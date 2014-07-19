@@ -1,0 +1,20 @@
+{
+	"name": "colibri-fw/config",
+	"type": "library",
+	"license": "MIT",
+	"authors": [{
+		"name": "Alexander Chibrikin",
+		"email": "alek13.me@gmail.com"
+	}],
+
+	"require": {
+		"php": "~5.3",
+		"colibri-fw/pattern": "*",
+		"colibri-fw/util": "*",
+	},
+	
+    "autoload": {
+        "psr-0": { "Colibri\\Config\\": "" }
+    },
+	"target-dir": "Colibri/Config",
+}

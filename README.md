@@ -1,2 +1,3 @@
-config
-======
+Colibri config component
+========================
+
