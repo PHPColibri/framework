@@ -1,0 +1,21 @@
+{
+	"name": "colibri-fw/pattern",
+	"description": "Colibri pattern component",
+	"type": "library",
+	"license": "MIT",
+	"authors": [{
+		"name": "Alexander Chibrikin",
+		"email": "alek13.me@gmail.com"
+	}],
+
+	"require": {
+		"php": "~5.3"
+	},
+	
+	"autoload": {
+		"psr-0": {
+			"Colibri\\Pattern\\": ""
+		}
+	},
+	"target-dir": "Colibri/Pattern"
+}
