@@ -9,7 +9,7 @@ namespace Colibri\Util;
 class File
 {
 	/**
-	 *
+	 * Get mime-type og the file
 	 * @param string $filepath
 	 * @return string string with mime-type like 'image/jpeg' & etc.
 	 */
