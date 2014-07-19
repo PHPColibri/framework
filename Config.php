@@ -48,7 +48,13 @@ class Config extends Helper
 	{
 		return static::exists($name) ? self::get($name) : array();
 	}
-
+	
+	/**
+	 * 
+	 * @param string $path
+	 * @return string
+	 * @throws \Exception
+	 */
 	public static function setBaseDir($path)
 	{
 		$realpath = realpath(rtrim($path, '/\\ '));
