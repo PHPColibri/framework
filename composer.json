@@ -1,5 +1,6 @@
 {
 	"name": "colibri-fw/config",
+	"description": "Colibri config component",
 	"type": "library",
 	"license": "MIT",
 	"authors": [{
@@ -10,7 +11,7 @@
 	"require": {
 		"php": "~5.3",
 		"colibri-fw/pattern": "*",
-		"colibri-fw/util": "*",
+		"colibri-fw/util": "*"
 	},
 	
 	"autoload": {
@@ -18,5 +19,5 @@
 			"Colibri\\Config\\": ""
 		}
 	},
-	"target-dir": "Colibri/Config",
+	"target-dir": "Colibri/Config"
 }
