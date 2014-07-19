@@ -13,8 +13,10 @@
 		"colibri-fw/util": "*",
 	},
 	
-    "autoload": {
-        "psr-0": { "Colibri\\Config\\": "" }
-    },
+	"autoload": {
+		"psr-0": {
+			"Colibri\\Config\\": ""
+		}
+	},
 	"target-dir": "Colibri/Config",
 }
