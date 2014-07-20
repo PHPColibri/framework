@@ -1,0 +1,24 @@
+{
+	"name": "colibri-fw/cache",
+	"description": "Colibri cache component",
+	"type": "library",
+	"license": "MIT",
+	"authors": [{
+		"name": "Alexander Chibrikin",
+		"email": "alek13.me@gmail.com"
+	}],
+
+	"require": {
+		"php": "~5.3",
+		"colibri-fw/config": "*",
+		"colibri-fw/pattern": "*",
+		"colibri-fw/util": "*"
+	},
+	
+	"autoload": {
+		"psr-0": {
+			"Colibri\\Cache\\": ""
+		}
+	},
+	"target-dir": "Colibri/Cache"
+}
