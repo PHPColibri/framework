@@ -19,5 +19,7 @@
 			"Colibri\\Config\\": ""
 		}
 	},
-	"target-dir": "Colibri/Config"
+	"target-dir": "Colibri/Config",
+
+	"minimum-stability": "dev"
 }
