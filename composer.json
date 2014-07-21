@@ -1,0 +1,21 @@
+{
+	"name": "colibri-fw/routine",
+	"description": "Colibri routine component",
+	"type": "library",
+	"license": "MIT",
+	"authors": [{
+		"name": "Alexander Chibrikin",
+		"email": "alek13.me@gmail.com"
+	}],
+
+	"require": {
+		"php": "~5.3"
+	},
+
+	"autoload": {
+		"psr-0": {
+		"Colibri\\Config\\": ""
+		}
+	},
+	"target-dir": "Colibri/Rouyine"
+}
