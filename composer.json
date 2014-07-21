@@ -9,7 +9,10 @@
 	}],
 
 	"require": {
-		"php": "~5.3"
+		"php": "~5.3",
+		"colibri-fw/controller": "dev-master",
+		"colibri-fw/database": "dev-master",
+		"colibri-fw/validation": "dev-master"
 	},
 
 	"autoload": {
