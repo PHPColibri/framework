@@ -17,5 +17,7 @@
 			"Colibri\\Pattern\\": ""
 		}
 	},
-	"target-dir": "Colibri/Pattern"
+	"target-dir": "Colibri/Pattern",
+
+	"minimum-stability": "dev"
 }
