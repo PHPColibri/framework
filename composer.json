@@ -17,10 +17,5 @@
 			"Colibri\\Pattern\\": ""
 		}
 	},
-	"target-dir": "Colibri/Pattern",
-	"extra": {
-		"branch-alias": {
-			"dev-master": "0.1.x-dev"
-		}
-	}
+	"target-dir": "Colibri/Pattern"
 }
