@@ -20,5 +20,7 @@
 			"Colibri\\Cache\\": ""
 		}
 	},
-	"target-dir": "Colibri/Cache"
+	"target-dir": "Colibri/Cache",
+
+	"minimum-stability": "dev"
 }
