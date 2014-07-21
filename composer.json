@@ -17,5 +17,7 @@
 			"Colibri\\Util\\": ""
 		}
 	},
-	"target-dir": "Colibri/Util"
+	"target-dir": "Colibri/Util",
+
+	"minimum-stability": "dev"
 }
