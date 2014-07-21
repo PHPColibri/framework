@@ -20,5 +20,7 @@
 		"Colibri\\Config\\": ""
 		}
 	},
-	"target-dir": "Colibri/Rouyine"
+	"target-dir": "Colibri/Rouyine",
+
+	"minimum-stability": "dev"
 }
