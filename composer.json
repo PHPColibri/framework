@@ -11,8 +11,7 @@
 	"require": {
 		"php": "~5.3",
 		"colibri-fw/config": "dev-master@dev",
-		"colibri-fw/pattern": "dev-master@dev",
-		"colibri-fw/util": "dev-master@dev"
+		"colibri-fw/pattern": "dev-master@dev"
 	},
 	
 	"autoload": {
