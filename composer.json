@@ -20,7 +20,7 @@
 		"Colibri\\Config\\": ""
 		}
 	},
-	"target-dir": "Colibri/Rouyine",
+	"target-dir": "Colibri/Routine",
 
 	"minimum-stability": "dev"
 }
