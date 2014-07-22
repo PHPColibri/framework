@@ -19,5 +19,7 @@
 			"Colibri\\Validation\\": ""
 		}
 	},
-	"target-dir": "Colibri/Validation"
+	"target-dir": "Colibri/Validation",
+
+	"minimum-stability": "dev"
 }
