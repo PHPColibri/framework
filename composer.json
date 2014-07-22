@@ -1,0 +1,23 @@
+{
+	"name": "colibri-fw/base",
+	"description": "Colibri base component",
+	"type": "library",
+	"license": "MIT",
+	"authors": [{
+		"name": "Alexander Chibrikin",
+		"email": "alek13.me@gmail.com"
+	}],
+
+	"require": {
+		"php": "~5.3",
+	},
+	
+	"autoload": {
+		"psr-0": {
+			"Colibri\\Base\\": ""
+		}
+	},
+	"target-dir": "Colibri/Base",
+
+	"minimum-stability": "dev"
+}
