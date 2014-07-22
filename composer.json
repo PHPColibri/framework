@@ -20,5 +20,7 @@
 			"Colibri\\Log\\": ""
 		}
 	},
-	"target-dir": "Colibri/Log"
+	"target-dir": "Colibri/Log",
+
+	"minimum-stability": "dev"
 }
