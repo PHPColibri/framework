@@ -18,5 +18,7 @@
 			"Colibri\\View\\": ""
 		}
 	},
-	"target-dir": "Colibri/View"
+	"target-dir": "Colibri/View",
+
+	"minimum-stability": "dev"
 }
