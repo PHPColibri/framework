@@ -19,5 +19,7 @@
 			"Colibri\\Controller\\": ""
 		}
 	},
-	"target-dir": "Colibri/Controller"
+	"target-dir": "Colibri/Controller",
+
+	"minimum-stability": "dev"
 }
