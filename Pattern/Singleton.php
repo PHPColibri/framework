@@ -22,7 +22,7 @@ abstract class Singleton extends Helper
 	static public function getInstance()
 	{
 		return static::$instance === null
-			? new static()
+			? static::$instance = new static()
 			: static::$instance
 		;
 	}
