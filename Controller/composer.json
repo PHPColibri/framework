@@ -1,0 +1,25 @@
+{
+	"name": "colibri-fw/controller",
+	"description": "Colibri controller component",
+	"type": "library",
+	"license": "MIT",
+	"authors": [{
+		"name": "Alexander Chibrikin",
+		"email": "alek13.me@gmail.com"
+	}],
+
+	"require": {
+		"php": "~5.3",
+		"colibri-fw/base": "dev-master@dev",
+		"colibri-fw/view": "dev-master@dev"
+	},
+	
+	"autoload": {
+		"psr-0": {
+			"Colibri\\Controller\\": ""
+		}
+	},
+	"target-dir": "Colibri/Controller",
+
+	"minimum-stability": "dev"
+}
