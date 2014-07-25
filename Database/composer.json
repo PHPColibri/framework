@@ -1,0 +1,26 @@
+{
+	"name": "colibri-fw/database",
+	"description": "Colibri database component",
+	"type": "library",
+	"license": "MIT",
+	"authors": [{
+		"name": "Alexander Chibrikin",
+		"email": "alek13.me@gmail.com"
+	}],
+
+	"require": {
+		"php": "~5.3",
+		"colibri-fw/base": "dev-master@dev",
+		"colibri-fw/cache": "dev-master@dev",
+		"colibri-fw/config": "dev-master@dev"
+	},
+	
+	"autoload": {
+		"psr-0": {
+			"Colibri\\Database\\": ""
+		}
+	},
+	"target-dir": "Colibri/Database",
+
+	"minimum-stability": "dev"
+}
