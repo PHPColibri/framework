@@ -31,5 +31,7 @@
 		}
 	},
 
+	"target-dir": "Colibri",
+
 	"minimum-stability": "dev"
 }
