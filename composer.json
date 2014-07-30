@@ -16,11 +16,10 @@
 	},
 	
 	"autoload": {
-		"psr-0": {
+		"psr-4": {
 			"Colibri\\Cache\\": ""
 		}
 	},
-	"target-dir": "Colibri/Cache",
 
 	"minimum-stability": "dev"
 }
