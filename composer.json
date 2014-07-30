@@ -14,11 +14,10 @@
 	},
 	
 	"autoload": {
-		"psr-0": {
+		"psr-4": {
 			"Colibri\\View\\": ""
 		}
 	},
-	"target-dir": "Colibri/View",
 
 	"minimum-stability": "dev"
 }
