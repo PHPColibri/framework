@@ -12,6 +12,7 @@
 		"php": ">=5.3"
 	},
 	"replace": {
+		"colibri-fw/application": "self.version",
 		"colibri-fw/base": "self.version",
 		"colibri-fw/cache": "self.version",
 		"colibri-fw/config": "self.version",
