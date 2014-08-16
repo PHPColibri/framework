@@ -65,7 +65,7 @@ class Config extends Helper
 	public static function getBaseDir()
 	{
 		return static::$baseDir === null
-			? static::setBaseDir(__DIR__ . '/../../../application/configs')
+			? static::setBaseDir(__DIR__ . '/../../../../application/configs')
 			: static::$baseDir
 		;
 	}
