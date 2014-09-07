@@ -23,9 +23,10 @@ final class Factory
 	 */
 	static public function createDb()
 	{
-		$config = Config::get('database');
-		$config = $config['connection'];
+		$config = Config::database('connection');
 		$default = $config['default'];
+		if (is_null($default))
+			return;
 		$config = is_array($default)
 			? $default
 			: $config[$default]
