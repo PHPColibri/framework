@@ -57,8 +57,7 @@ catch (BuisnessLogicException $exc)
 	
 	if ($mEngine->responseType==ResponseType::rpc)
 	{
-		$appConfig = Config::get('application');
-		header('Content-type: text/xml; charset='.$appConfig['encoding']);
+		header('Content-type: text/xml; charset='.Config::application('encoding'));
 		echo(XmlRpcResponse::additionalFault(
 			$exc->getCode(),
 			$exc->getAddError(),
@@ -66,7 +65,7 @@ catch (BuisnessLogicException $exc)
 		));
 	}
 	else
-		if (DEBUG)
+		if (Config::application('debug'))
 			echo('<tt>'.nl2br(htmlspecialchars("\n".'DEBUG Info: '.$message)).'</tt><br/>');
 		else
 		{
@@ -85,8 +84,7 @@ catch (AdditionalErrorException $exc)
 
 	if ($mEngine!==null && $mEngine->responseType==ResponseType::rpc)
 	{
-		$appConfig = Config::get('application');
-		header('Content-type: text/xml; charset='.$appConfig['encoding']);
+		header('Content-type: text/xml; charset='.Config::application('encoding'));
 		echo(XmlRpcResponse::additionalFault(
 			$exc->getCode(),
 			$exc->getAddError(),
@@ -94,7 +92,7 @@ catch (AdditionalErrorException $exc)
 		));
 	}
 	else
-		if (DEBUG)
+		if (Config::application('debug'))
 			echo('<tt>'.nl2br(htmlspecialchars("\n".'DEBUG Info: '.$screenMsg)).'</tt><br/>');
 		else
 		{
@@ -116,8 +114,7 @@ catch (\Exception $exc)
 
 	if ($mEngine!==null && $mEngine->responseType==ResponseType::rpc)
 	{
-		$appConfig = Config::get('application');
-		header('Content-type: text/xml; charset='.$appConfig['encoding']);
+		header('Content-type: text/xml; charset='.Config::application('encoding'));
 		echo(XmlRpcResponse::fault(
 			$exc->getCode(),
 			DEBUG?$screenMsg:'Internal Server Error.'
@@ -125,7 +122,7 @@ catch (\Exception $exc)
 	}
 	else
 	{
-		if (DEBUG)
+		if (Config::application('debug'))
 			$error = htmlspecialchars($screenMsg);
 		if ($exc->getCode()==1242 || $exc->getCode()==1222)
 		{

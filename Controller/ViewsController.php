@@ -124,11 +124,6 @@ class ViewsController extends Base
 		);
 		$this->addJsMgr('backbone'.($this->_division===''?'':'_'.$this->_division));
 		$this->addCss('backbone'.$this->divPostfix.'.css');
-		if (DEBUG)
-		{
-			$this->addJs('console_log_mgr.js');
-			$this->addJsTextOnReady('	if (addConsoleLog)	new console_log_mgr();');
-		}
 
 		$module_methodName=$this->_module.'_'.$this->_method;
 		// add default js manager

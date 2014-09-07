@@ -55,7 +55,7 @@ class MySQL implements IDb
 		$this->persistent = $persistent;
 
 		if (!$this->open())
-			throw new Exception('can\'t connect to datadase: SQL-error['.$this->getLastErrno().']: '.$this->getLastError());
+			throw new \Exception('can\'t connect to datadase: SQL-error['.$this->getLastErrno().']: '.$this->getLastError());
 	}
 	/**
 	 * Открывает соединение с базой данных
