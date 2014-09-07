@@ -16,11 +16,10 @@
 	},
 	
 	"autoload": {
-		"psr-0": {
+		"psr-4": {
 			"Colibri\\Database\\": ""
 		}
 	},
-	"target-dir": "Colibri/Database",
 
 	"minimum-stability": "dev"
 }
