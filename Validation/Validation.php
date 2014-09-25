@@ -37,10 +37,17 @@ class Validation extends PropertyAccess
 	{
 		return $this->scope=array_merge($this->scope,$scope);
 	}
+	/**
+	 * 
+	 * @param array $scope
+	 * @return $this
+	 */
 	public		function	setScope(array $scope)
 	{
 		$this->scope=$scope;
 		$this->_errors=array();
+		
+		return $this;
 	}
 	public		function	addError($key,$message)
 	{
@@ -142,8 +149,8 @@ class Validation extends PropertyAccess
 	/**
 	 *
 	 * @param callable $checkFunc
-	 * @param type $key
-	 * @param type $message
+	 * @param string $key
+	 * @param string $message
 	 * @return static 
 	 */
 	public		function	is($checkFunc,$key,$message)
@@ -186,6 +193,19 @@ class Validation extends PropertyAccess
 	{
 		return !(bool)count($this->_errors);
 	}
-
-
+	public		function	ifNotValid(\Closure $callback)
+	{
+		if (!$this->valid())
+			$callback($this->_errors);
+		
+		return $this;
+	}
+	public		function	validate()
+	{
+		$this->ifNotValid(function(array $errors) {
+			throw new Exception($errors);
+		});
+		
+		return $this;
+	}
 }
