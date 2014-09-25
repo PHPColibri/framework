@@ -1,11 +1,6 @@
 <?php
 namespace Colibri\Application;
 
-
-require_once(CONFIGS.'core.php');
-
-require_once(CLASSES.'API.php');
-
 use Colibri\Base\Error;
 use Colibri\Log\Log;
 use Colibri\Config\Config;
@@ -70,8 +65,7 @@ class Engine extends Engine\Base
 
 		//TODO: refactor to config. This is route by SEO requirements
 		$requestedUri=$this->getRequestedUri();
-		global $config;
-		$routes=$config['routes'];
+		$routes = Config::routing('rewrite');
 		foreach ($routes as $route)
 		{
 			$pattern	=$route['pattern'];
@@ -146,10 +140,9 @@ class Engine extends Engine\Base
 		$parts=explode('/',$file);
 		$partsCnt=count($parts);
 
-		if ($partsCnt>0 && in_array($parts[0],$config['divisions']))
-		{
-			$this->_division=$parts[0];
-			$parts=array_slice($parts,1);
+		if ($partsCnt > 0 && in_array($parts[0], Config::get('divisions'))) {
+			$this->_division = $parts[0];
+			$parts = array_slice($parts, 1);
 		}
 		else
 			$this->_division='';
@@ -242,7 +235,8 @@ class Engine extends Engine\Base
 		return $response;
 	}
 	/**
-	 *
+	 * @deprecated
+	 * 
 	 * @param	string	$rpcQuery	with xmlrpc
 	 * @exception 123x
 	 */
@@ -259,8 +253,7 @@ class Engine extends Engine\Base
 		$parts=explode('.',$rpcRequest->methodName);
 		$partsCnt=count($parts);
 
-		if ($partsCnt>0 && in_array($parts[0],$config['divisions']))
-		{
+		if ($partsCnt > 0 && in_array($parts[0], Config::get('divisions'))) {
 			$this->_division=$parts[0];
 			$parts=array_slice($parts,1);
 		}
