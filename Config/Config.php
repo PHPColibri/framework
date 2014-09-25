@@ -20,8 +20,13 @@ class Config extends Helper
 		return static::getBaseDir() . '/' . $name . '.php';
 	}
 
+	/**
+	 * @param $name
+	 * @return mixed
+	 */
 	protected static function load($name)
 	{
+		/** @noinspection PhpIncludeInspection */
 		return include(static::getFilepath($name));
 	}
 
@@ -30,6 +35,10 @@ class Config extends Helper
 		return file_exists(static::getFilepath($name));
 	}
 
+	/**
+	 * @param string $name
+	 * @return array
+	 */
 	final public static function get($name)
 	{
 		return isset(self::$allLoadedConfigs[$name])

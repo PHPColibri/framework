@@ -12,7 +12,7 @@ class Arr
 	 * 
 	 * @param array $array
 	 * @param array $with
-	 * @return type
+	 * @return array
 	 */
 	public static function overwrite(array $array, array $with)
 	{
