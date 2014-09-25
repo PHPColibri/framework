@@ -10,7 +10,7 @@ use Colibri\Base\PropertyAccess;
  * @package		xTeam
  * @version		1.01.0
  *
- * @property response
+ * @property string $response
  * @property string $division site division
  * @property string $module
  * @property string $method
