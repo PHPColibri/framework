@@ -26,7 +26,7 @@ class Arr
 	 * @param  mixed   $default
 	 * @return mixed
 	 */
-	public static function get(array $array, $key, $default = null)
+	public static function get(array $array, $key = null, $default = null)
 	{
 		if (is_null($key)) return $array;
 		if (isset($array[$key])) return $array[$key];
