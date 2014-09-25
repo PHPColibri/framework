@@ -12,13 +12,12 @@ use Colibri\Util\Arr;
  */
 class Config extends Helper
 {
-	protected static $allLoadedConfigs = array();
-	protected static $baseDir = null;
-
+	protected static $allLoadedConfigs	 = array();
+	protected static $baseDir			 = null;
 
 	protected static function getFilepath($name)
 	{
-		return static::getBaseDir() . '/' . $name . '.php';;
+		return static::getBaseDir() . '/' . $name . '.php';
 	}
 
 	protected static function load($name)
@@ -38,6 +37,7 @@ class Config extends Helper
 			: self::$allLoadedConfigs[$name] = Arr::overwrite(static::load($name), LocalConfig::load($name))
 		;
 	}
+
 	/**
 	 * Returns config if exists or empty array if not
 	 * 
@@ -48,7 +48,7 @@ class Config extends Helper
 	{
 		return static::exists($name) ? self::get($name) : array();
 	}
-	
+
 	/**
 	 * 
 	 * @param string $path
@@ -60,8 +60,10 @@ class Config extends Helper
 		$realpath = realpath(rtrim($path, '/\\ '));
 		if ($realpath === false)
 			throw new \Exception("cat`t get realpath: seems like path does`t exists: $path");
+		
 		return static::$baseDir = realpath(rtrim($path, '/\\ '));
 	}
+
 	public static function getBaseDir()
 	{
 		return static::$baseDir === null
@@ -69,10 +71,12 @@ class Config extends Helper
 			: static::$baseDir
 		;
 	}
+
 	public static function __callStatic($name, $arguments)
 	{
-		$key = $arguments[0];
+		$key	 = isset($arguments[0]) ? $arguments[0] : null;
 		$default = isset($arguments[1]) ? $arguments[1] : null;
+		
 		return Arr::get(static::get($name), $key, $default);
 	}
 }
