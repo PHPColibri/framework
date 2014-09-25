@@ -3,3 +3,5 @@ php:
     - 5.3.3
     - 5.3
     - 5.4
+
+script: vendor/bin/phpunit
