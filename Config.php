@@ -30,13 +30,17 @@ class Config extends Helper
 		return include(static::getFilepath($name));
 	}
 
+	/**
+	 * @param string $name config file name
+	 * @return bool
+	 */
 	public static function exists($name)
 	{
 		return file_exists(static::getFilepath($name));
 	}
 
 	/**
-	 * @param string $name
+	 * @param string $name config file name
 	 * @return array
 	 */
 	final public static function get($name)
@@ -70,7 +74,7 @@ class Config extends Helper
 		if ($realpath === false)
 			throw new \Exception("cat`t get realpath: seems like path does`t exists: $path");
 		
-		return static::$baseDir = realpath(rtrim($path, '/\\ '));
+		return static::$baseDir = $realpath;
 	}
 
 	public static function getBaseDir()
