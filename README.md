@@ -8,3 +8,5 @@ Colibri
 [![License](https://poser.pugx.org/colibri/framework/license.svg)](https://packagist.org/packages/colibri/framework)
 
 PHP Framework
+
+[Документация](https://github.com/PHPColibri/docs#colibri-documentation)
