@@ -2,7 +2,7 @@
 namespace Colibri\Util;
 /**
  *
- * @author		Александр Чибрикин aka alek13 <chibrikinalex@mail.ru>
+ * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  * @package		xTeam
  * @subpackage	a13FW
  * @version		1.00.0
@@ -60,17 +60,29 @@ static
 	}
 	/**
 	 * @param string $str
-	 * @return bool 
+	 * @return bool
 	 */
 static
 	public		function	isInt($str)
 	{
-		return $str===(string)(int)$str;
+		return is_int($str) || $str === (string)(int)$str;
+	}
+
+	/**
+	 * @param $str
+	 * @param $beginsWith
+	 *
+	 * @return bool
+	 */
+static
+	public		function	beginsWith($str, $beginsWith)
+	{
+		return substr($str, 0, strlen($beginsWith)) === $beginsWith;
 	}
 static
-	public		function	beginsWith($str,$beginsWith)
+	public      function    endsWith($str, $endsWith)
 	{
-		return substr($str,0,strlen($beginsWith))===$beginsWith;
+		return substr($str, -strlen($endsWith)) === $endsWith;
 	}
 static
 	public		function	contains($str,$substr)
