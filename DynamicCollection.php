@@ -9,7 +9,7 @@ use Colibri\Base\IDynamicCollection;
  * Реализует интерфейс для доступа к элементам при обращении к клвссу как к массиву
  * А также добавляет функции доступа к свойствам, реализованные в PropertyAccess
  * 
- * @author		Александр Чибрикин aka alek13 <chibrikinalex@mail.ru>
+ * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  * @package		xTeam
  * @subpackage	a13FW
  * @version		1.00.4
