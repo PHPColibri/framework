@@ -24,7 +24,7 @@ use Colibri\Database\Object;
  *        в следущей версии совместимость будет отсутствовать.
  *
  *
- * @author		Александр Чибрикин aka alek13 <chibrikinalex@mail.ru>
+ * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  * @package		xTeam
  * @subpackage	a13FW
  * @version		1.05
