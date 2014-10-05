@@ -8,7 +8,7 @@ require_once('xmlrpc.php');
  * 
  * @deprecated 
  *
- * @author		Александр Чибрикин aka alek13 <chibrikinalex@mail.ru>
+ * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  * @package		xTeam
  * @subpackage	a13FW
  * @version		1.01.0

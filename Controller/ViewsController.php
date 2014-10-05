@@ -8,7 +8,7 @@ use Colibri\View\PhpTemplate;
 /**
  * Description of CModule
  *
- * @author		Александр Чибрикин aka alek13 <chibrikinalex@mail.ru>
+ * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  * @package		xTeam
  * @version		1.05.5.1
  *

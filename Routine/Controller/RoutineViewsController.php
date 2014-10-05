@@ -10,7 +10,7 @@ use Colibri\Validation\Validation;
 /**
  * Description of moduleRoutineViews
  *
- * @author		Александр Чибрикин aka alek13 <chibrikinalex@mail.ru>
+ * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  * @package		xTeam
  * @version		1.00.0
  * @exception	???

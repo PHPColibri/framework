@@ -6,7 +6,7 @@ use Colibri\Base\SqlException;
 /**
  * DbMySQL Класс для работы с MySQL
  *
- * @author		Александр Чибрикин aka alek13 <chibrikinalex@mail.ru> (some 1.x versions and v. 2.x+)
+ * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com> (some 1.x versions and v. 2.x+)
  * @version		2.1.0
  * @package		xTeam
  * @subpackage	a13FW

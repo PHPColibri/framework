@@ -7,7 +7,7 @@ use Colibri\Config\Config;
 /**
  * Description of API
  *
- * @author		Александр Чибрикин aka alek13 <chibrikinalex@mail.ru>
+ * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  * @package		xTeam
  * @version		1.03
  */

@@ -33,7 +33,7 @@ namespace Colibri\Base;
  *
  * @deprecated
  * 
- * @author		Александр Чибрикин aka alek13 <chibrikinalex@mail.ru>
+ * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  * @package		xTeam
  * @subpackage	a13FW
  * @version		1.1.2
@@ -240,7 +240,7 @@ class Error
 /**
  * Абстрактный класс AdditionalErrorException.
  *
- * @author		Александр Чибрикин aka alek13 <chibrikinalex@mail.ru>
+ * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  * @package		xTeam
  * @subpackage	a13FW
  */

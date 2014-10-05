@@ -3,7 +3,7 @@ namespace Colibri\Util;
 /**
  * Description of CFile
  *
- * @author		Александр Чибрикин aka alek13 <chibrikinalex@mail.ru>
+ * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  * @version		1.00.0
  */
 class File

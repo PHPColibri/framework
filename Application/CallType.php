@@ -4,7 +4,7 @@ namespace Colibri\Application;
 /**
  * Description of CallType
  *
- * @author		Александр Чибрикин aka alek13 <chibrikinalex@mail.ru>
+ * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  * @package		xTeam
  * @version		1.00
  */

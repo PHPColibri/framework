@@ -9,7 +9,7 @@ use Colibri\Util\Arr;
 /**
  *
  *
- * @author		Александр Чибрикин aka alek13 <chibrikinalex@mail.ru>
+ * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  * @package		xTeam
  * @subpackage	a13FW
  * @version		2.0.3
