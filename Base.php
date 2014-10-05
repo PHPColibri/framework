@@ -6,7 +6,7 @@ use Colibri\Base\PropertyAccess;
 /**
  * base controller
  *
- * @author		Александр Чибрикин aka alek13 <chibrikinalex@mail.ru>
+ * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  * @package		xTeam
  * @version		1.01.0
  *
