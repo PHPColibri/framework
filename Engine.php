@@ -10,7 +10,7 @@ use Colibri\XmlRpc\Response as XmlRpcResponse;
 /**
  * Description of CModuleEngine
  *
- * @author		Александр Чибрикин aka alek13 <chibrikinalex@mail.ru>
+ * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  * @package		xTeam
  * @version		1.10.3
  * @exception	12xx
