@@ -1,6 +1,7 @@
 {
 	"name": "colibri/framework",
 	"description": "Colibri -  PHP framework",
+    "keywords": ["framework", "fast", "light", "colibri", "small"],
 	"type": "library",
 	"license": "MIT",
 	"authors": [{
