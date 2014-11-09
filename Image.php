@@ -1,8 +1,6 @@
 <?php
 namespace Colibri\Util;
 
-use Colibri\Util\File;
-
 /**
  * Description of image
  *
@@ -19,7 +17,7 @@ class Image
 	 * @param int $target_height
 	 * @param int $bgColor
 	 * @return string binary stream with thumbnail
-	 * @throws Exception 
+	 * @throws \Exception
 	 */
 static
 	public		function	createThumbnail($path, $target_width=100, $target_height=100, $bgColor=0xdddddd)
@@ -28,7 +26,7 @@ static
 
 		list($width, $height) = static::getSize($img);
 		
-		// Build the thumbnail
+		// Calc thumbnail size
 		$target_ratio = $target_width / $target_height;
 		   $img_ratio =	       $width /        $height;
 
@@ -45,15 +43,16 @@ static
 		if ($new_width > $target_width)
 			$new_height = $target_width;
 
+		// Build the thumbnail
 		$thumbnail = ImageCreateTrueColor($target_width, $target_height);
 		if (!$thumbnail)
-			throw new Exception('can`t create thumbnail: ImageCreateTrueColor failed');
+			throw new \Exception('can`t create thumbnail: ImageCreateTrueColor failed');
 		// Fill the image with bgColor
 		if (!@imagefilledrectangle($thumbnail, 0, 0, $target_width-1, $target_height-1, $bgColor))
-			throw new Exception('can`t create thumbnail: can`t fill new image by bg-color');
+			throw new \Exception('can`t create thumbnail: can`t fill new image by bg-color');
 		// Resize image into thumbnail
 		if (!@imagecopyresampled($thumbnail, $img, ($target_width-$new_width)/2, ($target_height-$new_height)/2, 0, 0, $new_width, $new_height, $width, $height))
-			throw new Exception('can`t create thumbnail: can`t resize image');
+			throw new \Exception('can`t create thumbnail: can`t resize image');
 
 		return static::getIntoVariable($thumbnail);
 	}
@@ -62,7 +61,7 @@ static
 	 * 
 	 * @param string $path
 	 * @return resource GD image resource
-	 * @throws Exception
+	 * @throws \Exception
 	 */
 static
 	protected	function	load($path)
@@ -73,10 +72,10 @@ static
 			case 'image/gif':	$img = imagecreatefromgif ($path); break;
 			case 'image/png':	$img = imagecreatefrompng ($path); break;
 			case 'image/bmp':	$img = imagecreatefromwbmp($path); break;
-			default:			throw new Exception('can`t create thumbnail: unknown image type');
+			default:			throw new \Exception('can`t create thumbnail: unknown image type');
 		}
 		if (!$img)
-			throw new Exception('can`t create thumbnail: can`t create image handle from file '.$path);
+			throw new \Exception('can`t create thumbnail: can`t create image handle from file '.$path);
 		
 		return $img;
 	}
@@ -84,7 +83,7 @@ static
 	 * 
 	 * @param resource $img GD image resource
 	 * @return array [width, height]
-	 * @throws Exception
+	 * @throws \Exception
 	 */
 static
 	protected	function	getSize($img)
@@ -92,15 +91,15 @@ static
 		$width  = imageSX($img);
 		$height = imageSY($img);
 		if (!$width || !$height)
-			throw new Exception('can`t create thumbnail: can`t get image size, invalid image width or height');
+			throw new \Exception('can`t create thumbnail: can`t get image size, invalid image width or height');
 		
 		return array($width, $height);
 	}
 	/**
 	 * 
 	 * @param resource $img GD image resource
-	 * @return type
-	 * @throws Exception
+	 * @return string
+	 * @throws \Exception
 	 */
 static
 	protected	function	getIntoVariable($img)
@@ -110,11 +109,11 @@ static
 		if (!@imagejpeg($img))
 		{
 			ob_end_clean();
-			throw new Exception('can`t create thumbnail: can`t output thumbnail into var');
+			throw new \Exception('can`t create thumbnail: can`t output thumbnail into var');
 		}
-		$imagevariable = ob_get_contents();
+		$imageVariable = ob_get_contents();
 		ob_end_clean();
 		
-		return $imagevariable;
+		return $imageVariable;
 	}
 }

@@ -1,12 +1,13 @@
 <?php
 namespace Colibri\Util;
+use Colibri\Pattern\Helper;
 
 /**
  * Description of Arr
  *
  * @author Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  */
-class Arr
+class Arr extends Helper
 {
 	/**
 	 * 
