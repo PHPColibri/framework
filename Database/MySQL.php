@@ -262,6 +262,15 @@ static
 
 		switch (strtolower($type))
 		{
+			case 'timestamp':
+				$value = is_int($value) ?
+					'\'' . date('Y-m-d H:i:s', $value) . '\'' :
+					($value instanceof \DateTime ?
+						'\'' . $value->format('Y-m-d H:i:s') . '\'' :
+						'\'' . addslashes($value) . '\''
+					);
+				break;
+
 			case 'bit':		$value=(int)intval($value);break;
 
 			case 'dec':
