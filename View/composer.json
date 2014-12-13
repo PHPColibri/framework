@@ -10,7 +10,8 @@
 
 	"require": {
 		"php": "~5.3",
-		"colibri-fw/base": "dev-master@dev"
+		"colibri-fw/base": "dev-master@dev",
+		"colibri-fw/pattern": "dev-master@dev"
 	},
 	
 	"autoload": {
