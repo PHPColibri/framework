@@ -8,7 +8,8 @@ use Colibri\View\PhpTemplate;
 use Colibri\Config\Config;
 
 /**
- * Description of CModule
+ * Views Controller abstract class.
+ * Extends from this class & place code for actions methods.
  *
  * @author        Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  *
@@ -19,10 +20,6 @@ use Colibri\Config\Config;
 abstract
 class ViewsController extends Base
 {
-    /**
-     * @var string name of backbone template to use at
-     */
-    protected $backboneTplName = null;
     /**
      * @var PhpTemplate
      */

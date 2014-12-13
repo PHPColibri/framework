@@ -22,6 +22,20 @@ class Layout extends Helper
     private static $jsTextOnReady = '';
     private static $jsMgr = [];
 
+    public static function clean($filename = null)
+    {
+        static::filename($filename);
+
+        static::$description =
+        static::$keywords =
+        static::$title =
+        static::$jsTextOnReady = '';
+        static::$css         =
+        static::$js =
+        static::$jsText =
+        static::$jsMgr = [];
+    }
+
     /**
      * @param string $filename
      *
@@ -112,13 +126,7 @@ class Layout extends Helper
      */
     public static function delCss($cssFilename, $path = RES_CSS)
     {
-        $cnt = count(static::$css);
-        for ($i = 0; $i < $cnt; $i++) {
-            if (static::$css[$i] == $path . $cssFilename) {
-                array_splice(static::$css, $i, 1);
-                $cnt--;
-            }
-        }
+        static::$css = array_diff(static::$css, [$path . $cssFilename]);
     }
 
     /**
@@ -129,7 +137,7 @@ class Layout extends Helper
      */
     public static function compile($content)
     {
-        $layoutTplVars = [];
+        $layoutTplVars            = [];
         $layoutTplVars['content'] = $content;
         //TODO: special chars
         $layoutTplVars['keywords'] = !empty(static::$keywords) ? "<meta name='keywords' content='" . static::$keywords . "' />\n" : '';
@@ -177,8 +185,9 @@ class Layout extends Helper
             }
         }
 
-        if (static::$filename === null)
+        if (static::$filename === null) {
             throw new \Exception('Layout template file name does not set: use Layout::setFilename().');
+        }
 
         $tpl       = new PhpTemplate(TEMPLATES . static::$filename);
         $tpl->vars = $layoutTplVars;
