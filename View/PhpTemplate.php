@@ -50,8 +50,8 @@ class	PhpTemplate extends PropertyAccess
 	public		function	load($filename=null)
 	{
 		if ($filename===null)			$filename=$this->_filename;
-		if ($filename===null)			$this->__raiseError(701);
-		if (!file_exists($filename))	$this->__raiseError(702,$filename);
+		if ($filename===null)			throw new \Exception('Can`t load template: property \'filename\' not set.');
+		if (!file_exists($filename))	throw new \Exception("file '$filename' does not exists.");
 		$this->_filename=$filename;
 		return $this;
 	}

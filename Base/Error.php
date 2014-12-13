@@ -72,9 +72,6 @@ class Error
 		// 501
 		/* XmlRpc\Response */
 		// 601
-		/* PhpTemplate */
-		 701	=> '\'filename\' not set.',
-		 702	=> 'file \'%1\' does not exists.',
 
 		/* Application\Engine\Base */
 		1001	=> 'can\'t connect to memcache server.',
@@ -91,94 +88,6 @@ class Error
 		1311	=> 'template not loaded.',
 
 
-
-		
-		// Modules:
-		/* CUsersViews */
-		//2100
-		/* CUsersMethods */
-		//2200
-
-		/* CArticlesViews */
-		2511	=> 'can\'t load article.', // sql error
-		/* CArticlesMethods */
-		//2600
-		2611	=> 'can\'t create article.', //sql error
-		2621	=> 'can\'t load article.', // sql error
-		/* CArticlesAdminViews */
-		2711    => 'can\'t load article.', // sql error
-		2712    => 'can\'t save article.', // sql error
-		2713    => 'can\'t delete article.', // sql error
-		2781	=> 'can\'t load articles.', // sql error
-		2782	=> 'can\'t load news.', // sql error
-		2783	=> 'can\'t load files.', // sql error
-		/* CArticlesAdminMethods */
-		//2800
-
-		/* CCommentsViews */
-		//2900
-		/* CCommentsMethods */
-		//3000
-		/* CAddressAdminViews */
-		//3100
-		3101	=> 'can\'t load article',
-		3102	=> 'can\'t save article',
-		3103	=> 'can\'t create article',
-		3104	=> 'can\'t create address',
-		3105	=> 'can\'t load address',
-		3106	=> 'can\'t save address',
-		3107	=> 'can\'t delete address',
-
-		/* CNewsAdminViews */
-		//3200
-		3201	=> 'can\'t load article',
-		3202	=> 'can\'t save article',
-		3203	=> 'can\'t create article',
-		3204	=> 'can\'t create news',
-		3205	=> 'can\'t load news',
-		3206	=> 'can\'t save news',
-		3207	=> 'can\'t delete news',
-
-		/* CAnnouncesAdminViews */
-		//3300
-		3301	=> 'can\'t load article',
-		3302	=> 'can\'t save article',
-		3303	=> 'can\'t create article',
-		3304	=> 'can\'t create announce',
-		3305	=> 'can\'t load announce',
-		3306	=> 'can\'t save announce',
-		3307	=> 'can\'t delete announce',
-
-		/* CCabinetArticlesCollection */
-		//3400
-		3401	=> 'can\'t load cabinet article',
-		3402	=> 'can\'t save cabinet article',
-		3403	=> 'can\'t create cabinet article',
-
-		//CCabinetClaimsCollection errors
-		3501	=> 'can\'t load cabinet claim(s)',
-		3502	=> 'can\'t save cabinet claim(s)',
-		3503	=> 'can\'t create cabinet claim(s)',
-
-		//CSettingsViews errors
-		3601	=> 'can\'t load settings',
-		3602	=> 'can\'t save settings',
-		3603	=> 'can\'t create settings',
-
-		//CNewsSubscription errors
-		3701	=> 'can\'t load news subscription',
-		3702	=> 'can\'t save subscription',
-		3703	=> 'can\'t create subscription',
-
-		/* CMenuViews */
-		3801	=> 'can\'t load menu subnodes',
-
-		/* CGalleryViews */
-		4001	=> 'can\'t load gallery with id %1.',
-
-		//  Logic errors
-		12611	=> 'article with same \'url alias\' olready exists.',
-		13401	=> 'article with type \'%1\' not found.',
 	);
 	
 	/**
