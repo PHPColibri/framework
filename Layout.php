@@ -1,15 +1,17 @@
 <?php
 namespace Colibri\View;
 
+use Colibri\Pattern\Helper;
+
 /**
  * Class Layout
  */
-class Layout
+class Layout extends Helper
 {
     /**
      * @var string name of layout template to use
      */
-    private static $templateName = null;
+    private static $filename = null;
     // vars:
     private static $description = '';
     private static $keywords = '';
@@ -21,19 +23,13 @@ class Layout
     private static $jsMgr = [];
 
     /**
+     * @param string $filename
+     *
      * @return string
      */
-    public static function getTemplateName()
+    public static function filename($value = null)
     {
-        return self::$templateName;
-    }
-
-    /**
-     * @param string $templateName
-     */
-    public static function setTemplateName($templateName)
-    {
-        self::$templateName = $templateName;
+        return $value !== null ? static::$filename = $value : static::$filename;
     }
 
     /**
@@ -181,10 +177,10 @@ class Layout
             }
         }
 
-        if (static::$templateName === null)
-            throw new \Exception('Layout template file name does not set: use Layout::setTemplateName().');
+        if (static::$filename === null)
+            throw new \Exception('Layout template file name does not set: use Layout::setFilename().');
 
-        $tpl       = new PhpTemplate(TEMPLATES . static::$templateName);
+        $tpl       = new PhpTemplate(TEMPLATES . static::$filename);
         $tpl->vars = $layoutTplVars;
 
         //login error information - to be shown only once
