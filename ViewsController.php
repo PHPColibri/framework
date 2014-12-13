@@ -100,8 +100,8 @@ class ViewsController extends Base
 
     private function setUpLayout()
     {
-        if (!Layout::getTemplateName()) {
-            Layout::setTemplateName('backbone' . $this->divPostfix . '.php');
+        if (!Layout::filename()) {
+            Layout::filename('backbone' . $this->divPostfix . '.php');
         }
 
         // TODO: bring out into application config ??
