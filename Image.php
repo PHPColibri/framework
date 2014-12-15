@@ -10,6 +10,9 @@ namespace Colibri\Util;
  */
 class Image
 {
+	const RESIZE_FILLED  = 'filled' ;
+	const RESIZE_CROPPED = 'cropped';
+
 	/**
 	 *
 	 * @param string $path
