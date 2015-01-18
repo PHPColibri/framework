@@ -28,14 +28,14 @@ class Object implements IObject
 	static	public	$debug=true;
 	
 	protected	$tableName	='tableName_not_set';
-	protected	$PKFieldName=array('id');
+	protected	$PKFieldName=['id'];
 
 	protected	$fieldsNameValuesArray=null;
 	protected	$where=null;
 
-	protected	$fields=array();
-	protected	$fieldTypes=array();
-	public      $fieldLengths = array();
+	protected	$fields=[];
+	protected	$fieldTypes=[];
+	public      $fieldLengths = [];
 
 	public		$error_message='';
 	public		$error_number=0;
@@ -47,11 +47,11 @@ class Object implements IObject
 	/**
 	 * @var array 
 	 */
-	protected	$collections=array();
+	protected	$collections=[];
 	/**
 	 * @var array 
 	 */
-	protected	$objects=array();
+	protected	$objects=[];
 
 	private function getFieldTypeLength($strField)
 	{
@@ -331,22 +331,36 @@ static
 				$strXMLPart.='<'.$propName.'>'.(is_null($propValue)?'<null />':$propValue).'</'.$propName.'>';
 		return $strXMLPart;
 	}
+
+    /**
+     * @return array
+     */
 	public		function	toArray()
 	{
-		$arrRet=array();
+		$arrRet=[];
 		foreach ($this as $propName => $propValue)
 			if (in_array($propName,$this->fields))
 				$arrRet[$propName]=$propValue;
 		return $arrRet;
 	}
+
+    /**
+     * @return string
+     */
+    public		function	toJson()
+    {
+        return json_encode($this->toArray());
+    }
 	/**
-	 * 
-	 * @param string $strQuery
-	 * @param string $type sql|internal
-	 * @param int $errno
-	 * @return type 
-	 */
-	protected	function	setError($strQuery,$type='sql',$errno=-128)
+	 *
+     * @param string $strQuery
+     * @param string $type sql|internal
+     * @param int $errno
+     *
+     * @return type
+     * @throws \Exception
+     */
+    protected function    setError($strQuery,$type='sql',$errno=-128)
 	{
 		$cls=get_class($this);
 		switch ($type)
