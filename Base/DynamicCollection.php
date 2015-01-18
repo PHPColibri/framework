@@ -47,4 +47,8 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
 			$retArr[]=get_object_vars($this->_items[$i]);
 		return $retArr;
 	}
+    public function toJson()
+    {
+        return json_encode($this->toDblArray());
+    }
 }
