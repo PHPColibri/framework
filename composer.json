@@ -16,11 +16,10 @@
 	},
 	
 	"autoload": {
-		"psr-0": {
+		"psr-4": {
 			"Colibri\\Log\\": ""
 		}
 	},
-	"target-dir": "Colibri/Log",
 
 	"minimum-stability": "dev"
 }
