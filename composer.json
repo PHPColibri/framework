@@ -16,11 +16,10 @@
 	},
 
 	"autoload": {
-		"psr-0": {
-		"Colibri\\Config\\": ""
+		"psr-4": {
+			"Colibri\\Config\\": ""
 		}
 	},
-	"target-dir": "Colibri/Routine",
 
 	"minimum-stability": "dev"
 }
