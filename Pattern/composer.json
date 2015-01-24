@@ -13,11 +13,10 @@
 	},
 	
 	"autoload": {
-		"psr-0": {
+		"psr-4": {
 			"Colibri\\Pattern\\": ""
 		}
 	},
-	"target-dir": "Colibri/Pattern",
 
 	"minimum-stability": "dev"
 }
