@@ -11,9 +11,15 @@ namespace Colibri\Database;
  */
 interface IDb
 {
-	/**
-	 * Конструктор
-	 */
+    /**
+     * Конструктор
+     *
+     * @param      $host
+     * @param      $login
+     * @param      $pass
+     * @param      $database
+     * @param bool $persistent
+     */
 	function __construct($host, $login, $pass, $database, $persistent = false);
 	/**
 	 * Открытие соединения
@@ -29,13 +35,13 @@ interface IDb
 	public function getConnect();
 	/**
 	 * Выборка значения одного поля таблицы из результата
-	 * @param int Строка таблицы
-	 * @param int Столбец таблицы
+	 * @param int $row Строка таблицы
+	 * @param int $field Столбец таблицы
  	 */
 	public function getResult($row = 0, $field = 0);
 	/**
 	 * Запрос к базе данных
-	 * @param string Строка запроса
+	 * @param string $query_string Строка запроса
 	 */
 	public function query($query_string);
 	/**
@@ -46,13 +52,18 @@ interface IDb
 	 * Идентификатор последней добавленной записи
 	 */
 	public function lastInsertId();
-	/**
-	 * Выгрузка результата запроса в массив
-	 */
+
+    /**
+     * Выгрузка результата запроса в массив
+     *
+     * @param int $param
+     *
+     * @return
+     */
 	public function fetchAllRows($param = MYSQL_ASSOC);
 	/**
 	 * Стока результата запроса в виде массива
-	 * @param Модификатор тива возвращаемого значения
+	 * @param int $param Модификатор тива возвращаемого значения
 	 * Возможные параметры: MYSQL_NUM | MYSQL_ASSOC | MYSQL_BOTH
 	 */
 	public function fetchArray($param = MYSQL_ASSOC);

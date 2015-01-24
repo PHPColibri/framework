@@ -1,32 +1,40 @@
 <?php
 namespace Colibri\Database;
 
-use Colibri\Config\Config;
-
 /**
  * Database\Factory, Абстрактная фабрика для класса базы даных
  *  
- * @author		Антон Марченко, a13
+ * @author		alek13
  * @version		1.0.1
- * @package		xTeam
+ * @package		Colibri
  * @subpackage	a13FW
  *
  * @exception	6xx
  */
 final class Factory
 {
-
-	/**
-	 * Создает экземпляр класса используя настройки Config::get('database')
-	 *
-	 * @return IDb Объект базы данных или генерит ошибку
-	 */
-	static public function createDb()
+    /**
+     * @var array
+     */
+    protected $config = [];
+    /**
+     * Создает экземпляр класса используя настройки Config::get('database')
+     *
+     * @param array $connectionConfig pass null to load from `database.php` by
+     *
+     * @return IDb Объект базы данных или генерит ошибку
+     * @throws DbException
+     */
+	static public function createDb(array $connectionConfig = null)
 	{
-		$config = Config::database('connection');
-		$default = $config['default'];
-		if (is_null($default))
-			return;
+        /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+        $config = $connectionConfig
+            ? $connectionConfig
+            : \Colibri\Config\Config::database('connection');
+		if (!isset($config['default']))
+			throw new DbException('can`t find `default` section in database config');
+
+        $default = $config['default'];
 		$config = is_array($default)
 			? $default
 			: $config[$default]
@@ -43,7 +51,7 @@ final class Factory
 				);
 			case Type::POSTGRESQL:
 			default:
-				throw new \Exception("can`t create database: this db type ($db_type) not supported");
+				throw new DbException("can`t create database: this db type (${config['type']}) not supported");
 		}
 	}
 
