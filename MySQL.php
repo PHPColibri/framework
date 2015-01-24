@@ -17,7 +17,7 @@ class MySQL implements IDb
 {
     /** @var \mysqli */
 	private $connect;
-	private $lastError = array('error'=>null,'errno'=>null);
+	private $lastError = ['error'=>null,'errno'=>null];
 	private $host;
 	private $login;
 	private $pass;
@@ -36,15 +36,15 @@ class MySQL implements IDb
     /**
      * Конструктор
      *
-     * @param    string $host mysql server name/ip[:port]
-     * @param    string $login mysql user login
-     * @param    string $pass mysql user password
-     * @param    string $database mysql database name
+     * @param    string $host       mysql server name/ip[:port]
+     * @param    string $login      mysql user login
+     * @param    string $pass       mysql user password
+     * @param    string $database   mysql database name
      * @param    bool   $persistent make persistent connection
      *
-     * @throws Exception
+     * @throws \Exception
      */
-	function __construct($host, $login, $pass, $database, $persistent = false)
+    function __construct($host, $login, $pass, $database, $persistent = false)
 	{
 		$this->host = $host;
 		$this->login = $login;
@@ -79,7 +79,7 @@ class MySQL implements IDb
 		if($this->connect->select_db($this->database)===false)
 			return !$this->setLastError();
 		
-		//$this->pass=null;
+		$this->pass=null;
 
 		$this->query("SET CHARACTER SET 'utf8'"/*, $encoding*/);
 		return true;
@@ -121,7 +121,7 @@ class MySQL implements IDb
 	 */
 	public	function	fetchAllRows($param=MYSQLI_ASSOC)
 	{
-		$return=array();
+		$return=[];
 		while ($row=$this->fetchArray($param))
 			$return[]=$row;
 		
@@ -186,7 +186,7 @@ static
 	public	function	queryTemplate($tpl)
 	{
 		$argList=func_get_args();
-		$strQuery=call_user_func_array(array('self','getQueryTemplate'),$argList);
+		$strQuery=call_user_func_array(['self','getQueryTemplate'],$argList);
 
 		return $this->query($strQuery);
 	}
