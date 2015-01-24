@@ -37,7 +37,7 @@ class Layout extends Helper
     }
 
     /**
-     * @param string $filename
+     * @param string $value
      *
      * @return string
      */
@@ -65,7 +65,7 @@ class Layout extends Helper
     }
 
     /**
-     * @param strnig $jsText
+     * @param string $jsText
      */
     public static function addJsText($jsText)
     {
@@ -73,7 +73,7 @@ class Layout extends Helper
     }
 
     /**
-     * @param strnig $jsText
+     * @param string $jsText
      */
     public static function addJsTextOnReady($jsText)
     {
@@ -91,7 +91,7 @@ class Layout extends Helper
     }
 
     /**
-     * @param strnig $value
+     * @param string $value
      *
      * @return string
      */
@@ -101,7 +101,7 @@ class Layout extends Helper
     }
 
     /**
-     * @param strnig $value
+     * @param string $value
      *
      * @return string
      */
@@ -111,7 +111,7 @@ class Layout extends Helper
     }
 
     /**
-     * @param strnig $value
+     * @param string $value
      *
      * @return string
      */
@@ -121,7 +121,7 @@ class Layout extends Helper
     }
 
     /**
-     * @param strnig $cssFilename
+     * @param string $cssFilename
      * @param string $path
      */
     public static function delCss($cssFilename, $path = RES_CSS)
