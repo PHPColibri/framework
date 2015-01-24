@@ -25,7 +25,7 @@ class ViewsController extends Base
      */
     protected $template = null;
     /**
-     * @var    bool tells to core to use temlate or not
+     * @var    bool tells to core to use template or not
      */
     protected $useTemplate = true;
     /**

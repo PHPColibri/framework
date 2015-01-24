@@ -1,3 +1,3 @@
-Colibri config component
-========================
+Colibri Controller component
+============================
 
