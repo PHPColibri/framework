@@ -22,7 +22,7 @@ class MySQL implements IDb
 	private $login;
 	private $pass;
 	private $database;
-    /** @var  mysqli_result */
+    /** @var  \mysqli_result */
 	private $result;
 	private $persistent;
 	
@@ -42,7 +42,7 @@ class MySQL implements IDb
      * @param    string $database   mysql database name
      * @param    bool   $persistent make persistent connection
      *
-     * @throws \Exception
+     * @throws DbException
      */
     function __construct($host, $login, $pass, $database, $persistent = false)
 	{
@@ -55,7 +55,7 @@ class MySQL implements IDb
 		$this->persistent = $persistent;
 
 		if (!$this->open())
-			throw new \Exception('can\'t connect to datadase: SQL-error['.$this->getLastErrno().']: '.$this->getLastError());
+			throw new DbException('can\'t connect to datadase: SQL-error['.$this->getLastErrno().']: '.$this->getLastError());
 	}
 	/**
 	 * Открывает соединение с базой данных
@@ -135,8 +135,8 @@ class MySQL implements IDb
 	}
 	/**
 	 *
-	 * @global type $time
-	 * @param type $query_string
+	 * @global int $time
+	 * @param string $query_string
 	 * @return bool 
 	 */
 	public	function	query($query_string)
@@ -146,7 +146,7 @@ class MySQL implements IDb
 			self::$strQueries .= $query_string."\n";
 		}
 
-		$this->result = $this->dbquery($query_string);
+		$this->result = $this->dbQuery($query_string);
 
 		if (self::$monitorQueries) {
 			global $time;
@@ -192,13 +192,13 @@ static
 	}
 
     /**
-     * @param $query_string
+     * @param string $query_string
      *
-     * @return bool|mysqli_result
+     * @return bool|\mysqli_result
      *
      * @throws SqlException
      */
-    private	function	dbquery($query_string)
+    private	function	dbQuery($query_string)
 	{
 		if (self::$monitorQueries)
 			self::$queriesCount++;
@@ -237,14 +237,14 @@ static
 	/**
 	 *
 	 * @param array $arrQueries
-	 * @param bool $rollbackOnfail
+	 * @param bool $rollbackOnFail
 	 * @return bool  
 	 */
-	public	function	queries(array $arrQueries,$rollbackOnfail=false)
+	public	function	queries(array $arrQueries,$rollbackOnFail=false)
 	{
 		foreach ($arrQueries as $query)
 			if (!$this->query($query.';'))
-				return  $rollbackOnfail?$this->transactionRollback()&&false:false;
+				return  $rollbackOnFail?$this->transactionRollback()&&false:false;
 		return true;
 	}
 	public	function	commit($arrQueries)
