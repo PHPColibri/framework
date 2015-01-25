@@ -9,4 +9,6 @@ Colibri
 
 PHP Framework
 
+[установка](https://github.com/PHPColibri/docs/blob/master/quick.md)
+
 [Документация](https://github.com/PHPColibri/docs#colibri-documentation)
