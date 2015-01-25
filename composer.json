@@ -3,6 +3,7 @@
 	"description": "Colibri -  PHP micro framework",
     "keywords": ["framework", "fast", "light", "colibri", "small", "micro"],
 	"type": "library",
+	"homepage": "http://framework.alek13.me/",
 	"license": "MIT",
 	"authors": [{
 		"name": "Alexander Chibrikin",
