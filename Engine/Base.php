@@ -1,12 +1,10 @@
 <?php
 namespace Colibri\Application\Engine;
 
-use Colibri\Application\Engine\IEngine;
 
 use Colibri\Base\PropertyAccess;
-use Colibri\Database\Factory as DbFactory;
-use Colibri\Database\MySQL;
-use Colibri\Cache\Memcache;
+use Colibri\Database\Concrete\MySQL;
+use Colibri\Database\Db;
 use Colibri\Config\Config;
 use Colibri\Database\Object;
 use Colibri\Database\ObjectCollection;
@@ -62,8 +60,8 @@ class Base extends PropertyAccess implements IEngine
 		MySQL::$monitorQueries =
 			$config['debug']
 		;
-		
-		$this->_db = DbFactory::createDb();
+
+        Db::setConfig(Config::get('database'));
 
 		$this->initialize();
 	}

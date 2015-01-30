@@ -129,8 +129,6 @@ class Engine extends Engine\Base
 	 */
 	protected	function	parseRequestedFile($file)
 	{
-		global $config;
-		
 		$appConfig = Config::get('application');
 
 		$dotPos=strpos($file,'.');
@@ -246,8 +244,7 @@ class Engine extends Engine\Base
 		if ($rpcRequest->errno)
 			$this->__raiseError(1231,$rpcRequest->errno,$rpcRequest->error);
 		
-		global $config;
-		
+
 		$appConfig = Config::get('application');
 
 		$parts=explode('.',$rpcRequest->methodName);
