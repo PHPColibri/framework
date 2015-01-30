@@ -16,23 +16,23 @@ use Colibri\Util\Arr;
  */
 class Memcache extends Helper implements ICache
 {
-	static private $defaultConfig	 = array(
+	static private $defaultConfig	 = [
 		'server'			 => '127.0.0.1',
 		'port'				 => 11211,
 		'defaultExpiration'	 => 300,
-	);
-	
+	];
+
 	static private $defaultExpiration = null;
 	/**
-	 * @var \Memcache 
+	 * @var \Memcache
 	 */
 	static private $memcache = null;
 	/**
-	 * @var int 
+	 * @var int
 	 */
 	static private $queriesCount = 0;
-	
-	
+
+
 	/**
 	 * @return int
 	 */
@@ -48,54 +48,56 @@ class Memcache extends Helper implements ICache
 	{
 		if (self::$memcache !== null)
 			return self::$memcache;
-		
+
 		$config = self::getConfig();
-		
+
 		self::$defaultExpiration = $config['defaultExpiration'];
-		
+
 		self::$memcache = new \Memcache();
 		self::$memcache->connect(
 			$config['server'],
 			$config['port']
 		);
-		
+
 		return self::$memcache;
 	}
-	
+
 	static private function getConfig()
 	{
 		$config = Config::getOrEmpty('cache');
-		
+
 		return Arr::overwrite(
 			static::$defaultConfig,
 			isset($config['memcache'])
 				? $config['memcache']
-				: array()
+				: []
 		);
 	}
 
 	/**
 	 * @param string $key for data
-	 * @return boolean result OR data
+	 * @return bool|mixed result OR data
 	 */
 	static
 	public function get($key)
 	{
 		self::$queriesCount++;
-		
+
 		return ($tmp = self::getMemcache()->get($key)) === false
 			? false
 			: unserialize($tmp)
 		;
 	}
 
-	/**
-	 * @param string $key for data
-	 * @param mixed $val any type of supported data: object, string, int…
-	 * @return boolean result
-	 */
-	static
-	public function set($key, $val, $expire = null)
+    /**
+     * @param string $key for data
+     * @param mixed  $val any type of supported data: object, string, int…
+     * @param int    $expire
+     *
+     * @return bool result
+     */
+    static
+    public function set($key, $val, $expire = null)
 	{
 		self::$queriesCount++;
 
@@ -104,7 +106,7 @@ class Memcache extends Helper implements ICache
 				$key,
 				serialize($val),
 				!MEMCACHE_COMPRESSED, // @todo здесь какая-то лажа (надо бы перейти на Memcached)
-				$expire ?: self::$defaultExpiration
+				$expire !== null ? $expire : self::$defaultExpiration
 			)
 		;
 	}
@@ -118,22 +120,26 @@ class Memcache extends Helper implements ICache
 	public function delete($key)
 	{
 		self::$queriesCount++;
-		
+
 		return self::getMemcache()->delete($key);
 	}
-	
-	/**
-	 * 
-	 * @param string $key
-	 * @param \Closure $getValueCallback
-	 */
+
+    /**
+     *
+     * @param string   $key
+     * @param \Closure $getValueCallback
+     *
+     * @param int     $expire
+     *
+     * @return mixed
+     */
 	public static function remember($key, \Closure $getValueCallback, $expire = null)
 	{
 		if (($fromCache = static::get($key)) !== false)
 			return $fromCache;
-		
+
 		static::set($key, $value = $getValueCallback(), $expire);
-		
+
 		return $value;
 	}
 }
