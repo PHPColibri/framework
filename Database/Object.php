@@ -25,7 +25,7 @@ class Object implements IObject
 	static	public	$useMemcache=false;
 	static	public	$debug=true;
 	
-	protected	$tableName	='tableName_not_set';
+	protected	static $tableName	='tableName_not_set';
 	protected	$PKFieldName=['id'];
 
 	protected	$fieldsNameValuesArray=null;
@@ -64,7 +64,7 @@ class Object implements IObject
 		if ($fieldsAndTypes===null)
 		{
 			// TODO: bring out into Database\MySQL
-			$sql='SHOW COLUMNS FROM '.$this->tableName;
+			$sql='SHOW COLUMNS FROM '.static::$tableName;
 			if (self::$useMemcache)
 			{
 				$mc_key=hash('md5',$sql);
@@ -135,7 +135,7 @@ class Object implements IObject
 	}
 	public		function	getTableName()
 	{
-		return $this->tableName;
+		return static::$tableName;
 	}
 
     /**
@@ -206,10 +206,10 @@ class Object implements IObject
 		// TODO [alek13]: ??? parse '...Query()' methods
 		switch ($name)
 		{
-			case 'createQuery':		$tpl='INSERT INTO `'.$this->tableName.'` SET '  .$this->getFieldsNameValueList();break;
-			case 'deleteQuery':		$tpl='DELETE FROM `'.$this->tableName.'` WHERE '.$this->getPKCondition();break;
-			case 'saveQuery':		$tpl='UPDATE `'     .$this->tableName.'` SET '  .$this->getFieldsNameValueList().' WHERE '.$this->getPKCondition();break;
-			case 'loadQuery':		$tpl='SELECT '.$this->getFieldsNamesList().' FROM `'.$this->tableName.'` WHERE '.($this->where===null?$this->getPKCondition():$this->getWhereCondition());break;
+			case 'createQuery':		$tpl='INSERT INTO `'.static::$tableName.'` SET '  .$this->getFieldsNameValueList();break;
+			case 'deleteQuery':		$tpl='DELETE FROM `'.static::$tableName.'` WHERE '.$this->getPKCondition();break;
+			case 'saveQuery':		$tpl='UPDATE `'     .static::$tableName.'` SET '  .$this->getFieldsNameValueList().' WHERE '.$this->getPKCondition();break;
+			case 'loadQuery':		$tpl='SELECT '.$this->getFieldsNamesList().' FROM `'.static::$tableName.'` WHERE '.($this->where===null?$this->getPKCondition():$this->getWhereCondition());break;
 			default: throw new \Exception('unknown query __called method name.');
 		}
         // @todo:

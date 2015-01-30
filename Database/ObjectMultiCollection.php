@@ -19,8 +19,8 @@ class ObjectMultiCollection extends ObjectCollection //implements IObjectMultiCo
 			case 'addToDbQuery':		return 'INSERT INTO `'.$this->fkTableName.'` SET '  .$this->FKName[0].'='.$this->FKValue[0].', '   .$this->FKName[1].'='.$this->FKValue[1];
 			case 'delFromDbQuery':		return 'DELETE FROM `'.$this->fkTableName.'` WHERE '.$this->FKName[0].'='.$this->FKValue[0].' AND '.$this->FKName[1].'='.$this->FKValue[1];
 			case 'selFromDbAllQuery':	$strQuery=$this->FKValue[0] !== null ?
-											'SELECT o.* FROM `'.$this->tableName.'` o inner join `'.$this->fkTableName.'` f  on o.id=f.'.$this->FKName[1].' WHERE f.'.$this->FKName[0].'='.$this->FKValue[0] :
-											'SELECT o.* FROM `'.$this->tableName.'` o WHERE 1';
+											'SELECT o.* FROM `'.static::$tableName.'` o inner join `'.$this->fkTableName.'` f  on o.id=f.'.$this->FKName[1].' WHERE f.'.$this->FKName[0].'='.$this->FKValue[0] :
+											'SELECT o.* FROM `'.static::$tableName.'` o WHERE 1';
 										$strQuery=$this->rebuildQueryForCustomLoad($strQuery);
 										if ($strQuery===false)
 											Error::__raiseError(401,$propertyName,__METHOD__,__LINE__);
