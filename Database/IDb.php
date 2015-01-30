@@ -80,4 +80,8 @@ interface IDb
 	public	function	transactionStart();
 	public	function	transactionRollback();
 	public	function	transactionCommit();
+
+    public function queries(array $arrQueries,$rollbackOnFail=false);
+
+    public function commit(array $arrQueries);
 }

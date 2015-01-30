@@ -1,8 +1,6 @@
 <?php
 namespace Colibri\Database;
 
-use Colibri\Database\MySQL;
-use Colibri\Database\IDb;
 use Colibri\Cache\Memcache;
 
 /**
@@ -39,11 +37,10 @@ class Object implements IObject
 
 	public		$error_message='';
 	public		$error_number=0;
-	/**
-	 * @var IDb 
-	 */
-	protected	$db;
-	
+
+
+    protected static $connectionName = 'default';
+
 	/**
 	 * @var array 
 	 */
@@ -62,9 +59,8 @@ class Object implements IObject
 		return null;
 	}
 
-	public		function	__construct(IDb &$db,$id_or_row=null,&$fieldsAndTypes=null)
+	public		function	__construct($id_or_row=null,&$fieldsAndTypes=null)
 	{
-		$this->db=&$db;
 		if ($fieldsAndTypes===null)
 		{
 			// TODO: bring out into Database\MySQL
@@ -75,14 +71,14 @@ class Object implements IObject
 				if (($result=Memcache::get($mc_key))===false)
 				{
 					if (!$this->doQuery($sql))	{ unset($this);return false;}
-					$result=$this->db->fetchAllRows();
+					$result=self::db()->fetchAllRows();
 					Memcache::set($mc_key,$result);
 				}
 			}
 			else
 			{
 				if (!$this->doQuery($sql))	{ unset($this);return false;}
-				$result=$this->db->fetchAllRows();
+				$result=self::db()->fetchAllRows();
 			}
 			$cnt=count($result);			
 			for ($i=0;$i<$cnt;$i++)
@@ -141,11 +137,23 @@ class Object implements IObject
 	{
 		return $this->tableName;
 	}
-	
+
+    /**
+     * @return IDb
+     */
+	public static function db()
+    {
+        return Db::connection(static::$connectionName);
+    }
 	/**************************************************************************/
 	protected	function	buildNameEqValue($name,$value)
 	{
-		$value=MySQL::prepareValue($value,$this->fieldTypes[$name]);
+        // @todo:
+        //$db = DB::connection(static::$connectionName);
+        //$method = get_class($db) . '::prepareValue';
+        //$value=$method($value,$this->fieldTypes[$name]);
+        //call_user_func([$db, 'prepareValue'], $value,$this->fieldTypes[$name]);
+		$value=Concrete\MySQL::prepareValue($value,$this->fieldTypes[$name]);
 
 		return '`'.$name.'`='.$value;
 	}
@@ -204,14 +212,15 @@ class Object implements IObject
 			case 'loadQuery':		$tpl='SELECT '.$this->getFieldsNamesList().' FROM `'.$this->tableName.'` WHERE '.($this->where===null?$this->getPKCondition():$this->getWhereCondition());break;
 			default: throw new \Exception('unknown query __called method name.');
 		}
-		return MySQL::getQueryTemplateArray($tpl,$arguments);
+        // @todo:
+		return Concrete\MySQL::getQueryTemplateArray($tpl,$arguments);
 	}
 	public		function	__get($propertyName)
 	{
 		if (isset($this->collections[$propertyName]))
 		{
 			if ($this->collections[$propertyName][1]===null)
-				$this->collections[$propertyName][1]=new $this->collections[$propertyName][0]($this->db,$this->id);
+				$this->collections[$propertyName][1]=new $this->collections[$propertyName][0]($this->id);
 			return $this->collections[$propertyName][1];
 		}
 		if (isset($this->objects[$propertyName]))
@@ -220,7 +229,7 @@ class Object implements IObject
 			if ($this->objects[$propertyName][1]===null)
 				$this->objects[$propertyName][1]
 					= new $this->objects[$propertyName][0](
-							$this->db,
+                            self::db(),
 							$this->{$this->objects[$propertyName][2]}
 					);
 			return $this->objects[$propertyName][1];
@@ -255,7 +264,7 @@ class Object implements IObject
 		$this->fieldsNameValuesArray=$fieldsNameValuesArray;
 		if (!$this->doQuery($this->createQuery()))
 			return false;
-		$this->{$this->PKFieldName[0]}=$this->db->lastInsertId();
+		$this->{$this->PKFieldName[0]}=self::db()->lastInsertId();
 		return true;
 	}
 	public		function	delete($id_or_where=null)
@@ -278,7 +287,13 @@ class Object implements IObject
 		return	$this->doQuery($this->saveQuery());
 	}
 	public		function	reload()	{	return	$this->load();	}
-	public		function	load($id_or_where=null)
+
+    /**
+     * @param null $id_or_where
+     *
+     * @return bool|null
+     */
+    public		function	load($id_or_where=null)
 	{
 		if ($id_or_where!==null)
 			if (is_array($id_or_where))
@@ -291,22 +306,21 @@ class Object implements IObject
 		else
 			;
 		if (!$this->doQuery($this->loadQuery()))return false;// sql error
-        if ($this->db->getNumRows()==0)			return null; // no  record
-		if (!$result=$this->db->fetchArray())	return false;
+        if (self::db()->getNumRows()==0)			return null; // no  record
+		if (!$result=self::db()->fetchArray())	return false;
 		$this->fillProperties($result);
 		return	true;
 	}
 	/**
 	 *
-	 * @param IDb $db
 	 * @param mixed $id PK value - int, string or array if multifield PK
 	 * @return \static
 	 * @throws \Exception 
 	 */
 static
-	public		function	getById(IDb &$db,$id)
+	public		function	getById($id)
 	{
-		$object=new static($db);
+		$object=new static();
 		if (!$object->load($id))
 			throw new \Exception('no record');
 		return $object;
@@ -315,8 +329,8 @@ static
 	protected	function	loadByQuery($sqlQuery)
 	{
 		if (!$this->doQuery($sqlQuery))			return false;// sql error
-		if ($this->db->getNumRows()==0)			return null; // no  record
-		if (!$result=$this->db->fetchArray())	return false;
+		if (self::db()->getNumRows()==0)			return null; // no  record
+		if (!$result=self::db()->fetchArray())	return false;
 		$this->fillProperties($result);
 		return	true;
 	}
@@ -366,10 +380,10 @@ static
 		switch ($type)
 		{
 			case 'sql':
-				$errno=$this->db->getLastErrno();
+				$errno=self::db()->getLastErrno();
 				$this->error_message=
 					$cls."\n".
-					'SQL-error ['.$errno.']: '.$this->db->getLastError()."\n".
+					'SQL-error ['.$errno.']: '.self::db()->getLastError()."\n".
 					'SQL-query: '.$strQuery;
 				break;
 			case 'internal':
@@ -393,19 +407,19 @@ static
 	 */
 	protected	function	doQuery($strQuery)
 	{
-		if (!$this->db->query($strQuery))
+		if (!self::db()->query($strQuery))
 			return !$this->setSqlError($strQuery);
 		return true;
 	}
 	protected	function	doQueries(array $arrQueries)
 	{
-		if (!$this->db->queries($arrQueries))
+		if (!self::db()->queries($arrQueries))
 			return !$this->setSqlError(print_r($arrQueries,true));
 		return true;
 	}
 	protected	function	doTransaction($arrQueries)
 	{
-		if (!$this->db->commit($arrQueries))
+		if (!self::db()->commit($arrQueries))
 			return !$this->setSqlError(print_r($arrQueries,true));
 		return true;
 	}

@@ -3,7 +3,7 @@ namespace Colibri\Tests\Database;
 
 
 use Colibri\Config\Config;
-use Colibri\Database\Factory;
+use Colibri\Database\Db;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,7 +14,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         Config::setBaseDir(__DIR__ . '/sample/config');
 
         $this->setExpectedException('Colibri\Database\DbException');
-        Factory::createDb();
+        Db::setConfig(Config::database());
     }
 
     /**
@@ -24,8 +24,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $config = Config::database('connection');
         $config['default'] = '__mysql';
-        $this->setExpectedException('PHPUnit_Framework_Error_Notice');
-        Factory::createDb($config);
+        $this->setExpectedException('Colibri\Database\DbException');
+        Db::setConfig($config);
     }
 
     /**
@@ -35,8 +35,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $config = Config::database('connection');
         $config['default'] = 'mysql1';
-        $this->setExpectedException('PHPUnit_Framework_Error_Warning');
-        $db = Factory::createDb($config);
+        $this->setExpectedException('Colibri\Database\DbException');
+        Db::setConfig($config);
+        $db = Db::connection();
         $this->assertInstanceOf('Colibri\Database\MySQL', $db);
     }
 }

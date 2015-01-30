@@ -12,7 +12,6 @@
 		"php": "~5.3",
 		"colibri-fw/base": "dev-master@dev",
 		"colibri-fw/cache": "dev-master@dev",
-		"colibri-fw/config": "dev-master@dev"
 	},
 	
 	"autoload": {

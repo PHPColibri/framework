@@ -1,7 +1,8 @@
 <?php
-namespace Colibri\Database;
+namespace Colibri\Database\Concrete;
 
 use Colibri\Base\SqlException;
+use Colibri\Database\IDb;
 
 /**
  * DbMySQL Класс для работы с MySQL
@@ -88,7 +89,7 @@ class MySQL implements IDb
 	public	function	__wakeup()			{	$this->open();						}
 
     /**
-     * @return mysqli
+     * @return \mysqli
      */
     public	function	getConnect()		{	return $this->connect;				}
 
@@ -247,7 +248,7 @@ static
 				return  $rollbackOnFail?$this->transactionRollback()&&false:false;
 		return true;
 	}
-	public	function	commit($arrQueries)
+	public	function	commit(array $arrQueries)
 	{
 		if (!$this->transactionStart())			return false;
 		if (!$this->queries($arrQueries,true))	return false;
