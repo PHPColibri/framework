@@ -40,8 +40,7 @@ namespace Colibri\Base;
  */
 class Error
 {
-	private	static	$_errors=array
-	(
+	private	static	$_errors=[
 		   0	=> 'internal php error [%1]: %2. [%3(%4)]',
 		  -1	=> 'unknown error || developer memory failed. :)',
 		/* PropertyAccess */
@@ -88,7 +87,7 @@ class Error
 		1311	=> 'template not loaded.',
 
 
-	);
+	];
 	
 	/**
 	 * @deprecated
@@ -156,9 +155,14 @@ class Error
 abstract
 class AdditionalErrorException extends \Exception
 {
-	protected	$addErrNumber;
-	
-	public	function	__construct($message,$errCode,$addErrNumber)
+	protected $addErrNumber;
+
+    /**
+     * @param string $message
+     * @param int    $errCode
+     * @param int    $addErrNumber
+     */
+    public	function	__construct($message,$errCode,$addErrNumber)
 	{
 		parent::__construct($message,$errCode);
 		$this->addErrNumber=$addErrNumber;
