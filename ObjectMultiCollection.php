@@ -46,7 +46,7 @@ class ObjectMultiCollection extends ObjectCollection //implements IObjectMultiCo
 	{
 		if (!($this->doQuery($this->selFromDbAllQuery)))
 			return false;
-		return $this->_db->fetchAllRows();
+		return $this->db()->fetchAllRows();
 	}
 	protected	function	delFromDbAll()
 	{

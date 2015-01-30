@@ -36,14 +36,13 @@ use Colibri\Database\Object;
 abstract
 class ObjectCollection extends DynamicCollection implements IDynamicCollection//IObjectCollection
 {
-	protected	$_db;
 	protected	$tableName='tableName_not_set';
 	protected	$itemClass='itemClass_not_set';
-	protected	$FKName=array('_id','_id');
-	protected	$FKValue=array(null,null);
+	protected	$FKName=['_id','_id'];
+	protected	$FKValue=[null,null];
 	protected	$_parentID;
-	protected	$itemFields=array();
-	protected	$itemFieldTypes=array();
+	protected	$itemFields=[];
+	protected	$itemFieldTypes=[];
 	public		$error_message='';
 	public		$error_number=0;
 
@@ -59,20 +58,20 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 
 	/**
 	 *
-	 * @param IDb $db
 	 * @param mixed $parentID
 	 */
-	public		function	__construct(&$db,$parentID=null)
+	public		function	__construct($parentID=null)
 	{
-		$this->_db=$db;
-
 		$this->parentID=$parentID;
 	}
 	/**
 	 * IDynamicCollection ::fillItems() implementation
-	 *
-	 */
-	public	function	fillItems(&$rows=null)
+     *
+     * @param null $rows
+     *
+     * @return bool
+     */
+    public function    fillItems(&$rows=null)
 	{
 		if ($rows===null)
 			return $this->load();
@@ -83,7 +82,7 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 		
 		$this->clearItems();
 		foreach ($rows as $row)
-			$this->addItem(new $this->itemClass($this->_db,$row,$fieldsAndTypes));
+			$this->addItem(new $this->itemClass($row,$fieldsAndTypes));
 
 		return true;
 	}
@@ -122,7 +121,7 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 	}
 	protected	function	clearItems()
 	{
-		$this->_items=array();
+		$this->_items=[];
 	}
 	///////////////////////////////////////////////////////////////////////////
 
@@ -137,16 +136,17 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 				{
 					if (!($this->doQuery($this->selFromDbAllQuery)))
 						return false;
-					return $this->_db->fetchAllRows();
+					return $this->db()->fetchAllRows();
 				}
 	///////////////////////////////////////////////////////////////////////////
 	protected	function	doQuery($strQuery)
 	{
-		if (!$this->_db->query($strQuery))
+        $itemClass = $this->itemClass;
+        if (!$itemClass::db()->query($strQuery))
 		{
 			$cls=get_class($this);
-			$errno=$this->_db->getLastErrno();
-			$this->error_message=$cls."\n".'SQL error['.$errno.']: '.$this->_db->getLastError()."\n".'SQL-query: '.$strQuery;
+			$errno=$itemClass::db()->getLastErrno();
+			$this->error_message=$cls."\n".'SQL error['.$errno.']: '.$itemClass::db()->getLastError()."\n".'SQL-query: '.$strQuery;
 			$this->error_number=$errno;
 			return false;
 		}
@@ -163,14 +163,14 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 				if (($result=Memcache::get($mc_key))===false)
 				{
 					if (!$this->doQuery($sql))	return false;
-					$result=$this->_db->fetchAllRows();
+                    $result=$this->db()->fetchAllRows();
 					Memcache::set($mc_key,$result);
 				}
 			}
 			else
 			{
 				if (!$this->doQuery($sql))	return false;
-				$result=$this->_db->fetchAllRows();
+				$result=$this->db()->fetchAllRows();
 			}
 
 			$cnt=count($result);
@@ -182,12 +182,12 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 			}
 		}
 
-		$retArray=array('fields'=>&$this->itemFields,'types'=>&$this->itemFieldTypes);
+		$retArray=['fields'=>&$this->itemFields,'types'=>&$this->itemFieldTypes];
 		return $retArray;
 	}
 	protected	function	buildWhere(array &$clauses,$type)
 	{
-		$whereParts=array();
+		$whereParts=[];
 		foreach ($clauses as $clause)
 		{
 			$name =$clause[0];
@@ -199,7 +199,7 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 			else
 			{
 				if (!is_array($name=explode(' ',$name,2)))
-					$name=array($name);
+					$name=[$name];
 				if (!isset($name[1]))
 					$name[1]=$value===null?'is':'=';
 
@@ -273,10 +273,10 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 	}*/
 	private function	buildClauses(array $where,$type='and')
 	{
-		$whereClauses=array();
+		$whereClauses=[];
 		foreach ($where as $name => $value)
-			$whereClauses[]=array($name,$value);
-		return array($type=>$whereClauses);
+			$whereClauses[]=[$name,$value];
+		return [$type=>$whereClauses];
 	}
 	// public user functions
 	///////////////////////////////////////////////////////////////////////////
@@ -402,7 +402,7 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 			// TODO [alek13]: bring out into Database\MySQL
 			if ($this->doQuery('SELECT FOUND_ROWS()'))
 			{
-				$row=$this->_db->fetchRow();
+				$row=$this->db()->fetchRow();
 				$this->recordsCount=$row[0];
 				$this->pagesCount = ceil($this->recordsCount/$this->recordsPerPage);
 			}
@@ -437,5 +437,14 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 				return $this->_items[$i];
 		return false;
 	}
-	///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * @return IDb
+     */
+    protected function db()
+    {
+        $itemClass = $this->itemClass;
+        return $itemClass::db();
+    }
+    ///////////////////////////////////////////////////////////////////////////
 }
