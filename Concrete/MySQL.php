@@ -2,6 +2,7 @@
 namespace Colibri\Database\Concrete;
 
 use Colibri\Base\SqlException;
+use Colibri\Database\DbException;
 use Colibri\Database\IDb;
 
 /**
@@ -153,7 +154,8 @@ class MySQL implements IDb
 			global $time;
 			$queryEndTime=microtime(true);
 			$curScriptTime=$queryEndTime-$time;
-			$queryExecTime=$queryEndTime-$queryStartTime;
+            /** @var int $queryStartTime */
+            $queryExecTime=$queryEndTime-$queryStartTime;
 			self::$strQueries.='  Script time: '.round($curScriptTime,8)."\n";
 			self::$strQueries.='  Query  time: '.round($queryExecTime,8)."\n";
 		}
@@ -224,7 +226,7 @@ static
 	
 	/**
 	 * 
-	 * @param type $tableName
+	 * @param string $tableName
 	 * @return array  поля: [TABLE_SCHEMA] ,TABLE_NAME, COLUMN_NAME    refs to   [REFERENCED_TABLE_SCHEMA ], REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
 	 */
 	public	function	getTableFKs($tableName)

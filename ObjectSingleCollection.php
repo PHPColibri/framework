@@ -20,7 +20,7 @@ class ObjectSingleCollection extends ObjectCollection //implements IObjectSingle
 										//eval($code);
 										//'.$fList.'
 										$strQuery=
-											'SELECT * FROM `'.$this->tableName.'` WHERE 1 '.
+											'SELECT * FROM `'.static::$tableName.'` WHERE 1 '.
 											($this->FKValue[1]!==null?
 												' AND '.$this->FKName[1].'='.$this->FKValue[1]:'').
 												($this->FKValue[0]!==null?
@@ -33,7 +33,7 @@ class ObjectSingleCollection extends ObjectCollection //implements IObjectSingle
 										if ($strQuery===false)
 											Error::__raiseError(401,$this->error_number,$this->error_message,$propertyName,__METHOD__,__LINE__);
 										return $strQuery;
-			case 'delFromDbAllQuery':	return 'DELETE FROM `'.$this->tableName.'` WHERE '.$this->FKName[0].'='.$this->FKValue[0];
+			case 'delFromDbAllQuery':	return 'DELETE FROM `'.static::$tableName.'` WHERE '.$this->FKName[0].'='.$this->FKValue[0];
 			default:					return parent::__get($propertyName);
 		}
 	}

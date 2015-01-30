@@ -36,7 +36,7 @@ use Colibri\Database\Object;
 abstract
 class ObjectCollection extends DynamicCollection implements IDynamicCollection//IObjectCollection
 {
-	protected	$tableName='tableName_not_set';
+	protected	static $tableName='tableName_not_set';
 	protected	$itemClass='itemClass_not_set';
 	protected	$FKName=['_id','_id'];
 	protected	$FKValue=[null,null];
@@ -156,7 +156,7 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 	{
 		if (empty($this->itemFields))
 		{
-			$sql='SHOW COLUMNS FROM '.$this->tableName;
+			$sql='SHOW COLUMNS FROM '.static::$tableName;
 			if (self::$useMemcache)
 			{
 				$mc_key=hash('md5',$sql);
