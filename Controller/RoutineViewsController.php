@@ -1,6 +1,7 @@
 <?php
 namespace Colibri\Routine\Controller;
 
+use Colibri\Base\SqlException;
 use Colibri\Controller\ViewsController;
 
 use Colibri\Database\Object;
@@ -28,20 +29,21 @@ class RoutineViewsController extends ViewsController
 
 	public		function	defaultView()
 	{
-		$items=new $this->listClass(\API::$db);
+        /** @var \Colibri\Database\ObjectCollection $items */
+		$items=new $this->listClass();
 		$this->applyListFilters($items);
 		if ($items->load()===false)
-			$this->__raiseSqlError(9999, $items->error_number, $items->error_message);
+			throw new SqlException($items->error_message, 9999, $items->error_number);
 
 		$this->template->vars[$this->listTplVar]=$items;
 		if ($this->pagedList)
-			$this->template->vars['pagination']=array(
+			$this->template->vars['pagination']=[
 				'page'			=> (int)(isset($_GET['page'])?$_GET['page']:0),
 				'recordsPerPage'=> $items->recordsPerPage,
 				'recordsCount'	=> $items->recordsCount,
 				'pagesCount'	=> $items->pagesCount,
 				'base_url'		=> '/'.$this->division.'/'.$this->module
-			);
+			];
 	}
 	protected	function	applyListFilters(ObjectCollection $items)
 	{
@@ -53,7 +55,8 @@ class RoutineViewsController extends ViewsController
 /*final*/public	function	edit($id)	{	$this->prepareEditorTpl($id);	}
 	protected	function	prepareEditorTpl($id=null)
 	{
-		$item=new $this->itemClass(\API::$db);
+        /** @var \Colibri\Database\Object $item */
+		$item=new $this->itemClass();
 
 		//kminaev - cancel button support
 		if(isset($_POST['cancel']))
@@ -76,7 +79,7 @@ class RoutineViewsController extends ViewsController
 			if (isset($this->template->vars['errors']))
 				$errors=$this->template->vars['errors'];
 			else
-				$errors=array();
+				$errors=[];
 
 			$this->template->vars['errors']=array_merge($errors,$post->errors);
 		}
@@ -90,7 +93,7 @@ class RoutineViewsController extends ViewsController
 		else // edit mode
 		{
 			if ($item->load($id)===false)
-				$this->__raiseSqlError(2751, $item->error_number, $item->error_message);
+				throw new SqlException($item->error_message, 2751, $item->error_number);
 		}
 
 		$this->initItem($item,$id);
@@ -105,7 +108,7 @@ class RoutineViewsController extends ViewsController
 	}
 
 	protected	function	initItem(Object $item,$id=null){}
-	protected	function	defaultValuesOnDbChange($id=null){ return array(); }
+	protected	function	defaultValuesOnDbChange(/** @noinspection PhpUnusedParameterInspection */$id=null){ return []; }
 
 	protected	function	dbChange(Object $item,$id=null)
 	{
@@ -122,9 +125,9 @@ class RoutineViewsController extends ViewsController
 		$changed=$item->$method($vals);
 		if ($changed===false)
 			if ($item->error_number==1062)
-				$this->template->vars['errors'][]=\API::$db->getLastError().":\n".' такая запись существует или находится в Корзине.';
+				$this->template->vars['errors'][]='Такая запись существует или находится в Корзине.';
 			else
-				$this->__raiseSqlError(9999, $item->error_number, $item->error_message);
+				throw new SqlException($item->error_message, 9999, $item->error_number);
 
 		return $changed;
 	}
@@ -133,9 +136,10 @@ abstract
 
 	public		function	delete($id)
 	{
-		$item=new $this->itemClass(\API::$db);
+        /** @var \Colibri\Database\Object $item */
+		$item=new $this->itemClass();
 		if ($item->delete($id)===false)
-			$this->__raiseSqlError(2741, $item->error_number, $item->error_message);
+			throw new SqlException($item->error_message, 2741, $item->error_number);
 		header('Location: '.(isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'/'.$this->division.'/'.$this->module));
 	}
 }
