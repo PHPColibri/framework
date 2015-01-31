@@ -84,4 +84,8 @@ interface IDb
     public function queries(array $arrQueries,$rollbackOnFail=false);
 
     public function commit(array $arrQueries);
+
+    public static function prepareValue(&$value, $type);
+
+    public static function getQueryTemplateArray($tpl, $arguments);
 }
