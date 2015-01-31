@@ -4,12 +4,9 @@ namespace Colibri\Database;
 use Colibri\Base\IDynamicCollection;
 use Colibri\Base\DynamicCollection;
 use Colibri\Cache\Memcache;
-use Colibri\Database\IDb;
-use Colibri\Database\MySQL;
-use Colibri\Database\Object;
 
 
-/*class ReferenceType
+/*class RelationType
 {
 	const	SingleToMany=1;
 	const	ManyToMany=2;
@@ -36,6 +33,9 @@ use Colibri\Database\Object;
 abstract
 class ObjectCollection extends DynamicCollection implements IDynamicCollection//IObjectCollection
 {
+    /**
+     * @var Object
+     */
 	protected	static $tableName='tableName_not_set';
 	protected	$itemClass='itemClass_not_set';
 	protected	$FKName=['_id','_id'];
@@ -203,7 +203,7 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 				if (!isset($name[1]))
 					$name[1]=$value===null?'is':'=';
 
-				$whereParts[]='`'.$name[0].'` '.$name[1].' '.MySQL::prepareValue($value,$this->itemFieldTypes[$name[0]]);
+				$whereParts[]='`'.$name[0].'` '.$name[1].' '.$this->db()->prepareValue($value,$this->itemFieldTypes[$name[0]]);
 			}
 		}
 
@@ -428,12 +428,20 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 		if ($this->indexOf($itemID)==-1)	return false;
 		else								return true;
 	}
-	public	function	getItemByID($ID)
+
+    /**
+     * @param int|string $id
+     *
+     * @return bool
+     */
+    public	function	getItemByID($id)
 	{
 		$count=count($this->_items);
-		if ($count>0)	$PKfn=$this->_items[0]->PKFieldName[0];
+        /** @var Object $itemClass */
+        $itemClass = $this->itemClass;
+		if ($count>0)	$PKfn=$itemClass::$PKFieldName[0];
 		for ($i=0;$i<$count;$i++)
-			if (isset($this->_items[$i]->$PKfn) && $this->_items[$i]->$PKfn==$ID)
+			if (isset($this->_items[$i]->$PKfn) && $this->_items[$i]->$PKfn==$id)
 				return $this->_items[$i];
 		return false;
 	}
@@ -443,6 +451,7 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
      */
     protected function db()
     {
+        /** @var Object $itemClass */
         $itemClass = $this->itemClass;
         return $itemClass::db();
     }

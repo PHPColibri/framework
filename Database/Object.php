@@ -8,13 +8,16 @@ use Colibri\Cache\Memcache;
  * прим.: версия 1.08+ возможно не совместима с предыдущими.
  *
  * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
- * @package		xTeam
- * @subpackage	a13FW
+ * @package		Colibri
+ * @subpackage	Database
  * @version		1.12.4
  *
- * @exception	3xx
+ * @property         int|string  $id
  *
- * @property-read	array	PKFieldName
+ * @method string createQuery()
+ * @method string deleteQuery()
+ * @method string saveQuery()
+ * @method string loadQuery()
  */
 abstract
 class Object implements IObject
@@ -24,9 +27,9 @@ class Object implements IObject
 
 	static	public	$useMemcache=false;
 	static	public	$debug=true;
-	
+
 	protected	static $tableName	='tableName_not_set';
-	protected	$PKFieldName=['id'];
+	protected	static $PKFieldName=['id'];
 
 	protected	$fieldsNameValuesArray=null;
 	protected	$where=null;
@@ -42,11 +45,11 @@ class Object implements IObject
     protected static $connectionName = 'default';
 
 	/**
-	 * @var array 
+	 * @var array
 	 */
 	protected	$collections=[];
 	/**
-	 * @var array 
+	 * @var array
 	 */
 	protected	$objects=[];
 
@@ -59,7 +62,11 @@ class Object implements IObject
 		return null;
 	}
 
-	public		function	__construct($id_or_row=null,&$fieldsAndTypes=null)
+    /**
+     * @param int|array $id_or_row
+     * @param array     $fieldsAndTypes
+     */
+    public		function	__construct($id_or_row=null,&$fieldsAndTypes=null)
 	{
 		if ($fieldsAndTypes===null)
 		{
@@ -80,7 +87,7 @@ class Object implements IObject
 				if (!$this->doQuery($sql))	{ unset($this);return false;}
 				$result=self::db()->fetchAllRows();
 			}
-			$cnt=count($result);			
+			$cnt=count($result);
 			for ($i=0;$i<$cnt;$i++)
 			{
 				$this->fields[]=$result[$i]['Field'];
@@ -97,42 +104,39 @@ class Object implements IObject
 		}
 
 		if ($id_or_row===null)
-			$this->{$this->PKFieldName[0]}=self::NEW_OBJECT;
+			$this->{static::$PKFieldName[0]}=self::NEW_OBJECT;
 		else
 			if (is_array($id_or_row))
 				$this->fillProperties($id_or_row);
 			else
 				if (!$this->load($id_or_row))
-					$this->{$this->PKFieldName[0]}=self::LOAD_ERROR;
+					$this->{static::$PKFieldName[0]}=self::LOAD_ERROR;
 	}
-	/*
-	public	function	getFieldsNameList($specificClassName=null,$everyFieldPrefix='')
-	{
-		$strList='';
-		$cName=$specificClassName===null?get_class($this):$specificClassName;
-		$selectedFields=array_keys(get_class_vars($cName));
 
-		foreach ($this as $propName => $propValue)
-			if (in_array($propName,$selectedFields)&&in_array($propName,$this->fields))
-				$strList.=', '.$everyFieldPrefix.$propName;
-
-		return substr($strList,2);
-		/*foreach ($selectedFields as $propName)
-			$strList.=', '.$everyFieldPrefix.$propName;
-		return substr($strList,2);*//*
-	}
-	*/
+    /**
+     * @param string $everyFieldPrefix
+     *
+     * @return string
+     */
 	public		function	getFieldsNamesList($everyFieldPrefix='')
 	{
 		$classVars=array_keys(get_class_vars(get_class($this)));
 		$selectedFields=array_intersect($classVars,$this->fields);
-		
+
 		return $everyFieldPrefix.'`'.implode('`, '.$everyFieldPrefix.'`',$selectedFields).'`';
 	}
+
+    /**
+     * @return array
+     */
 	public		function	getPKFieldName()
 	{
-		return $this->PKFieldName;
+		return static::$PKFieldName;
 	}
+
+    /**
+     * @return string
+     */
 	public		function	getTableName()
 	{
 		return static::$tableName;
@@ -141,31 +145,26 @@ class Object implements IObject
     /**
      * @return IDb
      */
-	public static function db()
+	final public static function db()
     {
         return Db::connection(static::$connectionName);
     }
 	/**************************************************************************/
 	protected	function	buildNameEqValue($name,$value)
 	{
-        // @todo:
-        //$db = DB::connection(static::$connectionName);
-        //$method = get_class($db) . '::prepareValue';
-        //$value=$method($value,$this->fieldTypes[$name]);
-        //call_user_func([$db, 'prepareValue'], $value,$this->fieldTypes[$name]);
-		$value=Concrete\MySQL::prepareValue($value,$this->fieldTypes[$name]);
+		$value=self::db()->prepareValue($value,$this->fieldTypes[$name]);
 
 		return '`'.$name.'`='.$value;
 	}
 	protected	function	getFieldsNameValueList($fieldPrefix='')
 	{
 		$obj=$this->fieldsNameValuesArray===null?$this:$this->fieldsNameValuesArray;
-		
+
 		$strList='';
 		foreach ($obj as $propName => $propValue)
 			if (in_array($propName,$this->fields) && (
 					$this->fieldsNameValuesArray===null ?
-						!in_array($propName,$this->PKFieldName) :
+						!in_array($propName,static::$PKFieldName) :
 						true
 			))
 				$strList.=', '.$fieldPrefix.$this->buildNameEqValue($propName,$propValue);
@@ -177,13 +176,13 @@ class Object implements IObject
 		$strList='';
 		foreach ($this->where as $name => $value)
 			$strList.=' AND '.$fieldPrefix.$this->buildNameEqValue($name,$value);
-			
+
 		return substr($strList,5);
 	}
 	protected	function	getPKCondition($fieldPrefix='')
 	{
 		$strList='';
-		foreach ($this->PKFieldName as $PKName)
+		foreach (static::$PKFieldName as $PKName)
 			$strList.=' AND '.$fieldPrefix.$this->buildNameEqValue($PKName,$this->$PKName);
 		return substr($strList,5);
 	}
@@ -192,7 +191,7 @@ class Object implements IObject
 		// TODO [alek13]: implement protected method setPKValue(array id) or __set('PK',array id) ...  (to make posible to set an PK as array), хотя зачем ?
 		throw new \Exception('method not implemented yet.');
 	}
-	
+
 	protected	function	fillProperties(array $row)
 	{
 		foreach ($row as $propName => $propValue)
@@ -201,7 +200,15 @@ class Object implements IObject
             else
                 $this->$propName=$propValue;//$row[$propName];
 	}
-	public		function	__call($name,$arguments)
+
+    /**
+     * @param $name
+     * @param $arguments
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    public		function	__call($name,$arguments)
 	{
 		// TODO [alek13]: ??? parse '...Query()' methods
 		switch ($name)
@@ -213,37 +220,36 @@ class Object implements IObject
 			default: throw new \Exception('unknown query __called method name.');
 		}
         // @todo:
-		return Concrete\MySQL::getQueryTemplateArray($tpl,$arguments);
+		return self::db()->getQueryTemplateArray($tpl,$arguments);
 	}
 	public		function	__get($propertyName)
 	{
 		if (isset($this->collections[$propertyName]))
 		{
-			if ($this->collections[$propertyName][1]===null)
-				$this->collections[$propertyName][1]=new $this->collections[$propertyName][0]($this->id);
-			return $this->collections[$propertyName][1];
+			return $this->getRelated($propertyName, $this->collections);
 		}
 		if (isset($this->objects[$propertyName]))
 		{
-			// TODO: ссылки не только на PK
-			if ($this->objects[$propertyName][1]===null)
-				$this->objects[$propertyName][1]
-					= new $this->objects[$propertyName][0](
-                            self::db(),
-							$this->{$this->objects[$propertyName][2]}
-					);
-			return $this->objects[$propertyName][1];
+			return $this->getRelated($propertyName, $this->objects);
 		}
 		throw new \Exception('свойство $'.$propertyName.' в классе '.get_class($this).' не определено или не является public.');
 	}
+    private     function    getRelated($name, &$relationsDefinition)
+    {
+        $container          = &$relationsDefinition[$name];
+        $relatedObject      = &$container[1];
+        $relatedObjectClass = $container[0];
+        $objectFKName       = isset($container[2]) ? $container[2] : static::$PKFieldName[0]; // TODO:
+
+        return $relatedObject === null
+            ? $relatedObject = new $relatedObjectClass($this->$objectFKName) // TODO: ссылки бывают не только на PK
+            : $relatedObject;
+    }
 	public		function	__set($propertyName,$propertyValue)
 	{
-		// this bugfix only temporary. php bug.
-		// in_array($propertyName,$this->PKFieldName) not work.
-		$a=$this->PKFieldName;
-		if (in_array($propertyName,$a))
+		if (in_array($propertyName,static::$PKFieldName))
 			return $this->$propertyName=$propertyValue;
-		
+
 		//if (self::$debug)
 			throw new \Exception('свойство $'.$propertyName.' в классе '.get_class($this).' не определено или не является public.');
 		//else
@@ -257,14 +263,14 @@ class Object implements IObject
 	}
 	/**
 	 * @param array $fieldsNameValuesArray
-	 * @return bool 
+	 * @return bool
 	 */
 	public		function	create(array $fieldsNameValuesArray=null)
 	{
 		$this->fieldsNameValuesArray=$fieldsNameValuesArray;
 		if (!$this->doQuery($this->createQuery()))
 			return false;
-		$this->{$this->PKFieldName[0]}=self::db()->lastInsertId();
+		$this->{static::$PKFieldName[0]}=self::db()->lastInsertId();
 		return true;
 	}
 	public		function	delete($id_or_where=null)
@@ -275,7 +281,7 @@ class Object implements IObject
 			else
 			{
 				$this->where=null;
-				$this->{$this->PKFieldName[0]}=$id_or_where;
+				$this->{static::$PKFieldName[0]}=$id_or_where;
 			}
 		else
 			;
@@ -301,12 +307,12 @@ class Object implements IObject
 			else
 			{
 				$this->where=null;
-				$this->{$this->PKFieldName[0]}=$id_or_where;
+				$this->{static::$PKFieldName[0]}=$id_or_where;
 			}
 		else
 			;
 		if (!$this->doQuery($this->loadQuery()))return false;// sql error
-        if (self::db()->getNumRows()==0)			return null; // no  record
+        if (self::db()->getNumRows()==0)		return null; // no  record
 		if (!$result=self::db()->fetchArray())	return false;
 		$this->fillProperties($result);
 		return	true;
@@ -315,7 +321,7 @@ class Object implements IObject
 	 *
 	 * @param mixed $id PK value - int, string or array if multifield PK
 	 * @return \static
-	 * @throws \Exception 
+	 * @throws \Exception
 	 */
 static
 	public		function	getById($id)
@@ -329,12 +335,12 @@ static
 	protected	function	loadByQuery($sqlQuery)
 	{
 		if (!$this->doQuery($sqlQuery))			return false;// sql error
-		if (self::db()->getNumRows()==0)			return null; // no  record
+		if (self::db()->getNumRows()==0)		return null; // no  record
 		if (!$result=self::db()->fetchArray())	return false;
 		$this->fillProperties($result);
 		return	true;
 	}
-	
+
 	public		function	initialize($row){	$this->fillProperties($row);				}
 
 	public		function	getFieldsAsXMLstring()
@@ -380,7 +386,9 @@ static
 		switch ($type)
 		{
 			case 'sql':
-				$errno=self::db()->getLastErrno();
+				/** @noinspection PhpUndefinedMethodInspection @todo: remove this functionality in favor of Exceptions */
+                $errno=self::db()->getLastErrno();
+                /** @noinspection PhpUndefinedMethodInspection @todo: remove this functionality in favor of Exceptions */
 				$this->error_message=
 					$cls."\n".
 					'SQL-error ['.$errno.']: '.self::db()->getLastError()."\n".
