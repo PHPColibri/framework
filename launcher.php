@@ -7,7 +7,7 @@ use Colibri\Application\Engine as ApplicationEngine;
 use Colibri\Log\Log;
 use Colibri\Cache\Memcache;
 use Colibri\Config\Config;
-use Colibri\Database\MySQL;
+use Colibri\Database\Concrete\MySQL;
 use Colibri\Base\BuisnessLogicException;
 use Colibri\Base\AdditionalErrorException;
 use Colibri\XmlRpc\Response as XmlRpcResponse;
