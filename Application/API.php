@@ -18,10 +18,6 @@ class API
 	 */
 	protected 	static	$moduleSystem=null;
 	/**
-	 * @var Colibri\Database\MySQL database
-	 */
-	public		static	$db=null;
-	/**
 	 * @var array assoc-array of errors (key/field => error-message); 
 	 */
 	public		static	$errors=null;
@@ -34,9 +30,7 @@ class API
 	public		function	__construct(Engine &$mSystem)
 	{
 		self::$moduleSystem=$mSystem;
-		if ($mSystem->db!==null)
-			self::$db=$mSystem->db;
-		
+
 		static::init();
 	}
 
