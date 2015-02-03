@@ -85,6 +85,12 @@ interface IDb
 
     public function commit(array $arrQueries);
 
+    /**
+     * @param string $tableName
+     * @return array
+     */
+    public function getColumnsMetadata($tableName);
+
     public static function prepareValue(&$value, $type);
 
     public static function getQueryTemplateArray($tpl, $arguments);

@@ -53,14 +53,6 @@ class Object implements IObject
 	 */
 	protected	$objects=[];
 
-	private function getFieldTypeLength($strField)
-	{
-		$ex1 = explode(")", $strField);
-		$ex2 = explode("(",$ex1[0]);
-		if(count($ex2)> 1)
-			return $ex2[1];
-		return null;
-	}
 
     /**
      * @param int|array $id_or_row
@@ -70,32 +62,10 @@ class Object implements IObject
 	{
 		if ($fieldsAndTypes===null)
 		{
-			// TODO: bring out into Database\MySQL
-			$sql='SHOW COLUMNS FROM '.static::$tableName;
-			if (self::$useMemcache)
-			{
-				$mc_key=hash('md5',$sql);
-				if (($result=Memcache::get($mc_key))===false)
-				{
-					if (!$this->doQuery($sql))	{ unset($this);return false;}
-					$result=self::db()->fetchAllRows();
-					Memcache::set($mc_key,$result);
-				}
-			}
-			else
-			{
-				if (!$this->doQuery($sql))	{ unset($this);return false;}
-				$result=self::db()->fetchAllRows();
-			}
-			$cnt=count($result);
-			for ($i=0;$i<$cnt;$i++)
-			{
-				$this->fields[]=$result[$i]['Field'];
-				$type=explode('(',$result[$i]['Type']);
-				$this->fieldTypes[$result[$i]['Field']]=$type[0];
-				$length = $this->getFieldTypeLength($result[$i]['Type']);
-				$this->fieldLengths[$result[$i]['Field']] = $length;
-			}
+            $metadata           = $this->db()->getColumnsMetadata(static::$tableName);
+            $this->fields       = &$metadata['fields'];
+            $this->fieldTypes   = &$metadata['fieldTypes'];
+            $this->fieldLengths = &$metadata['fieldLengths'];
 		}
 		else
 		{
@@ -137,7 +107,7 @@ class Object implements IObject
     /**
      * @return string
      */
-	public		function	getTableName()
+	final public function getTableName()
 	{
 		return static::$tableName;
 	}
