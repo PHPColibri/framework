@@ -60,7 +60,7 @@ interface IDb
      *
      * @return
      */
-	public function fetchAllRows($param = MYSQL_ASSOC);
+	public function &fetchAllRows($param = MYSQL_ASSOC);
 	/**
 	 * Стока результата запроса в виде массива
 	 * @param int $param Модификатор тива возвращаемого значения

@@ -122,7 +122,7 @@ class MySQL extends AbstractDb
 	 * @param int $param fetch type
 	 * @return array
 	 */
-	public	function	fetchAllRows($param=MYSQLI_ASSOC)
+	public	function	&fetchAllRows($param=MYSQLI_ASSOC)
 	{
 		$return=[];
 		while ($row=$this->fetchArray($param))
