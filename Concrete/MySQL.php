@@ -4,6 +4,7 @@ namespace Colibri\Database\Concrete;
 use Colibri\Base\SqlException;
 use Colibri\Database\DbException;
 use Colibri\Database\IDb;
+use Colibri\Database\AbstractDb;
 
 /**
  * DbMySQL Класс для работы с MySQL
@@ -15,7 +16,7 @@ use Colibri\Database\IDb;
  *
  * @property-read bool $noConnectToMemcacheServer
  */
-class MySQL implements IDb
+class MySQL extends AbstractDb
 {
     /** @var \mysqli */
 	private $connect;
@@ -27,9 +28,9 @@ class MySQL implements IDb
     /** @var  \mysqli_result */
 	private $result;
 	private $persistent;
-	
+
 	static	public	$throwExceptions=true;
-	
+
 	static	public	$monitorQueries=false;
 	static	public	$strQueries='';
 	static	public	$queriesCount = 0;
@@ -80,7 +81,7 @@ class MySQL implements IDb
 
 		if($this->connect->select_db($this->database)===false)
 			return !$this->setLastError();
-		
+
 		$this->pass=null;
 
 		$this->query("SET CHARACTER SET 'utf8'"/*, $encoding*/);
@@ -119,14 +120,14 @@ class MySQL implements IDb
 	public	function	fetchAssoc()					{	return $this->result->fetch_assoc();		}
 	/**
 	 * @param int $param fetch type
-	 * @return array 
+	 * @return array
 	 */
 	public	function	fetchAllRows($param=MYSQLI_ASSOC)
 	{
 		$return=[];
 		while ($row=$this->fetchArray($param))
 			$return[]=$row;
-		
+
 		return $return;
 	}
 
@@ -139,7 +140,7 @@ class MySQL implements IDb
 	 *
 	 * @global int $time
 	 * @param string $query_string
-	 * @return bool 
+	 * @return bool
 	 */
 	public	function	query($query_string)
 	{
@@ -223,9 +224,9 @@ static
 	public	function	transactionStart()		{	return $this->query('START TRANSACTION;');	}
 	public	function	transactionRollback()	{	return $this->query('ROLLBACK;');			}
 	public	function	transactionCommit()		{	return $this->query('COMMIT;');				}
-	
+
 	/**
-	 * 
+	 *
 	 * @param string $tableName
 	 * @return array  поля: [TABLE_SCHEMA] ,TABLE_NAME, COLUMN_NAME    refs to   [REFERENCED_TABLE_SCHEMA ], REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
 	 */
@@ -237,19 +238,6 @@ static
 		return $this->fetchAllRows();
 	}
 
-	/**
-	 *
-	 * @param array $arrQueries
-	 * @param bool $rollbackOnFail
-	 * @return bool  
-	 */
-	public	function	queries(array $arrQueries,$rollbackOnFail=false)
-	{
-		foreach ($arrQueries as $query)
-			if (!$this->query($query.';'))
-				return  $rollbackOnFail?$this->transactionRollback()&&false:false;
-		return true;
-	}
 	public	function	commit(array $arrQueries)
 	{
 		if (!$this->transactionStart())			return false;
@@ -287,7 +275,57 @@ static
 
 			default:		$value='\''.addslashes($value).'\'';
 		}
-		
+
 		return $value;
 	}
+
+    /**
+     * @param string $tableName
+     *
+     * @return array
+     */
+    protected function &retrieveColumnsMetadata($tableName)
+    {
+        $sql = 'SHOW COLUMNS FROM ' . $tableName;
+        if (!$this->query($sql)) {
+            throw new DbException($this->getLastError());
+        }
+        $result = $this->fetchAllRows();
+
+        $fields = [];
+        $fieldTypes = [];
+        $fieldLengths = [];
+
+        $cnt = count($result);
+        for ($i = 0; $i < $cnt; $i++) {
+            $fName                = &$result[$i]['Field'];
+            $fType                = &$result[$i]['Type'];
+            $fields[]             = &$fName;
+            $fieldTypes[$fName]   = explode('(', $fType)[0];
+            $fieldLengths[$fName] = $this->extractFieldTypeLength($fType);
+        }
+
+        $returnArray = [ // compact() ???
+            'fields'       => &$fields,
+            'fieldTypes'   => &$fieldTypes,
+            'fieldLengths' => &$fieldLengths
+        ];
+
+        return $returnArray;
+    }
+
+    /**
+     * @param $strField
+     * @return int|null
+     */
+    private function &extractFieldTypeLength(&$strFieldType)
+    {
+        $len = explode(")", $strFieldType);
+        $len = explode("(", $len[0]);
+        if (count($len) > 1)
+            $len = &$len[1];
+        else
+            $len = null;
+        return $len;
+    }
 }

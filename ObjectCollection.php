@@ -152,39 +152,17 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 		}
 		return true;
 	}
-	protected	function	getFieldsAndTypes()
-	{
-		if (empty($this->itemFields))
-		{
-			$sql='SHOW COLUMNS FROM '.static::$tableName;
-			if (self::$useMemcache)
-			{
-				$mc_key=hash('md5',$sql);
-				if (($result=Memcache::get($mc_key))===false)
-				{
-					if (!$this->doQuery($sql))	return false;
-                    $result=$this->db()->fetchAllRows();
-					Memcache::set($mc_key,$result);
-				}
-			}
-			else
-			{
-				if (!$this->doQuery($sql))	return false;
-				$result=$this->db()->fetchAllRows();
-			}
 
-			$cnt=count($result);
-			for ($i=0;$i<$cnt;$i++)
-			{
-				$this->itemFields[]=$result[$i]['Field'];
-				$type=explode('(',$result[$i]['Type']);
-				$this->itemFieldTypes[$result[$i]['Field']]=$type[0];
-			}
-		}
+    protected function    getFieldsAndTypes()
+    {
+        if (empty($this->itemFields)) {
+            $metadata = $this->db()->getColumnsMetadata(static::$tableName);
+            $this->itemFields     = &$metadata['fields'];
+            $this->itemFieldTypes = &$metadata['fieldTypes'];
+        }
 
-		$retArray=['fields'=>&$this->itemFields,'types'=>&$this->itemFieldTypes];
-		return $retArray;
-	}
+        return ['fields' => &$this->itemFields, 'types' => &$this->itemFieldTypes];
+    }
 	protected	function	buildWhere(array &$clauses,$type)
 	{
 		$whereParts=[];
