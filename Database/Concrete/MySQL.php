@@ -202,7 +202,7 @@ static
      *
      * @throws SqlException
      */
-    private	function	dbQuery($query_string)
+    private	function	&dbQuery($query_string)
 	{
 		if (self::$monitorQueries)
 			self::$queriesCount++;
@@ -216,8 +216,9 @@ static
 					9999, // TODO: waste this error code
 					$this->getLastErrno()
 				);
-			return false;
+            return $result;
 		}
+
 		return $result;
 	}
 
