@@ -33,9 +33,6 @@ use Colibri\Cache\Memcache;
 abstract
 class ObjectCollection extends DynamicCollection implements IDynamicCollection//IObjectCollection
 {
-    /**
-     * @var Object
-     */
 	protected	static $tableName='tableName_not_set';
 	protected	$itemClass='itemClass_not_set';
 	protected	$FKName=['_id','_id'];
@@ -412,7 +409,7 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
      *
      * @return bool
      */
-    public	function	getItemByID($id)
+    public	function	&getItemByID($id)
 	{
 		$count=count($this->_items);
         /** @var Object $itemClass */
@@ -422,6 +419,21 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 			if (isset($this->_items[$i]->$PKfn) && $this->_items[$i]->$PKfn==$id)
 				return $this->_items[$i];
 		return false;
+	}
+
+	public  function    &toArrayOf($fieldName)
+	{
+		$arr = [];
+		foreach ($this as $object) {
+			$arr []= $object->$fieldName;
+		}
+
+		return $arr;
+	}
+
+	public  function    implode($fieldName, $glue = ', ')
+	{
+		return implode($glue, $this->toArrayOf($fieldName));
 	}
 
     /**
