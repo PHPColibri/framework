@@ -58,20 +58,12 @@ class Object implements IObject
      * @param int|array $id_or_row
      * @param array     $fieldsAndTypes
      */
-    public		function	__construct($id_or_row=null,&$fieldsAndTypes=null)
+    public		function	__construct($id_or_row=null)
 	{
-		if ($fieldsAndTypes===null)
-		{
-            $metadata           = $this->db()->getColumnsMetadata(static::$tableName);
-            $this->fields       = &$metadata['fields'];
-            $this->fieldTypes   = &$metadata['fieldTypes'];
-            $this->fieldLengths = &$metadata['fieldLengths'];
-		}
-		else
-		{
-			$this->fields		=&$fieldsAndTypes['fields'];
-			$this->fieldTypes	=&$fieldsAndTypes['types'];
-		}
+        $metadata           = static::db()->getColumnsMetadata(static::$tableName);
+        $this->fields       = &$metadata['fields'];
+        $this->fieldTypes   = &$metadata['fieldTypes'];
+        $this->fieldLengths = &$metadata['fieldLengths'];
 
 		if ($id_or_row===null)
 			$this->{static::$PKFieldName[0]}=self::NEW_OBJECT;
