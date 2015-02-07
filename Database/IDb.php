@@ -89,7 +89,7 @@ interface IDb
      * @param string $tableName
      * @return array
      */
-    public function getColumnsMetadata($tableName);
+    public function &getColumnsMetadata($tableName);
 
     public static function prepareValue(&$value, $type);
 

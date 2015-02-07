@@ -141,12 +141,12 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 	///////////////////////////////////////////////////////////////////////////
 	protected	function	doQuery($strQuery)
 	{
-        $itemClass = $this->itemClass;
-        if (!$itemClass::db()->query($strQuery))
+        $db = $this->db();
+        if (!$db->query($strQuery))
 		{
 			$cls=get_class($this);
-			$errno=$itemClass::db()->getLastErrno();
-			$this->error_message=$cls."\n".'SQL error['.$errno.']: '.$itemClass::db()->getLastError()."\n".'SQL-query: '.$strQuery;
+			$errno=$db->getLastErrno();
+			$this->error_message=$cls."\n".'SQL error['.$errno.']: '.$db->getLastError()."\n".'SQL-query: '.$strQuery;
 			$this->error_number=$errno;
 			return false;
 		}
