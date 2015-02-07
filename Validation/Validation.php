@@ -256,6 +256,14 @@ class Validation extends PropertyAccess
 		return !(bool)count($this->_errors);
 	}
 
+	public function ifIsValid(\Closure $callback)
+	{
+		if ($this->valid())
+			$callback();
+
+		return $this;
+	}
+
 	/**
 	 * @param callable $callback
 	 *
