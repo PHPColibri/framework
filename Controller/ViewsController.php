@@ -103,6 +103,7 @@ class ViewsController extends Base
 
         // TODO: bring out into application config ??
         Layout::addJsText(
+	        'var VND=\'' . VND . '\';' . "\n" .
             'var MOD=\'' . MOD . '\';' . "\n" .
             'var IMG=\'' . RES_IMG . '\';' . "\n" .
             'var JS =\'' . RES_JS . '\';' . "\n" .
