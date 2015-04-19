@@ -421,11 +421,21 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 		return false;
 	}
 
-	public  function    &toArrayOf($fieldName)
+	/**
+	 * @param string $fieldName which field push to an array
+	 * @param string $keyField  which field use as keys of array
+	 *
+	 * @return array
+	 */
+	public  function    &toArrayOf($fieldName, $keyField = null)
 	{
 		$arr = [];
 		foreach ($this as $object) {
-			$arr []= $object->$fieldName;
+			if ($keyField === null) {
+				$arr[] = $object->$fieldName;
+			} else {
+				$arr[$object->$keyField] = $object->$fieldName;
+			}
 		}
 
 		return $arr;
@@ -446,4 +456,17 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
         return $itemClass::db();
     }
     ///////////////////////////////////////////////////////////////////////////
+	/**
+	 * @param string $fieldName
+	 * @param string $keyField
+	 *
+	 * @return static|ObjectCollection|Object[]|array
+	 */
+	public static function &all($fieldName = null, $keyField = null)
+	{
+		$collection = new static();
+		if ($fieldName !== null)
+			return $collection->toArrayOf($fieldName, $keyField);
+		return $collection;
+	}
 }

@@ -254,6 +254,19 @@ class Object implements IObject
 		$this->fieldsNameValuesArray=$fieldsNameValuesArray;
 		return	$this->doQuery($this->saveQuery());
 	}
+
+	/**
+	 * @param $values
+	 *
+	 * @return static
+	 */
+	public static function &saveNew($values)
+	{
+		$object = new static();
+		$object->create($values);
+		return $object;
+	}
+
 	public		function	reload()	{	return	$this->load();	}
 
     /**
