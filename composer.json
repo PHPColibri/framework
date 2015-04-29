@@ -1,0 +1,23 @@
+{
+	"name": "colibri-fw/session",
+	"description": "Colibri Session component",
+	"type": "library",
+	"license": "MIT",
+	"authors": [{
+		"name": "Alexander Chibrikin",
+		"email": "alek13.me@gmail.com"
+	}],
+
+	"require": {
+		"php": "~5.3",
+		"colibri-fw/util": "dev-master@dev"		
+	},
+	
+	"autoload": {
+		"psr-4": {
+			"Colibri\\Session\\": ""
+		}
+	},
+
+	"minimum-stability": "dev"
+}
