@@ -14,10 +14,11 @@ interface StorageInterface
 	public function has($dottedKey);
 	/**
 	 * @param string $dottedKey
+	 * @param mixed  $default
 	 *
 	 * @return mixed
 	 */
-	public function get($dottedKey);
+	public function get($dottedKey, $default = null);
 	/**
 	 * @param string $dottedKey
 	 * @param mixed  $value

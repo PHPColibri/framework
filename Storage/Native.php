@@ -30,12 +30,13 @@ class Native extends Singleton implements StorageInterface
 
 	/**
 	 * @param string $dottedKey
+	 * @param mixed  $default
 	 *
 	 * @return mixed
 	 */
-	public function get($dottedKey)
+	public function get($dottedKey, $default = null)
 	{
-		return Arr::get($_SESSION, $dottedKey);
+		return Arr::get($_SESSION, $dottedKey, $default);
 	}
 
 	/**
