@@ -23,16 +23,16 @@ class Arr extends Helper
 	 * Get an item from an array using "dot" notation.
 	 *
 	 * @param  array   $array
-	 * @param  string  $key
+	 * @param  string  $dottedKey
 	 * @param  mixed   $default
 	 * @return mixed
 	 */
-	public static function get(array $array, $key = null, $default = null)
+	public static function get(array $array, $dottedKey = null, $default = null)
 	{
-		if (is_null($key)) return $array;
-		if (isset($array[$key])) return $array[$key];
+		if (is_null($dottedKey)) return $array;
+		if (isset($array[$dottedKey])) return $array[$dottedKey];
 
-		foreach (explode('.', $key) as $segment) {
+		foreach (explode('.', $dottedKey) as $segment) {
 			if (!is_array($array) || !array_key_exists($segment, $array)) {
 				return $default;
 			}
@@ -42,4 +42,43 @@ class Arr extends Helper
 		return $array;
 	}
 
+	/**
+	 * @param array  $array
+	 * @param string $dottedKey
+	 * @param mixed  $value
+	 *
+	 * @return mixed
+	 */
+	public static function &set(&$array, $dottedKey, $value)
+	{
+		if (is_null($dottedKey)) return $array = $value;
+
+		$k = explode('.', $dottedKey, 2);
+
+		$array[$k[0]] = isset($k[1])
+			? Arr::set($array[$k[0]], $k[1], $value)
+			: $value;
+
+		return $array;
+	}
+
+	/**
+	 * @param array  $array
+	 * @param string $dottedKey
+	 *
+	 * @return mixed|null
+	 */
+	public static function remove(array &$array, $dottedKey)
+	{
+		if (isset($array[$dottedKey])) {
+			$value = $array[$dottedKey];
+			unset($array[$dottedKey]);
+			return $value;
+		}
+
+		$k = explode('.', $dottedKey, 2);
+		return isset($k[1])
+			? Arr::remove($array[$k[0]], $k[1])
+			: null;
+	}
 }
