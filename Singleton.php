@@ -19,7 +19,7 @@ abstract class Singleton
 	/**
 	 * @return static
 	 */
-	static public function &getInstance()
+	static public function getInstance()
 	{
 		return static::$instance === null
 			? static::$instance = new static()
