@@ -8,7 +8,7 @@ namespace Colibri\Pattern;
  * 
  * @author Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  */
-abstract class Singleton extends Helper
+abstract class Singleton
 {
 	static protected $instance = null;
 
@@ -19,7 +19,7 @@ abstract class Singleton extends Helper
 	/**
 	 * @return static
 	 */
-	static public function getInstance()
+	static public function &getInstance()
 	{
 		return static::$instance === null
 			? static::$instance = new static()
