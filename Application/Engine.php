@@ -207,7 +207,7 @@ class Engine extends Engine\Base
 	{
 		$this->loadModule($division,$module,$type);
 
-		$className='C'.ucfirst($module).ucfirst($division).($type==CallType::view?'Views':'Methods');
+		$className=ucfirst($module).ucfirst($division).($type==CallType::view?'Views':'Methods').'Controller';
 		if (!class_exists($className))
 			$this->__raiseError(1221,$className);
 		$responser=new $className($division,$module,$method);
@@ -275,10 +275,10 @@ class Engine extends Engine\Base
 	private		function	loadModule($division,$moduleName,$type=CallType::view)
 	{
 		$mPath=$moduleName.'/'.($division===''?'':$division.'/');
-		$mName=$moduleName.ucfirst($division);
+		$mName=ucfirst($moduleName).ucfirst($division);
 
 		$fileName=MODULES.$mPath;
-		if     ($type==CallType::view)		$fileName.=$mName.'Views.php';
+		if     ($type==CallType::view)		$fileName.=$mName.'ViewsController.php';
 		elseif ($type==CallType::method)	$fileName.=$mName.'Methods.php';
 		else								$this->__raiseError(1241);       // unknown callType
 
