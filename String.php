@@ -12,7 +12,7 @@ class String
 	/**
 	 *
 	 * @param string $str
-	 * @return bool 
+	 * @return bool
 	 */
 static
 	public		function	isEmail($str)
@@ -93,11 +93,52 @@ static
 	/**
 	 *
 	 * @param string $str
-	 * @return bool 
+	 * @return bool
 	 */
 static
 	public		function	isJSON($str)
 	{
 		return json_decode($str)!==null;
+	}
+
+	/**
+	 * @param string $str
+	 * @param string $delimiter
+	 *
+	 * @return bool
+	 */
+static
+	public		function	firstPart($str, $delimiter = ' ')
+	{
+		return array_shift(explode($delimiter, $str));
+	}
+
+	/**
+	 * @param string $str
+	 * @param string $delimiter
+	 *
+	 * @return bool
+	 */
+static
+	public		function	lastPart($str, $delimiter = ' ')
+	{
+		return array_pop(explode($delimiter, $str));
+	}
+
+	/**
+	 * @param string $str
+	 * @param string $delimiter
+	 *
+	 * @return mixed|string
+	 */
+static
+	public		function	snake($str, $delimiter = '_')
+	{
+		if (!ctype_upper($str)) {
+			$str = strtolower(preg_replace('/(.)(?=[A-Z])/', '$1' . $delimiter, $str));
+			$str = preg_replace('/\s+/', '', $str);
+		}
+
+		return $str;
 	}
 }
