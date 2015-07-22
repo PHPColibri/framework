@@ -105,7 +105,7 @@ static
 	 * @param string $str
 	 * @param string $delimiter
 	 *
-	 * @return bool
+	 * @return string
 	 */
 static
 	public		function	firstPart($str, $delimiter = ' ')
@@ -117,7 +117,7 @@ static
 	 * @param string $str
 	 * @param string $delimiter
 	 *
-	 * @return bool
+	 * @return string
 	 */
 static
 	public		function	lastPart($str, $delimiter = ' ')
@@ -129,7 +129,7 @@ static
 	 * @param string $str
 	 * @param string $delimiter
 	 *
-	 * @return mixed|string
+	 * @return string
 	 */
 static
 	public		function	snake($str, $delimiter = '_')
