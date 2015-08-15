@@ -87,7 +87,7 @@ class Validation extends PropertyAccess
 
 	/**
 	 * @param string|array $key
-	 * @param int          $maxLength
+	 * @param int|array    $maxLength
 	 * @param string       $message
 	 *
 	 * @return $this
