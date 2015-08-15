@@ -40,8 +40,8 @@ class ObjectSingleCollection extends ObjectCollection //implements IObjectSingle
 
 	// with DataBase
 	///////////////////////////////////////////////////////////////////////////
-	protected	function	addToDb($id)	{	return true;	}
-	protected	function	delFromDb($id)	{	return true;	}
-	protected	function	delFromDbAll()	{	return true;	}
+	protected   function    addToDb(Object &$id)    {	return true;	}
+	protected   function    delFromDb($id)          {	return true;	}
+	protected   function    delFromDbAll()          {	return true;	}
 	///////////////////////////////////////////////////////////////////////////
 }

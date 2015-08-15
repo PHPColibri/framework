@@ -3,6 +3,7 @@ namespace Colibri\Application\Engine;
 
 
 use Colibri\Base\PropertyAccess;
+use Colibri\Database\AbstractDb;
 use Colibri\Database\Concrete\MySQL;
 use Colibri\Database\Db;
 use Colibri\Config\Config;
@@ -51,11 +52,10 @@ class Base extends PropertyAccess implements IEngine
 			}
 		}
 
-		Object::$useMemcache =
-		ObjectCollection::$useMemcache =
+		AbstractDb::$useMemcacheForMetadata =
 			$config['useCache']
 		;
-		
+
 		Object::$debug =
 		MySQL::$monitorQueries =
 			$config['debug']

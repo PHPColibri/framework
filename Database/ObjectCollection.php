@@ -51,8 +51,6 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 	public		$recordsCount=null;
 	public		$pagesCount=null;
 
-	public	static	$useMemcache=false;
-
 	/**
 	 *
 	 * @param mixed $parentID
@@ -125,7 +123,7 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 
 	// with DataBase
 	///////////////////////////////////////////////////////////////////////////
-	abstract	protected	function	addToDb($id);
+	abstract	protected	function	addToDb(Object &$id);
 	abstract	protected	function	delFromDb($id);
 	//abstract	protected	function	selFromDbAll();
 	abstract	protected	function	delFromDbAll();
@@ -348,7 +346,7 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 	public	function	add(Object &$obj)
 	{
 		if ($this->_items===null)	if (!$this->fillItems())	return false;
-		if (!$this->addToDb($obj->id))	return false;
+		if (!$this->addToDb($obj))	return false;
 		$this->addItem($obj);
 		return true;
 	}

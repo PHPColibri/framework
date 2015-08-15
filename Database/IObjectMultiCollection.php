@@ -5,7 +5,7 @@ use Colibri\Database\IObjectCollection;
 
 interface	IObjectMultiCollection extends IObjectCollection
 {
-	function	addToDb($itemID);
+	function	addToDb(Object &$itemID);
 	function	delFromDb($itemID);
 	//function	selFromDbAll();
 	function	delFromDbAll();
