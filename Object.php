@@ -25,7 +25,6 @@ class Object implements IObject
 	const	NEW_OBJECT=-1;
 	const	LOAD_ERROR=-2;
 
-	static	public	$useMemcache=false;
 	static	public	$debug=true;
 
 	protected	static $tableName	='tableName_not_set';
@@ -156,11 +155,14 @@ class Object implements IObject
 
 	protected	function	fillProperties(array $row)
 	{
-		foreach ($row as $propName => $propValue)
-            if (isset($this->fieldTypes[$propName]) && strtolower($this->fieldTypes[$propName])=='bit')
-                $this->$propName=(bool)ord($propValue);//$row[$propName];
-            else
-                $this->$propName=$propValue;//$row[$propName];
+		foreach ($row as $propName => $propValue) {
+			$type = isset($this->fieldTypes[$propName]) ? $this->fieldTypes[$propName] : null;
+			switch ($type) {
+				case 'bit':       $this->$propName = (bool)ord($propValue);break;
+				case 'timestamp': $this->$propName = new \Carbon\Carbon($propValue);break;
+				default:          $this->$propName = $propValue;break;
+			}
+		}
 	}
 
     /**
@@ -260,7 +262,7 @@ class Object implements IObject
 	 *
 	 * @return static
 	 */
-	public static function &saveNew($values)
+	public static function &saveNew(array $values)
 	{
 		$object = new static();
 		$object->create($values);

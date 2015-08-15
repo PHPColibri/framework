@@ -32,9 +32,9 @@ class ObjectMultiCollection extends ObjectCollection //implements IObjectMultiCo
 
 	// with DataBase
 	///////////////////////////////////////////////////////////////////////////
-	protected	function	addToDb($id)
+	protected	function	addToDb(Object &$object)
 	{
-		$this->FKValue[1]=$id;
+		$this->FKValue[1]=$object->id;
 		return $this->doQuery($this->addToDbQuery);
 	}
 	protected	function	delFromDb($id)
