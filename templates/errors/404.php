@@ -20,12 +20,12 @@
 		<p>
 			Страница, которую вы запршиваете, не существует.
 		</p>
-		<? if (defined('DEBUG') && DEBUG && isset($error)) { ?>
+		<?php if (defined('DEBUG') && DEBUG && isset($error)) { ?>
 		<div class="error">
 			<div>Debug Info:</div>
 			<pre><?=$error?></pre>
 		</div>
-		<? } ?>
+		<?php } ?>
 	</div></div>
   </body>
 </html>

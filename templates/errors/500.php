@@ -20,12 +20,12 @@
 		<p>
 			На сервере произошла ошибка. Приносим свои извинения.
 		</p>
-		<? if (defined('DEBUG') && DEBUG && isset($error)) { ?>
+		<?php if (defined('DEBUG') && DEBUG && isset($error)) { ?>
 		<div class="error">
 			<div>Debug Info:</div>
 			<pre><?=$error?></pre>
 		</div>
-		<? } ?>
+		<?php } ?>
 	</div></div>
   </body>
 </html>
