@@ -144,10 +144,10 @@ class Engine extends Engine\Base
 		}
 		else
 			$this->_division='';
-			
+
 		if (empty($parts[0]))		$this->_module=$appConfig['module']['default'];
 		else						$this->_module=$parts[0];
-		if ($partsCnt<2 || 
+		if ($partsCnt<2 ||
 			empty($parts[1]))		$this->_method=$appConfig['module']['defaultViewsControllerAction'];
 		else						$this->_method=$parts[1];
 
@@ -234,7 +234,7 @@ class Engine extends Engine\Base
 	}
 	/**
 	 * @deprecated
-	 * 
+	 *
 	 * @param	string	$rpcQuery	with xmlrpc
 	 * @exception 123x
 	 */
@@ -294,12 +294,13 @@ static
 		throw new \Exception("php error [$code]: '$message' in $file:$line");
 	}
 static
-	public		function	exceptionHandler(Exception $exc)
+	public		function	exceptionHandler(\Exception $exc)
 	{
+		$message = $exc->__toString();
 		if (DEBUG)
-			echo('<pre>'.$exc->__toString().'</pre>');
+			echo('<pre>' . $message . '</pre>');
 		else
-			include(HTTPERRORS.'500.html');
+			include(HTTPERRORS . '500.html');
 		
 		Log::add($message,'core.module');
 	}
