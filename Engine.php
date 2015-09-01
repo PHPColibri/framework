@@ -300,7 +300,7 @@ static
 		if (DEBUG)
 			echo('<pre>' . $message . '</pre>');
 		else
-			include(HTTPERRORS . '500.html');
+			include(HTTPERRORS . '500.php');
 		
 		Log::add($message,'core.module');
 	}
