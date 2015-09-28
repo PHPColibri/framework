@@ -27,6 +27,7 @@
 		"colibri-fw/log": "self.version",
 		"colibri-fw/pattern": "self.version",
 		"colibri-fw/routine": "self.version",
+		"colibri-fw/session": "self.version",
 		"colibri-fw/util": "self.version",
 		"colibri-fw/validation": "self.version",
 		"colibri-fw/view": "self.version"
