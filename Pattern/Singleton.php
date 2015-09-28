@@ -8,7 +8,7 @@ namespace Colibri\Pattern;
  * 
  * @author Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  */
-abstract class Singleton extends Helper
+abstract class Singleton
 {
 	static protected $instance = null;
 
