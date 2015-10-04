@@ -274,7 +274,7 @@ class Engine extends Engine\Base
 	 */
 	private		function	loadModule($division,$moduleName,$type=CallType::view)
 	{
-		$mPath=$moduleName.'/'.($division===''?'':$division.'/');
+		$mPath=$moduleName.'/'.($division===''?'primary/':$division.'/');
 		$mName=ucfirst($moduleName).ucfirst($division);
 
 		$fileName=MODULES.$mPath;

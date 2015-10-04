@@ -50,7 +50,7 @@ class ViewsController extends Base
     protected function init()
     {
         parent::init();
-        $this->divPath    = $this->_module . ($this->_division === '' ? '' : '/' . $this->_division);
+        $this->divPath    = $this->_module . '/' . Config::divisions($this->_division);
         $this->divPrefix  = ($this->_division === '' ? '' : $this->_division . '_');
         $this->divPostfix = ($this->_division === '' ? '' : '.' . $this->_division);
     }
@@ -71,7 +71,7 @@ class ViewsController extends Base
 
         if ($this->template->filename === null) {
             $tplPath = sprintf(MODULE_TEMPLATES, $this->divPath);
-            $tplName = $tplPath . $this->divPrefix . $this->_module . '_' . $this->_method . '.php';
+            $tplName = $tplPath . $this->_method . '.php';
             if (file_exists($tplName)) {
                 $this->template->load($tplName);
             }
@@ -114,10 +114,10 @@ class ViewsController extends Base
         Layout::addJsMgr('backbone' . ($this->_division === '' ? '' : '_' . $this->_division));
         Layout::addCss('backbone' . $this->divPostfix . '.css');
 
-        $module_methodName = $this->_module . '_' . $this->_method;
+        $fileBaseName = $this->_module . '_' . $this->_method;
         // add default js manager
         $jsPath   = $this->divPath . '/js/managers/';
-        $jsName   = $this->divPrefix . $module_methodName;
+        $jsName   = $this->divPrefix . $fileBaseName;
         $fileName = MODULES . $jsPath . $jsName . '_mgr.js';
         if (file_exists($fileName)) {
             Layout::addJsMgr($jsName, MOD . $jsPath);
@@ -125,7 +125,7 @@ class ViewsController extends Base
 
         // add default css
         $cssPath  = $this->divPath . '/css/';
-        $cssName  = $this->divPrefix . $module_methodName . '.css';
+        $cssName  = $this->divPrefix . $fileBaseName . '.css';
         $fileName = MODULES . $cssPath . $cssName;
         if (file_exists($fileName)) {
             Layout::addCss($cssName, MOD . $cssPath);
