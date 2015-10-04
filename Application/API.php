@@ -156,6 +156,7 @@ static
 static
 	public		function	catchSession($session_id)
 	{
+		// @todo move this into Session
 		session_write_close();
 		session_id($session_id);
 		session_start();

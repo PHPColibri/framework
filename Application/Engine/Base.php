@@ -9,6 +9,7 @@ use Colibri\Database\Db;
 use Colibri\Config\Config;
 use Colibri\Database\Object;
 use Colibri\Database\ObjectCollection;
+use Colibri\Session\Session;
 
 /**
  * Description of CEngine
@@ -28,7 +29,7 @@ class Base extends PropertyAccess implements IEngine
 	{
 		$config = Config::get('application');
 		
-		session_start();
+		Session::start();
 		
 		if (get_magic_quotes_gpc()) //  turn OFF the magic quotes !!!!!!!!!!!!!!!!!!!!
 		{
