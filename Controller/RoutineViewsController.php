@@ -87,7 +87,7 @@ class RoutineViewsController extends ViewsController
 		if ($id===null) // create mode
 		{
 			$tplPath=sprintf(MODULE_TEMPLATES,$this->module.'/'.$this->division);
-			$tplName=$tplPath.$this->division.'_'.$this->module.'_edit.php';
+			$tplName=$tplPath.'edit.php';
 			$this->template->load($tplName);
 		}
 		else // edit mode
