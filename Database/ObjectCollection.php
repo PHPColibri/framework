@@ -17,18 +17,6 @@ use Colibri\Cache\Memcache;
  *
  * Класс основан на DynamicCollection, по сему свои элементы подгружает
  * только тогда, когда идёт первое обращение к элементу коллекции.
- * прим.: версия 1.02+ возможно не совместима с предыдущими.
- *        в следущей версии совместимость будет отсутствовать.
- *
- *
- * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
- * @package		xTeam
- * @subpackage	a13FW
- * @version		1.05
- *
- * внесены изменения в классы ObjectSingleCollection и ObjectMultiCollection
- *  ObjectSingleCollection: теперь при FKValue[0]==null делается выборка по всей коллекции при FKName[1]=FKValue[1]
- *  ObjectMultiCollection: теперь при FKValue[0]==null делается выборка по всей коллекции
  */
 abstract
 class ObjectCollection extends DynamicCollection implements IDynamicCollection//IObjectCollection

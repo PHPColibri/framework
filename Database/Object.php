@@ -156,6 +156,10 @@ class Object implements IObject
 	protected	function	fillProperties(array $row)
 	{
 		foreach ($row as $propName => $propValue) {
+			if ($propValue === null) {
+				$this->$propName = $propValue;
+				continue;
+			}
 			$type = isset($this->fieldTypes[$propName]) ? $this->fieldTypes[$propName] : null;
 			switch ($type) {
 				case 'bit':       $this->$propName = (bool)ord($propValue);break;
