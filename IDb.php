@@ -91,7 +91,7 @@ interface IDb
      */
     public function &getColumnsMetadata($tableName);
 
-    public static function prepareValue(&$value, $type);
+    public function prepareValue(&$value, $type);
 
     public static function getQueryTemplateArray($tpl, $arguments);
 }
