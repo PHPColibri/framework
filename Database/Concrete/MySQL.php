@@ -246,7 +246,7 @@ static
 		if (!$this->transactionCommit())		return false;
 		return true;
 	}
-static
+
 	public	function	prepareValue(&$value,$type)
 	{
 		if ($value===null)
@@ -259,7 +259,7 @@ static
 					'\'' . date('Y-m-d H:i:s', $value) . '\'' :
 					($value instanceof \DateTime ?
 						'\'' . $value->format('Y-m-d H:i:s') . '\'' :
-						'\'' . addslashes($value) . '\''
+						'\'' . $this->connect->escape_string($value) . '\''
 					);
 				break;
 
@@ -274,7 +274,7 @@ static
 			case 'double':
 			case 'float':	$value=(float)floatval($value);break;
 
-			default:		$value='\''.addslashes($value).'\'';
+			default:		$value='\''.$this->connect->escape_string($value).'\'';
 		}
 
 		return $value;

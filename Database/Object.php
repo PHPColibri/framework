@@ -239,6 +239,9 @@ class Object implements IObject
 		if (!$this->doQuery($this->createQuery()))
 			return false;
 		$this->{static::$PKFieldName[0]}=self::db()->lastInsertId();
+		if ($fieldsNameValuesArray) {
+			$this->fillProperties($fieldsNameValuesArray);
+		}
 		return true;
 	}
 	public		function	delete($id_or_where=null)
@@ -301,7 +304,7 @@ class Object implements IObject
 	/**
 	 *
 	 * @param mixed $id PK value - int, string or array if multifield PK
-	 * @return \static
+	 * @return static
 	 * @throws \Exception
 	 */
 static
