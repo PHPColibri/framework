@@ -10,7 +10,7 @@ use Colibri\Pattern\Helper;
 class Arr extends Helper
 {
 	/**
-	 * 
+	 *
 	 * @param array $array
 	 * @param array $with
 	 * @return array
@@ -80,5 +80,15 @@ class Arr extends Helper
 		return isset($k[1])
 			? Arr::remove($array[$k[0]], $k[1])
 			: null;
+	}
+
+    /**
+     * @param array $array
+     * @param array $keys
+     * @return array
+     */
+	public static function only(array $array, array $keys)
+	{
+		return array_intersect_key($array, array_flip($keys));
 	}
 }
