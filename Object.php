@@ -2,6 +2,7 @@
 namespace Colibri\Database;
 
 use Colibri\Cache\Memcache;
+use Colibri\Util\Arr;
 
 /**
  * Абстрактный класс объекта базы данных.
@@ -55,7 +56,6 @@ class Object implements IObject
 
     /**
      * @param int|array $id_or_row
-     * @param array     $fieldsAndTypes
      */
     public		function	__construct($id_or_row=null)
 	{
