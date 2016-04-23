@@ -71,6 +71,7 @@ static
 static
 	private		function	getCacheKeyForCall(array $params)
 	{
+		$params += $_GET;
 		$keyStr='';
 		foreach ($params as $param)
 			$keyStr.=serialize($param);
