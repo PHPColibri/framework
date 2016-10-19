@@ -329,7 +329,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	{
 		$validation
 			->extendScope(array('login' => 'vpopov'))
-			->isNot('\Colibri\Util\String::isEmail', 'login', 'field \'login\' must not be a mail')
+			->isNot('\Colibri\Util\StringC::isEmail', 'login', 'field \'login\' must not be a mail')
 			->isNot('self::theFalse', 'not-exists', 'something wrong');
 		$this->assertEquals(0, count($validation->errors));
 
