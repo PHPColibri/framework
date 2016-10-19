@@ -1,41 +1,52 @@
 <?php
+
 namespace Colibri\Util;
+
 use Colibri\Pattern\Helper;
 
 /**
- * Description of Arr
- *
- * @author Александр Чибрикин aka alek13 <alek13.me@gmail.com>
+ * Helper for work with arrays.
  */
 class Arr extends Helper
 {
+
 	/**
+	 * Overwrite $with values in $array.
 	 *
 	 * @param array $array
 	 * @param array $with
+	 *
 	 * @return array
 	 */
 	public static function overwrite(array $array, array $with)
 	{
 		return array_replace_recursive($array, $with);
 	}
+
 	/**
 	 * Get an item from an array using "dot" notation.
 	 *
 	 * @param  array   $array
 	 * @param  string  $dottedKey
 	 * @param  mixed   $default
+	 *
 	 * @return mixed
 	 */
 	public static function get(array $array, $dottedKey = null, $default = null)
 	{
-		if (is_null($dottedKey)) return $array;
-		if (isset($array[$dottedKey])) return $array[$dottedKey];
+		if (is_null($dottedKey)) {
+			return $array;
+		}
+
+		if (isset($array[$dottedKey])) {
+			return $array[$dottedKey];
+		}
 
 		foreach (explode('.', $dottedKey) as $segment) {
 			if (!is_array($array) || !array_key_exists($segment, $array)) {
 				return $default;
 			}
+
 			$array = $array[$segment];
 		}
 
@@ -43,6 +54,8 @@ class Arr extends Helper
 	}
 
 	/**
+	 * Set value to array using dot notation.
+	 *
 	 * @param array  $array
 	 * @param string $dottedKey
 	 * @param mixed  $value
@@ -63,6 +76,8 @@ class Arr extends Helper
 	}
 
 	/**
+	 * Remove value in array using dot notation.
+	 *
 	 * @param array  $array
 	 * @param string $dottedKey
 	 *
@@ -83,8 +98,11 @@ class Arr extends Helper
 	}
 
     /**
+	 * Return values with $keys from $array.
+	 *
      * @param array $array
      * @param array $keys
+	 *
      * @return array
      */
 	public static function only(array $array, array $keys)

@@ -2,7 +2,7 @@
 namespace Colibri\Validation;
 
 use Colibri\Base\PropertyAccess;
-use Colibri\Util\String;
+use Colibri\Util\StringC;
 
 /**
  * Description of Validation
@@ -135,7 +135,7 @@ class Validation extends PropertyAccess
 			foreach ($key as $name)
 				$this->isIntGt0($name, $message);
 		else
-			if (isset($this->scope[$key]) && !(String::isInt($this->scope[$key]) && ((int)$this->scope[$key]) > 0))
+			if (isset($this->scope[$key]) && !(StringC::isInt($this->scope[$key]) && ((int)$this->scope[$key]) > 0))
 				$this->_errors[$key] = sprintf($message !== null ? $message : self::$isIntGt0Message, $key);
 
 		return $this;
@@ -153,7 +153,7 @@ class Validation extends PropertyAccess
 			foreach ($key as $name)
 				$this->isJSON($name, $message);
 		else
-			if (isset($this->scope[$key]) && !String::isJSON($this->scope[$key]))
+			if (isset($this->scope[$key]) && !StringC::isJSON($this->scope[$key]))
 				$this->_errors[$key] = sprintf($message !== null ? $message : self::$isJSONMessage, $key);
 
 		return $this;
@@ -171,7 +171,7 @@ class Validation extends PropertyAccess
 			foreach ($key as $name)
 				$this->isEmail($name, $message);
 		else
-			if (isset($this->scope[$key]) && !String::isEmail($this->scope[$key]))
+			if (isset($this->scope[$key]) && !StringC::isEmail($this->scope[$key]))
 				$this->_errors[$key] = sprintf($message !== null ? $message : self::$isEmailMessage, $key);
 
 		return $this;

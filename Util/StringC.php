@@ -7,7 +7,7 @@ namespace Colibri\Util;
  * @subpackage	a13FW
  * @version		1.00.0
  */
-class String
+class StringC
 {
 	/**
 	 *
