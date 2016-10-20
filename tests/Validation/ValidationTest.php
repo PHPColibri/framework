@@ -2,7 +2,7 @@
 namespace Colibri\Tests\Validation;
 
 
-use Colibri\Util\String;
+use Colibri\Util\Str;
 use Colibri\Validation\Validation;
 use Colibri\Validation\ValidationException;
 
@@ -299,7 +299,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 		$validation
 			->extendScope(array('message' => 'some text, that contains [cut] bb tag'))
 			->is(function ($value) {
-				return String::contains($value, '[cut]');
+				return Str::contains($value, '[cut]');
 			}, 'message', 'field \'message\' must contains "[cut]" bb tag')
 			->is('self::theFalse', 'not-exists', 'something wrong');
 		$this->assertEquals(0, count($validation->errors));
@@ -307,7 +307,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 		$validation
 			->extendScope(array('no-cut-message' => 'some text, that does not contains "cut" bb tag'))
 			->is(function ($value) {
-				return String::contains($value, '[cut]');
+				return Str::contains($value, '[cut]');
 			}, 'no-cut-message', 'no [cut] in field \'%s\'');
 		$this->assertEquals(1, count($validation->errors));
 		$this->assertEquals('no [cut] in field \'no-cut-message\'', $validation->errors['no-cut-message']);
@@ -329,14 +329,14 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	{
 		$validation
 			->extendScope(array('login' => 'vpopov'))
-			->isNot('\Colibri\Util\String::isEmail', 'login', 'field \'login\' must not be a mail')
+			->isNot('\Colibri\Util\Str::isEmail', 'login', 'field \'login\' must not be a mail')
 			->isNot('self::theFalse', 'not-exists', 'something wrong');
 		$this->assertEquals(0, count($validation->errors));
 
 		$validation
 			->extendScope(array('no-cut-message' => 'some text, that does not contains "cut" bb tag'))
 			->isNot(function ($value) {
-				return !String::isEmail($value);
+				return !Str::isEmail($value);
 			}, 'login', 'field \'%s\' must be a mail');
 		$this->assertEquals(1, count($validation->errors));
 		$this->assertEquals('field \'login\' must be a mail', $validation->errors['login']);
