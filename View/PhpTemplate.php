@@ -4,6 +4,9 @@ namespace Colibri\View;
 
 use Colibri\Base\PropertyAccess;
 
+/**
+ * @property	string	filename
+ */
 class PhpTemplate extends PropertyAccess
 {
 	/**
@@ -33,7 +36,7 @@ class PhpTemplate extends PropertyAccess
 	}
 
 	/**
-	 * Sets or adds variables of template (merge)
+	 * Sets or adds variables of template (merge).
 	 * 
 	 * @param array $vars
 	 *
@@ -41,7 +44,7 @@ class PhpTemplate extends PropertyAccess
 	 */
 	public function	setVars(array $vars)
 	{
-		$this->vars=array_merge($this->vars,$vars);
+		$this->vars = array_merge($this->vars, $vars);
 
 		return $this;
 	}
@@ -65,7 +68,7 @@ class PhpTemplate extends PropertyAccess
 		}
 
 		if (!file_exists($filename)) {
-			throw new \Exception("file '$filename' does not exists.");
+			throw new \Exception("File '$filename' does not exists.");
 		}
 
 		$this->_filename = $filename;
@@ -88,7 +91,7 @@ class PhpTemplate extends PropertyAccess
 		ob_start();
 
 		include($this->_filename);
-		$__strCompiled__=ob_get_contents();
+		$__strCompiled__ = ob_get_contents();
 
 		ob_end_clean();
 
