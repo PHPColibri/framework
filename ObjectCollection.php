@@ -64,8 +64,10 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 			return false;
 		
 		$this->clearItems();
-		foreach ($rows as $row)
-			$this->addItem(new $this->itemClass($row,$fieldsAndTypes));
+		foreach ($rows as $row) {
+			$item = new $this->itemClass($row, $fieldsAndTypes);
+			$this->addItem($item);
+		}
 
 		return true;
 	}
