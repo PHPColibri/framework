@@ -265,7 +265,7 @@ class Validation extends PropertyAccess
 	}
 
 	/**
-	 * @param callable $callback
+	 * @param \Closure $callback
 	 *
 	 * @return $this
 	 */
