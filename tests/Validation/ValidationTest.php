@@ -18,7 +18,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers Colibri\Validation\Validation::setScope
+	 * @covers \Colibri\Validation\Validation::setScope
 	 */
 	public function testSetScope()
 	{
@@ -29,7 +29,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers Colibri\Validation\Validation::forScope
+	 * @covers \Colibri\Validation\Validation::forScope
 	 * @return Validation
 	 */
 	public function testForScope()
@@ -42,7 +42,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers  Colibri\Validation\Validation::extendScope
+	 * @covers  \Colibri\Validation\Validation::extendScope
 	 * @depends testForScope
 	 *
 	 * @param Validation $validation
@@ -69,7 +69,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers  Colibri\Validation\Validation::required
+	 * @covers  \Colibri\Validation\Validation::required
 	 * @depends testExtendScope
 	 *
 	 * @param Validation $validation
@@ -99,7 +99,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers  Colibri\Validation\Validation::minLength
+	 * @covers  \Colibri\Validation\Validation::minLength
 	 * @depends testRequired
 	 *
 	 * @param Validation $validation
@@ -125,7 +125,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers  Colibri\Validation\Validation::maxLength
+	 * @covers  \Colibri\Validation\Validation::maxLength
 	 * @depends testMinLength
 	 *
 	 * @param Validation $validation
@@ -150,7 +150,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers  Colibri\Validation\Validation::regex
+	 * @covers  \Colibri\Validation\Validation::regex
 	 * @depends testMaxLength
 	 *
 	 * @param Validation $validation
@@ -175,7 +175,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers  Colibri\Validation\Validation::isIntGt0
+	 * @covers  \Colibri\Validation\Validation::isIntGt0
 	 * @depends testRegex
 	 *
 	 * @param Validation $validation
@@ -205,7 +205,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers  Colibri\Validation\Validation::isJSON
+	 * @covers  \Colibri\Validation\Validation::isJSON
 	 * @depends testIsIntGt0
 	 *
 	 * @param Validation $validation
@@ -232,7 +232,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers  Colibri\Validation\Validation::isEmail
+	 * @covers  \Colibri\Validation\Validation::isEmail
 	 * @depends testIsJSON
 	 *
 	 * @param Validation $validation
@@ -259,7 +259,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers  Colibri\Validation\Validation::isEqual
+	 * @covers  \Colibri\Validation\Validation::isEqual
 	 * @depends testIsEmail
 	 *
 	 * @param Validation $validation
@@ -287,7 +287,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers  Colibri\Validation\Validation::is
+	 * @covers  \Colibri\Validation\Validation::is
 	 * @depends testIsEqual
 	 *
 	 * @param Validation $validation
@@ -318,7 +318,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers  Colibri\Validation\Validation::isNot
+	 * @covers  \Colibri\Validation\Validation::isNot
 	 * @depends testIs
 	 *
 	 * @param Validation $validation
@@ -329,7 +329,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	{
 		$validation
 			->extendScope(array('login' => 'vpopov'))
-			->isNot('\Colibri\Util\String::isEmail', 'login', 'field \'login\' must not be a mail')
+			->isNot('\Colibri\Util\Str::isEmail', 'login', 'field \'login\' must not be a mail')
 			->isNot('self::theFalse', 'not-exists', 'something wrong');
 		$this->assertEquals(0, count($validation->errors));
 
@@ -355,7 +355,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers  Colibri\Validation\Validation::addError
+	 * @covers  \Colibri\Validation\Validation::addError
 	 * @depends testIsNot
 	 *
 	 * @param Validation $validation
@@ -375,7 +375,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers  Colibri\Validation\Validation::valid
+	 * @covers  \Colibri\Validation\Validation::valid
 	 * @depends testAddError
 	 *
 	 * @param Validation $validation
@@ -402,7 +402,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers  Colibri\Validation\Validation::ifNotValid
+	 * @covers  \Colibri\Validation\Validation::ifNotValid
 	 * @depends testValid
 	 *
 	 * @param Validation $validation
@@ -437,7 +437,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers  Colibri\Validation\Validation::validate
+	 * @covers  \Colibri\Validation\Validation::validate
 	 * @depends testIfNotValid
 	 *
 	 * @param Validation $validation
