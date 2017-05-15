@@ -312,13 +312,17 @@ class Engine extends Engine\Base
 	{
 		throw new \Exception("php error [$code]: '$message' in $file:$line");
 	}
-	public static function exceptionHandler(\Exception $exc)
+
+    /**
+     * @param \Throwable|\Exception $exc
+     */
+	public static function exceptionHandler($exc)
 	{
 		$message = $exc->__toString();
 		if (DEBUG)
-			echo('<pre>' . $message . '</pre>');
-		else
-			include(HTTPERRORS . '500.php');
+			$error = $message;
+
+		include(HTTPERRORS . '500.php');
 
 		Log::add($message,'core.module');
 	}
