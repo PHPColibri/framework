@@ -74,15 +74,9 @@ class Error
 
 		/* Application\Engine\Base */
 		1001	=> 'can\'t connect to memcache server.',
-		/* Application\Engine */
-		1203	=> 'wrong routing format',
-		1211	=> 'unknown request type.',
-		1212	=> 'method \'%2\' of module \'%1\' does not returns any value or returns <null>',
-		1221	=> 'class \'%1\' does not exists.',
-		1222	=> 'method \'%1\' does not contains in class \'%2\'.',
-		1231	=> 'can\'t parse xmlrpc request: Colibri\XmlRpc\Request error[%1]: %2.',
-		1241	=> 'can\'t load module: module \'%1\' does not installed.',
-		1242	=> 'can\'t load module: file \'%1\' does not exists.',
+
+
+
 		/* ViewsController */
 		1311	=> 'template not loaded.',
 
