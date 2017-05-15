@@ -1,6 +1,7 @@
 <?php
 require_once(CONFIGS.'application.php');
 
+use Colibri\Application\Exception\NotFoundException;
 use Colibri\Application\ResponseType;
 use Colibri\Application\Engine as ApplicationEngine;
 
@@ -10,7 +11,6 @@ use Colibri\Config\Config;
 use Colibri\Database\Concrete\MySQL;
 use Colibri\Base\BuisnessLogicException;
 use Colibri\Base\AdditionalErrorException;
-use Colibri\XmlRpc\Response as XmlRpcResponse;
 
 
 $mEngine=null;
@@ -55,52 +55,44 @@ catch (BuisnessLogicException $exc)
 {
 	$message="\n".'error ['.$exc->getCode().']: '. $exc->getMessage();
 	
-	if ($mEngine->responseType==ResponseType::rpc)
-	{
-		header('Content-type: text/xml; charset='.Config::application('encoding'));
-		echo(XmlRpcResponse::additionalFault(
-			$exc->getCode(),
-			$exc->getAddError(),
-			$exc->getMessage()
-		));
-	}
-	else
-		if (Config::application('debug'))
-			echo('<tt>'.nl2br(htmlspecialchars("\n".'DEBUG Info: '.$message)).'</tt><br/>');
-		else
-		{
-			header('HTTP/1.1 500 Internal Server Error');
-			include(HTTPERRORS.'500.php');
-		}
+    if (Config::application('debug'))
+        $error = htmlspecialchars($message);
+
+    header('HTTP/1.1 500 Internal Server Error');
+    include(HTTPERRORS.'500.php');
 }
 catch (AdditionalErrorException $exc)
 {
 	$message="\n".
 		'error ['. $exc->getCode().']: '. $exc->getMessage()."\n\n".
 		$exc->getTraceAsString();
-	$screenMsg=$message."\n\n".
-		'$_GET: ' .print_r($_GET ,true)."\n".
-		'$_POST: '.print_r($_POST,true);
 
-	if ($mEngine!==null && $mEngine->responseType==ResponseType::rpc)
-	{
-		header('Content-type: text/xml; charset='.Config::application('encoding'));
-		echo(XmlRpcResponse::additionalFault(
-			$exc->getCode(),
-			$exc->getAddError(),
-			DEBUG ? $screenMsg : 'Internal Server Error.'
-		));
-	}
-	else
-		if (Config::application('debug'))
-			echo('<tt>'.nl2br(htmlspecialchars("\n".'DEBUG Info: '.$screenMsg)).'</tt><br/>');
-		else
-		{
-			header('HTTP/1.1 500 Internal Server Error');
-			include(HTTPERRORS.'500.php');
-		}
+    if (Config::application('debug'))
+        $error = htmlspecialchars($message);
+
+    header('HTTP/1.1 500 Internal Server Error');
+    include(HTTPERRORS.'500.php');
 
 	Log::add($message,'core.module');
+}
+
+
+catch (NotFoundException $exc)
+{
+    Log::warning(
+        ' Request: '.$_SERVER['REQUEST_URI'].
+        ' Referer: '.(isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'')
+        ,
+        'core.notFound');
+
+    $message="\n".
+        'error ['. $exc->getCode().']: '. $exc->getMessage()."\n\n".
+        $exc->getTraceAsString();
+
+    if (Config::application('debug'))
+        $error = htmlspecialchars($message);
+    header('HTTP/1.1 404 Not Found');
+    include(HTTPERRORS.'404.php');
 }
 
 catch (\Exception $exc)
@@ -108,39 +100,11 @@ catch (\Exception $exc)
 	$message="\n".
 		'error ['. $exc->getCode().']: '. $exc->getMessage()."\n\n".
 		$exc->getTraceAsString();
-	$screenMsg=$message."\n\n".
-		'$_GET: ' .print_r($_GET ,true)."\n".
-		'$_POST: '.print_r($_POST,true);
 
-	if ($mEngine!==null && $mEngine->responseType==ResponseType::rpc)
-	{
-		header('Content-type: text/xml; charset='.Config::application('encoding'));
-		echo(XmlRpcResponse::fault(
-			$exc->getCode(),
-			DEBUG?$screenMsg:'Internal Server Error.'
-		));
-	}
-	else
-	{
-		if (Config::application('debug'))
-			$error = htmlspecialchars($screenMsg);
-		if ($exc->getCode()==1242 || $exc->getCode()==1222)
-		{
-			header('HTTP/1.1 404 Not Found');
-			include(HTTPERRORS.'404.php');
-		}
-		else
-		{
-			header('HTTP/1.1 500 Internal Server Error');
-			include(HTTPERRORS.'500.php');
-		}
-	}
-	if ($exc->getCode()==1242)
-		Log::warning(
-			' Request: '.$_SERVER['REQUEST_URI'].
-			' Referer: '.(isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'')
-			,
-			'core.notFound');
-	else
-		Log::add($message,'core.module');
+    if (Config::application('debug'))
+        $error = htmlspecialchars($message);
+    header('HTTP/1.1 500 Internal Server Error');
+    include(HTTPERRORS.'500.php');
+
+	Log::add($message,'core.module');
 }

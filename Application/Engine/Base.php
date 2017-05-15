@@ -31,22 +31,6 @@ class Base extends PropertyAccess implements IEngine
 		
 		Session::start();
 		
-		if (get_magic_quotes_gpc()) //  turn OFF the magic quotes !!!!!!!!!!!!!!!!!!!!
-		{
-			function stripslashes_deep($value)
-			{
-				$value = is_array($value) ?
-							array_map('stripslashes_deep', $value) :
-							stripslashes($value);
-
-				return $value;
-			}
-			$_POST   =stripslashes_deep($_POST);
-			$_GET    =stripslashes_deep($_GET);
-			$_COOKIE =stripslashes_deep($_COOKIE);
-			$_REQUEST=stripslashes_deep($_REQUEST);
-		}
-		
 		if (isset($config['response']['defaultHeaders'])) {
 			foreach ($config['response']['defaultHeaders'] as $header) {
 				header($header);

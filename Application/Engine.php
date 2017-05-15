@@ -1,11 +1,11 @@
 <?php
 namespace Colibri\Application;
 
-use Colibri\Base\Error;
 use Colibri\Log\Log;
 use Colibri\Config\Config;
 use Colibri\XmlRpc\Request as XmlRpcRequest;
 use Colibri\XmlRpc\Response as XmlRpcResponse;
+use LogicException;
 
 /**
  * Description of CModuleEngine
@@ -31,8 +31,18 @@ class Engine extends Engine\Base
 	protected	$_showProfilerInfoOnDebug=true;
 	protected	$_showAppDevToolsOnDebug =true;
 
+    /**
+     */
+    private static function setUpErrorHandling()
+    {
+        error_reporting(0xffff);
+        ini_set('display_errors', DEBUG);
+        set_error_handler('\Colibri\Application\Engine::errorHandler', 0xffff);
+        set_exception_handler('\Colibri\Application\Engine::exceptionHandler');
+    }
 
-	/**
+
+    /**
 	 * @exception	120x
 	 */
 	protected	function	initialize()
@@ -41,16 +51,12 @@ class Engine extends Engine\Base
 		mb_internal_encoding($appConfig['encoding']);
 		date_default_timezone_set($appConfig['timezone']);
 		umask($appConfig['umask']);
-		
-		// это было в конфиге
-		define('DEBUG', $appConfig['debug']);
-		error_reporting(0xffff);
-		ini_set('display_errors', DEBUG);
-		set_error_handler('\Colibri\Application\Engine::errorHandler',0xffff);
-		set_exception_handler('\Colibri\Application\Engine::exceptionHandler');
+        define('DEBUG', $appConfig['debug']);
+        self::setUpErrorHandling();
 
-		$this->_domainPrefix=$this->getDomainPrefix();
-		
+
+        $this->_domainPrefix=$this->getDomainPrefix();
+
 		new \API($this);// initialize API
 
 		// identifying request type & parse params
@@ -86,7 +92,7 @@ class Engine extends Engine\Base
 				else
 				{
 					if (!isset($route['module']) || !isset($route['method']))
-						$this->__raiseError(1203);
+			            throw new LogicException('Wrong routing format');
 					$this->_module=$route['module'];
 					$this->_method=$route['method'];
 					$this->_params=isset($route['params'])?$route['params']:array();
@@ -153,17 +159,18 @@ class Engine extends Engine\Base
 
 		if ($partsCnt>2)			$this->_params=array_slice($parts,2);
 	}
-	/**
-	 *
-	 * @return	string
-	 * @exception	121x
-	 */
+
+    /**
+     * @return string
+     * @throws Exception\NotFoundException
+     * @throws LogicException
+     */
 	public		function	generateResponse()
 	{
 		switch ($this->_requestType) {
 			default:
 			case RequestType::none:
-				$this->__raiseError(1211);
+			    throw new Exception\NotFoundException('Unknown request type.');
 				break;
 
 			case RequestType::getModuleView:
@@ -179,7 +186,7 @@ class Engine extends Engine\Base
 		if ($this->_responseType==ResponseType::rpc)
 		{
 			if ($strResponse===null)
-				$this->__raiseError(1212,$this->_module,$this->_method);
+			    throw new LogicException("Method '$this->_method' of module '$this->_module' does not returns any value or returns <null>");
 			$rpcResponse=new XmlRpcResponse($strResponse);
 			$strResponse=$rpcResponse->xml;
 		}
@@ -189,14 +196,15 @@ class Engine extends Engine\Base
 		return $strResponse;
 	}
 
-	/**
-	 *
-	 * @param	string	$module
-	 * @param	string	$method
-	 * @param	array		$params
-	 * @return	string
-	 * @exception 122x
-	 */
+    /**
+     * @param string $division
+     * @param string $module
+     * @param string $method
+     * @param array  $params
+     *
+     * @return string
+     * @throws Exception\NotFoundException
+     */
 	public		function	getModuleView    (      $division,$module,$method,$params){
 		return       $this->callModuleEssence (CallType::view   ,$division,$module,$method,$params);
 	}
@@ -209,13 +217,13 @@ class Engine extends Engine\Base
 
 		$className=ucfirst($module).ucfirst($division).($type==CallType::view?'Views':'Methods').'Controller';
 		if (!class_exists($className))
-			$this->__raiseError(1221,$className);
+		    throw new Exception\NotFoundException("Class '$className' does not exists.");
 		$responser=new $className($division,$module,$method);
 		$this->_responser=&$responser;
 
 		$classMethods=get_class_methods($className);
 		if (!in_array($method,$classMethods))
-			$this->__raiseError(1222,$method,$className);
+            throw new Exception\NotFoundException("Method '$method' does not contains in class '$className'.");
 
 				  call_user_func_array(array(&$responser,'setUp'   ),$params);
 		$response=call_user_func_array(array(&$responser,$method   ),$params);
@@ -232,18 +240,19 @@ class Engine extends Engine\Base
 
 		return $response;
 	}
-	/**
-	 * @deprecated
-	 *
-	 * @param	string	$rpcQuery	with xmlrpc
-	 * @exception 123x
-	 */
+
+    /**
+     * @deprecated
+     *
+     * @param string $rpcQuery with xmlrpc
+     *
+     * @throws Exception\NotFoundException
+     */
 	private		function	parseRpcQuery($rpcQuery)
 	{
 		$rpcRequest=new XmlRpcRequest($rpcQuery);
 		if ($rpcRequest->errno)
-			$this->__raiseError(1231,$rpcRequest->errno,$rpcRequest->error);
-		
+            throw new Exception\NotFoundException("Can't parse xmlrpc request: Colibri\XmlRpc\Request error[$rpcRequest->errno]: $rpcRequest->error.");
 
 		$appConfig = Config::get('application');
 
@@ -265,13 +274,15 @@ class Engine extends Engine\Base
 
 		$this->_params=$rpcRequest->params;
 	}
-	/**
-	 *
-	 * @param	string				$moduleGuid		guid модуля.
-	 * @param	CallType		$callType		'views' or 'methods'
-	 * @return	Object<CModule>
-	 * @exception	124x
-	 */
+
+    /**
+     * @param string $division   name of division (as a folder name)
+     * @param string $moduleName name of module (as a folder name)
+     * @param int    $type       one of CallType::<const> 'views' or 'methods'
+     *
+     * @throws Exception\NotFoundException
+     * @throws LogicException
+     */
 	private		function	loadModule($division,$moduleName,$type=CallType::view)
 	{
 		$mPath=$moduleName.'/'.($division===''?'primary/':$division.'/');
@@ -280,28 +291,35 @@ class Engine extends Engine\Base
 		$fileName=MODULES.$mPath;
 		if     ($type==CallType::view)		$fileName.=$mName.'ViewsController.php';
 		elseif ($type==CallType::method)	$fileName.=$mName.'Methods.php';
-		else								$this->__raiseError(1241);       // unknown callType
+		else                                throw new LogicException("Unknown CallType $type");
 
 		if (!file_exists($fileName))
-			$this->__raiseError(1242,$fileName);
+            throw new Exception\NotFoundException("Can't load module: file '$fileName' does not exists.");
 		else
+		    // @todo remove this (carefully)
 			require_once($fileName);
 	}
 
-static
-	public		function	errorHandler($code,$message,$file,$line)
+    /**
+     * @param $code
+     * @param $message
+     * @param $file
+     * @param $line
+     *
+     * @throws \Exception
+     */
+	public static function errorHandler($code,$message,$file,$line)
 	{
 		throw new \Exception("php error [$code]: '$message' in $file:$line");
 	}
-static
-	public		function	exceptionHandler(\Exception $exc)
+	public static function exceptionHandler(\Exception $exc)
 	{
 		$message = $exc->__toString();
 		if (DEBUG)
 			echo('<pre>' . $message . '</pre>');
 		else
 			include(HTTPERRORS . '500.php');
-		
+
 		Log::add($message,'core.module');
 	}
 }

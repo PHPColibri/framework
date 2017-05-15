@@ -54,7 +54,7 @@ class Log extends Helper
 	{
 		if (static::$config === null)
 			static::loadFromConfig();
-		
+
 		if (!file_exists(self::$config['folder']))
 			if (!mkdir(self::$config['folder'], 0777, true)) // 0777 - just default value, which means that need to use umask()
 				return false;
