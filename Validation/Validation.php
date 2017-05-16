@@ -61,6 +61,12 @@ class Validation extends PropertyAccess
 	}
 
 
+	/**
+	 * @param string|array $key
+	 * @param string       $message
+	 *
+	 * @return $this
+	 */
 	public function required($key, $message = null)
 	{
 		if (is_array($key))
@@ -204,9 +210,9 @@ class Validation extends PropertyAccess
 	}
 
 	/**
-	 * @param callable $checkFunc
-	 * @param string   $key
-	 * @param string   $message
+	 * @param callable     $checkFunc
+	 * @param string|array $key
+	 * @param string       $message
 	 *
 	 * @return static
 	 */

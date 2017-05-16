@@ -247,7 +247,7 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 	/**
 	 *
 	 * @param array $where
-	 * @return ObjectCollection
+	 * @return ObjectCollection|$this|Object[]
 	 */
 	final
 	public	function	where(array $where)
@@ -266,7 +266,7 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 	/*
 	 *
 	 * @param array $where
-	 * @return ObjectCollection
+	 * @return ObjectCollection|$this|Object[]
 	 *//*
 	final
 	public	function	or_where(array $where)
@@ -275,7 +275,7 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 	}*/
 	/**
 	 * @param array $plan
-	 * @return ObjectCollection
+	 * @return ObjectCollection|$this|Object[]
 	 */
 	final
 	public	function	wherePlan(array $plan)
@@ -287,7 +287,7 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 	/**
 	 *
 	 * @param array $order_by array('field1'=>'orientation','field2'=>'orientation'), 'fieldN' - name of field, 'orientation' - ascendig or descending abbreviation ('asc' or 'desc')
-	 * @return ObjectCollection
+	 * @return ObjectCollection|$this|Object[]
 	 */
 	final
 	public	function	order_by(array $order_by)
@@ -299,7 +299,7 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 	 *
 	 * @param int $offset_or_count
 	 * @param int $count
-	 * @return ObjectCollection
+	 * @return ObjectCollection|$this|Object[]
 	 */
 	final
 	public	function	limit($offset_or_count,$count=null)
@@ -320,7 +320,7 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 	 *
 	 * @param int $pageNumber 0..N
 	 * @param int $recordsPerPage
-	 * @return ObjectCollection
+	 * @return ObjectCollection|$this|Object[]
 	 */
 	final	function	page($pageNumber,$recordsPerPage=null)
 	{
