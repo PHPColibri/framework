@@ -1,73 +1,98 @@
 <?php
+
 namespace Colibri\View;
 
 use Colibri\Base\PropertyAccess;
 
 /**
- *
- *
- * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
- * @package		xTeam
- * @subpackage	a13FW
- * @version		1.01
- *
  * @property	string	filename
  */
-class	PhpTemplate extends PropertyAccess
+class PhpTemplate extends PropertyAccess
 {
 	/**
-	 * @var string	path/name of template
-	 */
-	protected	$_filename=null;
-	/**
-	 * @var array	variables of template for tpl compile
-	 */
-	public		$vars=array();
-
-
-	/**
+	 * Path of template.
 	 *
-	 * @param	string		$filename	имя файла
+	 * @var string
 	 */
-	public		function	__construct($filename=null)
+	protected $_filename = null;
+
+	/**
+	 * Variables of template for tpl compile.
+	 *
+	 * @var array
+	 */
+	public $vars = array();
+
+	/**
+	 * @param string $filename filename
+	 */
+	public function	__construct($filename = null)
 	{
-		if ($filename===null)	return;
+		if (null === $filename) {
+			return;
+		}
 
 		$this->load($filename);
 	}
+
 	/**
-	 * Sets or adds variables of template (merge)
+	 * Sets or adds variables of template (merge).
 	 * 
 	 * @param array $vars
-	 * @return static 
+	 *
+	 * @return static
 	 */
-	public		function	setVars(array $vars)
+	public function	setVars(array $vars)
 	{
-		$this->vars=array_merge($this->vars,$vars);
+		$this->vars = array_merge($this->vars, $vars);
+
 		return $this;
 	}
 
-	public		function	load($filename=null)
+	/**
+	 * Load template.
+	 *
+	 * @param null $filename
+	 *
+	 * @return $this
+	 *
+	 * @throws \Exception
+	 */
+	public function	load($filename = null)
 	{
-		if ($filename===null)			$filename=$this->_filename;
-		if ($filename===null)			throw new \Exception('Can`t load template: property \'filename\' not set.');
-		if (!file_exists($filename))	throw new \Exception("file '$filename' does not exists.");
-		$this->_filename=$filename;
+		if (null === $filename) {
+			$filename = $this->_filename;
+		}
+		if (null === $filename) {
+			throw new \Exception('Can`t load template: property \'filename\' not set.');
+		}
+
+		if (!file_exists($filename)) {
+			throw new \Exception("File '$filename' does not exists.");
+		}
+
+		$this->_filename = $filename;
+
 		return $this;
 	}
+
 	/**
+	 * Compile template.
 	 *
-	 * @return string compiled template text
+	 * @return string
 	 */
-	public		function	compile()
+	public function	compile()
 	{
-		$__strCompiled__='';
-		
-		foreach ($this->vars as $key=>$value)
-			$$key=$value;
+		foreach ($this->vars as $key => $value) {
+			$$key = $value;
+		}
+
+
 		ob_start();
+
 		include($this->_filename);
-		$__strCompiled__=ob_get_contents();
+		$__strCompiled__ = ob_get_contents();
+
 		ob_end_clean();
 
 		return $__strCompiled__;
