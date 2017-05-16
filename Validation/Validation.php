@@ -79,6 +79,13 @@ class Validation extends PropertyAccess
 		return $this;
 	}
 
+    /**
+     * @param      $key
+     * @param      $minLength
+     * @param null $message
+     *
+     * @return $this
+     */
 	public function minLength($key, $minLength, $message = null)
 	{
 		if (is_array($key))
@@ -237,7 +244,7 @@ class Validation extends PropertyAccess
 	 * @param string   $key
 	 * @param string   $message
 	 *
-	 * @return static
+	 * @return $this
 	 */
 	public function isNot($checkFunc, $key, $message)
 	{
@@ -262,6 +269,11 @@ class Validation extends PropertyAccess
 		return !(bool)count($this->_errors);
 	}
 
+    /**
+     * @param \Closure $callback
+     *
+     * @return $this
+     */
 	public function ifIsValid(\Closure $callback)
 	{
 		if ($this->valid())
