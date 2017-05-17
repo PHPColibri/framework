@@ -1,34 +1,26 @@
 <?php
 namespace Colibri\View;
 
-use Colibri\Base\PropertyAccess;
-
 /**
- *
- *
- * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
- * @package		xTeam
- * @subpackage	a13FW
- * @version		1.01
- *
- * @property	string	filename
  */
-class	PhpTemplate extends PropertyAccess
+class PhpTemplate
 {
 	/**
 	 * @var string	path/name of template
 	 */
-	protected	$_filename=null;
+	protected	$filename=null;
 	/**
 	 * @var array	variables of template for tpl compile
 	 */
 	public		$vars=array();
 
 
-	/**
-	 *
-	 * @param	string		$filename	имя файла
-	 */
+    /**
+     *
+     * @param    string $filename имя файла
+     *
+     * @throws \Exception file does not exists
+     */
 	public		function	__construct($filename=null)
 	{
 		if ($filename===null)	return;
@@ -37,9 +29,9 @@ class	PhpTemplate extends PropertyAccess
 	}
 	/**
 	 * Sets or adds variables of template (merge)
-	 * 
+	 *
 	 * @param array $vars
-	 * @return static 
+	 * @return static
 	 */
 	public		function	setVars(array $vars)
 	{
@@ -47,12 +39,18 @@ class	PhpTemplate extends PropertyAccess
 		return $this;
 	}
 
+    /**
+     * @param string $filename
+     *
+     * @return $this
+     * @throws \Exception filename not set or file does not exists
+     */
 	public		function	load($filename=null)
 	{
-		if ($filename===null)			$filename=$this->_filename;
+		if ($filename===null)			$filename=$this->filename;
 		if ($filename===null)			throw new \Exception('Can`t load template: property \'filename\' not set.');
 		if (!file_exists($filename))	throw new \Exception("file '$filename' does not exists.");
-		$this->_filename=$filename;
+		$this->filename =$filename;
 		return $this;
 	}
 	/**
@@ -61,16 +59,22 @@ class	PhpTemplate extends PropertyAccess
 	 */
 	public		function	compile()
 	{
-		$__strCompiled__='';
-		
 		foreach ($this->vars as $key=>$value)
 			$$key=$value;
+
 		ob_start();
-		include($this->_filename);
+		include($this->filename);
 		$__strCompiled__=ob_get_contents();
 		ob_end_clean();
 
 		return $__strCompiled__;
 	}
 
+    /**
+     * @return string
+     */
+    public function getFilename()
+    {
+        return $this->filename;
+    }
 }

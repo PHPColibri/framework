@@ -69,7 +69,7 @@ class ViewsController extends Base
             return;
         }
 
-        if ($this->template->filename === null) {
+        if ($this->template->getFilename() === null) {
             $tplPath = sprintf(MODULE_TEMPLATES, $this->divPath);
             $tplName = $tplPath . $this->_method . '.php';
             if (file_exists($tplName)) {
@@ -79,7 +79,7 @@ class ViewsController extends Base
 
 
         if (!$this->useBackbone) {
-            if ($this->template->filename === null) {
+            if ($this->template->getFilename() === null) {
                 throw new \Exception('template not loaded.');
             }
             $this->_response = $this->template->compile();
@@ -89,7 +89,7 @@ class ViewsController extends Base
         $this->setUpLayout();
 
         $this->_response = Layout::compile(
-            $this->template->filename !== null
+            $this->template->getFilename() !== null
                 ? $this->template->compile()
                 : (DEBUG ? 'DEBUG Info: template not autoloaded.<br/> no such file: ' . str_replace(ROOT, '', $tplName) : '')
         );
