@@ -283,20 +283,20 @@ class Object implements IObject
     }
 
     /**
-     * @param array $fieldsNameValuesArray
+     * @param array $fieldsNameValues
      *
      * @return bool
      * @throws DbException
      * @throws \Exception
      */
-	public		function	create(array $fieldsNameValuesArray=null)
+	public		function	create(array $fieldsNameValues=null)
 	{
-		$this->fieldsNameValuesArray=$fieldsNameValuesArray;
+		$this->fieldsNameValuesArray=$fieldsNameValues;
 		if (!$this->doQuery($this->createQuery()))
 			return false;
 		$this->{static::$PKFieldName[0]}=self::db()->lastInsertId();
-		if ($fieldsNameValuesArray) {
-			$this->fillProperties($fieldsNameValuesArray);
+		if ($fieldsNameValues) {
+			$this->fillProperties($fieldsNameValues);
 		}
 		return true;
 	}
