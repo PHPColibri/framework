@@ -284,6 +284,7 @@ static
      * @param string $tableName
      *
      * @return array
+     * @throws DbException
      */
     protected function &retrieveColumnsMetadata($tableName)
     {
@@ -316,7 +317,8 @@ static
     }
 
     /**
-     * @param $strField
+     * @param $strFieldType
+     *
      * @return int|null
      */
     private function &extractFieldTypeLength(&$strFieldType)

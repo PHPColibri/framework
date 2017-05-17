@@ -1,17 +1,14 @@
 <?php
 namespace Colibri\Database;
 
-use Colibri\Cache\Memcache;
-use Colibri\Util\Arr;
+use Carbon\Carbon;
 
 /**
  * Абстрактный класс объекта базы данных.
- * прим.: версия 1.08+ возможно не совместима с предыдущими.
  *
  * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  * @package		Colibri
  * @subpackage	Database
- * @version		1.12.4
  *
  * @property         int|string  $id
  *
@@ -56,6 +53,9 @@ class Object implements IObject
 
     /**
      * @param int|array $id_or_row
+     *
+     * @throws DbException
+     * @throws \Exception
      */
     public		function	__construct($id_or_row=null)
 	{
@@ -105,6 +105,7 @@ class Object implements IObject
 
     /**
      * @return IDb
+     * @throws DbException
      */
 	final public static function db()
     {
@@ -140,6 +141,12 @@ class Object implements IObject
 
 		return substr($strList,5);
 	}
+
+    /**
+     * @param string $fieldPrefix
+     *
+     * @return bool|string
+     */
 	protected	function	getPKCondition($fieldPrefix='')
 	{
 		$strList='';
@@ -147,12 +154,10 @@ class Object implements IObject
 			$strList.=' AND '.$fieldPrefix.$this->buildNameEqValue($PKName,$this->$PKName);
 		return substr($strList,5);
 	}
-	public		function	setPKValue(array $id)
-	{
-		// TODO [alek13]: implement protected method setPKValue(array id) or __set('PK',array id) ...  (to make posible to set an PK as array), хотя зачем ?
-		throw new \Exception('method not implemented yet.');
-	}
 
+    /**
+     * @param array $row
+     */
 	protected	function	fillProperties(array $row)
 	{
 		foreach ($row as $propName => $propValue) {
@@ -163,7 +168,7 @@ class Object implements IObject
 			$type = isset($this->fieldTypes[$propName]) ? $this->fieldTypes[$propName] : null;
 			switch ($type) {
 				case 'bit':       $this->$propName = (bool)ord($propValue);break;
-				case 'timestamp': $this->$propName = new \Carbon\Carbon($propValue);break;
+				case 'timestamp': $this->$propName = new Carbon($propValue);break;
 				default:          $this->$propName = $propValue;break;
 			}
 		}
@@ -178,18 +183,31 @@ class Object implements IObject
      */
     public		function	__call($name,$arguments)
 	{
-		// TODO [alek13]: ??? parse '...Query()' methods
 		switch ($name)
 		{
-			case 'createQuery':		$tpl='INSERT INTO `'.static::$tableName.'` SET '  .$this->getFieldsNameValueList();break;
-			case 'deleteQuery':		$tpl='DELETE FROM `'.static::$tableName.'` WHERE '.$this->getPKCondition();break;
-			case 'saveQuery':		$tpl='UPDATE `'     .static::$tableName.'` SET '  .$this->getFieldsNameValueList().' WHERE '.$this->getPKCondition();break;
-			case 'loadQuery':		$tpl='SELECT '.$this->getFieldsNamesList().' FROM `'.static::$tableName.'` WHERE '.($this->where===null?$this->getPKCondition():$this->getWhereCondition());break;
+			case 'createQuery':
+                /** @noinspection SqlNoDataSourceInspection */
+                $tpl ='INSERT INTO `'.static::$tableName.'` SET '  .$this->getFieldsNameValueList();break;
+			case 'deleteQuery':
+                /** @noinspection SqlNoDataSourceInspection */
+			    $tpl='DELETE FROM `'.static::$tableName.'` WHERE '.$this->getPKCondition();break;
+			case 'saveQuery':
+			    $tpl='UPDATE `'     .static::$tableName.'` SET '  .$this->getFieldsNameValueList().' WHERE '.$this->getPKCondition();break;
+			case 'loadQuery':
+			    $tpl='SELECT '.$this->getFieldsNamesList().' FROM `'.static::$tableName.'` WHERE '.($this->where===null?$this->getPKCondition():$this->getWhereCondition());
+			    break;
 			default: throw new \Exception('unknown query __called method name.');
 		}
-        // @todo:
+
 		return self::db()->getQueryTemplateArray($tpl,$arguments);
 	}
+
+    /**
+     * @param string $propertyName
+     *
+     * @return ObjectCollection|ObjectMultiCollection|ObjectSingleCollection|Object
+     * @throws \Exception
+     */
 	public		function	__get($propertyName)
 	{
 		if (isset($this->collections[$propertyName]))
@@ -202,6 +220,13 @@ class Object implements IObject
 		}
 		throw new \Exception('свойство $'.$propertyName.' в классе '.get_class($this).' не определено или не является public.');
 	}
+
+    /**
+     * @param $name
+     * @param $relationsDefinition
+     *
+     * @return Object|ObjectCollection|ObjectSingleCollection|ObjectMultiCollection
+     */
     private     function    getRelated($name, &$relationsDefinition)
     {
         $container          = &$relationsDefinition[$name];
@@ -213,26 +238,57 @@ class Object implements IObject
             ? $relatedObject = new $relatedObjectClass($this->$objectFKName) // TODO: ссылки бывают не только на PK
             : $relatedObject;
     }
+
+    /**
+     * @param $propertyName
+     * @param $propertyValue
+     *
+     * @return mixed
+     * @throws \Exception
+     */
 	public		function	__set($propertyName,$propertyValue)
 	{
 		if (in_array($propertyName,static::$PKFieldName))
 			return $this->$propertyName=$propertyValue;
 
-		//if (self::$debug)
-			throw new \Exception('свойство $'.$propertyName.' в классе '.get_class($this).' не определено или не является public.');
-		//else
-		//	$this->$propertyName=$propertyValue;
+		throw new \Exception('свойство $'.$propertyName.' в классе '.get_class($this).' не определено или не является public.');
 	}
 
+    /**
+     * @param array $where
+     *
+     * @return $this
+     */
 	public		function	where(array $where)
 	{
 		$this->where=$where;
 		return $this;
 	}
-	/**
-	 * @param array $fieldsNameValuesArray
-	 * @return bool
-	 */
+
+    /**
+     * @param array $where
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    protected static function recordExists(array $where)
+    {
+        $dbObject = new static();
+        $loaded   = $dbObject->load($where);
+        if ($loaded === false) {
+            throw new \Exception('can`t load user. where clause: ' . var_export($where));
+        }
+
+        return $loaded !== null;
+    }
+
+    /**
+     * @param array $fieldsNameValuesArray
+     *
+     * @return bool
+     * @throws DbException
+     * @throws \Exception
+     */
 	public		function	create(array $fieldsNameValuesArray=null)
 	{
 		$this->fieldsNameValuesArray=$fieldsNameValuesArray;
@@ -244,6 +300,14 @@ class Object implements IObject
 		}
 		return true;
 	}
+
+    /**
+     * @param null $id_or_where
+     *
+     * @return bool
+     * @throws DbException
+     * @throws \Exception
+     */
 	public		function	delete($id_or_where=null)
 	{
 		if ($id_or_where!==null)
@@ -258,17 +322,27 @@ class Object implements IObject
 			;
 		return	$this->doQuery($this->deleteQuery());
 	}
+
+    /**
+     * @param null $fieldsNameValuesArray
+     *
+     * @return bool
+     * @throws DbException
+     * @throws \Exception
+     */
 	public		function	save($fieldsNameValuesArray=null)
 	{
 		$this->fieldsNameValuesArray=$fieldsNameValuesArray;
 		return	$this->doQuery($this->saveQuery());
 	}
 
-	/**
-	 * @param $values
-	 *
-	 * @return static
-	 */
+    /**
+     * @param array $values
+     *
+     * @return static
+     * @throws DbException
+     * @throws \Exception
+     */
 	public static function &saveNew(array $values)
 	{
 		$object = new static();
@@ -282,6 +356,8 @@ class Object implements IObject
      * @param null $id_or_where
      *
      * @return bool|null
+     * @throws DbException
+     * @throws \Exception
      */
     public		function	load($id_or_where=null)
 	{
@@ -316,6 +392,13 @@ static
 		return $object;
 	}
 
+    /**
+     * @param $sqlQuery
+     *
+     * @return bool|null
+     * @throws DbException
+     * @throws \Exception
+     */
 	protected	function	loadByQuery($sqlQuery)
 	{
 		if (!$this->doQuery($sqlQuery))			return false;// sql error
@@ -325,8 +408,17 @@ static
 		return	true;
 	}
 
-	public		function	initialize($row){	$this->fillProperties($row);				}
+    /**
+     * @param array $row
+     */
+	public		function	initialize(array $row)
+    {
+        $this->fillProperties($row);
+    }
 
+    /**
+     * @return string
+     */
 	public		function	getFieldsAsXMLstring()
 	{
 		$strXMLPart='';
@@ -355,13 +447,14 @@ static
     {
         return json_encode($this->toArray());
     }
+
 	/**
 	 *
      * @param string $strQuery
-     * @param string $type sql|internal
-     * @param int $errno
+     * @param string $type     sql|internal
+     * @param int    $errno
      *
-     * @return type
+     * @return bool
      * @throws \Exception
      */
     protected function    setError($strQuery,$type='sql',$errno=-128)
@@ -389,26 +482,53 @@ static
 		$this->error_number=$errno;
 		return true;
 	}
+
+    /**
+     * @param string $strQuery
+     *
+     * @return bool
+     * @throws \Exception
+     */
 	protected	function	setSqlError($strQuery)
 	{
 		return $this->setError($strQuery,'sql');
 	}
-	/**
-	 * @param string $strQuery
-	 * @return bool true on success or false on failure (if no exeptions on)
-	 */
+
+    /**
+     * @param string $strQuery
+     *
+     * @return bool true on success or false on failure (if no exeptions on)
+     * @throws DbException
+     * @throws \Exception
+     */
 	protected	function	doQuery($strQuery)
 	{
 		if (!self::db()->query($strQuery))
 			return !$this->setSqlError($strQuery);
 		return true;
 	}
+
+    /**
+     * @param array $arrQueries
+     *
+     * @return bool
+     * @throws DbException
+     * @throws \Exception
+     */
 	protected	function	doQueries(array $arrQueries)
 	{
 		if (!self::db()->queries($arrQueries))
 			return !$this->setSqlError(print_r($arrQueries,true));
 		return true;
 	}
+
+    /**
+     * @param $arrQueries
+     *
+     * @return bool
+     * @throws DbException
+     * @throws \Exception
+     */
 	protected	function	doTransaction($arrQueries)
 	{
 		if (!self::db()->commit($arrQueries))
