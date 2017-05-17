@@ -112,27 +112,49 @@ class Object implements IObject
         return Db::connection(static::$connectionName);
     }
 	/**************************************************************************/
+    /**
+     * @param $name
+     * @param $value
+     *
+     * @return string
+     * @throws DbException
+     */
 	protected	function	buildNameEqValue($name,$value)
 	{
 		$value=self::db()->prepareValue($value,$this->fieldTypes[$name]);
 
 		return '`'.$name.'`='.$value;
 	}
+
+    /**
+     * @param string $fieldPrefix
+     *
+     * @return string
+     * @throws DbException
+     */
 	protected	function	getFieldsNameValueList($fieldPrefix='')
 	{
 		$obj=$this->fieldsNameValuesArray===null?$this:$this->fieldsNameValuesArray;
 
 		$strList='';
-		foreach ($obj as $propName => $propValue)
-			if (in_array($propName,$this->fields) && (
-					$this->fieldsNameValuesArray===null ?
-						!in_array($propName,static::$PKFieldName) :
-						true
-			))
-				$strList.=', '.$fieldPrefix.$this->buildNameEqValue($propName,$propValue);
+        foreach ($obj as $propName => $propValue)
+            if (in_array($propName, $this->fields) && (
+                $this->fieldsNameValuesArray === null
+                    ? !in_array($propName, static::$PKFieldName)
+                    : true
+                )
+            )
+                $strList .= ', ' . $fieldPrefix . $this->buildNameEqValue($propName, $propValue);
 
 		return substr($strList,2);
 	}
+
+    /**
+     * @param string $fieldPrefix
+     *
+     * @return string
+     * @throws DbException
+     */
 	protected	function	getWhereCondition($fieldPrefix='')
 	{
 		$strList='';
@@ -145,13 +167,15 @@ class Object implements IObject
     /**
      * @param string $fieldPrefix
      *
-     * @return bool|string
+     * @return string
+     * @throws DbException
      */
 	protected	function	getPKCondition($fieldPrefix='')
 	{
 		$strList='';
 		foreach (static::$PKFieldName as $PKName)
 			$strList.=' AND '.$fieldPrefix.$this->buildNameEqValue($PKName,$this->$PKName);
+
 		return substr($strList,5);
 	}
 
@@ -283,20 +307,20 @@ class Object implements IObject
     }
 
     /**
-     * @param array $fieldsNameValues
+     * @param array $attributes
      *
      * @return bool
      * @throws DbException
      * @throws \Exception
      */
-	public		function	create(array $fieldsNameValues=null)
+	public		function	create(array $attributes=null)
 	{
-		$this->fieldsNameValuesArray=$fieldsNameValues;
+		$this->fieldsNameValuesArray=$attributes;
 		if (!$this->doQuery($this->createQuery()))
 			return false;
 		$this->{static::$PKFieldName[0]}=self::db()->lastInsertId();
-		if ($fieldsNameValues) {
-			$this->fillProperties($fieldsNameValues);
+		if ($attributes) {
+			$this->fillProperties($attributes);
 		}
 		return true;
 	}
@@ -324,15 +348,15 @@ class Object implements IObject
 	}
 
     /**
-     * @param null $fieldsNameValuesArray
+     * @param array $attributes
      *
      * @return bool
      * @throws DbException
      * @throws \Exception
      */
-	public		function	save($fieldsNameValuesArray=null)
+	public		function	save(array $attributes=null)
 	{
-		$this->fieldsNameValuesArray=$fieldsNameValuesArray;
+		$this->fieldsNameValuesArray=$attributes;
 		return	$this->doQuery($this->saveQuery());
 	}
 
@@ -343,7 +367,7 @@ class Object implements IObject
      * @throws DbException
      * @throws \Exception
      */
-	public static function &saveNew(array $values)
+	public static function saveNew(array $values)
 	{
 		$object = new static();
 		$object->create($values);
