@@ -26,7 +26,7 @@ class Engine extends Engine\Base
 	private		$_method=null;
 	private		$_params=array();
 
-	private		$_requestType	=RequestType ::none;
+	private		$_requestType	=RequestType::none;
 	protected 	$_responseType	=ResponseType::none;
 	protected	$_showProfilerInfoOnDebug=true;
 	protected	$_showAppDevToolsOnDebug =true;
@@ -71,7 +71,8 @@ class Engine extends Engine\Base
 
 		//TODO: refactor to config. This is route by SEO requirements
 		$requestedUri=$this->getRequestedUri();
-		$routes = Config::routing('rewrite');
+        /** @noinspection PhpUndefinedMethodInspection */
+        $routes = Config::routing('rewrite');
 		foreach ($routes as $route)
 		{
 			$pattern	=$route['pattern'];
@@ -204,6 +205,7 @@ class Engine extends Engine\Base
      *
      * @return string
      * @throws Exception\NotFoundException
+     * @throws LogicException
      */
 	public		function	getModuleView    (      $division,$module,$method,$params){
 		return       $this->callModuleEssence (CallType::view   ,$division,$module,$method,$params);
@@ -320,7 +322,8 @@ class Engine extends Engine\Base
 	{
 		$message = $exc->__toString();
 		if (DEBUG)
-			$error = $message;
+            /** @noinspection PhpUnusedLocalVariableInspection variable uses in 500.php */
+            $error = $message;
 
 		include(HTTPERRORS . '500.php');
 
