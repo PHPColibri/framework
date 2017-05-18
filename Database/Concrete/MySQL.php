@@ -46,6 +46,7 @@ class MySQL extends AbstractDb
      * @param    bool   $persistent make persistent connection
      *
      * @throws DbException
+     * @throws SqlException
      */
     function __construct($host, $login, $pass, $database, $persistent = false)
 	{
@@ -290,6 +291,7 @@ static
      *
      * @return array
      * @throws DbException
+     * @throws SqlException
      */
     protected function &retrieveColumnsMetadata($tableName)
     {
