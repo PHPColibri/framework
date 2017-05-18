@@ -136,12 +136,15 @@ class MySQL extends AbstractDb
         $this->result->data_seek($this->getNumRows()-1);
         return $this->result->fetch_row();
 	}
-	/**
-	 *
-	 * @global int $time
-	 * @param string $query_string
-	 * @return bool
-	 */
+
+    /**
+     *
+     * @param string $query_string
+     *
+     * @return bool
+     * @throws SqlException
+     * @global int   $time
+     */
 	public	function	query($query_string)
 	{
 		if (self::$monitorQueries) {
@@ -226,11 +229,13 @@ static
 	public	function	transactionRollback()	{	return $this->query('ROLLBACK;');			}
 	public	function	transactionCommit()		{	return $this->query('COMMIT;');				}
 
-	/**
-	 *
-	 * @param string $tableName
-	 * @return array  поля: [TABLE_SCHEMA] ,TABLE_NAME, COLUMN_NAME    refs to   [REFERENCED_TABLE_SCHEMA ], REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
-	 */
+    /**
+     *
+     * @param string $tableName
+     *
+     * @return array поля: [TABLE_SCHEMA] ,TABLE_NAME, COLUMN_NAME    refs to   [REFERENCED_TABLE_SCHEMA ], REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
+     * @throws SqlException
+     */
 	public	function	getTableFKs($tableName)
 	{
 		// TODO: доделать
