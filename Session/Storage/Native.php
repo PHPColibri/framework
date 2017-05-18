@@ -53,7 +53,7 @@ class Native extends Singleton implements StorageInterface
 	/**
 	 * @param string $dottedKey
 	 *
-	 * @return mixed|null
+	 * @return mixed|null returns removed value or null if key not found
 	 */
 	public function remove($dottedKey)
 	{

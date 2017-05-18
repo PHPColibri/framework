@@ -44,13 +44,23 @@ class Session extends Helper
 
 	/**
 	 * @param string $dottedKey
-	 * @param string $value
+	 * @param mixed  $value
 	 *
 	 * @return mixed
 	 */
 	public static function set($dottedKey, $value)
 	{
 		return self::$storage->set($dottedKey, $value);
+    }
+
+	/**
+	 * @param $dottedKey
+	 *
+	 * @return mixed|null returns removed value or null if key not found
+	 */
+	public static function remove($dottedKey)
+	{
+		return self::$storage->remove($dottedKey);
 	}
 
 	/**

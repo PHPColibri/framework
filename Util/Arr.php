@@ -66,7 +66,7 @@ class Arr extends Helper
 	 * @param array  $array
 	 * @param string $dottedKey
 	 *
-	 * @return mixed|null
+	 * @return mixed|null returns removed value or null if key not found
 	 */
 	public static function remove(array &$array, $dottedKey)
 	{
