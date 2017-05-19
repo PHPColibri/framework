@@ -1,6 +1,8 @@
 <?php
 namespace Colibri\Database;
 
+use Colibri\Base\SqlException;
+
 /**
  * IDb Интерфейс класса для работы с базами данных
  *  
@@ -42,6 +44,8 @@ interface IDb
 	/**
 	 * Запрос к базе данных
 	 * @param string $query_string Строка запроса
+     *
+     * @throws SqlException
 	 */
 	public function query($query_string);
 	/**
@@ -60,13 +64,13 @@ interface IDb
      *
      * @return
      */
-	public function fetchAllRows($param = MYSQL_ASSOC);
+	public function fetchAllRows($param = MYSQLI_ASSOC);
 	/**
 	 * Стока результата запроса в виде массива
 	 * @param int $param Модификатор тива возвращаемого значения
-	 * Возможные параметры: MYSQL_NUM | MYSQL_ASSOC | MYSQL_BOTH
+	 * Возможные параметры: MYSQLI_NUM | MYSQLI_ASSOC | MYSQLI_BOTH
 	 */
-	public function fetchArray($param = MYSQL_ASSOC);
+	public function fetchArray($param = MYSQLI_ASSOC);
 	/**
 	 * Возвращает ассоциативный массив с названиями индексов,
 	 * соответсвующими названиям колонок

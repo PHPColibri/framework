@@ -2,6 +2,7 @@
 namespace Colibri\Database;
 
 use Carbon\Carbon;
+use Colibri\Base\SqlException;
 
 /**
  * Абстрактный класс объекта базы данных.
@@ -35,7 +36,13 @@ class Object implements IObject
 	protected	$fieldTypes=[];
 	public      $fieldLengths = [];
 
+    /**
+     * @deprecated
+     */
 	public		$error_message='';
+    /**
+     * @deprecated
+     */
 	public		$error_number=0;
 
 
@@ -441,6 +448,7 @@ static
     }
 
     /**
+     * @deprecated will be removed
      * @return string
      */
 	public		function	getFieldsAsXMLstring()
@@ -473,6 +481,7 @@ static
     }
 
 	/**
+     * @deprecated use Exceptions
 	 *
      * @param string $strQuery
      * @param string $type     sql|internal
@@ -508,6 +517,8 @@ static
 	}
 
     /**
+     * @deprecated use Exceptions
+     *
      * @param string $strQuery
      *
      * @return bool
@@ -523,6 +534,7 @@ static
      *
      * @return bool true on success or false on failure (if no exeptions on)
      * @throws DbException
+     * @throws SqlException
      * @throws \Exception
      */
 	protected	function	doQuery($strQuery)

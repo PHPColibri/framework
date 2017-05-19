@@ -98,6 +98,11 @@ class MySQL extends AbstractDb
 
 	public	function	getLastErrno()		{	return $this->lastError['errno'];	}
 	public	function	getLastError()		{	return $this->lastError['error'];	}
+
+    /**
+     * @deprecated use Exceptions
+     * @return bool
+     */
 	private	function	setLastError()
 	{
 		$this->lastError['errno'] = $this->connect->errno;
