@@ -10,6 +10,7 @@ class Redirect extends Helper
 	 */
 	public static function to($url)
 	{
-		return header('Location: ' . $url);
+		header('Location: ' . $url);
+		exit;
 	}
 }
