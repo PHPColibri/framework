@@ -82,6 +82,23 @@ class Object implements IObject
 	}
 
     /**
+     * @param mixed $id_or_where
+     *
+     * @return null|static
+     * @throws DbException
+     * @throws \Exception
+     */
+    public static function find($id_or_where)
+    {
+        $dbObject = new static();
+        $loaded = $dbObject->load($id_or_where);
+
+        return $loaded
+            ? $dbObject
+            : null;
+    }
+
+    /**
      * @param string $everyFieldPrefix
      *
      * @return string
