@@ -186,7 +186,7 @@ class Engine extends Engine\Base
 					break;
 			}
 		} catch (Exception\NotFoundException $exception) {
-			throw new Http\NotFoundException();
+			throw new Http\NotFoundException($exception->getMessage(), $exception->getCode(), $exception);
 		}
 
 		if ($this->_responseType==ResponseType::rpc)
