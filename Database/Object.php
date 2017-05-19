@@ -541,6 +541,9 @@ static
 	{
 		if (!self::db()->query($strQuery))
 			return !$this->setSqlError($strQuery);
+
+		$this->cleanUpQueryVars();
+
 		return true;
 	}
 
@@ -571,4 +574,13 @@ static
 			return !$this->setSqlError(print_r($arrQueries,true));
 		return true;
 	}
+
+    /**
+     * bring out into Query class
+     */
+    private function cleanUpQueryVars()
+    {
+        $this->where = null;
+        $this->fieldsNameValuesArray = null;
+    }
 }
