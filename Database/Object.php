@@ -206,13 +206,14 @@ class Object implements IObject
     /**
      * @param array $row
      */
-	protected	function	fillProperties(array $row)
+	protected	function	fillProperties(array $row, $cast = true)
 	{
 		foreach ($row as $propName => $propValue) {
-			if ($propValue === null) {
+			if ($propValue === null || !$cast) {
 				$this->$propName = $propValue;
 				continue;
 			}
+
 			$type = isset($this->fieldTypes[$propName]) ? $this->fieldTypes[$propName] : null;
 			switch ($type) {
                 case 'int':
@@ -387,6 +388,8 @@ class Object implements IObject
 	public		function	save(array $attributes=null)
 	{
 		$this->fieldsNameValuesArray=$attributes;
+		$this->fillProperties($attributes, false);
+
 		return	$this->doQuery($this->saveQuery());
 	}
 
