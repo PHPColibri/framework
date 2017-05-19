@@ -1,6 +1,7 @@
 <?php
 namespace Colibri\Application;
 
+use Colibri\Http;
 use Colibri\Log\Log;
 use Colibri\Config\Config;
 use Colibri\XmlRpc\Request as XmlRpcRequest;
@@ -163,25 +164,29 @@ class Engine extends Engine\Base
 
     /**
      * @return string
-     * @throws Exception\NotFoundException
+     * @throws Http\NotFoundException
      * @throws LogicException
      */
 	public		function	generateResponse()
 	{
-		switch ($this->_requestType) {
-			default:
-			case RequestType::none:
-			    throw new Exception\NotFoundException('Unknown request type.');
-				break;
+		try {
+			switch ($this->_requestType) {
+				default:
+				case RequestType::none:
+					throw new Exception\NotFoundException('Unknown request type.');
+					break;
 
-			case RequestType::getModuleView:
-				$this->_responseType = ResponseType::html;
-				$strResponse		 = $this->getModuleView($this->_division, $this->_module, $this->_method, $this->_params);
-				break;
-			case RequestType::callModuleMethod:
-				$this->_responseType = ResponseType::rpc;
-				$strResponse		 = $this->callModuleMethod($this->_division, $this->_module, $this->_method, $this->_params);
-				break;
+				case RequestType::getModuleView:
+					$this->_responseType = ResponseType::html;
+					$strResponse         = $this->getModuleView($this->_division, $this->_module, $this->_method, $this->_params);
+					break;
+				case RequestType::callModuleMethod:
+					$this->_responseType = ResponseType::rpc;
+					$strResponse         = $this->callModuleMethod($this->_division, $this->_module, $this->_method, $this->_params);
+					break;
+			}
+		} catch (Exception\NotFoundException $exception) {
+			throw new Http\NotFoundException();
 		}
 
 		if ($this->_responseType==ResponseType::rpc)

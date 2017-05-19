@@ -1,7 +1,7 @@
 <?php
 require_once(CONFIGS.'application.php');
 
-use Colibri\Application\Exception\NotFoundException;
+use Colibri\Http\NotFoundException;
 use Colibri\Application\ResponseType;
 use Colibri\Application\Engine as ApplicationEngine;
 
@@ -61,20 +61,6 @@ catch (BuisnessLogicException $exc)
     header('HTTP/1.1 500 Internal Server Error');
     include(HTTPERRORS.'500.php');
 }
-catch (AdditionalErrorException $exc)
-{
-	$message="\n".
-		'error ['. $exc->getCode().']: '. $exc->getMessage()."\n\n".
-		$exc->getTraceAsString();
-
-    if (Config::application('debug'))
-        $error = htmlspecialchars($message);
-
-    header('HTTP/1.1 500 Internal Server Error');
-    include(HTTPERRORS.'500.php');
-
-	Log::add($message,'core.module');
-}
 
 
 catch (NotFoundException $exc)
@@ -103,6 +89,7 @@ catch (\Exception $exc)
 
     if (Config::application('debug'))
         $error = htmlspecialchars($message);
+
     header('HTTP/1.1 500 Internal Server Error');
     include(HTTPERRORS.'500.php');
 
