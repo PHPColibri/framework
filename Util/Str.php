@@ -110,7 +110,9 @@ static
 static
 	public		function	firstPart($str, $delimiter = ' ')
 	{
-		return array_shift(explode($delimiter, $str));
+		$parts = explode($delimiter, $str);
+
+		return array_shift($parts);
 	}
 
 	/**
@@ -122,7 +124,9 @@ static
 static
 	public		function	lastPart($str, $delimiter = ' ')
 	{
-		return array_pop(explode($delimiter, $str));
+		$parts = explode($delimiter, $str);
+
+		return array_pop($parts);
 	}
 
 	/**
