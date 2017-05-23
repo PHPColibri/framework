@@ -5,12 +5,21 @@ use Colibri\Cache\Memcache;
 
 abstract class AbstractDb implements IDb
 {
+    protected $host;
+    protected $login;
+    protected $pass;
+    protected $database;
+
+    /**
+     * @var bool
+     */
     static	public	$useMemcacheForMetadata = false;
 
     /**
      * @var array
      */
     private static $columnsMetadata = [];
+
     /**
      * @param string $tableName
      *
@@ -20,7 +29,7 @@ abstract class AbstractDb implements IDb
     {
         if (!isset(self::$columnsMetadata[$tableName]))
             self::$columnsMetadata[$tableName] = (static::$useMemcacheForMetadata
-                ? Memcache::remember(hash('md5', $tableName . '.meta'), function () use ($tableName) {
+                ? Memcache::remember($this->database . '.' . $tableName . '.meta', function () use ($tableName) {
                     return $this->retrieveColumnsMetadata($tableName);
                 })
                 : $this->retrieveColumnsMetadata($tableName)
