@@ -2,6 +2,7 @@
 namespace Colibri\Validation;
 
 use Colibri\Base\PropertyAccess;
+use Colibri\Util\Arr;
 use Colibri\Util\Str;
 
 /**
@@ -277,7 +278,7 @@ class Validation extends PropertyAccess
 	public function ifIsValid(\Closure $callback)
 	{
 		if ($this->valid())
-			$callback();
+			$callback($this->scope);
 
 		return $this;
 	}
@@ -316,5 +317,17 @@ class Validation extends PropertyAccess
 	static public function forScope(array $scope)
 	{
 		return new static($scope);
+	}
+
+	/**
+     * Gets from $_POST only needed keys and use new as scope
+     *
+	 * @param array $keys list of keys in $_POST array that must be validates
+	 *
+	 * @return Validation
+	 */
+    public static function forPostOnly(array $keys)
+    {
+        return static::forScope(Arr::only($_POST, $keys));
 	}
 }
