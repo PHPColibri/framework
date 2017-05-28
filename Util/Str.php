@@ -35,10 +35,13 @@ static
 					}
 					$str = '';
 					for ($i=0;$i<$len;$i++)
-						$str.=substr($pool,mt_rand(0,strlen($pool)-1),1);
+						/** @noinspection PhpUndefinedVariableInspection */
+						$str .=substr($pool,mt_rand(0,strlen($pool)-1),1);
 					return $str;
 			case 'unique' : return md5(uniqid(mt_rand()));
 			case 'guid'   : return self::generateGUID();
+			default:
+				throw new \Exception('unknown random type');
 		}
 	}
 	/**
@@ -144,5 +147,27 @@ static
 		}
 
 		return $str;
+	}
+
+	/**
+	 * @param string $str
+	 *
+	 * @return string
+	 */
+static
+	public		function	studly($str)
+	{
+		return str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $str)));
+	}
+
+	/**
+	 * @param string $str
+	 *
+	 * @return string
+	 */
+static
+	public      function    camel($str)
+	{
+		return lcfirst(static::studly($str));
 	}
 }
