@@ -4,6 +4,7 @@ namespace Colibri\Application;
 use Colibri\Http;
 use Colibri\Log\Log;
 use Colibri\Config\Config;
+use Colibri\Util\Str;
 use Colibri\XmlRpc\Request as XmlRpcRequest;
 use Colibri\XmlRpc\Response as XmlRpcResponse;
 use LogicException;
@@ -157,7 +158,7 @@ class Engine extends Engine\Base
 		else						$this->_module=$parts[0];
 		if ($partsCnt<2 ||
 			empty($parts[1]))		$this->_method=$appConfig['module']['defaultViewsControllerAction'];
-		else						$this->_method=$parts[1];
+		else						$this->_method=Str::camel($parts[1]);
 
 		if ($partsCnt>2)			$this->_params=array_slice($parts,2);
 	}
