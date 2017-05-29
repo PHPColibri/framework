@@ -10,17 +10,17 @@ namespace Colibri\Util;
  */
 class Str
 {
-	/**
+    /**
      * Check is string contains valid email.
      *
      * @param string $string
      *
-	 * @return bool
-	 */
+     * @return bool
+     */
     static public function isEmail($string)
-	{
-		return (bool)preg_match(RegExp::isEmail, $string);
-	}
+    {
+        return (bool)preg_match(RegExp::isEmail, $string);
+    }
 
     static public		function	random($type='alnum',$len=8)
 	{
