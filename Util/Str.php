@@ -13,7 +13,7 @@ class Str
 	/**
      * Check is string contains valid email.
      *
-	 * @param string $string
+     * @param string $string
      *
 	 * @return bool
 	 */
