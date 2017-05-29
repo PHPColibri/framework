@@ -3,6 +3,7 @@ namespace Colibri\Database;
 
 use Carbon\Carbon;
 use Colibri\Base\SqlException;
+use Colibri\Database\Exception\NotFoundException;
 
 /**
  * Абстрактный класс объекта базы данных.
@@ -81,13 +82,13 @@ class Object implements IObject
 					$this->{static::$PKFieldName[0]}=self::LOAD_ERROR;
 	}
 
-    /**
-     * @param mixed $id_or_where
-     *
-     * @return null|static
-     * @throws DbException
-     * @throws \Exception
-     */
+	/**
+	 * @param mixed $id_or_where
+	 *
+	 * @return static
+	 * @throws DbException
+	 * @throws \Exception
+	 */
     public static function find($id_or_where)
     {
         $dbObject = new static();
@@ -96,6 +97,23 @@ class Object implements IObject
         return $loaded
             ? $dbObject
             : null;
+    }
+
+	/**
+	 * @param mixed $id_or_where
+	 *
+	 * @return static
+	 * @throws DbException
+	 * @throws NotFoundException
+	 * @throws \Exception
+	 */
+    public static function get($id_or_where)
+    {
+        $dbObject = static::find($id_or_where);
+        if (!$dbObject)
+            throw new NotFoundException('Model not found');
+
+        return $dbObject;
     }
 
     /**
@@ -203,9 +221,10 @@ class Object implements IObject
 		return substr($strList,5);
 	}
 
-    /**
-     * @param array $row
-     */
+	/**
+	 * @param array $row
+	 * @param bool  $cast
+	 */
 	protected	function	fillProperties(array $row, $cast = true)
 	{
 		foreach ($row as $propName => $propValue) {
@@ -434,19 +453,19 @@ class Object implements IObject
 		$this->fillProperties($result);
 		return	true;
 	}
+
 	/**
 	 *
 	 * @param mixed $id PK value - int, string or array if multifield PK
+	 *
 	 * @return static
+	 * @throws DbException
 	 * @throws \Exception
 	 */
 static
 	public		function	getById($id)
 	{
-		$object=new static();
-		if (!$object->load($id))
-			throw new \Exception('no record');
-		return $object;
+		return static::get($id);
 	}
 
     /**
