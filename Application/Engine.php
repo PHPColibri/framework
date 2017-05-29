@@ -52,6 +52,7 @@ class Engine extends Engine\Base
 		$appConfig = Config::get('application');
 		mb_internal_encoding($appConfig['encoding']);
 		date_default_timezone_set($appConfig['timezone']);
+		setlocale(LC_TIME, $appConfig['locale']);
 		umask($appConfig['umask']);
         define('DEBUG', $appConfig['debug']);
         self::setUpErrorHandling();
@@ -71,7 +72,6 @@ class Engine extends Engine\Base
 			return;
 		}
 
-		//TODO: refactor to config. This is route by SEO requirements
 		$requestedUri=$this->getRequestedUri();
         /** @noinspection PhpUndefinedMethodInspection */
         $routes = Config::routing('rewrite');
@@ -81,27 +81,6 @@ class Engine extends Engine\Base
 			$replacement=$route['replacement'];
 			$requestedUri=preg_replace($pattern,$replacement,$requestedUri);
 
-			/*
-			if (isset($route['requestType']))
-				$this->_requestType=$route['requestType'];
-			if ($this->_requestType==RequestType::callModuleMethod)
-			{
-				$GLOBALS['xmlrpc_internalencoding']=$appConfig['encoding'];
-				if (isset($route['parseRpcQuery']))
-				{
-					eval('$rpcQuery='.$route['parseRpcQuery']);
-					$this->parseRpcQuery($rpcQuery);
-				}
-				else
-				{
-					if (!isset($route['module']) || !isset($route['method']))
-			            throw new LogicException('Wrong routing format');
-					$this->_module=$route['module'];
-					$this->_method=$route['method'];
-					$this->_params=isset($route['params'])?$route['params']:array();
-				}
-			}
-			*/
 			if (isset($route['last']))
 				break;
 		}
