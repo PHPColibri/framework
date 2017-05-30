@@ -55,4 +55,68 @@ class StrTest extends PHPUnit_Framework_TestCase
             ['xxxColibrixxx@gmail.com'],
         ];
     }
+
+    /**
+     * @covers ::random
+     * @expectedException \Exception
+     * @expectedExceptionMessage unknown random type
+     */
+    public function testRandomInvalidTypeException()
+    {
+        Str::random('invalid_type');
+    }
+
+    /**
+     * @covers ::random
+     * @dataProvider randomProvider
+     *
+     * @param string  $type
+     * @param integer $length
+     * @param string  $regexp
+     */
+    public function testRandom($type, $length, $regexp)
+    {
+        $this->assertRegExp($regexp, Str::random($type, $length));
+    }
+
+    public function randomProvider()
+    {
+        return [
+            ['alnum',   2,  '/[0-9a-zA-Z]{2}/'],
+            ['alnum',   8,  '/[0-9a-zA-Z]{8}/'],
+            ['alnum',   15, '/[0-9a-zA-Z]{15}/'],
+            ['numeric', 2,  '/[0-9]{2}/'],
+            ['numeric', 8,  '/[0-9]{8}/'],
+            ['numeric', 15, '/[0-9]{15}/'],
+            ['nozero',  2,  '/[1-9]{2}/'],
+            ['nozero',  8,  '/[1-9]{8}/'],
+            ['nozero',  15, '/[1-9]{15}/'],
+            ['unique',  2,  '/[0-9a-f]{32}/'],
+            ['unique',  8,  '/[0-9a-f]{32}/'],
+            ['unique',  15, '/[0-9a-f]{32}/'],
+        ];
+    }
+
+    /**
+     * @covers ::random
+     * @dataProvider randomDefaultLengthProvider
+     *
+     * @param string  $type
+     * @param integer $expectedLength
+     */
+    public function testRandomDefaultLength($type, $expectedLength)
+    {
+        $this->assertEquals($expectedLength, mb_strlen(Str::random($type)));
+    }
+
+    public function randomDefaultLengthProvider()
+    {
+        return [
+            ['alnum',   8],
+            ['numeric', 8],
+            ['nozero',  8],
+            ['unique',  32],
+            ['guid',    36],
+        ];
+    }
 }
