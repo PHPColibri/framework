@@ -1,8 +1,7 @@
 <?php
-
 namespace Colibri\Util;
-
 /**
+ *
  * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  * @package		xTeam
  * @subpackage	a13FW
@@ -10,19 +9,18 @@ namespace Colibri\Util;
  */
 class Str
 {
-    /**
-     * Check is string contains valid email.
-     *
-     * @param string $string
-     *
-     * @return bool
-     */
-    static public function isEmail($string)
-    {
-        return (bool)preg_match(RegExp::isEmail, $string);
-    }
-
-    static public		function	random($type='alnum',$len=8)
+	/**
+	 *
+	 * @param string $str
+	 * @return bool
+	 */
+static
+	public		function	isEmail($str)
+	{
+		return (bool)preg_match(RegExp::isEmail,$str);
+	}
+static
+	public		function	random($type='alnum',$len=8)
 	{
 		switch ($type)
 		{
