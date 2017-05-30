@@ -5,8 +5,6 @@ use Colibri\Http;
 use Colibri\Log\Log;
 use Colibri\Config\Config;
 use Colibri\Util\Str;
-use Colibri\XmlRpc\Request as XmlRpcRequest;
-use Colibri\XmlRpc\Response as XmlRpcResponse;
 use LogicException;
 
 /**
@@ -19,8 +17,6 @@ use LogicException;
  */
 class Engine extends Engine\Base
 {
-	const		rpcquery_POSTvarName='xquery';
-
 	protected	$_responser=null;
 	protected	$_domainPrefix=null;
 	private		$_division=null;
@@ -28,8 +24,6 @@ class Engine extends Engine\Base
 	private		$_method=null;
 	private		$_params=array();
 
-	private		$_requestType	=RequestType::none;
-	protected 	$_responseType	=ResponseType::none;
 	protected	$_showProfilerInfoOnDebug=true;
 	protected	$_showAppDevToolsOnDebug =true;
 
@@ -62,16 +56,6 @@ class Engine extends Engine\Base
 
 		new \API($this);// initialize API
 
-		// identifying request type & parse params
-		if (isset($_POST[self::rpcquery_POSTvarName]))
-		{
-			$this->_requestType=RequestType::callModuleMethod;
-			$GLOBALS['xmlrpc_internalencoding']=$appConfig['encoding'];
-			$this->parseRpcQuery($_POST[self::rpcquery_POSTvarName]);
-			unset($_POST[self::rpcquery_POSTvarName]);
-			return;
-		}
-
 		$requestedUri=$this->getRequestedUri();
         /** @noinspection PhpUndefinedMethodInspection */
         $routes = Config::routing('rewrite');
@@ -86,7 +70,6 @@ class Engine extends Engine\Base
 		}
 
 		$this->parseRequestedFile($requestedUri);
-		$this->_requestType=RequestType::getModuleView;
 	}
 	/**
 	 * @return	string		returns reqwested file name with path: for "http://example.com/some/dir/somefile.php?arg1=val1&arg2=val2" returns "/some/dir/somefile.php"
@@ -150,36 +133,10 @@ class Engine extends Engine\Base
 	public		function	generateResponse()
 	{
 		try {
-			switch ($this->_requestType) {
-				default:
-				case RequestType::none:
-					throw new Exception\NotFoundException('Unknown request type.');
-					break;
-
-				case RequestType::getModuleView:
-					$this->_responseType = ResponseType::html;
-					$strResponse         = $this->getModuleView($this->_division, $this->_module, $this->_method, $this->_params);
-					break;
-				case RequestType::callModuleMethod:
-					$this->_responseType = ResponseType::rpc;
-					$strResponse         = $this->callModuleMethod($this->_division, $this->_module, $this->_method, $this->_params);
-					break;
-			}
+			return $this->getModuleView($this->_division, $this->_module, $this->_method, $this->_params);
 		} catch (Exception\NotFoundException $exception) {
 			throw new Http\NotFoundException($exception->getMessage(), $exception->getCode(), $exception);
 		}
-
-		if ($this->_responseType==ResponseType::rpc)
-		{
-			if ($strResponse===null)
-			    throw new LogicException("Method '$this->_method' of module '$this->_module' does not returns any value or returns <null>");
-			$rpcResponse=new XmlRpcResponse($strResponse);
-			$strResponse=$rpcResponse->xml;
-		}
-		if ($this->_responseType & ResponseType::xml)
-			header('Content-type: text/xml');
-
-		return $strResponse;
 	}
 
     /**
@@ -226,40 +183,6 @@ class Engine extends Engine\Base
 			return $responser->response;
 
 		return $response;
-	}
-
-    /**
-     * @deprecated
-     *
-     * @param string $rpcQuery with xmlrpc
-     *
-     * @throws Exception\NotFoundException
-     */
-	private		function	parseRpcQuery($rpcQuery)
-	{
-		$rpcRequest=new XmlRpcRequest($rpcQuery);
-		if ($rpcRequest->errno)
-            throw new Exception\NotFoundException("Can't parse xmlrpc request: Colibri\XmlRpc\Request error[$rpcRequest->errno]: $rpcRequest->error.");
-
-		$appConfig = Config::get('application');
-
-		$parts=explode('.',$rpcRequest->methodName);
-		$partsCnt=count($parts);
-
-		if ($partsCnt > 0 && in_array($parts[0], Config::get('divisions'))) {
-			$this->_division=$parts[0];
-			$parts=array_slice($parts,1);
-		}
-		else
-			$this->_division='';
-
-		if (empty($parts[0]))		$this->_module=$appConfig['module']['default'];
-		else						$this->_module=$parts[0];
-		if ($partsCnt<2 ||
-			empty($parts[1]))		$this->_method=$appConfig['module']['defaultMethodsControllerAction'];
-		else						$this->_method=$parts[1];
-
-		$this->_params=$rpcRequest->params;
 	}
 
     /**

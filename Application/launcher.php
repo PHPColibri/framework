@@ -2,7 +2,6 @@
 require_once(CONFIGS.'application.php');
 
 use Colibri\Http\NotFoundException;
-use Colibri\Application\ResponseType;
 use Colibri\Application\Engine as ApplicationEngine;
 
 use Colibri\Log\Log;
@@ -10,7 +9,6 @@ use Colibri\Cache\Memcache;
 use Colibri\Config\Config;
 use Colibri\Database\Concrete\MySQL;
 use Colibri\Base\BuisnessLogicException;
-use Colibri\Base\AdditionalErrorException;
 
 
 $mEngine=null;
@@ -25,7 +23,7 @@ try
 	echo($content);
 
 	// TODO [alek13]: bring out
-	if (DEBUG && $mEngine->responseType==ResponseType::html)
+	if (DEBUG)
 	{
 		if ($mEngine->showProfilerInfoOnDebug)
 		{
