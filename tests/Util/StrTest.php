@@ -3,7 +3,6 @@ namespace Colibri\Tests\Util;
 
 use Colibri\Util\Str;
 use PHPUnit_Framework_TestCase;
-use Exception;
 
 /**
  * @coversDefaultClass \Colibri\Util\Str
@@ -77,9 +76,7 @@ class StrTest extends PHPUnit_Framework_TestCase
      */
     public function testRandom($type, $length, $regexp)
     {
-        $randomResult = Str::random($type, $length);
-
-        $this->assertRegExp($regexp, $randomResult);
+        $this->assertRegExp($regexp, Str::random($type, $length));
     }
 
     public function randomProvider()
