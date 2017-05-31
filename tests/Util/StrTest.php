@@ -124,8 +124,8 @@ class StrTest extends PHPUnit_Framework_TestCase
      * @covers ::snake
      * @dataProvider snakeProvider
      *
-     * @param $stringSnakeCase
-     * @param $expectedString
+     * @param string $stringSnakeCase
+     * @param string $expectedString
      */
     public function testSnake($stringSnakeCase, $expectedString)
     {
@@ -146,8 +146,8 @@ class StrTest extends PHPUnit_Framework_TestCase
      * @covers ::camel
      * @dataProvider camelProvider
      *
-     * @param $stringCamelCase
-     * @param $expectedString
+     * @param string $stringCamelCase
+     * @param string $expectedString
      */
     public function testCamel($stringCamelCase, $expectedString)
     {
@@ -170,8 +170,8 @@ class StrTest extends PHPUnit_Framework_TestCase
      * @covers ::studly
      * @dataProvider studlyProvider
      *
-     * @param $stringCamelCase
-     * @param $expectedString
+     * @param string $stringCamelCase
+     * @param string $expectedString
      */
     public function testStudly($stringCamelCase, $expectedString)
     {
@@ -186,6 +186,53 @@ class StrTest extends PHPUnit_Framework_TestCase
             ['camelCase',    'CamelCase'],
             ['camel_c_ase1', 'CamelCAse1'],
             ['string',       'String'],
+        ];
+    }
+
+    /**
+     * @covers ::isInt
+     * @dataProvider isIntPositiveProvider
+     *
+     * @param string $string
+     */
+    public function testIsIntPositive($string)
+    {
+        $this->assertTrue(Str::isInt($string));
+    }
+
+    public function isIntPositiveProvider()
+    {
+        return [
+            ['11'],
+            ['80'],
+            ['8080'],
+            ['-11'],
+            ['0'],
+        ];
+    }
+
+    /**
+     * @covers ::isInt
+     * @dataProvider isIntNegativeProvider
+     *
+     * @param $string
+     */
+    public function testIsIntNegative($string)
+    {
+        $this->assertFalse(Str::isInt($string));
+    }
+
+    public function isIntNegativeProvider()
+    {
+        return [
+            ['1a1'],
+            ['a12'],
+            ['12.1'],
+            ['11.'],
+            ['-11.'],
+            ['11-'],
+            ['-0'],
+            ['+0'],
         ];
     }
 }
