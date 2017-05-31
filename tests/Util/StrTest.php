@@ -275,4 +275,46 @@ class StrTest extends PHPUnit_Framework_TestCase
             ['Colibri the best', 'Laravel'],
         ];
     }
+
+    /**
+     * @covers ::endsWith
+     * @dataProvider endsWithPositiveProvider
+     *
+     * @param string $sourceString
+     * @param string $beginsWith
+     */
+    public function testEndsWithPositive($sourceString, $beginsWith)
+    {
+        $this->assertTrue(Str::endsWith($sourceString, $beginsWith));
+    }
+
+    public function endsWithPositiveProvider()
+    {
+        return [
+            ['foobar',           'bar'],
+            ['Colibri the best', 'best'],
+            ['Colibri the best', 'est'],
+        ];
+    }
+
+    /**
+     * @covers ::endsWith
+     * @dataProvider endsWithNegativeProvider
+     *
+     * @param $sourceString
+     * @param $beginsWith
+     */
+    public function testEndsWithNegative($sourceString, $beginsWith)
+    {
+        $this->assertFalse(Str::endsWith($sourceString, $beginsWith));
+    }
+
+    public function endsWithNegativeProvider()
+    {
+        return [
+            ['foobar',           'foo'],
+            ['Colibri the best', 'test'],
+            ['Colibri the best', ''],
+        ];
+    }
 }
