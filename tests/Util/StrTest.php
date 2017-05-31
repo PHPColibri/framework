@@ -119,4 +119,71 @@ class StrTest extends PHPUnit_Framework_TestCase
             ['guid',    36],
         ];
     }
+
+    /**
+     * @covers ::snake
+     * @dataProvider snakeProvider
+     *
+     * @param $stringSnakeCase
+     * @param $expectedString
+     */
+    public function testSnake($stringSnakeCase, $expectedString)
+    {
+        $this->assertEquals($expectedString, Str::snake($stringSnakeCase));
+    }
+
+    public function snakeProvider()
+    {
+        return [
+            ['camelCase',  'camel_case'],
+            ['snake_case', 'snake_case'],
+            ['camelCAse1', 'camel_c_ase1'],
+            ['string',     'string'],
+        ];
+    }
+
+    /**
+     * @covers ::camel
+     * @dataProvider camelProvider
+     *
+     * @param $stringCamelCase
+     * @param $expectedString
+     */
+    public function testCamel($stringCamelCase, $expectedString)
+    {
+        $this->assertEquals($expectedString, Str::camel($stringCamelCase));
+    }
+
+    public function camelProvider()
+    {
+        return [
+            ['camel_case',   'camelCase'],
+            ['camelCase',    'camelCase'],
+            ['camel_c_ase1', 'camelCAse1'],
+            ['string',       'string'],
+        ];
+    }
+
+    /**
+     * @covers ::studly
+     * @dataProvider studlyProvider
+     *
+     * @param $stringCamelCase
+     * @param $expectedString
+     */
+    public function testStudly($stringCamelCase, $expectedString)
+    {
+        $this->assertEquals($expectedString, Str::studly($stringCamelCase));
+    }
+
+    public function studlyProvider()
+    {
+        return [
+            ['camel_case',   'CamelCase'],
+            ['camel-case',   'CamelCase'],
+            ['camelCase',    'CamelCase'],
+            ['camel_c_ase1', 'CamelCAse1'],
+            ['string',       'String'],
+        ];
+    }
 }
