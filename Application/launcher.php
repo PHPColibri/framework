@@ -1,5 +1,4 @@
 <?php
-require_once(CONFIGS.'application.php');
 
 use Colibri\Http\NotFoundException;
 use Colibri\Application\Engine as ApplicationEngine;
@@ -8,7 +7,6 @@ use Colibri\Log\Log;
 use Colibri\Cache\Memcache;
 use Colibri\Config\Config;
 use Colibri\Database\Concrete\MySQL;
-use Colibri\Base\BuisnessLogicException;
 
 
 $mEngine=null;
@@ -48,18 +46,6 @@ try
 		}
 	}
 }
-
-catch (BuisnessLogicException $exc)
-{
-	$message="\n".'error ['.$exc->getCode().']: '. $exc->getMessage();
-	
-    if (Config::application('debug'))
-        $error = htmlspecialchars($message);
-
-    header('HTTP/1.1 500 Internal Server Error');
-    include(HTTPERRORS.'500.php');
-}
-
 
 catch (NotFoundException $exc)
 {

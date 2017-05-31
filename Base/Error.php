@@ -166,7 +166,5 @@ class AdditionalErrorException extends \Exception
 		return $this->addErrNumber;
 	}
 }
-
+/** @deprecated */
 class SqlException				extends AdditionalErrorException	{}
-class BuisnessLogicException	extends AdditionalErrorException	{}
-
