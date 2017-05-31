@@ -25,7 +25,7 @@ class ArrTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers       Colibri\Util\Arr::overwrite
+	 * @covers       \Colibri\Util\Arr::overwrite
 	 * @dataProvider overwriteDataProvider
 	 *
 	 * @param array $original
@@ -48,7 +48,7 @@ class ArrTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @dataProvider getDataProvider
-	 * @covers       Colibri\Util\Arr::get
+	 * @covers       \Colibri\Util\Arr::get
 	 *
 	 * @param string $key
 	 * @param mixed  $expectedValue
