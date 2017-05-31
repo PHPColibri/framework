@@ -215,7 +215,7 @@ class StrTest extends PHPUnit_Framework_TestCase
      * @covers ::isInt
      * @dataProvider isIntNegativeProvider
      *
-     * @param $string
+     * @param string $string
      */
     public function testIsIntNegative($string)
     {
@@ -233,6 +233,46 @@ class StrTest extends PHPUnit_Framework_TestCase
             ['11-'],
             ['-0'],
             ['+0'],
+        ];
+    }
+
+    /**
+     * @covers ::beginsWith
+     * @dataProvider beginsWithPositiveProvider
+     *
+     * @param string $sourceString
+     * @param string $beginsWith
+     */
+    public function testBeginsWithPositive($sourceString, $beginsWith)
+    {
+        $this->assertTrue(Str::beginsWith($sourceString, $beginsWith));
+    }
+
+    public function beginsWithPositiveProvider()
+    {
+        return [
+            ['foobar',           'foo'],
+            ['Colibri the best', 'Col'],
+        ];
+    }
+
+    /**
+     * @covers ::beginsWith
+     * @dataProvider beginsWithNegativeProvider
+     *
+     * @param $sourceString
+     * @param $beginsWith
+     */
+    public function testBeginsWithNegative($sourceString, $beginsWith)
+    {
+        $this->assertFalse(Str::beginsWith($sourceString, $beginsWith));
+    }
+
+    public function beginsWithNegativeProvider()
+    {
+        return [
+            ['foobar',           'bar'],
+            ['Colibri the best', 'Laravel'],
         ];
     }
 }
