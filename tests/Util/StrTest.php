@@ -260,8 +260,8 @@ class StrTest extends PHPUnit_Framework_TestCase
      * @covers ::beginsWith
      * @dataProvider beginsWithNegativeProvider
      *
-     * @param $sourceString
-     * @param $beginsWith
+     * @param string $sourceString
+     * @param string $beginsWith
      */
     public function testBeginsWithNegative($sourceString, $beginsWith)
     {
@@ -301,8 +301,8 @@ class StrTest extends PHPUnit_Framework_TestCase
      * @covers ::endsWith
      * @dataProvider endsWithNegativeProvider
      *
-     * @param $sourceString
-     * @param $beginsWith
+     * @param string $sourceString
+     * @param string $beginsWith
      */
     public function testEndsWithNegative($sourceString, $beginsWith)
     {
