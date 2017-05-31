@@ -124,8 +124,8 @@ class StrTest extends PHPUnit_Framework_TestCase
      * @covers ::snake
      * @dataProvider snakeProvider
      *
-     * @param $stringSnakeCase
-     * @param $expectedString
+     * @param string $stringSnakeCase
+     * @param string $expectedString
      */
     public function testSnake($stringSnakeCase, $expectedString)
     {
@@ -146,8 +146,8 @@ class StrTest extends PHPUnit_Framework_TestCase
      * @covers ::camel
      * @dataProvider camelProvider
      *
-     * @param $stringCamelCase
-     * @param $expectedString
+     * @param string $stringCamelCase
+     * @param string $expectedString
      */
     public function testCamel($stringCamelCase, $expectedString)
     {
@@ -170,8 +170,8 @@ class StrTest extends PHPUnit_Framework_TestCase
      * @covers ::studly
      * @dataProvider studlyProvider
      *
-     * @param $stringCamelCase
-     * @param $expectedString
+     * @param string $stringCamelCase
+     * @param string $expectedString
      */
     public function testStudly($stringCamelCase, $expectedString)
     {
@@ -186,6 +186,135 @@ class StrTest extends PHPUnit_Framework_TestCase
             ['camelCase',    'CamelCase'],
             ['camel_c_ase1', 'CamelCAse1'],
             ['string',       'String'],
+        ];
+    }
+
+    /**
+     * @covers ::isInt
+     * @dataProvider isIntPositiveProvider
+     *
+     * @param string $string
+     */
+    public function testIsIntPositive($string)
+    {
+        $this->assertTrue(Str::isInt($string));
+    }
+
+    public function isIntPositiveProvider()
+    {
+        return [
+            ['11'],
+            ['80'],
+            ['8080'],
+            ['-11'],
+            ['0'],
+        ];
+    }
+
+    /**
+     * @covers ::isInt
+     * @dataProvider isIntNegativeProvider
+     *
+     * @param string $string
+     */
+    public function testIsIntNegative($string)
+    {
+        $this->assertFalse(Str::isInt($string));
+    }
+
+    public function isIntNegativeProvider()
+    {
+        return [
+            ['1a1'],
+            ['a12'],
+            ['12.1'],
+            ['11.'],
+            ['-11.'],
+            ['11-'],
+            ['-0'],
+            ['+0'],
+        ];
+    }
+
+    /**
+     * @covers ::beginsWith
+     * @dataProvider beginsWithPositiveProvider
+     *
+     * @param string $sourceString
+     * @param string $beginsWith
+     */
+    public function testBeginsWithPositive($sourceString, $beginsWith)
+    {
+        $this->assertTrue(Str::beginsWith($sourceString, $beginsWith));
+    }
+
+    public function beginsWithPositiveProvider()
+    {
+        return [
+            ['foobar',           'foo'],
+            ['Colibri the best', 'Col'],
+        ];
+    }
+
+    /**
+     * @covers ::beginsWith
+     * @dataProvider beginsWithNegativeProvider
+     *
+     * @param string $sourceString
+     * @param string $beginsWith
+     */
+    public function testBeginsWithNegative($sourceString, $beginsWith)
+    {
+        $this->assertFalse(Str::beginsWith($sourceString, $beginsWith));
+    }
+
+    public function beginsWithNegativeProvider()
+    {
+        return [
+            ['foobar',           'bar'],
+            ['Colibri the best', 'Laravel'],
+        ];
+    }
+
+    /**
+     * @covers ::endsWith
+     * @dataProvider endsWithPositiveProvider
+     *
+     * @param string $sourceString
+     * @param string $beginsWith
+     */
+    public function testEndsWithPositive($sourceString, $beginsWith)
+    {
+        $this->assertTrue(Str::endsWith($sourceString, $beginsWith));
+    }
+
+    public function endsWithPositiveProvider()
+    {
+        return [
+            ['foobar',           'bar'],
+            ['Colibri the best', 'best'],
+            ['Colibri the best', 'est'],
+        ];
+    }
+
+    /**
+     * @covers ::endsWith
+     * @dataProvider endsWithNegativeProvider
+     *
+     * @param string $sourceString
+     * @param string $beginsWith
+     */
+    public function testEndsWithNegative($sourceString, $beginsWith)
+    {
+        $this->assertFalse(Str::endsWith($sourceString, $beginsWith));
+    }
+
+    public function endsWithNegativeProvider()
+    {
+        return [
+            ['foobar',           'foo'],
+            ['Colibri the best', 'test'],
+            ['Colibri the best', ''],
         ];
     }
 }
