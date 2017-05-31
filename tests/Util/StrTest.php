@@ -158,8 +158,10 @@ class StrTest extends PHPUnit_Framework_TestCase
     {
         return [
             ['camel_case',   'camelCase'],
+            ['camel-case',   'camelCase'],
             ['camelCase',    'camelCase'],
             ['camel_c_ase1', 'camelCAse1'],
+            ['camel-c-ase1', 'camelCAse1'],
             ['string',       'string'],
         ];
     }
