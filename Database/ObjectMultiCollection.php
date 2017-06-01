@@ -1,9 +1,6 @@
 <?php
 namespace Colibri\Database;
 
-use Colibri\Base\Error;
-use Colibri\Database\ObjectCollection;
-
 /**
  * ObjectMultiCollection
  *

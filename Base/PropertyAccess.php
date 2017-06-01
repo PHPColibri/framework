@@ -9,8 +9,6 @@ namespace Colibri\Base;
  * иметь сразу простой public доступ к этим переменным, обращаясь к ним
  * без символа подчёркивания. В последствии вы можете некоторые из них
  * закрыть на запись и/или чтение перепереопределив методы __get и __set.
- * Если подобный функционал не требуется, вы можете пронаследоваться
- * только от Error или не наследоваться вообще.
  *
  * <code>
  * class CMyClass extends PropertyAccess
@@ -23,14 +21,12 @@ namespace Colibri\Base;
  * echo($x->var1);
  * </code>
  *
- * @see Error
- *
  * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  * @package		xTeam
  * @subpackage	a13FW
  * @version		1.0.0.01
  */
-abstract class PropertyAccess extends Error {
+abstract class PropertyAccess {
 	public function	__get($propName)
 	{
 		$p='_'.$propName;
