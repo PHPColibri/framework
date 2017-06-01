@@ -23,7 +23,7 @@ class ObjectMultiCollection extends ObjectCollection //implements IObjectMultiCo
 											'SELECT o.* FROM `'.static::$tableName.'` o WHERE 1';
 										$strQuery=$this->rebuildQueryForCustomLoad($strQuery);
 										if ($strQuery===false)
-											Error::__raiseError(401,$propertyName,__METHOD__,__LINE__);
+											throw new \RuntimeException('can\'t rebuild query \''.$propertyName.'\' for custom load in '.__METHOD__.' [line: '.__LINE__.']. possible: getFieldsAndTypes() failed (check for sql errors) or incorrect wherePlan() format');
 										return $strQuery;
 			case 'delFromDbAllQuery':	return 'DELETE FROM `'.$this->fkTableName.'` WHERE '.$this->FKName[0].'='.$this->FKValue[0];
 			default:					parent::__get($propertyName);

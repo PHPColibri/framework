@@ -35,14 +35,14 @@ abstract class PropertyAccess extends Error {
 	{
 		$p='_'.$propName;
 		if (!property_exists($this, $p))
-			$this->__raiseError(1, $p, get_class($this));
+			throw new \RuntimeException("свойство $p не определено в классе " . get_class($this));
 		return $this->$p;
 	}
 	public function	__set($propName,$propValue)
 	{
 		$p='_'.$propName;
 		if (!property_exists($this, $p))
-			$this->__raiseError(1, $p, get_class($this));
+			throw new \RuntimeException("свойство $p не определено в классе " . get_class($this));
 		return $this->$p=$propValue;
 	}
 }

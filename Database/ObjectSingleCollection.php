@@ -31,7 +31,7 @@ class ObjectSingleCollection extends ObjectCollection //implements IObjectSingle
 													'');
 										$strQuery=$this->rebuildQueryForCustomLoad($strQuery);
 										if ($strQuery===false)
-											Error::__raiseError(401,$this->error_number,$this->error_message,$propertyName,__METHOD__,__LINE__);
+											throw new \RuntimeException('can\'t rebuild query \''.$propertyName.'\' for custom load in '.__METHOD__.' [line: '.__LINE__.']. possible: getFieldsAndTypes() failed (check for sql errors) or incorrect wherePlan() format');
 										return $strQuery;
 			case 'delFromDbAllQuery':	return 'DELETE FROM `'.static::$tableName.'` WHERE '.$this->FKName[0].'='.$this->FKValue[0];
 			default:					return parent::__get($propertyName);

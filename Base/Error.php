@@ -83,22 +83,6 @@ class Error
 
 	];
 	
-	/**
-	 * @deprecated
-	 *
-	 * @param	int $errNumber
-	 * @param	...
-	 */
-	public		static	function	__raiseError($errNumber)
-	{
-		$argList=func_get_args();
-		$argNum =func_num_args();
-		$errMessage=isset(self::$_errors[$errNumber])?self::$_errors[$errNumber]:self::$_errors[-1].' ['.$errNumber.']';
-		$errNumber =isset(self::$_errors[$errNumber])?$errNumber:-1;
-		for ($i=1;$i<$argNum;$i++)
-			$errMessage=str_replace('%'.$i,$argList[$i],$errMessage);
-		throw new \Exception($errMessage,$errNumber);
-	}
 }
 
 /**
