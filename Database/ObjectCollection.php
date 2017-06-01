@@ -3,14 +3,7 @@ namespace Colibri\Database;
 
 use Colibri\Base\IDynamicCollection;
 use Colibri\Base\DynamicCollection;
-use Colibri\Cache\Memcache;
 
-
-/*class RelationType
-{
-	const	SingleToMany=1;
-	const	ManyToMany=2;
-}*/
 
 /**
  * Абстрактный класс ObjectCollection.

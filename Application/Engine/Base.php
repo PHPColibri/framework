@@ -8,7 +8,6 @@ use Colibri\Database\Concrete\MySQL;
 use Colibri\Database\Db;
 use Colibri\Config\Config;
 use Colibri\Database\Object;
-use Colibri\Database\ObjectCollection;
 use Colibri\Session\Session;
 
 /**

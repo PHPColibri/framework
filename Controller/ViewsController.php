@@ -1,8 +1,6 @@
 <?php
 namespace Colibri\Controller;
 
-use Colibri\Controller\Base;
-use Colibri\Log\Log;
 use Colibri\View\Layout;
 use Colibri\View\PhpTemplate;
 use Colibri\Config\Config;

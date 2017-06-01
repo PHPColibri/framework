@@ -3,7 +3,6 @@ namespace Colibri\Database\Concrete;
 
 use Colibri\Base\SqlException;
 use Colibri\Database\DbException;
-use Colibri\Database\IDb;
 use Colibri\Database\AbstractDb;
 
 /**
