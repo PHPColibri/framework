@@ -22,8 +22,6 @@ use Colibri\Session\Session;
 abstract
 class Base extends PropertyAccess implements IEngine
 {
-	protected	$_db=null;
-	
 	public		function	__construct()
 	{
 		$config = Config::get('application');
