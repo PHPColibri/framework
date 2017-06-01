@@ -99,35 +99,6 @@ class Error
 			$errMessage=str_replace('%'.$i,$argList[$i],$errMessage);
 		throw new \Exception($errMessage,$errNumber);
 	}
-	/**
-	 * @deprecated
-	 */
-	private		static	function	__raiseAddError($errNumber,$addErrNumber,$addErrMessage,$exceptionType)
-	{
-		$argList=func_get_args();
-		$argNum =func_num_args();
-		$errMessage=isset(self::$_errors[$errNumber])?self::$_errors[$errNumber]:self::$_errors[-1].' ['.$errNumber.']';
-		$errNumber =isset(self::$_errors[$errNumber])?$errNumber:-1;
-		for ($i=4;$i<$argNum;$i++)
-		{
-			$errMessage=str_replace('%'.($i-3),$argList[$i],$errMessage);
-			$addErrMessage=str_replace('%'.($i-3),$argList[$i],$addErrMessage);
-		}
-		$errMessage.="\n".$exceptionType.' error['.$addErrNumber.']: '.$addErrMessage;
-		$exceptionName=$exceptionType.'Exception';
-		throw new $exceptionName($errMessage,$errNumber,$addErrNumber);
-	}
-	/**
-	 * @deprecated 
-	 */
-	public		static	function	__raiseLogicError($errNumber,$logicErrNumber)
-	{
-		$logicErrMessage=isset(self::$_errors[$logicErrNumber])?self::$_errors[$logicErrNumber]:self::$_errors[-1].' ['.$logicErrNumber.']';
-		$args=func_get_args();
-		array_splice($args,2,0,$logicErrMessage);
-		array_splice($args,3,0,'\Colibri\Base\BuisnessLogic');
-		call_user_func_array('self::__raiseAddError',$args);
-	}
 }
 
 /**
