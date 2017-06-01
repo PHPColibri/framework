@@ -120,15 +120,6 @@ class Error
 	/**
 	 * @deprecated 
 	 */
-	public		static	function	__raiseSqlError($errNumber,$sqlErrNumber,$sqlErrMessage)
-	{
-		$args=func_get_args();
-		array_splice($args,3,0,'\Colibri\Base\Sql');
-		call_user_func_array('self::__raiseAddError',$args);
-	}
-	/**
-	 * @deprecated 
-	 */
 	public		static	function	__raiseLogicError($errNumber,$logicErrNumber)
 	{
 		$logicErrMessage=isset(self::$_errors[$logicErrNumber])?self::$_errors[$logicErrNumber]:self::$_errors[-1].' ['.$logicErrNumber.']';
