@@ -450,4 +450,16 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 			return $collection->toArrayOf($fieldName, $keyField);
 		return $collection;
 	}
+
+	/**
+	 * @return $this
+	 * @throws DbException
+	 */
+	public function get()
+	{
+		if (!$this->load())
+			throw new DbException('failed to load collection');
+
+		return $this;
+	}
 }
