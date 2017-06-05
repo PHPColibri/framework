@@ -43,22 +43,18 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 	/**
 	 * IDynamicCollection ::fillItems() implementation
      *
-     * @param null $rows
+     * @param array $rows
      *
      * @return bool
      */
-    public function    fillItems(&$rows=null)
+    public function    fillItems(array &$rows=null)
 	{
 		if ($rows===null)
 			return $this->load();
 
-		$fieldsAndTypes=$this->getFieldsAndTypes();
-		if ($fieldsAndTypes===false)
-			return false;
-		
 		$this->clearItems();
 		foreach ($rows as $row) {
-			$item = new $this->itemClass($row, $fieldsAndTypes);
+			$item = $this->instantiateItem($row);
 			$this->addItem($item);
 		}
 
@@ -100,6 +96,15 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 	protected	function	clearItems()
 	{
 		$this->_items=[];
+	}
+	/**
+	 * @param array $row
+	 *
+	 * @return \Colibri\Database\Object
+	 */
+	protected	function	instantiateItem(array $row)
+	{
+		return new $this->itemClass($row);
 	}
 	///////////////////////////////////////////////////////////////////////////
 

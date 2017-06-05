@@ -30,6 +30,8 @@ class Object implements IObject
 	protected	static $tableName	='tableName_not_set';
 	protected	static $PKFieldName=['id'];
 
+	protected	$intermediate;
+
 	protected	$fieldsNameValuesArray=null;
 	protected	$where=null;
 
@@ -80,6 +82,30 @@ class Object implements IObject
 			else
 				if (!$this->load($id_or_row))
 					$this->{static::$PKFieldName[0]}=self::LOAD_ERROR;
+	}
+
+	/**
+	 * @param mixed $intermediate
+	 *
+	 * @return $this|Object
+	 */
+	public function setIntermediate($intermediate)
+	{
+		$this->intermediate = $intermediate;
+
+		return $this;
+	}
+
+	/**
+	 * @param string $field
+	 *
+	 * @return mixed
+	 */
+	public function getIntermediate($field = null)
+	{
+		return $field === null
+			? $this->intermediate
+			: $this->intermediate[$field];
 	}
 
 	/**
