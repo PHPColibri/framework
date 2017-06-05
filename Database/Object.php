@@ -267,7 +267,7 @@ class Object implements IObject
                 case 'smallint':
                 case 'mediumint':
                 case 'bigint':    $this->$propName = (int)$propValue;break;
-				case 'bit':       $this->$propName = (bool)ord($propValue);break;
+				case 'bit':       $this->$propName = (bool)$propValue;break;
 				case 'timestamp': $this->$propName = new Carbon($propValue);break;
 				default:          $this->$propName = $propValue;break;
 			}
