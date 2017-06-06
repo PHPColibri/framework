@@ -217,7 +217,6 @@ static
 			if (self::$throwExceptions)
 				throw new SqlException(
 					'SQL-error ['.$this->getLastErrno().']: '.$this->getLastError()."\nSQL-query: $query_string",
-					9999, // TODO: waste this error code
 					$this->getLastErrno()
 				);
             return $result;
