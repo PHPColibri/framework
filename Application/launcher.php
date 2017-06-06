@@ -55,27 +55,19 @@ catch (NotFoundException $exc)
         ,
         'core.notFound');
 
-    $message="\n".
-        'error ['. $exc->getCode().']: '. $exc->getMessage()."\n\n".
-        $exc->getTraceAsString();
-
     if (Config::application('debug'))
-        $error = htmlspecialchars($message);
+        $error = htmlspecialchars($exc);
     header('HTTP/1.1 404 Not Found');
     include(HTTPERRORS.'404.php');
 }
 
 catch (\Exception $exc)
 {
-	$message="\n".
-		'error ['. $exc->getCode().']: '. $exc->getMessage()."\n\n".
-		$exc->getTraceAsString();
-
     if (Config::application('debug'))
-        $error = htmlspecialchars($message);
+        $error = htmlspecialchars($exc);
 
     header('HTTP/1.1 500 Internal Server Error');
     include(HTTPERRORS.'500.php');
 
-	Log::add($message,'core.module');
+	Log::add($exc,'core.module');
 }
