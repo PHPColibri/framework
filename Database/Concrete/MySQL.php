@@ -1,9 +1,9 @@
 <?php
 namespace Colibri\Database\Concrete;
 
-use Colibri\Base\SqlException;
-use Colibri\Database\DbException;
 use Colibri\Database\AbstractDb;
+use Colibri\Database\DbException;
+use Colibri\Database\Exception\SqlException;
 
 /**
  * DbMySQL Класс для работы с MySQL

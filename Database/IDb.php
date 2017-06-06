@@ -1,7 +1,7 @@
 <?php
 namespace Colibri\Database;
 
-use Colibri\Base\SqlException;
+use Colibri\Database\Exception\SqlException;
 
 /**
  * IDb Интерфейс класса для работы с базами данных

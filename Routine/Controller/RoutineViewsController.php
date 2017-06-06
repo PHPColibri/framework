@@ -1,9 +1,8 @@
 <?php
 namespace Colibri\Routine\Controller;
 
-use Colibri\Base\SqlException;
 use Colibri\Controller\ViewsController;
-
+use Colibri\Database\Exception\SqlException;
 use Colibri\Database\Object;
 use Colibri\Database\ObjectCollection;
 use Colibri\Validation\Validation;
@@ -33,7 +32,7 @@ class RoutineViewsController extends ViewsController
 		$items=new $this->listClass();
 		$this->applyListFilters($items);
 		if ($items->load()===false)
-			throw new SqlException($items->error_message, 9999, $items->error_number);
+			throw new SqlException($items->error_message, $items->error_number);
 
 		$this->template->vars[$this->listTplVar]=$items;
 		if ($this->pagedList)
@@ -93,7 +92,7 @@ class RoutineViewsController extends ViewsController
 		else // edit mode
 		{
 			if ($item->load($id)===false)
-				throw new SqlException($item->error_message, 2751, $item->error_number);
+				throw new SqlException($item->error_message, $item->error_number);
 		}
 
 		$this->initItem($item,$id);
@@ -127,7 +126,7 @@ class RoutineViewsController extends ViewsController
 			if ($item->error_number==1062)
 				$this->template->vars['errors'][]='Такая запись существует или находится в Корзине.';
 			else
-				throw new SqlException($item->error_message, 9999, $item->error_number);
+				throw new SqlException($item->error_message, $item->error_number);
 
 		return $changed;
 	}
@@ -139,7 +138,7 @@ abstract
         /** @var \Colibri\Database\Object $item */
 		$item=new $this->itemClass();
 		if ($item->delete($id)===false)
-			throw new SqlException($item->error_message, 2741, $item->error_number);
+			throw new SqlException($item->error_message, $item->error_number);
 		header('Location: '.(isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'/'.$this->division.'/'.$this->module));
 	}
 }

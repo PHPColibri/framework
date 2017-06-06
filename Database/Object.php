@@ -2,8 +2,8 @@
 namespace Colibri\Database;
 
 use Carbon\Carbon;
-use Colibri\Base\SqlException;
 use Colibri\Database\Exception\NotFoundException;
+use Colibri\Database\Exception\SqlException;
 
 /**
  * Абстрактный класс объекта базы данных.
