@@ -31,8 +31,7 @@ class RoutineViewsController extends ViewsController
         /** @var \Colibri\Database\ObjectCollection $items */
 		$items=new $this->listClass();
 		$this->applyListFilters($items);
-		if ($items->load()===false)
-			throw new SqlException($items->error_message, $items->error_number);
+		$items->load();
 
 		$this->template->vars[$this->listTplVar]=$items;
 		if ($this->pagedList)
@@ -91,8 +90,7 @@ class RoutineViewsController extends ViewsController
 		}
 		else // edit mode
 		{
-			if ($item->load($id)===false)
-				throw new SqlException($item->error_message, $item->error_number);
+			$item->load($id);
 		}
 
 		$this->initItem($item,$id);
@@ -121,14 +119,18 @@ class RoutineViewsController extends ViewsController
 			$vals=array_merge($_POST,$addVals);
 		else
 			$vals=$_POST;
-		$changed=$item->$method($vals);
-		if ($changed===false)
-			if ($item->error_number==1062)
-				$this->template->vars['errors'][]='Такая запись существует или находится в Корзине.';
-			else
-				throw new SqlException($item->error_message, $item->error_number);
+		try {
+			$item->$method($vals);
+		} catch (SqlException $exception) {
+			if ($exception->getCode()!=1062)
+				throw $exception;
 
-		return $changed;
+			$this->template->vars['errors'][]='Такая запись существует или находится в Корзине.';
+
+			return false;
+		}
+
+		return true;
 	}
 abstract 
 	protected	function	validate(Validation $vScope,$id=null);
@@ -137,8 +139,8 @@ abstract
 	{
         /** @var \Colibri\Database\Object $item */
 		$item=new $this->itemClass();
-		if ($item->delete($id)===false)
-			throw new SqlException($item->error_message, $item->error_number);
+		$item->delete($id);
+
 		header('Location: '.(isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'/'.$this->division.'/'.$this->module));
 	}
 }

@@ -21,8 +21,6 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 	protected	$_parentID;
 	protected	$itemFields=[];
 	protected	$itemFieldTypes=[];
-	public		$error_message='';
-	public		$error_number=0;
 
 	protected	$where=null;
 	protected	$order_by=null;
@@ -117,22 +115,14 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 	abstract	protected	function	delFromDbAll();
 				protected	function	selFromDbAll()
 				{
-					if (!($this->doQuery($this->selFromDbAllQuery)))
-						return false;
+					$this->doQuery($this->selFromDbAllQuery);
+
 					return $this->db()->fetchAllRows();
 				}
 	///////////////////////////////////////////////////////////////////////////
 	protected	function	doQuery($strQuery)
 	{
-        $db = $this->db();
-        if (!$db->query($strQuery))
-		{
-			$cls=get_class($this);
-			$errno=$db->getLastErrno();
-			$this->error_message=$cls."\n".'SQL error['.$errno.']: '.$db->getLastError()."\n".'SQL-query: '.$strQuery;
-			$this->error_number=$errno;
-			return false;
-		}
+		$this->db()->query($strQuery);
 		return true;
 	}
 
@@ -361,12 +351,10 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 		if ($this->limit!==null)
 		{
 			// TODO [alek13]: bring out into Database\MySQL
-			if ($this->doQuery('SELECT FOUND_ROWS()'))
-			{
-				$row=$this->db()->fetchRow();
-				$this->recordsCount=$row[0];
-				$this->pagesCount = ceil($this->recordsCount/$this->recordsPerPage);
-			}
+			$this->doQuery('SELECT FOUND_ROWS()');
+			$row=$this->db()->fetchRow();
+			$this->recordsCount=$row[0];
+			$this->pagesCount = ceil($this->recordsCount/$this->recordsPerPage);
 			$this->limit=null;
 		}
 

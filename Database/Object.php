@@ -39,16 +39,6 @@ class Object implements IObject
 	protected	$fieldTypes=[];
 	public      $fieldLengths = [];
 
-    /**
-     * @deprecated
-     */
-	public		$error_message='';
-    /**
-     * @deprecated
-     */
-	public		$error_number=0;
-
-
     protected static $connectionName = 'default';
 
 	/**
@@ -385,20 +375,20 @@ class Object implements IObject
     /**
      * @param array $attributes
      *
-     * @return bool
+     * @return $this
      * @throws DbException
      * @throws \Exception
      */
 	public		function	create(array $attributes=null)
 	{
 		$this->fieldsNameValuesArray=$attributes;
-		if (!$this->doQuery($this->createQuery()))
-			return false;
+		$this->doQuery($this->createQuery());
 		$this->{static::$PKFieldName[0]}=self::db()->lastInsertId();
 		if ($attributes) {
 			$this->fillProperties($attributes);
 		}
-		return true;
+
+		return $this;
 	}
 
     /**
@@ -447,9 +437,7 @@ class Object implements IObject
      */
 	public static function saveNew(array $values)
 	{
-		$object = new static();
-		$object->create($values);
-		return $object;
+		return (new static())->create($values);
 	}
 
 	public		function	reload()	{	return	$this->load();	}
@@ -551,55 +539,6 @@ static
         return json_encode($this->toArray());
     }
 
-	/**
-     * @deprecated use Exceptions
-	 *
-     * @param string $strQuery
-     * @param string $type     sql|internal
-     * @param int    $errno
-     *
-     * @return bool
-     * @throws \Exception
-     */
-    protected function    setError($strQuery,$type='sql',$errno=-128)
-	{
-		$cls=get_class($this);
-		switch ($type)
-		{
-			case 'sql':
-				/** @noinspection PhpUndefinedMethodInspection @todo: remove this functionality in favor of Exceptions */
-                $errno=self::db()->getLastErrno();
-                /** @noinspection PhpUndefinedMethodInspection @todo: remove this functionality in favor of Exceptions */
-				$this->error_message=
-					$cls."\n".
-					'SQL-error ['.$errno.']: '.self::db()->getLastError()."\n".
-					'SQL-query: '.$strQuery;
-				break;
-			case 'internal':
-				$this->error_message=
-					$cls."\n".
-					'internal error: '.$strQuery;
-				break;
-			default:
-				throw new \Exception('unknown error type');
-		}
-		$this->error_number=$errno;
-		return true;
-	}
-
-    /**
-     * @deprecated use Exceptions
-     *
-     * @param string $strQuery
-     *
-     * @return bool
-     * @throws \Exception
-     */
-	protected	function	setSqlError($strQuery)
-	{
-		return $this->setError($strQuery,'sql');
-	}
-
     /**
      * @param string $strQuery
      *
@@ -610,8 +549,7 @@ static
      */
 	protected	function	doQuery($strQuery)
 	{
-		if (!self::db()->query($strQuery))
-			return !$this->setSqlError($strQuery);
+		self::db()->query($strQuery);
 
 		$this->cleanUpQueryVars();
 
@@ -627,8 +565,8 @@ static
      */
 	protected	function	doQueries(array $arrQueries)
 	{
-		if (!self::db()->queries($arrQueries))
-			return !$this->setSqlError(print_r($arrQueries,true));
+		self::db()->queries($arrQueries);
+
 		return true;
 	}
 
@@ -641,8 +579,8 @@ static
      */
 	protected	function	doTransaction($arrQueries)
 	{
-		if (!self::db()->commit($arrQueries))
-			return !$this->setSqlError(print_r($arrQueries,true));
+		self::db()->commit($arrQueries);
+
 		return true;
 	}
 

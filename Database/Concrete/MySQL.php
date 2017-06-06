@@ -24,8 +24,6 @@ class MySQL extends AbstractDb
 	private $result;
 	private $persistent;
 
-	static	public	$throwExceptions=true;
-
 	static	public	$monitorQueries=false;
 	static	public	$strQueries='';
 	static	public	$queriesCount = 0;
@@ -53,8 +51,7 @@ class MySQL extends AbstractDb
 		$this->database = $database;
 		$this->persistent = $persistent;
 
-		if (!$this->open())
-			throw new DbException('can\'t connect to datadase: SQL-error['.$this->getLastErrno().']: '.$this->getLastError());
+		$this->open();
 	}
 	/**
 	 * Открывает соединение с базой данных
@@ -70,20 +67,26 @@ class MySQL extends AbstractDb
 			self::$strQueries.=sprintf('%f',$curTime)."\n";
 		}
 
-        $this->connect = new \mysqli($this->persistent ? 'p:' : '' . $this->host,$this->login,$this->pass);
-
+		try {
+			$this->connect = new \mysqli($this->persistent ? 'p:' : '' . $this->host, $this->login, $this->pass);
+		} catch (\Exception $exception) {
+			throw new DbException('can\'t connect to database: ' . $exception->getMessage(), $exception->getCode(), $exception);
+        }
 		if ( ! $this->connect)
-			return !$this->setLastError();
+		    throw new DbException('can\'t connect to database: ' . $this->connect->connect_error, $this->connect->connect_errno);
 
-		if($this->connect->select_db($this->database)===false)
-			return !$this->setLastError();
+		if($this->connect->select_db($this->database.'djfh')===false)
+			throw new DbException('can\'t connect to database: ' . $this->connect->error, $this->connect->errno);
 
 		$this->pass=null;
 
 		$this->query("SET CHARACTER SET 'utf8'"/*, $encoding*/);
+	}
+	public	function	close() {
+		if ( ! ($closed = $this->connect->close()))
+			throw new DbException('can\'t close database connection: ' . $this->connect->error, $this->connect->errno);
 		return true;
 	}
-	public	function	close()				{	return $this->connect->close() || !$this->setLastError();	}
 	public	function	__wakeup()			{	$this->open();						}
 
     /**
@@ -91,19 +94,6 @@ class MySQL extends AbstractDb
      */
     public	function	getConnect()		{	return $this->connect;				}
 
-	public	function	getLastErrno()		{	return $this->lastError['errno'];	}
-	public	function	getLastError()		{	return $this->lastError['error'];	}
-
-    /**
-     * @deprecated use Exceptions
-     * @return bool
-     */
-	private	function	setLastError()
-	{
-		$this->lastError['errno'] = $this->connect->errno;
-		$this->lastError['error'] = $this->connect->error;
-		return true;
-	}
 
 	public	function	getNumRows()			{	return $this->result->num_rows;			}
 	public	function	getAffectedRows()		{	return $this->connect->affected_rows;		}
@@ -165,9 +155,6 @@ class MySQL extends AbstractDb
 			self::$strQueries.='  Query  time: '.round($queryExecTime,8)."\n";
 		}
 
-		if ($this->result === false)
-			return false;
-
 		return true;
 	}
 static
@@ -213,13 +200,10 @@ static
 		$result=$this->connect->query($query_string);
 		if ($result===false)
 		{
-			$this->setLastError();
-			if (self::$throwExceptions)
-				throw new SqlException(
-					'SQL-error ['.$this->getLastErrno().']: '.$this->getLastError()."\nSQL-query: $query_string",
-					$this->getLastErrno()
-				);
-            return $result;
+			throw new SqlException(
+				'SQL-error ['.$this->connect->errno.']: '.$this->connect->error."\nSQL-query: $query_string",
+				$this->connect->errno
+			);
 		}
 
 		return $result;
@@ -294,10 +278,7 @@ static
      */
     protected function &retrieveColumnsMetadata($tableName)
     {
-        $sql = 'SHOW COLUMNS FROM ' . $tableName;
-        if (!$this->query($sql)) {
-            throw new DbException($this->getLastError());
-        }
+        $this->query('SHOW COLUMNS FROM ' . $tableName);
         $result = $this->fetchAllRows();
 
         $fields = [];
