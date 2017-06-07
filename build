@@ -1,0 +1,19 @@
+#!/bin/bash
+
+git pull
+
+
+git subtree push -P Application cf-application master
+git subtree push -P Base        cf-base        master
+git subtree push -P Cache       cf-cache       master
+git subtree push -P Config      cf-config      master
+git subtree push -P Controller  cf-controller  master
+git subtree push -P Database    cf-database    master
+git subtree push -P Http        cf-http        master
+git subtree push -P Log         cf-log         master
+git subtree push -P Pattern     cf-pattern     master
+git subtree push -P Routine     cf-routine     master
+git subtree push -P Session     cf-session     master
+git subtree push -P Util        cf-util        master
+git subtree push -P Validation  cf-validation  master
+git subtree push -P View        cf-view        master
