@@ -78,8 +78,6 @@ class MySQL extends AbstractDb
 		if($this->connect->select_db($this->database)===false)
 			throw new DbException('can\'t connect to database: ' . $this->connect->error, $this->connect->errno);
 
-		$this->pass=null;
-
 		$this->query("SET CHARACTER SET 'utf8'"/*, $encoding*/);
 	}
 
