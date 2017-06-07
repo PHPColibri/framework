@@ -28,6 +28,12 @@ interface IDb
 	 */
 	public function open();
 	/**
+	 * Проверка открыт ли коннект к базе
+	 *
+	 * @return bool
+	 */
+	public function opened();
+	/**
 	 * Закрытие соединения
 	 */
 	public function close();

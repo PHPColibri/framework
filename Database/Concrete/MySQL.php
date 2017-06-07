@@ -82,6 +82,17 @@ class MySQL extends AbstractDb
 
 		$this->query("SET CHARACTER SET 'utf8'"/*, $encoding*/);
 	}
+
+	/**
+	 * Проверка открыт ли коннект к базе
+	 *
+	 * @return bool
+	 */
+	public function opened()
+	{
+		return $this->connect->ping();
+	}
+
 	public	function	close() {
 		if ( ! ($closed = $this->connect->close()))
 			throw new DbException('can\'t close database connection: ' . $this->connect->error, $this->connect->errno);
