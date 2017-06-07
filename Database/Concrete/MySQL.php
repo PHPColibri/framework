@@ -75,7 +75,7 @@ class MySQL extends AbstractDb
 		if ( ! $this->connect)
 		    throw new DbException('can\'t connect to database: ' . $this->connect->connect_error, $this->connect->connect_errno);
 
-		if($this->connect->select_db($this->database.'djfh')===false)
+		if($this->connect->select_db($this->database)===false)
 			throw new DbException('can\'t connect to database: ' . $this->connect->error, $this->connect->errno);
 
 		$this->pass=null;
