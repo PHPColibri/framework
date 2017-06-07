@@ -60,6 +60,14 @@ class ViewsController extends Base
     }
 
     /**
+     * @param array $variables
+     */
+    public function view(array $variables)
+    {
+        $this->template->setVars($variables);
+    }
+
+    /**
      */
     public function    tearDown()
     {
@@ -103,7 +111,7 @@ class ViewsController extends Base
 
         // TODO: bring out into application config ??
         Layout::addJsText(
-	        'var VND=\'' . VND . '\';' . "\n" .
+            'var VND=\'' . VND . '\';' . "\n" .
             'var MOD=\'' . MOD . '\';' . "\n" .
             'var IMG=\'' . RES_IMG . '\';' . "\n" .
             'var JS =\'' . RES_JS . '\';' . "\n" .
