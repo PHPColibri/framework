@@ -224,6 +224,8 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 	}*/
 	private function	buildClauses(array $where,$type='and')
 	{
+		if (!in_array($type, ['and', 'or']))
+			throw new \InvalidArgumentException('where-type must be `and` or `or`');
 		$whereClauses=[];
 		foreach ($where as $name => $value)
 			$whereClauses[]=[$name,$value];
@@ -235,19 +237,25 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 	/**
 	 *
 	 * @param array $where
+	 * @param string $type
+	 *
 	 * @return ObjectCollection|$this|Object[]
 	 */
 	final
-	public	function	where(array $where)
+	public	function	where(array $where, $type='and')
 	{
-		$where=$this->buildClauses($where);
-		if ($this->where===null)
-			$this->where=$where;
+		$where=$this->buildClauses($where, $type);
+		if ($this->where===null) {
+			$this->where = $where;
+			return $this;
+		}
+
+		if (isset($this->where[$type]))
+			$this->where[$type]=array_merge($this->where[$type],$where[$type]);
 		else
-			if (isset($this->where['and']))
-				$this->where['and']=array_merge($this->where['and'],$where['and']);
-			else
-				$this->where['and']=$where;
+			$this->where = $type == 'or'
+				? ['and' => array_merge($this->where['and'], [['or', $where['or']]])]
+				: ['and' => array_merge($where['and'], [['or', $this->where['or']]])];
 
 		return $this;//->whereClauses($where);
 	}
