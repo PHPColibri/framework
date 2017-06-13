@@ -179,9 +179,12 @@ class Object implements IObject
      */
 	protected	function	buildNameEqValue($name,$value)
 	{
+		$nameAndOp=explode(' ',$name,2);
+		$name=$nameAndOp[0];
+		$operator=isset($nameAndOp[1])?$nameAndOp[1]:($value===null?'is':'=');
 		$value=self::db()->prepareValue($value,$this->fieldTypes[$name]);
 
-		return '`'.$name.'`='.$value;
+		return "`$name` $operator $value";
 	}
 
     /**
