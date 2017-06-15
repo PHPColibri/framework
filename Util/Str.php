@@ -170,4 +170,20 @@ static
 	{
 		return lcfirst(static::studly($str));
 	}
+
+static
+	public		function	part($str, $i, $delimiter, $default = null)
+	{
+		$parts = explode($delimiter, $str);
+
+		return isset($parts[$i])
+			? $parts[$i]
+			: $default;
+	}
+
+static
+	public		function	word($str, $i, $default = null)
+	{
+		return static::part($str, $i, ' ', $default);
+	}
 }
