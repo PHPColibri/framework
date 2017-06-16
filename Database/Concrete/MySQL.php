@@ -250,6 +250,13 @@ static
 		if ($value===null)
 			return $value='NULL';
 
+		if (is_array($value)) {
+			foreach ($value as &$v) {
+				$this->prepareValue($v,$type);
+			}
+			return '(\'' . implode('\', \'', $value) . '\')';
+		}
+
 		switch (strtolower($type))
 		{
 			case 'timestamp':
