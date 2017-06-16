@@ -254,7 +254,7 @@ static
 			foreach ($value as &$v) {
 				$this->prepareValue($v,$type);
 			}
-			return '(\'' . implode('\', \'', $value) . '\')';
+			return '(' . implode(', ', $value) . ')';
 		}
 
 		switch (strtolower($type))
