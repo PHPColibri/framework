@@ -11,13 +11,19 @@ use Colibri\Util\Arr;
  */
 class Session extends Helper
 {
+    /**
+     * @var array flashed between http calls variables
+     */
     private static $flashedVars = [];
     /**
-     * @var StorageInterface
+     * @var StorageInterface storage driver
      */
     private static $storage = null;
 
 
+    /**
+     * Starts the Session.
+     */
     public static function start()
     {
         self::$storage     = Native::getInstance();
@@ -25,6 +31,8 @@ class Session extends Helper
     }
 
     /**
+     * Retrieve the value from session.
+     *
      * @param string $dottedKey
      * @param mixed  $default
      *
@@ -43,6 +51,8 @@ class Session extends Helper
     }
 
     /**
+     * Store the value into session.
+     *
      * @param string $dottedKey
      * @param mixed  $value
      *
@@ -54,6 +64,8 @@ class Session extends Helper
     }
 
     /**
+     * Removes the value from session by specified key.
+     *
      * @param $dottedKey
      *
      * @return mixed|null returns removed value or null if key not found
@@ -64,6 +76,8 @@ class Session extends Helper
     }
 
     /**
+     * Flashes some value to next http call.
+     *
      * @param string $key
      * @param mixed  $value
      */
@@ -73,6 +87,8 @@ class Session extends Helper
     }
 
     /**
+     * Flashes array of values to next http call.
+     *
      * @param array $keyValues
      */
     public static function flashValues(array $keyValues)

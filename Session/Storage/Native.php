@@ -6,12 +6,11 @@ use Colibri\Util\Arr;
 
 /**
  * Class Native
- *
- * @package Colibri\Session\Storage
  */
 class Native extends Singleton implements StorageInterface
 {
     /**
+     * Session Native driver constructor.
      */
     protected function __construct()
     {
@@ -21,7 +20,7 @@ class Native extends Singleton implements StorageInterface
     /**
      * @param string $dottedKey
      *
-     * @return mixed
+     * @return bool
      */
     public function has($dottedKey)
     {

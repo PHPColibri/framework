@@ -2,14 +2,14 @@
 namespace Colibri\Session\Storage;
 
 /**
- * Interface StorageInterface for Session Storage
+ * Interface StorageInterface for Session Storage drivers
  */
 interface StorageInterface
 {
     /**
      * @param string $dottedKey
      *
-     * @return mixed
+     * @return bool
      */
     public function has($dottedKey);
 
