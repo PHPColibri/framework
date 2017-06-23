@@ -7,36 +7,31 @@ use Colibri\Pattern\Helper;
 use Colibri\Util\Arr;
 
 /**
- *
- *
- * @author         Александр Чибрикин aka alek13 <alek13.me@gmail.com>
- * @package        xTeam
- * @subpackage     a13FW
- * @version        2.0.3
+ * Memcache implementation of Cache
  */
 class Memcache extends Helper implements ICache
 {
-    static private $defaultConfig = [
+    private static $defaultConfig = [
         'server'            => '127.0.0.1',
         'port'              => 11211,
         'defaultExpiration' => 300,
     ];
 
-    static private $defaultExpiration = null;
+    private static $defaultExpiration = null;
     /**
      * @var \Memcache
      */
-    static private $memcache = null;
+    private static $memcache = null;
     /**
-     * @var int
+     * @var int count of queries to Memcache statistics
      */
-    static private $queriesCount = 0;
+    private static $queriesCount = 0;
 
 
     /**
-     * @return int
+     * @return int count of queries to Memcache statistics
      */
-    static public function getQueriesCount()
+    public static function getQueriesCount()
     {
         return self::$queriesCount;
     }
@@ -44,7 +39,7 @@ class Memcache extends Helper implements ICache
     /**
      * @return \Memcache
      */
-    static private function getMemcache()
+    private static function getMemcache()
     {
         if (self::$memcache !== null)
             return self::$memcache;
@@ -62,7 +57,10 @@ class Memcache extends Helper implements ICache
         return self::$memcache;
     }
 
-    static private function getConfig()
+    /**
+     * @return array
+     */
+    private static function getConfig()
     {
         $config = Config::getOrEmpty('cache');
 
@@ -77,10 +75,9 @@ class Memcache extends Helper implements ICache
     /**
      * @param string $key for data
      *
-     * @return bool|mixed result OR data
+     * @return bool|mixed returns false if failed OR cached data
      */
-    static
-    public function get($key)
+    public static function get($key)
     {
         self::$queriesCount++;
 
@@ -90,14 +87,17 @@ class Memcache extends Helper implements ICache
     }
 
     /**
-     * @param string $key for data
-     * @param mixed  $val any type of supported data: object, string, int…
-     * @param int    $expire
+     * @param string $key    for data
+     * @param mixed  $val    any type of supported data: object, string, int…
+     * @param int    $expire Expiration time of the item (usually in seconds).
+     *                       If it's equal to null, the 'defaultExpiration' config value will used.
+     *                       If it's equal to zero, the item will never expire.
+     *                       You can also use Unix timestamp or a number of seconds starting from current time,
+     *                       but in the latter case the number of seconds may not exceed 2592000 (30 days).
      *
-     * @return bool result
+     * @return bool Returns <b>TRUE</b> on success or <b>FALSE</b> on failure.
      */
-    static
-    public function set($key, $val, $expire = null)
+    public static function set($key, $val, $expire = null)
     {
         self::$queriesCount++;
 
@@ -117,8 +117,7 @@ class Memcache extends Helper implements ICache
      *
      * @return boolean true on success and false on fail.
      */
-    static
-    public function delete($key)
+    public static function delete($key)
     {
         self::$queriesCount++;
 
@@ -126,11 +125,18 @@ class Memcache extends Helper implements ICache
     }
 
     /**
+     * Tries to ::get() data from cache; and if not exists,
+     *   get the real date through $getValueCallback()
+     *   and store it in cache, than return
      *
-     * @param string   $key
-     * @param \Closure $getValueCallback
-     *
-     * @param int      $expire
+     * @param string   $key              key for data
+     * @param \Closure $getValueCallback closure that get the real (not cached) value
+     * @param int      $expire           Expiration time of the item (usually in seconds).
+     *                                   If it's equal to null, the 'defaultExpiration' config value will used.
+     *                                   If it's equal to zero, the item will never expire.
+     *                                   You can also use Unix timestamp or a number of seconds starting from current
+     *                                   time, but in the latter case the number of seconds may not exceed 2592000 (30
+     *                                   days).
      *
      * @return mixed
      */

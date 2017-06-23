@@ -2,11 +2,7 @@
 namespace Colibri\Cache;
 
 /**
- *
- * @author         Александр Чибрикин aka alek13 <alek13.me@gmail.com>
- * @package        xTeam
- * @subpackage     a13FW
- * @version        1.0.0
+ * Cache interface
  */
 interface ICache
 {
@@ -15,32 +11,32 @@ interface ICache
      *
      * @return boolean result OR data
      */
-    static
-    public function get($key);
+    public static function get($key);
 
     /**
-     * @param string $key    for data
+     * @param string $key    key for data
      * @param mixed  $value  any type of supported data: object, string, int…
      * @param int    $expire seconds
      *
      * @return boolean result
      */
-    static
-    public function set($key, $value, $expire = null);
+    public static function set($key, $value, $expire = null);
 
     /**
-     * @param    string $key for data
+     * @param string $key key for data
      */
-    static
-    public function delete($key);
+    public static function delete($key);
 
     /**
-     * @param string   $key for data
-     * @param \Closure $getValueCallback
-     * @param null     $expire
+     * Tries to ::get() data from cache; and if not exists,
+     *   get the real date through $getValueCallback()
+     *   and store it in cache, than return
+     *
+     * @param string   $key              key for data
+     * @param \Closure $getValueCallback closure that get the real (not cached) value
+     * @param null     $expire           seconds
      *
      * @return bool result OR data
      */
-    static
-    public function remember($key, \Closure $getValueCallback, $expire = null);
+    public static function remember($key, \Closure $getValueCallback, $expire = null);
 }
