@@ -6,17 +6,14 @@ use Colibri\View\Layout;
 use Colibri\View\PhpTemplate;
 
 /**
- * Views Controller abstract class.
+ * Base Controller for Views.
  * Extends from this class & place code for actions methods.
- *
- * @author        Александр Чибрикин aka alek13 <alek13.me@gmail.com>
+ * Corresponding template wil be used automatically.
  *
  * @property bool $showProfilerInfoOnDebug ...
  * @property bool $showAppDevToolsOnDebug  ...
- *
  */
-abstract
-class ViewsController extends Base
+abstract class ViewsController extends Base
 {
     /**
      * @var PhpTemplate
@@ -39,26 +36,42 @@ class ViewsController extends Base
      */
     protected $_showAppDevToolsOnDebug = true;
 
-    private $divPath = null;
-    private $divPrefix = null;
-    private $divPostfix = null;
 
+    /**
+     * @var string
+     */
+    private $divisionPath = null;
+    /**
+     * @var string
+     */
+    private $divisionPrefix = null;
+    /**
+     * @var string
+     */
+    private $divisionPostfix = null;
 
+    /**
+     * Initialize private $divisionPath, $divisionPrefix, $divisionPostfix.
+     */
     protected function init()
     {
         parent::init();
-        $this->divPath    = $this->_module . '/' . Config::divisions($this->_division);
-        $this->divPrefix  = ($this->_division === '' ? '' : $this->_division . '_');
-        $this->divPostfix = ($this->_division === '' ? '' : '.' . $this->_division);
+        $this->divisionPath    = $this->_module . '/' . Config::divisions($this->_division);
+        $this->divisionPrefix  = ($this->_division === '' ? '' : $this->_division . '_');
+        $this->divisionPostfix = ($this->_division === '' ? '' : '.' . $this->_division);
     }
 
-
+    /**
+     * Initialize template for called method.
+     */
     public function setUp()
     {
         $this->template = new PhpTemplate();
     }
 
     /**
+     * Sets template variables.
+     *
      * @param array $variables
      */
     public function view(array $variables)
@@ -67,6 +80,7 @@ class ViewsController extends Base
     }
 
     /**
+     * Compile template. Prepare ::$response.
      */
     public function tearDown()
     {
@@ -75,7 +89,7 @@ class ViewsController extends Base
         }
 
         if ($this->template->getFilename() === null) {
-            $tplPath = sprintf(MODULE_TEMPLATES, $this->divPath);
+            $tplPath = sprintf(MODULE_TEMPLATES, $this->divisionPath);
             $tplName = $tplPath . $this->_method . '.php';
             if (file_exists($tplName)) {
                 $this->template->load($tplName);
@@ -101,13 +115,16 @@ class ViewsController extends Base
         );
     }
 
+    /**
+     * Prepare layout with automatically added consts, js, js-mgr, css.
+     */
     private function setUpLayout()
     {
         if (Layout::filename()) {
             return;
         }
 
-        Layout::filename('backbone' . $this->divPostfix . '.php');
+        Layout::filename('backbone' . $this->divisionPostfix . '.php');
 
         // TODO: bring out into application config ??
         Layout::addJsText(
@@ -120,20 +137,20 @@ class ViewsController extends Base
             'var PTO=\'' . RES_IMG_PTO . '\';'
         );
         Layout::addJsMgr('backbone' . ($this->_division === '' ? '' : '_' . $this->_division));
-        Layout::addCss('backbone' . $this->divPostfix . '.css');
+        Layout::addCss('backbone' . $this->divisionPostfix . '.css');
 
         $fileBaseName = $this->_module . '_' . $this->_method;
         // add default js manager
-        $jsPath   = $this->divPath . '/js/managers/';
-        $jsName   = $this->divPrefix . $fileBaseName;
+        $jsPath   = $this->divisionPath . '/js/managers/';
+        $jsName   = $this->divisionPrefix . $fileBaseName;
         $fileName = MODULES . $jsPath . $jsName . '_mgr.js';
         if (file_exists($fileName)) {
             Layout::addJsMgr($jsName, MOD . $jsPath);
         }
 
         // add default css
-        $cssPath  = $this->divPath . '/css/';
-        $cssName  = $this->divPrefix . $fileBaseName . '.css';
+        $cssPath  = $this->divisionPath . '/css/';
+        $cssName  = $this->divisionPrefix . $fileBaseName . '.css';
         $fileName = MODULES . $cssPath . $cssName;
         if (file_exists($fileName)) {
             Layout::addCss($cssName, MOD . $cssPath);
