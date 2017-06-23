@@ -8,18 +8,40 @@ use Colibri\Database\ObjectCollection;
 use Colibri\Validation\Validation;
 
 /**
- * Description of moduleRoutineViews
+ * Controller for routine CRUD actions like list, create, edit, delete
  */
 abstract class RoutineViewsController extends ViewsController
 {
+    /**
+     * @var string class name of CRUD entity
+     */
     protected $itemClass = null;
+    /**
+     * @var string name of variable in template, that represents one entity (used in edit.php template)
+     */
     protected $itemTplVar = null;
+    /**
+     * @var string class name of Collection of entities
+     */
     protected $listClass = null;
+    /**
+     * @var string name of variable in template, that represents list(Collection) of entities
+     *             (used in defaultView.php template)
+     */
     protected $listTplVar = null;
 
+    /**
+     * @var bool
+     */
     protected $pagedList = false;
+    /**
+     * @var int
+     */
     protected $recordsPerPage = 20;
 
+    /**
+     * Action for list entities.
+     */
     public function defaultView()
     {
         /** @var \Colibri\Database\ObjectCollection $items */
@@ -38,22 +60,52 @@ abstract class RoutineViewsController extends ViewsController
             ];
     }
 
+    /**
+     * Apply additional criteria to list query.
+     *
+     * @param \Colibri\Database\ObjectCollection $items
+     */
     protected function applyListFilters(ObjectCollection $items)
     {
         if ($this->pagedList)
             $items->page(isset($_GET['page']) ? $_GET['page'] : 0, $this->recordsPerPage);
     }
 
+    /**
+     * Create action.
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \Exception
+     */
     final public function create()
     {
         $this->prepareEditorTpl();
     }
 
+    /**
+     * Edit action.
+     *
+     * @param $id
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \Exception
+     */
     final public function edit($id)
     {
         $this->prepareEditorTpl($id);
     }
 
+    /**
+     * Prepare template for create & edit action.
+     *
+     * @param int|mixed $id if equals null, then create action is called, and otherwise edit action is called
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \Exception
+     */
     protected function prepareEditorTpl($id = null)
     {
         /** @var \Colibri\Database\Object $item */
@@ -100,14 +152,18 @@ abstract class RoutineViewsController extends ViewsController
     }
 
     /**
-     * @param \Colibri\Database\Object $item
-     * @param null                     $id
+     * Override this method, if you want to initialize entity before display. For example, with defaults.
+     *
+     * @param \Colibri\Database\Object $item entity to be initialized
+     * @param int|mixed                $id   if equals null, then create action is called, and otherwise edit action is
+     *                                       called
      */
     protected function initItem(Database\Object $item, $id = null)
     {
     }
 
     /**
+     * Override this method, if you want to automatically overwrite some entity properties before save.
      * @param null $id
      *
      * @return array
@@ -131,7 +187,7 @@ abstract class RoutineViewsController extends ViewsController
         $PKName = $item->getPKFieldName();
         $PKName = $PKName[0];
         if ($id !== null) $item->$PKName = $id;
-        $method  = $id === null ? 'create' : 'save';
+        $method    = $id === null ? 'create' : 'save';
         $addValues = $this->defaultValuesOnDbChange($id);
         if (is_array($addValues))
             $values = array_merge($_POST, $addValues);
@@ -151,9 +207,25 @@ abstract class RoutineViewsController extends ViewsController
         return true;
     }
 
-    abstract
-    protected function validate(Validation $vScope, $id = null);
+    /**
+     * Implement the validation.
+     *
+     * @param \Colibri\Validation\Validation $scope $_POST scope for validate
+     * @param int|mixed                      $id    if equals null, then create action is called, and otherwise edit
+     *                                              action is called
+     *
+     * @return mixed
+     */
+    abstract protected function validate(Validation $scope, $id = null);
 
+    /**
+     * Delete action.
+     *
+     * @param int|mixed $id
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Exception
+     */
     public function delete($id)
     {
         /** @var \Colibri\Database\Object $item */
