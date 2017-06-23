@@ -19,7 +19,6 @@ class MySQL extends AbstractDb
 {
     /** @var \mysqli */
 	private $connect;
-	private $lastError = ['error'=>null,'errno'=>null];
     /** @var  \mysqli_result */
 	private $result;
 	private $persistent;
@@ -46,7 +45,6 @@ class MySQL extends AbstractDb
 		$this->host = $host;
 		$this->login = $login;
 		$this->pass = $pass;
-		$this->lastError = NULL;
 		$this->resource = NULL;
 		$this->database = $database;
 		$this->persistent = $persistent;
