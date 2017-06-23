@@ -1,5 +1,4 @@
 <?php
-
 namespace Colibri\Cache;
 
 use Colibri\Config\Config;
