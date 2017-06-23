@@ -1,5 +1,4 @@
 <?php
-
 namespace Colibri\Log;
 
 use Colibri\Config\Config;
@@ -7,24 +6,30 @@ use Colibri\Pattern\Helper;
 use Colibri\Util\Arr;
 
 /**
- * Description of Log
- *
- * @author         Александр Чибрикин aka alek13 <alek13.me@gmail.com>
- * @package        xTeam
- * @subpackage     a13FW
- * @version        1.00.1
+ * Simple Log
  */
 class Log extends Helper
 {
+    /**
+     * @var array default config values, if no one specified
+     */
     protected static $defaultConfig = [
         'folder' => '/var/log/colibri',
         'prefix' => 'colibri',
     ];
+    /**
+     * @var array real laded config
+     */
     protected static $config = null;
-//	public static $logFolder = '/var/log/colibri';
-//	public static $prefix	 = 'colibri';
 
-
+    /**
+     * @param string $message       message to log
+     * @param string $who           log name
+     * @param bool   $logServerVars log or not additional info ($_GET, $_POST, $_SESSION, $_COOKIE)
+     *
+     * @return bool
+     * @throws \InvalidArgumentException if can`t get the real-path of log config file
+     */
     public static function add($message, $who = 'colibri', $logServerVars = false)
     {
         $ret = "\n" . '### ' . date('d-m-y H:i:s') . ' ### ------------------------------------------------------------------------------------------' . "\n";
@@ -41,6 +46,13 @@ class Log extends Helper
         return self::write2file($ret, $who);
     }
 
+    /**
+     * @param string $message message to log
+     * @param string $who     log name
+     *
+     * @return bool TRUE on success, FALSE on fail
+     * @throws \InvalidArgumentException if can`t get the real-path of log config file
+     */
     public static function warning($message, $who = 'colibri')
     {
         $message = '### ' . date('d-m-y H:i:s') . ' ###: ' . $message . "\n";
@@ -48,6 +60,13 @@ class Log extends Helper
         return self::write2file($message, $who);
     }
 
+    /**
+     * @param $message
+     * @param $who
+     *
+     * @return bool
+     * @throws \InvalidArgumentException if can`t get the real-path of log config file
+     */
     private static function write2file($message, $who)
     {
         if (static::$config === null)
@@ -61,6 +80,12 @@ class Log extends Helper
         return self::fwrite($filename, $message);
     }
 
+    /**
+     * @param string $filename
+     * @param string $str
+     *
+     * @return bool
+     */
     private static function fwrite($filename, $str)
     {
         $f = @fopen($filename, 'a+');
@@ -72,6 +97,10 @@ class Log extends Helper
         return true;
     }
 
+    /**
+     * @return array
+     * @throws \InvalidArgumentException if can`t get the real-path of log config file
+     */
     private static function loadFromConfig()
     {
         static::$config           = Arr::overwrite(
