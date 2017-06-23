@@ -25,8 +25,10 @@ abstract class Enum extends Helper
             /* ? <self::$validValues[get_called_class()]> или <static::$validValues> : */
             static::getConstList();
     }
+
     /**
      * @param string $value
+     *
      * @return bool
      */
     public static function isValid($value)

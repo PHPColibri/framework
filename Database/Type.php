@@ -8,6 +8,6 @@ namespace Colibri\Database;
  */
 class Type
 {
-	const MYSQL = 'mysql';
-	const POSTGRESQL = 'postgresql';
+    const MYSQL = 'mysql';
+    const POSTGRESQL = 'postgresql';
 }

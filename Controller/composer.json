@@ -1,24 +1,23 @@
 {
-	"name": "colibri-fw/controller",
-	"description": "Colibri controller component",
-	"type": "library",
-	"license": "MIT",
-	"authors": [{
-		"name": "Alexander Chibrikin",
-		"email": "alek13.me@gmail.com"
-	}],
-
-	"require": {
-		"php": ">=5.6",
-		"colibri-fw/base": "dev-master@dev",
-		"colibri-fw/view": "dev-master@dev"
-	},
-	
-	"autoload": {
-		"psr-4": {
-			"Colibri\\Controller\\": ""
-		}
-	},
-
-	"minimum-stability": "dev"
+    "name": "colibri-fw/controller",
+    "description": "Colibri controller component",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander Chibrikin",
+            "email": "alek13.me@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6",
+        "colibri-fw/base": "dev-master@dev",
+        "colibri-fw/view": "dev-master@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Colibri\\Controller\\": ""
+        }
+    },
+    "minimum-stability": "dev"
 }

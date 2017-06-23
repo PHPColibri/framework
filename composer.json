@@ -1,44 +1,49 @@
 {
-	"name": "colibri/framework",
-	"description": "Colibri -  PHP micro framework",
-    "keywords": ["framework", "fast", "light", "colibri", "micro"],
-	"type": "library",
-	"homepage": "http://framework.alek13.me/",
-	"license": "MIT",
-	"authors": [{
-		"name": "Alexander Chibrikin",
-		"email": "alek13.me@gmail.com"
-	}],
-
-	"require": {
-		"php": ">=5.6",
-		"nesbot/carbon": "dev-master"
-	},
+    "name": "colibri/framework",
+    "description": "Colibri -  PHP micro framework",
+    "keywords": [
+        "framework",
+        "fast",
+        "light",
+        "colibri",
+        "micro"
+    ],
+    "type": "library",
+    "homepage": "http://framework.alek13.me/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander Chibrikin",
+            "email": "alek13.me@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6",
+        "nesbot/carbon": "dev-master"
+    },
     "require-dev": {
         "phpunit/phpunit": "4.2.*",
         "phpunit/phpunit-skeleton-generator": "2.0.1"
     },
-	"replace": {
-		"colibri-fw/application": "self.version",
-		"colibri-fw/base": "self.version",
-		"colibri-fw/cache": "self.version",
-		"colibri-fw/config": "self.version",
-		"colibri-fw/controller": "self.version",
-		"colibri-fw/database": "self.version",
-		"colibri-fw/log": "self.version",
-		"colibri-fw/pattern": "self.version",
-		"colibri-fw/routine": "self.version",
-		"colibri-fw/session": "self.version",
-		"colibri-fw/util": "self.version",
-		"colibri-fw/validation": "self.version",
-		"colibri-fw/view": "self.version"
-	},
-	
-	"autoload": {
-		"psr-4": {
-			"Colibri\\": ""
-		}
-	},
-
-	"minimum-stability": "dev"
+    "replace": {
+        "colibri-fw/application": "self.version",
+        "colibri-fw/base": "self.version",
+        "colibri-fw/cache": "self.version",
+        "colibri-fw/config": "self.version",
+        "colibri-fw/controller": "self.version",
+        "colibri-fw/database": "self.version",
+        "colibri-fw/log": "self.version",
+        "colibri-fw/pattern": "self.version",
+        "colibri-fw/routine": "self.version",
+        "colibri-fw/session": "self.version",
+        "colibri-fw/util": "self.version",
+        "colibri-fw/validation": "self.version",
+        "colibri-fw/view": "self.version"
+    },
+    "autoload": {
+        "psr-4": {
+            "Colibri\\": ""
+        }
+    },
+    "minimum-stability": "dev"
 }

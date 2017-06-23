@@ -1,24 +1,23 @@
 {
-	"name": "colibri-fw/view",
-	"description": "Colibri view component",
-	"type": "library",
-	"license": "MIT",
-	"authors": [{
-		"name": "Alexander Chibrikin",
-		"email": "alek13.me@gmail.com"
-	}],
-
-	"require": {
-		"php": ">=5.6",
-		"colibri-fw/base": "dev-master@dev",
-		"colibri-fw/pattern": "dev-master@dev"
-	},
-	
-	"autoload": {
-		"psr-4": {
-			"Colibri\\View\\": ""
-		}
-	},
-
-	"minimum-stability": "dev"
+    "name": "colibri-fw/view",
+    "description": "Colibri view component",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander Chibrikin",
+            "email": "alek13.me@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6",
+        "colibri-fw/base": "dev-master@dev",
+        "colibri-fw/pattern": "dev-master@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Colibri\\View\\": ""
+        }
+    },
+    "minimum-stability": "dev"
 }

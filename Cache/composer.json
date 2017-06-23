@@ -1,25 +1,24 @@
 {
-	"name": "colibri-fw/cache",
-	"description": "Colibri cache component",
-	"type": "library",
-	"license": "MIT",
-	"authors": [{
-		"name": "Alexander Chibrikin",
-		"email": "alek13.me@gmail.com"
-	}],
-
-	"require": {
-		"php": ">=5.6",
-		"colibri-fw/config": "dev-master@dev",
-		"colibri-fw/pattern": "dev-master@dev",
-		"colibri-fw/util": "dev-master@dev"
-	},
-	
-	"autoload": {
-		"psr-4": {
-			"Colibri\\Cache\\": ""
-		}
-	},
-
-	"minimum-stability": "dev"
+    "name": "colibri-fw/cache",
+    "description": "Colibri cache component",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander Chibrikin",
+            "email": "alek13.me@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6",
+        "colibri-fw/config": "dev-master@dev",
+        "colibri-fw/pattern": "dev-master@dev",
+        "colibri-fw/util": "dev-master@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Colibri\\Cache\\": ""
+        }
+    },
+    "minimum-stability": "dev"
 }

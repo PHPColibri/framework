@@ -8,16 +8,15 @@ namespace Colibri\Config;
  */
 class LocalConfig extends Config
 {
-	protected static function load($name)
-	{
-		return static::exists($name)
-			? parent::load($name)
-			: array()
-		;
-	}
+    protected static function load($name)
+    {
+        return static::exists($name)
+            ? parent::load($name)
+            : [];
+    }
 
-	public static function getBaseDir()
-	{
-		return parent::getBaseDir() . '/local';
-	}
+    public static function getBaseDir()
+    {
+        return parent::getBaseDir() . '/local';
+    }
 }

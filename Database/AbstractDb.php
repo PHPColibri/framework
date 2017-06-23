@@ -13,7 +13,7 @@ abstract class AbstractDb implements IDb
     /**
      * @var bool
      */
-    static	public	$useMemcacheForMetadata = false;
+    static public $useMemcacheForMetadata = false;
 
     /**
      * @var array
@@ -48,14 +48,16 @@ abstract class AbstractDb implements IDb
     /**
      *
      * @param array $arrQueries
-     * @param bool $rollbackOnFail
+     * @param bool  $rollbackOnFail
+     *
      * @return bool
      */
-    public	function	queries(array $arrQueries,$rollbackOnFail=false)
+    public function queries(array $arrQueries, $rollbackOnFail = false)
     {
         foreach ($arrQueries as &$query)
-            if (!$this->query($query.';'))
-                return  $rollbackOnFail?$this->transactionRollback()&&false:false;
+            if (!$this->query($query . ';'))
+                return $rollbackOnFail ? $this->transactionRollback() && false : false;
+
         return true;
     }
 }

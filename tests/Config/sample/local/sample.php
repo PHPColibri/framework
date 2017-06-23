@@ -1,5 +1,5 @@
 <?php
 
-return array(
-	'anotherSetting' => 'localValue',
-);
+return [
+    'anotherSetting' => 'localValue',
+];

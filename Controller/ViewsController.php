@@ -1,9 +1,9 @@
 <?php
 namespace Colibri\Controller;
 
+use Colibri\Config\Config;
 use Colibri\View\Layout;
 use Colibri\View\PhpTemplate;
-use Colibri\Config\Config;
 
 /**
  * Views Controller abstract class.
@@ -44,7 +44,6 @@ class ViewsController extends Base
     private $divPostfix = null;
 
 
-
     protected function init()
     {
         parent::init();
@@ -69,7 +68,7 @@ class ViewsController extends Base
 
     /**
      */
-    public function    tearDown()
+    public function tearDown()
     {
         if (!$this->useTemplate) {
             return;
@@ -89,6 +88,7 @@ class ViewsController extends Base
                 throw new \Exception('template not loaded.');
             }
             $this->_response = $this->template->compile();
+
             return;
         }
 

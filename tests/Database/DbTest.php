@@ -22,7 +22,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateDb_WrongDefault()
     {
-        $config = Config::database('connection');
+        $config            = Config::database('connection');
         $config['default'] = '__mysql';
         $this->setExpectedException('Colibri\Database\DbException');
         Db::setConfig($config);
@@ -33,7 +33,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateDb()
     {
-        $config = Config::database('connection');
+        $config            = Config::database('connection');
         $config['default'] = 'mysql1';
         $this->setExpectedException('Colibri\Database\DbException');
         Db::setConfig($config);

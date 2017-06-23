@@ -6,27 +6,20 @@ use Colibri\Database\DbException;
 use Colibri\Database\Exception\SqlException;
 
 /**
- * DbMySQL Класс для работы с MySQL
- *
- * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com> (some 1.x versions and v. 2.x+)
- * @version		2.1.0
- * @package		xTeam
- * @subpackage	a13FW
- *
- * @property-read bool $noConnectToMemcacheServer
+ * Класс для работы с MySQL
  */
 class MySQL extends AbstractDb
 {
     /** @var \mysqli */
-	private $connect;
+    private $connect;
     /** @var  \mysqli_result */
-	private $result;
-	private $persistent;
+    private $result;
+    private $persistent;
 
-	static	public	$monitorQueries=false;
-	static	public	$strQueries='';
-	static	public	$queriesCount = 0;
-	static	public	$cachedQueriesCount = 0;
+    static public $monitorQueries = false;
+    static public $strQueries = '';
+    static public $queriesCount = 0;
+    static public $cachedQueriesCount = 0;
 
     /**
      * Конструктор
@@ -41,99 +34,135 @@ class MySQL extends AbstractDb
      * @throws SqlException
      */
     function __construct($host, $login, $pass, $database, $persistent = false)
-	{
-		$this->host = $host;
-		$this->login = $login;
-		$this->pass = $pass;
-		$this->resource = NULL;
-		$this->database = $database;
-		$this->persistent = $persistent;
+    {
+        $this->host       = $host;
+        $this->login      = $login;
+        $this->pass       = $pass;
+        $this->resource   = null;
+        $this->database   = $database;
+        $this->persistent = $persistent;
 
-		$this->open();
-	}
-	/**
-	 * Открывает соединение с базой данных
-	 *
-	 */
-	public function open(/*$encoding = 'utf8'*/)
-	{
-		if (self::$monitorQueries)
-		{
-			self::$strQueries.="Before @mysqli_connect\n";
-			global $time;
-			$curTime=microtime(true)-$time;
-			self::$strQueries.=sprintf('%f',$curTime)."\n";
-		}
+        $this->open();
+    }
 
-		try {
-			$this->connect = new \mysqli($this->persistent ? 'p:' : '' . $this->host, $this->login, $this->pass);
-		} catch (\Exception $exception) {
-			throw new DbException('can\'t connect to database: ' . $exception->getMessage(), $exception->getCode(), $exception);
+    /**
+     * Открывает соединение с базой данных
+     *
+     */
+    public function open(/*$encoding = 'utf8'*/)
+    {
+        if (self::$monitorQueries) {
+            self::$strQueries .= "Before @mysqli_connect\n";
+            global $time;
+            $curTime          = microtime(true) - $time;
+            self::$strQueries .= sprintf('%f', $curTime) . "\n";
         }
-		if ( ! $this->connect)
-		    throw new DbException('can\'t connect to database: ' . $this->connect->connect_error, $this->connect->connect_errno);
 
-		if($this->connect->select_db($this->database)===false)
-			throw new DbException('can\'t connect to database: ' . $this->connect->error, $this->connect->errno);
+        try {
+            $this->connect = new \mysqli($this->persistent ? 'p:' : '' . $this->host, $this->login, $this->pass);
+        } catch (\Exception $exception) {
+            throw new DbException('can\'t connect to database: ' . $exception->getMessage(), $exception->getCode(), $exception);
+        }
+        if (!$this->connect)
+            throw new DbException('can\'t connect to database: ' . $this->connect->connect_error, $this->connect->connect_errno);
 
-		$this->query("SET CHARACTER SET 'utf8'"/*, $encoding*/);
-	}
+        if ($this->connect->select_db($this->database) === false)
+            throw new DbException('can\'t connect to database: ' . $this->connect->error, $this->connect->errno);
 
-	/**
-	 * Проверка открыт ли коннект к базе
-	 *
-	 * @return bool
-	 */
-	public function opened()
-	{
-		return $this->connect->ping();
-	}
+        $this->query("SET CHARACTER SET 'utf8'"/*, $encoding*/);
+    }
 
-	public	function	close() {
-		if ( ! ($closed = $this->connect->close()))
-			throw new DbException('can\'t close database connection: ' . $this->connect->error, $this->connect->errno);
-		return true;
-	}
-	public	function	__wakeup()			{	$this->open();						}
+    /**
+     * Проверка открыт ли коннект к базе
+     *
+     * @return bool
+     */
+    public function opened()
+    {
+        return $this->connect->ping();
+    }
+
+    public function close()
+    {
+        if (!($closed = $this->connect->close()))
+            throw new DbException('can\'t close database connection: ' . $this->connect->error, $this->connect->errno);
+
+        return true;
+    }
+
+    public function __wakeup()
+    {
+        $this->open();
+    }
 
     /**
      * @return \mysqli
      */
-    public	function	getConnect()		{	return $this->connect;				}
+    public function getConnect()
+    {
+        return $this->connect;
+    }
 
 
-	public	function	getNumRows()			{	return $this->result->num_rows;			}
-	public	function	getAffectedRows()		{	return $this->connect->affected_rows;		}
-	public	function	getResult($row=0,$field=0)
+    public function getNumRows()
+    {
+        return $this->result->num_rows;
+    }
+
+    public function getAffectedRows()
+    {
+        return $this->connect->affected_rows;
+    }
+
+    public function getResult($row = 0, $field = 0)
     {
         $this->result->data_seek($row);
         $this->result->field_seek($field);
+
         return $this->result->fetch_field();
     }
+
 //	public	function	getResult($row=0,$field=0){	return mysql_result($this->result,$row,$field);	}
-	public	function	lastInsertId()			{	return $this->connect->insert_id;			}
+    public function lastInsertId()
+    {
+        return $this->connect->insert_id;
+    }
 
-	public	function	fetchArray($param=MYSQLI_ASSOC)	{	return $this->result->fetch_array($param);	}
-	public	function	fetchRow()						{	return $this->result->fetch_row();		}
-	public	function	fetchAssoc()					{	return $this->result->fetch_assoc();		}
-	/**
-	 * @param int $param fetch type
-	 * @return array
-	 */
-	public	function	&fetchAllRows($param=MYSQLI_ASSOC)
-	{
-		$return=[];
-		while ($row=$this->fetchArray($param))
-			$return[]=$row;
+    public function fetchArray($param = MYSQLI_ASSOC)
+    {
+        return $this->result->fetch_array($param);
+    }
 
-		return $return;
-	}
-
-	public	function	fetchLastRow()
-	{
-        $this->result->data_seek($this->getNumRows()-1);
+    public function fetchRow()
+    {
         return $this->result->fetch_row();
-	}
+    }
+
+    public function fetchAssoc()
+    {
+        return $this->result->fetch_assoc();
+    }
+
+    /**
+     * @param int $param fetch type
+     *
+     * @return array
+     */
+    public function    &fetchAllRows($param = MYSQLI_ASSOC)
+    {
+        $return = [];
+        while ($row = $this->fetchArray($param))
+            $return[] = $row;
+
+        return $return;
+    }
+
+    public function fetchLastRow()
+    {
+        $this->result->data_seek($this->getNumRows() - 1);
+
+        return $this->result->fetch_row();
+    }
 
     /**
      *
@@ -143,55 +172,58 @@ class MySQL extends AbstractDb
      * @throws SqlException
      * @global int   $time
      */
-	public	function	query($query_string)
-	{
-		if (self::$monitorQueries) {
-			$queryStartTime = microtime(true);
-			self::$strQueries .= $query_string."\n";
-		}
+    public function query($query_string)
+    {
+        if (self::$monitorQueries) {
+            $queryStartTime   = microtime(true);
+            self::$strQueries .= $query_string . "\n";
+        }
 
-		$this->result = $this->dbQuery($query_string);
+        $this->result = $this->dbQuery($query_string);
 
-		if (self::$monitorQueries) {
-			global $time;
-			$queryEndTime=microtime(true);
-			$curScriptTime=$queryEndTime-$time;
+        if (self::$monitorQueries) {
+            global $time;
+            $queryEndTime  = microtime(true);
+            $curScriptTime = $queryEndTime - $time;
             /** @var int $queryStartTime */
-            $queryExecTime=$queryEndTime-$queryStartTime;
-			self::$strQueries.='  Script time: '.round($curScriptTime,8)."\n";
-			self::$strQueries.='  Query  time: '.round($queryExecTime,8)."\n";
-		}
+            $queryExecTime    = $queryEndTime - $queryStartTime;
+            self::$strQueries .= '  Script time: ' . round($curScriptTime, 8) . "\n";
+            self::$strQueries .= '  Query  time: ' . round($queryExecTime, 8) . "\n";
+        }
 
-		return true;
-	}
-static
-	public	function	getQueryTemplateArray($tpl,$argArr)
-	{
-		$argNum=count($argArr);
-		for ($i=$argNum;$i>0;$i--)
-			$tpl=str_replace('%'.$i,$argArr[$i-1],$tpl);
+        return true;
+    }
 
-		return $tpl;
-	}
-static
-	public	function	getQueryTemplate($tpl)
-	{
-		$argList=func_get_args();
-		$argNum =func_num_args();
+    static
+    public function getQueryTemplateArray($tpl, $argArr)
+    {
+        $argNum = count($argArr);
+        for ($i = $argNum; $i > 0; $i--)
+            $tpl = str_replace('%' . $i, $argArr[$i - 1], $tpl);
 
-		$strQuery=$tpl;
-		for ($i=$argNum-1;$i>0;$i--)
-			$strQuery=str_replace('%'.$i,$argList[$i],$strQuery);
+        return $tpl;
+    }
 
-		return $strQuery;
-	}
-	public	function	queryTemplate($tpl)
-	{
-		$argList=func_get_args();
-		$strQuery=call_user_func_array(['self','getQueryTemplate'],$argList);
+    static
+    public function getQueryTemplate($tpl)
+    {
+        $argList = func_get_args();
+        $argNum  = func_num_args();
 
-		return $this->query($strQuery);
-	}
+        $strQuery = $tpl;
+        for ($i = $argNum - 1; $i > 0; $i--)
+            $strQuery = str_replace('%' . $i, $argList[$i], $strQuery);
+
+        return $strQuery;
+    }
+
+    public function queryTemplate($tpl)
+    {
+        $argList  = func_get_args();
+        $strQuery = call_user_func_array(['self', 'getQueryTemplate'], $argList);
+
+        return $this->query($strQuery);
+    }
 
     /**
      * @param string $query_string
@@ -200,88 +232,112 @@ static
      *
      * @throws SqlException
      */
-    private	function	&dbQuery($query_string)
-	{
-		if (self::$monitorQueries)
-			self::$queriesCount++;
-		$result=$this->connect->query($query_string);
-		if ($result===false)
-		{
-			throw new SqlException(
-				'SQL-error ['.$this->connect->errno.']: '.$this->connect->error."\nSQL-query: $query_string",
-				$this->connect->errno
-			);
-		}
+    private function    &dbQuery($query_string)
+    {
+        if (self::$monitorQueries)
+            self::$queriesCount++;
+        $result = $this->connect->query($query_string);
+        if ($result === false) {
+            throw new SqlException(
+                'SQL-error [' . $this->connect->errno . ']: ' . $this->connect->error . "\nSQL-query: $query_string",
+                $this->connect->errno
+            );
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 
-	public	function	transactionStart()		{	return $this->query('START TRANSACTION;');	}
-	public	function	transactionRollback()	{	return $this->query('ROLLBACK;');			}
-	public	function	transactionCommit()		{	return $this->query('COMMIT;');				}
+    public function transactionStart()
+    {
+        return $this->query('START TRANSACTION;');
+    }
+
+    public function transactionRollback()
+    {
+        return $this->query('ROLLBACK;');
+    }
+
+    public function transactionCommit()
+    {
+        return $this->query('COMMIT;');
+    }
 
     /**
      *
      * @param string $tableName
      *
-     * @return array поля: [TABLE_SCHEMA] ,TABLE_NAME, COLUMN_NAME    refs to   [REFERENCED_TABLE_SCHEMA ], REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
+     * @return array поля: [TABLE_SCHEMA] ,TABLE_NAME, COLUMN_NAME    refs to   [REFERENCED_TABLE_SCHEMA ],
+     *               REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
      * @throws SqlException
      */
-	public	function	getTableFKs($tableName)
-	{
-		// TODO: доделать
-		// поля: [TABLE_SCHEMA] ,TABLE_NAME, COLUMN_NAME    refs to   [REFERENCED_TABLE_SCHEMA ], REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
-		$this->query('SELECT * FROM `KEY_COLUMN_USAGE` WHERE `TABLE_NAME` = \''.$tableName.'\' AND `REFERENCED_COLUMN_NAME` IS NOT NULL');
-		return $this->fetchAllRows();
-	}
+    public function getTableFKs($tableName)
+    {
+        // TODO: доделать
+        // поля: [TABLE_SCHEMA] ,TABLE_NAME, COLUMN_NAME    refs to   [REFERENCED_TABLE_SCHEMA ], REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
+        $this->query('SELECT * FROM `KEY_COLUMN_USAGE` WHERE `TABLE_NAME` = \'' . $tableName . '\' AND `REFERENCED_COLUMN_NAME` IS NOT NULL');
 
-	public	function	commit(array $arrQueries)
-	{
-		if (!$this->transactionStart())			return false;
-		if (!$this->queries($arrQueries,true))	return false;
-		if (!$this->transactionCommit())		return false;
-		return true;
-	}
+        return $this->fetchAllRows();
+    }
 
-	public	function	prepareValue(&$value,$type)
-	{
-		if ($value===null)
-			return $value='NULL';
+    public function commit(array $arrQueries)
+    {
+        if (!$this->transactionStart()) return false;
+        if (!$this->queries($arrQueries, true)) return false;
+        if (!$this->transactionCommit()) return false;
 
-		if (is_array($value)) {
-			foreach ($value as &$v) {
-				$this->prepareValue($v,$type);
-			}
-			return '(' . implode(', ', $value) . ')';
-		}
+        return true;
+    }
 
-		switch (strtolower($type))
-		{
-			case 'timestamp':
-				$value = is_int($value) ?
-					'\'' . date('Y-m-d H:i:s', $value) . '\'' :
-					($value instanceof \DateTime ?
-						'\'' . $value->format('Y-m-d H:i:s') . '\'' :
-						'\'' . $this->connect->escape_string($value) . '\''
-					);
-				break;
+    public function prepareValue(&$value, $type)
+    {
+        if ($value === null)
+            return $value = 'NULL';
 
-			case 'bit':		$value=(int)intval($value);break;
+        if (is_array($value)) {
+            foreach ($value as &$v) {
+                $this->prepareValue($v, $type);
+            }
 
-			case 'dec':
-			case 'decimal':
-			case 'tinyint':
-			case 'smallint':
-			case 'bigint':
-			case 'int':		$value=(int)intval($value);break;
-			case 'double':
-			case 'float':	$value=(float)floatval($value);break;
+            return '(' . implode(', ', $value) . ')';
+        }
 
-			default:		$value='\''.$this->connect->escape_string($value).'\'';
-		}
+        switch (strtolower($type)) {
+            case 'timestamp':
+                $value = is_int($value)
+                    ?
+                    '\'' . date('Y-m-d H:i:s', $value) . '\''
+                    :
+                    ($value instanceof \DateTime
+                        ?
+                        '\'' . $value->format('Y-m-d H:i:s') . '\''
+                        :
+                        '\'' . $this->connect->escape_string($value) . '\''
+                    );
+                break;
 
-		return $value;
-	}
+            case 'bit':
+                $value = (int)intval($value);
+                break;
+
+            case 'dec':
+            case 'decimal':
+            case 'tinyint':
+            case 'smallint':
+            case 'bigint':
+            case 'int':
+                $value = (int)intval($value);
+                break;
+            case 'double':
+            case 'float':
+                $value = (float)floatval($value);
+                break;
+
+            default:
+                $value = '\'' . $this->connect->escape_string($value) . '\'';
+        }
+
+        return $value;
+    }
 
     /**
      * @param string $tableName
@@ -295,8 +351,8 @@ static
         $this->query('SHOW COLUMNS FROM ' . $tableName);
         $result = $this->fetchAllRows();
 
-        $fields = [];
-        $fieldTypes = [];
+        $fields       = [];
+        $fieldTypes   = [];
         $fieldLengths = [];
 
         $cnt = count($result);
@@ -311,7 +367,7 @@ static
         $returnArray = [ // compact() ???
             'fields'       => &$fields,
             'fieldTypes'   => &$fieldTypes,
-            'fieldLengths' => &$fieldLengths
+            'fieldLengths' => &$fieldLengths,
         ];
 
         return $returnArray;
@@ -330,6 +386,7 @@ static
             $len = &$len[1];
         else
             $len = null;
+
         return $len;
     }
 }

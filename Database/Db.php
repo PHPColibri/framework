@@ -62,7 +62,7 @@ class Db extends Helper
      */
     private static function createForConnection($name)
     {
-        $config  = &self::$config['connection'][$name];
+        $config = &self::$config['connection'][$name];
 
         switch ($config['type']) {
             case Type::MYSQL:

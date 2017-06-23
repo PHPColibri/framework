@@ -1,31 +1,28 @@
 <?php
 namespace Colibri\Application;
 
+use Colibri\Config\Config;
 use Colibri\Http;
 use Colibri\Log\Log;
-use Colibri\Config\Config;
 use Colibri\Util\Str;
 use LogicException;
 
 /**
  * Description of CModuleEngine
  *
- * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
- * @package		xTeam
- * @version		1.10.3
- * @exception	12xx
+ * @property string $domainPrefix
  */
 class Engine extends Engine\Base
 {
-	protected	$_responser=null;
-	protected	$_domainPrefix=null;
-	private		$_division=null;
-	private		$_module=null;
-	private		$_method=null;
-	private		$_params=array();
+    protected $_responser = null;
+    protected $_domainPrefix = null;
+    private $_division = null;
+    private $_module = null;
+    private $_method = null;
+    private $_params = [];
 
-	protected	$_showProfilerInfoOnDebug=true;
-	protected	$_showAppDevToolsOnDebug =true;
+    protected $_showProfilerInfoOnDebug = true;
+    protected $_showAppDevToolsOnDebug = true;
 
     /**
      */
@@ -39,105 +36,109 @@ class Engine extends Engine\Base
 
 
     /**
-	 * @exception	120x
-	 */
-	protected	function	initialize()
-	{
-		$appConfig = Config::get('application');
-		mb_internal_encoding($appConfig['encoding']);
-		date_default_timezone_set($appConfig['timezone']);
-		setlocale(LC_TIME, $appConfig['locale']);
-		umask($appConfig['umask']);
+     * @exception    120x
+     */
+    protected function initialize()
+    {
+        $appConfig = Config::get('application');
+        mb_internal_encoding($appConfig['encoding']);
+        date_default_timezone_set($appConfig['timezone']);
+        setlocale(LC_TIME, $appConfig['locale']);
+        umask($appConfig['umask']);
         define('DEBUG', $appConfig['debug']);
         self::setUpErrorHandling();
 
 
-        $this->_domainPrefix=$this->getDomainPrefix();
+        $this->_domainPrefix = $this->getDomainPrefix();
 
-		new \API($this);// initialize API
+        new \API($this);// initialize API
 
-		$requestedUri=$this->getRequestedUri();
+        $requestedUri = $this->getRequestedUri();
         /** @noinspection PhpUndefinedMethodInspection */
         $routes = Config::routing('rewrite');
-		foreach ($routes as $route)
-		{
-			$pattern	=$route['pattern'];
-			$replacement=$route['replacement'];
-			$requestedUri=preg_replace($pattern,$replacement,$requestedUri);
+        foreach ($routes as $route) {
+            $pattern      = $route['pattern'];
+            $replacement  = $route['replacement'];
+            $requestedUri = preg_replace($pattern, $replacement, $requestedUri);
 
-			if (isset($route['last']))
-				break;
-		}
+            if (isset($route['last']))
+                break;
+        }
 
-		$this->parseRequestedFile($requestedUri);
-	}
-	/**
-	 * @return	string		returns reqwested file name with path: for "http://example.com/some/dir/somefile.php?arg1=val1&arg2=val2" returns "/some/dir/somefile.php"
-	 */
-	private		function	getRequestedUri()
-	{
-		$questPos=strpos($_SERVER['REQUEST_URI'],'?');
-		if ($questPos===false)
-			return $_SERVER['REQUEST_URI'];
+        $this->parseRequestedFile($requestedUri);
+    }
 
-		return substr($_SERVER['REQUEST_URI'],0,$questPos);
-	}
-	/**
-	 * @return string returns prefix of domain: for "sub.domain.example.com" and const $conf['domain']=="example.com", returns "sub.domain"
-	 */
-	private		function	getDomainPrefix()
-	{
-		$appConfig = Config::get('application');
-		$prefix=str_replace($appConfig['domain'],'',$_SERVER['HTTP_HOST']);
-		$pLen=strlen($prefix);
-		if ($pLen)
-			$prefix=substr($prefix,0,$pLen-1);
+    /**
+     * @return    string        returns reqwested file name with path: for
+     *                          "http://example.com/some/dir/somefile.php?arg1=val1&arg2=val2" returns
+     *                          "/some/dir/somefile.php"
+     */
+    private function getRequestedUri()
+    {
+        $questPos = strpos($_SERVER['REQUEST_URI'], '?');
+        if ($questPos === false)
+            return $_SERVER['REQUEST_URI'];
 
-		return $prefix;
-	}
-	/**
-	 * @param	string	$file	requested file name
-	 */
-	protected	function	parseRequestedFile($file)
-	{
-		$appConfig = Config::get('application');
+        return substr($_SERVER['REQUEST_URI'], 0, $questPos);
+    }
 
-		$dotPos=strpos($file,'.');
-		if ($dotPos!==false)	$file=substr($file,0,$dotPos);
-		if ($file[0]==='/')		$file=substr($file,1);
+    /**
+     * @return string returns prefix of domain: for "sub.domain.example.com" and const $conf['domain']=="example.com",
+     *                returns "sub.domain"
+     */
+    private function getDomainPrefix()
+    {
+        $appConfig = Config::get('application');
+        $prefix    = str_replace($appConfig['domain'], '', $_SERVER['HTTP_HOST']);
+        $pLen      = strlen($prefix);
+        if ($pLen)
+            $prefix = substr($prefix, 0, $pLen - 1);
 
-		$parts=explode('/',$file);
-		$partsCnt=count($parts);
+        return $prefix;
+    }
 
-		if ($partsCnt > 0 && in_array($parts[0], Config::get('divisions'))) {
-			$this->_division = $parts[0];
-			$parts = array_slice($parts, 1);
-		}
-		else
-			$this->_division='';
+    /**
+     * @param    string $file requested file name
+     */
+    protected function parseRequestedFile($file)
+    {
+        $appConfig = Config::get('application');
 
-		if (empty($parts[0]))		$this->_module=$appConfig['module']['default'];
-		else						$this->_module=$parts[0];
-		if ($partsCnt<2 ||
-			empty($parts[1]))		$this->_method=$appConfig['module']['defaultViewsControllerAction'];
-		else						$this->_method=Str::camel($parts[1]);
+        $dotPos = strpos($file, '.');
+        if ($dotPos !== false) $file = substr($file, 0, $dotPos);
+        if ($file[0] === '/') $file = substr($file, 1);
 
-		if ($partsCnt>2)			$this->_params=array_slice($parts,2);
-	}
+        $parts    = explode('/', $file);
+        $partsCnt = count($parts);
+
+        if ($partsCnt > 0 && in_array($parts[0], Config::get('divisions'))) {
+            $this->_division = $parts[0];
+            $parts           = array_slice($parts, 1);
+        } else
+            $this->_division = '';
+
+        if (empty($parts[0])) $this->_module = $appConfig['module']['default'];
+        else                        $this->_module = $parts[0];
+        if ($partsCnt < 2 ||
+            empty($parts[1])) $this->_method = $appConfig['module']['defaultViewsControllerAction'];
+        else                        $this->_method = Str::camel($parts[1]);
+
+        if ($partsCnt > 2) $this->_params = array_slice($parts, 2);
+    }
 
     /**
      * @return string
      * @throws Http\NotFoundException
      * @throws LogicException
      */
-	public		function	generateResponse()
-	{
-		try {
-			return $this->getModuleView($this->_division, $this->_module, $this->_method, $this->_params);
-		} catch (Exception\NotFoundException $exception) {
-			throw new Http\NotFoundException($exception->getMessage(), $exception->getCode(), $exception);
-		}
-	}
+    public function generateResponse()
+    {
+        try {
+            return $this->getModuleView($this->_division, $this->_module, $this->_method, $this->_params);
+        } catch (Exception\NotFoundException $exception) {
+            throw new Http\NotFoundException($exception->getMessage(), $exception->getCode(), $exception);
+        }
+    }
 
     /**
      * @param string $division
@@ -149,41 +150,44 @@ class Engine extends Engine\Base
      * @throws Exception\NotFoundException
      * @throws LogicException
      */
-	public		function	getModuleView    (      $division,$module,$method,$params){
-		return       $this->callModuleEssence (CallType::view   ,$division,$module,$method,$params);
-	}
-	public		function	callModuleMethod (      $division,$module,$method,$params){
-		return       $this->callModuleEssence (CallType::method ,$division,$module,$method,$params);
-	}
-	private		function	callModuleEssence($type,$division,$module,$method,$params)
-	{
-		$this->loadModule($division,$module,$type);
+    public function getModuleView($division, $module, $method, $params)
+    {
+        return $this->callModuleEssence(CallType::view, $division, $module, $method, $params);
+    }
 
-		$className=ucfirst($module).ucfirst($division).($type==CallType::view?'Views':'Methods').'Controller';
-		if (!class_exists($className))
-		    throw new Exception\NotFoundException("Class '$className' does not exists.");
-		$responser=new $className($division,$module,$method);
-		$this->_responser=&$responser;
+    public function callModuleMethod($division, $module, $method, $params)
+    {
+        return $this->callModuleEssence(CallType::method, $division, $module, $method, $params);
+    }
 
-		$classMethods=get_class_methods($className);
-		if (!in_array($method,$classMethods))
+    private function callModuleEssence($type, $division, $module, $method, $params)
+    {
+        $this->loadModule($division, $module, $type);
+
+        $className = ucfirst($module) . ucfirst($division) . ($type == CallType::view ? 'Views' : 'Methods') . 'Controller';
+        if (!class_exists($className))
+            throw new Exception\NotFoundException("Class '$className' does not exists.");
+        $responser        = new $className($division, $module, $method);
+        $this->_responser =& $responser;
+
+        $classMethods = get_class_methods($className);
+        if (!in_array($method, $classMethods))
             throw new Exception\NotFoundException("Method '$method' does not contains in class '$className'.");
 
-				  call_user_func_array(array(&$responser,'setUp'   ),$params);
-		$response=call_user_func_array(array(&$responser,$method   ),$params);
-				  call_user_func_array(array(&$responser,'tearDown'),$params);
+        call_user_func_array([&$responser, 'setUp'], $params);
+        $response = call_user_func_array([&$responser, $method], $params);
+        call_user_func_array([&$responser, 'tearDown'], $params);
 
-		if ($type==CallType::view)
-		{
-			$this->_showProfilerInfoOnDebug=$responser->showProfilerInfoOnDebug;
-			$this->_showAppDevToolsOnDebug =$responser->showAppDevToolsOnDebug ;
-		}
+        if ($type == CallType::view) {
+            $this->_showProfilerInfoOnDebug = $responser->showProfilerInfoOnDebug;
+            $this->_showAppDevToolsOnDebug  = $responser->showAppDevToolsOnDebug;
+        }
 
-		if ($type==CallType::view)
-			return $responser->response;
+        if ($type == CallType::view)
+            return $responser->response;
 
-		return $response;
-	}
+        return $response;
+    }
 
     /**
      * @param string $division   name of division (as a folder name)
@@ -193,22 +197,22 @@ class Engine extends Engine\Base
      * @throws Exception\NotFoundException
      * @throws LogicException
      */
-	private		function	loadModule($division,$moduleName,$type=CallType::view)
-	{
-		$mPath=$moduleName.'/'.($division===''?'primary/':$division.'/');
-		$mName=ucfirst($moduleName).ucfirst($division);
+    private function loadModule($division, $moduleName, $type = CallType::view)
+    {
+        $mPath = $moduleName . '/' . ($division === '' ? 'primary/' : $division . '/');
+        $mName = ucfirst($moduleName) . ucfirst($division);
 
-		$fileName=MODULES.$mPath;
-		if     ($type==CallType::view)		$fileName.=$mName.'ViewsController.php';
-		elseif ($type==CallType::method)	$fileName.=$mName.'Methods.php';
-		else                                throw new LogicException("Unknown CallType $type");
+        $fileName = MODULES . $mPath;
+        if ($type == CallType::view) $fileName .= $mName . 'ViewsController.php';
+        else if ($type == CallType::method) $fileName .= $mName . 'Methods.php';
+        else                                throw new LogicException("Unknown CallType $type");
 
-		if (!file_exists($fileName))
+        if (!file_exists($fileName))
             throw new Exception\NotFoundException("Can't load module: file '$fileName' does not exists.");
-		else
-		    // @todo remove this (carefully)
-			require_once($fileName);
-	}
+        else
+            // @todo remove this (carefully)
+            require_once($fileName);
+    }
 
     /**
      * @param $code
@@ -218,23 +222,23 @@ class Engine extends Engine\Base
      *
      * @throws \Exception
      */
-	public static function errorHandler($code,$message,$file,$line)
-	{
-		throw new \Exception("php error [$code]: '$message' in $file:$line");
-	}
+    public static function errorHandler($code, $message, $file, $line)
+    {
+        throw new \Exception("php error [$code]: '$message' in $file:$line");
+    }
 
     /**
      * @param \Throwable|\Exception $exc
      */
-	public static function exceptionHandler($exc)
-	{
-		$message = $exc->__toString();
-		if (DEBUG)
+    public static function exceptionHandler($exc)
+    {
+        $message = $exc->__toString();
+        if (DEBUG)
             /** @noinspection PhpUnusedLocalVariableInspection variable uses in 500.php */
             $error = $message;
 
-		include(HTTPERRORS . '500.php');
+        include(HTTPERRORS . '500.php');
 
-		Log::add($message,'core.module');
-	}
+        Log::add($message, 'core.module');
+    }
 }

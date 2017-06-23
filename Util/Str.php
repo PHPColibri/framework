@@ -2,188 +2,211 @@
 namespace Colibri\Util;
 /**
  *
- * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
- * @package		xTeam
- * @subpackage	a13FW
- * @version		1.00.0
+ * @author         Александр Чибрикин aka alek13 <alek13.me@gmail.com>
+ * @package        xTeam
+ * @subpackage     a13FW
+ * @version        1.00.0
  */
 class Str
 {
-	/**
-	 *
-	 * @param string $str
-	 * @return bool
-	 */
-static
-	public		function	isEmail($str)
-	{
-		return (bool)preg_match(RegExp::isEmail,$str);
-	}
-static
-	public		function	random($type='alnum',$len=8)
-	{
-		switch ($type)
-		{
-			case 'alnum':
-			case 'numeric':
-			case 'nozero':
-					switch ($type)
-					{
-						case 'alnum':	$pool='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';break;
-						case 'numeric':	$pool='0123456789';break;
-						case 'nozero':	$pool='123456789';break;
-					}
-					$str = '';
-					for ($i=0;$i<$len;$i++)
-						/** @noinspection PhpUndefinedVariableInspection */
-						$str .=substr($pool,mt_rand(0,strlen($pool)-1),1);
-					return $str;
-			case 'unique' : return md5(uniqid(mt_rand()));
-			case 'guid'   : return self::generateGUID();
-			default:
-				throw new \Exception('unknown random type');
-		}
-	}
-	/**
-	 * @return string GUID
-	 */
-static
-	public		function	generateGUID()
-	{
-		$guidstr = "";
-		for ($i=1;$i<=16;$i++)
-		{
-			$b = (int)rand(0,0xff);
-			if ($i==7) { $b&=0x0f; $b|=0x40; } // version 4 (random)
-			if ($i==9) { $b&=0x3f; $b|=0x80; } // variant
-			$guidstr.=sprintf("%02s", base_convert($b,10,16));
-			if ($i==4 || $i==6 || $i==8 || $i==10) { $guidstr.='-'; }
-		}
-		return $guidstr;
-	}
-	/**
-	 * @param string $str
-	 * @return bool
-	 */
-static
-	public		function	isInt($str)
-	{
-		return is_int($str) || $str === (string)(int)$str;
-	}
+    /**
+     *
+     * @param string $str
+     *
+     * @return bool
+     */
+    static
+    public function isEmail($str)
+    {
+        return (bool)preg_match(RegExp::isEmail, $str);
+    }
 
-	/**
-	 * @param $str
-	 * @param $beginsWith
-	 *
-	 * @return bool
-	 */
-static
-	public		function	beginsWith($str, $beginsWith)
-	{
-		return substr($str, 0, strlen($beginsWith)) === $beginsWith;
-	}
-static
-	public      function    endsWith($str, $endsWith)
-	{
-		return substr($str, -strlen($endsWith)) === $endsWith;
-	}
-static
-	public		function	contains($str,$substr)
-	{
-		return strpos($str,$substr)!==false;
-	}
+    static
+    public function random($type = 'alnum', $len = 8)
+    {
+        switch ($type) {
+            case 'alnum':
+            case 'numeric':
+            case 'nozero':
+                switch ($type) {
+                    case 'alnum':
+                        $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                        break;
+                    case 'numeric':
+                        $pool = '0123456789';
+                        break;
+                    case 'nozero':
+                        $pool = '123456789';
+                        break;
+                }
+                $str = '';
+                for ($i = 0; $i < $len; $i++)
+                    /** @noinspection PhpUndefinedVariableInspection */
+                    $str .= substr($pool, mt_rand(0, strlen($pool) - 1), 1);
 
-	/**
-	 *
-	 * @param string $str
-	 * @return bool
-	 */
-static
-	public		function	isJSON($str)
-	{
-		return json_decode($str)!==null;
-	}
+                return $str;
+            case 'unique' :
+                return md5(uniqid(mt_rand()));
+            case 'guid'   :
+                return self::generateGUID();
+            default:
+                throw new \Exception('unknown random type');
+        }
+    }
 
-	/**
-	 * @param string $str
-	 * @param string $delimiter
-	 *
-	 * @return string
-	 */
-static
-	public		function	firstPart($str, $delimiter = ' ')
-	{
-		$parts = explode($delimiter, $str);
+    /**
+     * @return string GUID
+     */
+    static
+    public function generateGUID()
+    {
+        $guidstr = "";
+        for ($i = 1; $i <= 16; $i++) {
+            $b = (int)rand(0, 0xff);
+            if ($i == 7) {
+                $b &= 0x0f;
+                $b |= 0x40;
+            } // version 4 (random)
+            if ($i == 9) {
+                $b &= 0x3f;
+                $b |= 0x80;
+            } // variant
+            $guidstr .= sprintf("%02s", base_convert($b, 10, 16));
+            if ($i == 4 || $i == 6 || $i == 8 || $i == 10) {
+                $guidstr .= '-';
+            }
+        }
 
-		return array_shift($parts);
-	}
+        return $guidstr;
+    }
 
-	/**
-	 * @param string $str
-	 * @param string $delimiter
-	 *
-	 * @return string
-	 */
-static
-	public		function	lastPart($str, $delimiter = ' ')
-	{
-		$parts = explode($delimiter, $str);
+    /**
+     * @param string $str
+     *
+     * @return bool
+     */
+    static
+    public function isInt($str)
+    {
+        return is_int($str) || $str === (string)(int)$str;
+    }
 
-		return array_pop($parts);
-	}
+    /**
+     * @param $str
+     * @param $beginsWith
+     *
+     * @return bool
+     */
+    static
+    public function beginsWith($str, $beginsWith)
+    {
+        return substr($str, 0, strlen($beginsWith)) === $beginsWith;
+    }
 
-	/**
-	 * @param string $str
-	 * @param string $delimiter
-	 *
-	 * @return string
-	 */
-static
-	public		function	snake($str, $delimiter = '_')
-	{
-		if (!ctype_upper($str)) {
-			$str = strtolower(preg_replace('/(.)(?=[A-Z])/', '$1' . $delimiter, $str));
-			$str = preg_replace('/\s+/', '', $str);
-		}
+    static
+    public function endsWith($str, $endsWith)
+    {
+        return substr($str, -strlen($endsWith)) === $endsWith;
+    }
 
-		return $str;
-	}
+    static
+    public function contains($str, $substr)
+    {
+        return strpos($str, $substr) !== false;
+    }
 
-	/**
-	 * @param string $str
-	 *
-	 * @return string
-	 */
-static
-	public		function	studly($str)
-	{
-		return str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $str)));
-	}
+    /**
+     *
+     * @param string $str
+     *
+     * @return bool
+     */
+    static
+    public function isJSON($str)
+    {
+        return json_decode($str) !== null;
+    }
 
-	/**
-	 * @param string $str
-	 *
-	 * @return string
-	 */
-static
-	public      function    camel($str)
-	{
-		return lcfirst(static::studly($str));
-	}
+    /**
+     * @param string $str
+     * @param string $delimiter
+     *
+     * @return string
+     */
+    static
+    public function firstPart($str, $delimiter = ' ')
+    {
+        $parts = explode($delimiter, $str);
 
-static
-	public		function	part($str, $i, $delimiter, $default = null)
-	{
-		$parts = explode($delimiter, $str);
+        return array_shift($parts);
+    }
 
-		return isset($parts[$i])
-			? $parts[$i]
-			: $default;
-	}
+    /**
+     * @param string $str
+     * @param string $delimiter
+     *
+     * @return string
+     */
+    static
+    public function lastPart($str, $delimiter = ' ')
+    {
+        $parts = explode($delimiter, $str);
 
-static
-	public		function	word($str, $i, $default = null)
-	{
-		return static::part($str, $i, ' ', $default);
-	}
+        return array_pop($parts);
+    }
+
+    /**
+     * @param string $str
+     * @param string $delimiter
+     *
+     * @return string
+     */
+    static
+    public function snake($str, $delimiter = '_')
+    {
+        if (!ctype_upper($str)) {
+            $str = strtolower(preg_replace('/(.)(?=[A-Z])/', '$1' . $delimiter, $str));
+            $str = preg_replace('/\s+/', '', $str);
+        }
+
+        return $str;
+    }
+
+    /**
+     * @param string $str
+     *
+     * @return string
+     */
+    static
+    public function studly($str)
+    {
+        return str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $str)));
+    }
+
+    /**
+     * @param string $str
+     *
+     * @return string
+     */
+    static
+    public function camel($str)
+    {
+        return lcfirst(static::studly($str));
+    }
+
+    static
+    public function part($str, $i, $delimiter, $default = null)
+    {
+        $parts = explode($delimiter, $str);
+
+        return isset($parts[$i])
+            ? $parts[$i]
+            : $default;
+    }
+
+    static
+    public function word($str, $i, $default = null)
+    {
+        return static::part($str, $i, ' ', $default);
+    }
 }
