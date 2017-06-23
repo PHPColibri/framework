@@ -3,21 +3,31 @@ namespace Colibri\Pattern;
 
 /**
  * Represent a singleton pattern:
- *   not public __construct & __clone,
+ *   not public __construct, __clone & __wakeup,
  *   implement ::getInstance()
- *
- * @author Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  */
 abstract class Singleton
 {
+    /**
+     * @var static
+     */
     static protected $instance = null;
 
+    /**
+     * Singleton constructor.
+     */
     abstract protected function __construct();
 
+    /**
+     * Close public access.
+     */
     private function __clone()
     {
     }
 
+    /**
+     * Close public access/
+     */
     private function __wakeup()
     {
     }

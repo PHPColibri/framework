@@ -3,17 +3,14 @@ namespace Colibri\Pattern;
 
 /**
  * Represent a helper pattern:
- *   not public __construct & __clone
- *
- * @author Александр Чибрикин aka alek13 <alek13.me@gmail.com>
+ *   not public __construct
  */
 abstract class Helper
 {
+    /**
+     * Close public access to constructor.
+     */
     private function __construct()
-    {
-    }
-
-    private function __clone()
     {
     }
 }
