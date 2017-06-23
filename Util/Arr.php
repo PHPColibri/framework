@@ -4,13 +4,12 @@ namespace Colibri\Util;
 use Colibri\Pattern\Helper;
 
 /**
- * Description of Arr
- *
- * @author Александр Чибрикин aka alek13 <alek13.me@gmail.com>
+ * Array manipulation helper.
  */
 class Arr extends Helper
 {
     /**
+     * Overwrites values of the $array with values from $with array
      *
      * @param array $array
      * @param array $with
@@ -23,7 +22,7 @@ class Arr extends Helper
     }
 
     /**
-     * Get an item from an array using "dot" notation.
+     * Gets value from $array using "dot" notation, or returns $default value.
      *
      * @param  array  $array
      * @param  string $dottedKey
@@ -47,6 +46,8 @@ class Arr extends Helper
     }
 
     /**
+     * Sets $value to $array using "dot" notation.
+     *
      * @param array  $array
      * @param string $dottedKey
      * @param mixed  $value
@@ -67,6 +68,8 @@ class Arr extends Helper
     }
 
     /**
+     * Removes value from $array.
+     *
      * @param array  $array
      * @param string $dottedKey
      *
@@ -89,6 +92,8 @@ class Arr extends Helper
     }
 
     /**
+     * Returns only specified by $keys values from $array.
+     *
      * @param array $array
      * @param array $keys
      *

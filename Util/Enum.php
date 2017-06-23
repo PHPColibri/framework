@@ -4,7 +4,7 @@ namespace Colibri\Util;
 use Colibri\Pattern\Helper;
 
 /**
- * Class Enum.
+ * Enum-like class. Specify possible values with const-ants.
  */
 abstract class Enum extends Helper
 {

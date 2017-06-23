@@ -2,15 +2,17 @@
 namespace Colibri\Util;
 
 /**
- * Description of image
- *
- * @author         Александр Чибрикин aka alek13 <alek13.me@gmail.com>
- * @package        xTeam
- * @version        1.00.0
+ * Image manipulations.
  */
 class Image
 {
+    /**
+     * Type of resize.
+     */
     const RESIZE_FILLED = 'filled';
+    /**
+     * Type of resize.
+     */
     const RESIZE_CROPPED = 'cropped';
 
     /**
@@ -18,21 +20,20 @@ class Image
      * @param string $path
      * @param int    $width
      * @param int    $height
-     * @param string $rszType
+     * @param string $resizeType
      * @param int    $bgColor
      *
      * @return string binary stream with thumbnail
      * @throws \Exception
      */
-    static
-    public function createThumbnail($path, $width = 100, $height = 100, $rszType = self::RESIZE_FILLED, $bgColor = 0xfff5ee)
+    public static function createThumbnail($path, $width = 100, $height = 100, $resizeType = self::RESIZE_FILLED, $bgColor = 0xfff5ee)
     {
         $img = self::createFromFileByMime($path);
 
         // Build the thumbnail
         $new_img = ImageCreateTrueColor($width, $height);
 
-        if ($rszType == self::RESIZE_FILLED) {
+        if ($resizeType == self::RESIZE_FILLED) {
             // Fill the image gray
             if (!@imagefilledrectangle($new_img, 0, 0, $width - 1, $height - 1, $bgColor))
                 throw new \Exception('can`t create thumbnail: can`t fill new image by bg-color');
@@ -42,48 +43,57 @@ class Image
         list(
             $src_x, $src_y, $src_w, $src_h,
             $dst_x, $dst_y, $dst_w, $dst_h,
-            ) = self::calcResizeParams($rszType, $img, $width, $height);
+            ) = self::calcResizeParams($resizeType, $img, $width, $height);
         if (!@imagecopyresampled($new_img, $img, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h))
             throw new \Exception('can`t create thumbnail: can`t resize image');
 
         return self::getJpegToVar($new_img);
     }
 
-    static private function calcResizeParams($rType, $img, $tmb_w, $tmb_h)
+    /**
+     * @param string   $resizeType
+     * @param resource $img
+     * @param int      $tmbWidth
+     * @param int      $tmbHeight
+     *
+     * @return array
+     * @throws \Exception
+     */
+    static private function calcResizeParams($resizeType, $img, $tmbWidth, $tmbHeight)
     {
         list($width, $height) = self::getImageSize($img);
 
-        switch ($rType) {
+        switch ($resizeType) {
             case self::RESIZE_FILLED:
-                $tmb_ratio = $tmb_w / $tmb_h;
+                $tmb_ratio = $tmbWidth / $tmbHeight;
                 $img_ratio = $width / $height;
 
                 if ($tmb_ratio > $img_ratio) {
-                    $new_width  = $img_ratio * $tmb_h;
-                    $new_height = $tmb_h;
+                    $new_width  = $img_ratio * $tmbHeight;
+                    $new_height = $tmbHeight;
                 } else {
-                    $new_width  = $tmb_w;
-                    $new_height = $tmb_w / $img_ratio;
+                    $new_width  = $tmbWidth;
+                    $new_height = $tmbWidth / $img_ratio;
                 }
 
-                if ($new_height > $tmb_h)
-                    $new_height = $tmb_h;
-                if ($new_width > $tmb_w)
-                    $new_height = $tmb_w;
+                if ($new_height > $tmbHeight)
+                    $new_height = $tmbHeight;
+                if ($new_width > $tmbWidth)
+                    $new_height = $tmbWidth;
 
                 return [
-                    0,                        // $src_x
-                    0,                        // $src_y
-                    $width,                   // $src_w
-                    $height,                  // $src_h
-                    ($tmb_w - $new_width) / 2,  // $dst_x
-                    ($tmb_h - $new_height) / 2,  // $dst_y
-                    $new_width,               // $dst_w
-                    $new_height,              // $dst_h
+                    0,                             // $src_x
+                    0,                             // $src_y
+                    $width,                        // $src_w
+                    $height,                       // $src_h
+                    ($tmbWidth - $new_width) / 2,  // $dst_x
+                    ($tmbHeight - $new_height) / 2,// $dst_y
+                    $new_width,                    // $dst_w
+                    $new_height,                   // $dst_h
                 ];
 
             case self::RESIZE_CROPPED:
-                if ($tmb_w != $tmb_h)
+                if ($tmbWidth != $tmbHeight)
                     throw new \Exception('this resize type implemented only for square thumbnails');
 
                 if ($width > $height) {
@@ -100,14 +110,14 @@ class Image
 
 
                 return [
-                    $x,       // $src_x
-                    $y,       // $src_y
-                    $w,       // $src_w
-                    $h,       // $src_h
-                    0,        // $dst_x
-                    0,        // $dst_y
-                    $tmb_w,  // $dst_w
-                    $tmb_h,  // $dst_h
+                    $x,         // $src_x
+                    $y,         // $src_y
+                    $w,         // $src_w
+                    $h,         // $src_h
+                    0,          // $dst_x
+                    0,          // $dst_y
+                    $tmbWidth,  // $dst_w
+                    $tmbHeight, // $dst_h
                 ];
 
             default:
@@ -160,6 +170,12 @@ class Image
         return [$width, $height];
     }
 
+    /**
+     * @param resource $img
+     *
+     * @return string
+     * @throws \Exception
+     */
     static private function getJpegToVar($img)
     {
         // Use a output buffering to load the image into a variable

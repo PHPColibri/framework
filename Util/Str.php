@@ -1,28 +1,35 @@
 <?php
 namespace Colibri\Util;
+
+use Colibri\Pattern\Helper;
+
 /**
- *
- * @author         Александр Чибрикин aka alek13 <alek13.me@gmail.com>
- * @package        xTeam
- * @subpackage     a13FW
- * @version        1.00.0
+ * With string manipulations methods.
  */
-class Str
+class Str extends Helper
 {
     /**
+     * Checks if string stores an email.
      *
      * @param string $str
      *
      * @return bool
      */
-    static
-    public function isEmail($str)
+    public static function isEmail($str)
     {
         return (bool)preg_match(RegExp::isEmail, $str);
     }
 
-    static
-    public function random($type = 'alnum', $len = 8)
+    /**
+     * Generates random string.
+     *
+     * @param string $type one of 'alnum', 'numeric', 'nozero', 'unique', 'guid'
+     * @param int    $len  length of generated string.
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public static function random($type = 'alnum', $len = 8)
     {
         switch ($type) {
             case 'alnum':
@@ -55,12 +62,13 @@ class Str
     }
 
     /**
+     * Generates GUID.
+     *
      * @return string GUID
      */
-    static
-    public function generateGUID()
+    public static function generateGUID()
     {
-        $guidstr = "";
+        $guidStr = "";
         for ($i = 1; $i <= 16; $i++) {
             $b = (int)rand(0, 0xff);
             if ($i == 7) {
@@ -71,70 +79,87 @@ class Str
                 $b &= 0x3f;
                 $b |= 0x80;
             } // variant
-            $guidstr .= sprintf("%02s", base_convert($b, 10, 16));
+            $guidStr .= sprintf("%02s", base_convert($b, 10, 16));
             if ($i == 4 || $i == 6 || $i == 8 || $i == 10) {
-                $guidstr .= '-';
+                $guidStr .= '-';
             }
         }
 
-        return $guidstr;
+        return $guidStr;
     }
 
     /**
+     * Checks if string stores an integer.
+     *
      * @param string $str
      *
      * @return bool
      */
-    static
-    public function isInt($str)
+    public static function isInt($str)
     {
         return is_int($str) || $str === (string)(int)$str;
     }
 
     /**
-     * @param $str
-     * @param $beginsWith
+     * Checks if string begins with specified part.
+     *
+     * @param string $str
+     * @param string $beginsWith
      *
      * @return bool
      */
-    static
-    public function beginsWith($str, $beginsWith)
+    public static function beginsWith($str, $beginsWith)
     {
         return substr($str, 0, strlen($beginsWith)) === $beginsWith;
     }
 
-    static
-    public function endsWith($str, $endsWith)
+    /**
+     * Checks if string ends with specified part.
+     *
+     * @param string $str
+     * @param string $endsWith
+     *
+     * @return bool
+     */
+    public static function endsWith($str, $endsWith)
     {
         return substr($str, -strlen($endsWith)) === $endsWith;
     }
 
-    static
-    public function contains($str, $substr)
+    /**
+     * Checks if string contains specified $subString.
+     *
+     * @param string $str
+     * @param string $subString
+     *
+     * @return bool
+     */
+    public static function contains($str, $subString)
     {
-        return strpos($str, $substr) !== false;
+        return strpos($str, $subString) !== false;
     }
 
     /**
+     * Checks if string stores a JSON.
      *
      * @param string $str
      *
      * @return bool
      */
-    static
-    public function isJSON($str)
+    public static function isJSON($str)
     {
         return json_decode($str) !== null;
     }
 
     /**
+     * Gets the first part of string divided by $delimiter.
+     *
      * @param string $str
      * @param string $delimiter
      *
      * @return string
      */
-    static
-    public function firstPart($str, $delimiter = ' ')
+    public static function firstPart($str, $delimiter = ' ')
     {
         $parts = explode($delimiter, $str);
 
@@ -142,13 +167,14 @@ class Str
     }
 
     /**
+     * Gets the last part of string divided by $delimiter.
+     *
      * @param string $str
      * @param string $delimiter
      *
      * @return string
      */
-    static
-    public function lastPart($str, $delimiter = ' ')
+    public static function lastPart($str, $delimiter = ' ')
     {
         $parts = explode($delimiter, $str);
 
@@ -156,13 +182,14 @@ class Str
     }
 
     /**
+     * Converts string into snaked style.
+     *
      * @param string $str
      * @param string $delimiter
      *
      * @return string
      */
-    static
-    public function snake($str, $delimiter = '_')
+    public static function snake($str, $delimiter = '_')
     {
         if (!ctype_upper($str)) {
             $str = strtolower(preg_replace('/(.)(?=[A-Z])/', '$1' . $delimiter, $str));
@@ -173,29 +200,40 @@ class Str
     }
 
     /**
+     * Converts string into studly case style.
+     *
      * @param string $str
      *
      * @return string
      */
-    static
-    public function studly($str)
+    public static function studly($str)
     {
         return str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $str)));
     }
 
     /**
+     * Converts string into studly case style.
+     *
      * @param string $str
      *
      * @return string
      */
-    static
-    public function camel($str)
+    public static function camel($str)
     {
         return lcfirst(static::studly($str));
     }
 
-    static
-    public function part($str, $i, $delimiter, $default = null)
+    /**
+     * Gets specified $i-th part of string divided by $delimiter, or returns $default.
+     *
+     * @param string $str
+     * @param int    $i
+     * @param string $delimiter
+     * @param string $default
+     *
+     * @return string
+     */
+    public static function part($str, $i, $delimiter, $default = null)
     {
         $parts = explode($delimiter, $str);
 
@@ -204,8 +242,17 @@ class Str
             : $default;
     }
 
-    static
-    public function word($str, $i, $default = null)
+    /**
+     * Gets specified $i-th word of string divided by $delimiter, or returns $default.
+     * Same as ::part() with ' '(space) delimiter.
+     *
+     * @param      $str
+     * @param      $i
+     * @param null $default
+     *
+     * @return string
+     */
+    public static function word($str, $i, $default = null)
     {
         return static::part($str, $i, ' ', $default);
     }
