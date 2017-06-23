@@ -5,25 +5,39 @@ use Colibri\Pattern\Helper;
 use Colibri\Util\Arr;
 
 /**
- * Description of Config
+ * Config
  *
- * @author Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  * @method static mixed application(string $key, mixed $default = null) gets config value by keys, separated with dot
  */
 class Config extends Helper
 {
+    /**
+     * @var array in-memory cache
+     */
     protected static $allLoadedConfigs = [];
+    /**
+     * @var string path to directory with config files
+     */
     protected static $baseDir = null;
 
+    /**
+     * Retrieve full real path to config.
+     *
+     * @param string $name config file name
+     *
+     * @return string
+     * @throws \InvalidArgumentException if can`t get the real-path of config file
+     */
     protected static function getFilepath($name)
     {
         return static::getBaseDir() . '/' . $name . '.php';
     }
 
     /**
-     * @param $name
+     * @param string $name config file name
      *
-     * @return mixed
+     * @return array
+     * @throws \InvalidArgumentException if can`t get the real-path of config file
      */
     protected static function load($name)
     {
@@ -35,6 +49,7 @@ class Config extends Helper
      * @param string $name config file name
      *
      * @return bool
+     * @throws \InvalidArgumentException if can`t get the real-path of config file
      */
     public static function exists($name)
     {
@@ -45,6 +60,7 @@ class Config extends Helper
      * @param string $name config file name
      *
      * @return array
+     * @throws \InvalidArgumentException if can`t get the real-path of config file
      */
     final public static function get($name)
     {
@@ -56,9 +72,10 @@ class Config extends Helper
     /**
      * Returns config if exists or empty array if not
      *
-     * @param string $name
+     * @param string $name config file name
      *
      * @return array
+     * @throws \InvalidArgumentException if can`t get the real-path of config file
      */
     final public static function getOrEmpty($name)
     {
@@ -66,21 +83,26 @@ class Config extends Helper
     }
 
     /**
+     * Sets path of the directory where config files are stored.
      *
      * @param string $path
      *
-     * @return string
-     * @throws \Exception
+     * @return string returns the real path
+     * @throws \InvalidArgumentException if can`t get the real-path of config file
      */
     public static function setBaseDir($path)
     {
         $path = realpath(rtrim($path, '/\\ '));
         if ($path === false)
-            throw new \Exception("cat`t get real path: seems like path does`t exists: $path");
+            throw new \InvalidArgumentException("cat`t get real path: seems like path does`t exists: $path");
 
         return static::$baseDir = $path;
     }
 
+    /**
+     * @return string
+     * @throws \InvalidArgumentException if can`t get the real-path of config file
+     */
     public static function getBaseDir()
     {
         return static::$baseDir === null
@@ -88,6 +110,13 @@ class Config extends Helper
             : static::$baseDir;
     }
 
+    /**
+     * @param string $name       config file name
+     * @param array  $arguments  (string $key, mixed $default = null)
+     *
+     * @return mixed
+     * @throws \InvalidArgumentException if can`t get the real-path of config file
+     */
     public static function __callStatic($name, $arguments)
     {
         $key     = isset($arguments[0]) ? $arguments[0] : null;
