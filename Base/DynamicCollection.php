@@ -4,21 +4,29 @@ namespace Colibri\Base;
 /**
  * class DynamicCollection
  *
- * Реализует интерфейс для доступа к элементам при обращении к клвссу как к массиву
+ * Реализует интерфейс для доступа к элементам при обращении к классу как к массиву
  * А также добавляет функции доступа к свойствам, реализованные в PropertyAccess
- *
- * @author         Александр Чибрикин aka alek13 <alek13.me@gmail.com>
- * @package        xTeam
- * @subpackage     a13FW
- * @version        1.00.4
  */
 abstract class DynamicCollection extends PropertyAccess implements IDynamicCollection
 {
+    /**
+     * @var array
+     */
     protected $_items = null;
 
+    /**
+     * @return void
+     */
     abstract protected function fillItems();
 
-    // ArrayAccess
+
+    //// ArrayAccess implementation
+
+    /**
+     * @param mixed $offset
+     *
+     * @return bool
+     */
     public function offsetExists($offset)
     {
         if ($this->_items === null) $this->fillItems();
@@ -26,6 +34,11 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
         return isset($this->_items[$offset]);
     }
 
+    /**
+     * @param mixed $offset
+     *
+     * @return mixed
+     */
     public function offsetGet($offset)
     {
         if ($this->_items === null) $this->fillItems();
@@ -33,6 +46,12 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
         return $this->_items[$offset];
     }
 
+    /**
+     * @param mixed $offset
+     * @param mixed $data
+     *
+     * @return mixed
+     */
     public function offsetSet($offset, $data)
     {
         if ($this->_items === null) $this->fillItems();
@@ -40,19 +59,29 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
         return $this->_items[$offset] = $data;
     }
 
+    /**
+     * @param mixed $offset
+     */
     public function offsetUnset($offset)
     {
         if ($this->_items === null) $this->fillItems();
         unset($this->_items[$offset]);
     }
 
-    // Iterator
+    //// Iterator implementation
+
+    /**
+     * @return void
+     */
     public function rewind()
     {
         if ($this->_items === null) $this->fillItems();
         reset($this->_items);
     }
 
+    /**
+     * @return mixed
+     */
     public function current()
     {
         if ($this->_items === null) $this->fillItems();
@@ -60,6 +89,9 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
         return current($this->_items);
     }
 
+    /**
+     * @return mixed
+     */
     public function key()
     {
         if ($this->_items === null) $this->fillItems();
@@ -67,6 +99,9 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
         return key($this->_items);
     }
 
+    /**
+     * @return mixed
+     */
     public function next()
     {
         if ($this->_items === null) $this->fillItems();
@@ -74,6 +109,9 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
         return next($this->_items);
     }
 
+    /**
+     * @return bool
+     */
     public function valid()
     {
         if ($this->_items === null) $this->fillItems();
@@ -81,7 +119,11 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
         return $this->current() !== false;
     }
 
-    // Countable
+    //// Countable implementation
+
+    /**
+     * @return int
+     */
     public function count()
     {
         if ($this->_items === null) $this->fillItems();
@@ -89,7 +131,11 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
         return count($this->_items);
     }
 
+    //// Additional methods
 
+    /**
+     * @return array
+     */
     public function toArray()
     {
         if ($this->_items === null) $this->fillItems();
@@ -97,6 +143,9 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
         return array_values(get_object_vars($this));
     }
 
+    /**
+     * @return array[]
+     */
     public function toDblArray()
     {
         if ($this->_items === null) $this->fillItems();
@@ -108,6 +157,9 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
         return $retArr;
     }
 
+    /**
+     * @return string
+     */
     public function toJson()
     {
         return json_encode($this->toDblArray());

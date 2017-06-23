@@ -20,14 +20,14 @@ namespace Colibri\Base;
  * $x->var1='foobar';
  * echo($x->var1);
  * </code>
- *
- * @author         Александр Чибрикин aka alek13 <alek13.me@gmail.com>
- * @package        xTeam
- * @subpackage     a13FW
- * @version        1.0.0.01
  */
 abstract class PropertyAccess
 {
+    /**
+     * @param string $propName
+     *
+     * @return mixed
+     */
     public function __get($propName)
     {
         $p = '_' . $propName;
@@ -37,6 +37,12 @@ abstract class PropertyAccess
         return $this->$p;
     }
 
+    /**
+     * @param string $propName
+     * @param mixed  $propValue
+     *
+     * @return mixed
+     */
     public function __set($propName, $propValue)
     {
         $p = '_' . $propName;
