@@ -2,10 +2,11 @@
 namespace Colibri\Database;
 
 use Colibri\Base\IDynamicCollection;
+use Colibri\Database;
 
 interface    IObjectCollection extends IDynamicCollection
 {
-    function addItem(Object &$obj);
+    function addItem(Database\Object &$obj);
 
     function delItem($itemID);
 
@@ -17,7 +18,7 @@ interface    IObjectCollection extends IDynamicCollection
 
     function reload();
 
-    function add(Object $obj);
+    function add(Database\Object $obj);
 
     function remove($itemID);
 

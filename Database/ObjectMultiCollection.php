@@ -1,11 +1,14 @@
 <?php
 namespace Colibri\Database;
 
+use Colibri\Database;
 use Colibri\Util\Arr;
 
 /**
  * ObjectMultiCollection
  *
+ * @property-read string $addToDbQuery
+ * @property-read string $delFromDbQuery
  */
 class ObjectMultiCollection extends ObjectCollection //implements IObjectMultiCollection
 {
@@ -74,7 +77,7 @@ class ObjectMultiCollection extends ObjectCollection //implements IObjectMultiCo
     }
     // with DataBase
     ///////////////////////////////////////////////////////////////////////////
-    protected function addToDb(Object &$object)
+    protected function addToDb(Database\Object &$object)
     {
         $this->FKValue[1] = $object->id;
 

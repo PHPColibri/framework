@@ -38,7 +38,6 @@ class MySQL extends AbstractDb
         $this->host       = $host;
         $this->login      = $login;
         $this->pass       = $pass;
-        $this->resource   = null;
         $this->database   = $database;
         $this->persistent = $persistent;
 

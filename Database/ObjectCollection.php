@@ -3,6 +3,7 @@ namespace Colibri\Database;
 
 use Colibri\Base\DynamicCollection;
 use Colibri\Base\IDynamicCollection;
+use Colibri\Database;
 
 
 /**
@@ -10,9 +11,11 @@ use Colibri\Base\IDynamicCollection;
  *
  * Класс основан на DynamicCollection, по сему свои элементы подгружает
  * только тогда, когда идёт первое обращение к элементу коллекции.
+ *
+ * @property string $selFromDbAllQuery
+ * @property mixed  $parentID
  */
-abstract
-class ObjectCollection extends DynamicCollection implements IDynamicCollection//IObjectCollection
+abstract class ObjectCollection extends DynamicCollection implements IDynamicCollection//IObjectCollection
 {
     protected static $tableName = 'tableName_not_set';
     protected $itemClass = 'itemClass_not_set';
@@ -76,12 +79,13 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
     protected function shiftLeftFromPos($pos)
     {
         $cnt = count($this->_items);
-        if ($pos < 1 || $pos >= $cnt) return false;// throw new Exception("pos to shift from must be in range 1..Length-1");
+        if ($pos < 1 || $pos >= $cnt)
+            throw new \OutOfBoundsException("pos to shift from must be in range 1..Length-1");
         for ($i = $pos; $i < $cnt; $i++)
             $this->_items[$i - 1] = $this->_items[$i];
     }
 
-    protected function addItem(Object &$obj)
+    protected function addItem(Database\Object &$obj)
     {
         $this->_items[] = $obj;
     }
@@ -117,7 +121,7 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 
     // with DataBase
     ///////////////////////////////////////////////////////////////////////////
-    abstract protected function addToDb(Object &$id);
+    abstract protected function addToDb(Database\Object &$id);
 
     abstract protected function delFromDb($id);
 
@@ -213,11 +217,10 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 
 
     ///////////////////////////////////////////////////////////////////////////
-    // for where() function additional funcs.
+    // for where() function additional functions.
     /*private	function	whereClauses(array $where,$type='and')
     {
         $whereClauses=$this->buildClauses($where,$type);
-        //kminaev - merge atrays in where clause
         if (is_array($this->where))
             $this->where=array_merge($this->where,$whereClauses);
         else
@@ -290,7 +293,7 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
     /**
      *
      * @param array $order_by array('field1'=>'orientation','field2'=>'orientation'), 'fieldN' - name of field,
-     *                        'orientation' - ascendig or descending abbreviation ('asc' or 'desc')
+     *                        'orientation' - ascending or descending abbreviation ('asc' or 'desc')
      *
      * @return ObjectCollection|$this|Object[]
      */
@@ -342,7 +345,7 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
 
 
     ///////////////////////////////////////////////////////////////////////////
-    public function add(Object &$obj)
+    public function add(Database\Object &$obj)
     {
         if ($this->_items === null) if (!$this->fillItems()) return false;
         if (!$this->addToDb($obj)) return false;
@@ -419,7 +422,7 @@ class ObjectCollection extends DynamicCollection implements IDynamicCollection//
     public function    &getItemByID($id)
     {
         $count = count($this->_items);
-        /** @var Object $itemClass */
+        /** @var \Colibri\Database\Object $itemClass */
         $itemClass = $this->itemClass;
         if ($count > 0) $PKfn = $itemClass::$PKFieldName[0];
         for ($i = 0; $i < $count; $i++)

@@ -2,7 +2,7 @@
 namespace Colibri\Pattern;
 
 /**
- * Represent a singlton pattern:
+ * Represent a singleton pattern:
  *   not public __construct & __clone,
  *   implement ::getInstance()
  *

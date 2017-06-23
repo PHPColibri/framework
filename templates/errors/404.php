@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <style type="text/css">
         * {
-            font-family: Verdana, Tahoma, Arial;
+            font-family: Verdana, Tahoma, Arial, sans-serif;
         }
 
         h1, h2, h3, h4, h5, h6 {

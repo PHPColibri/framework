@@ -1,6 +1,8 @@
 <?php
 namespace Colibri\Database;
 
+use Colibri\Database;
+
 /**
  * ObjectSingleCollection
  *
@@ -41,7 +43,7 @@ class ObjectSingleCollection extends ObjectCollection //implements IObjectSingle
 
     // with DataBase
     ///////////////////////////////////////////////////////////////////////////
-    protected function addToDb(Object &$id)
+    protected function addToDb(Database\Object &$id)
     {
         return true;
     }

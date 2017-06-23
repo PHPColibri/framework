@@ -6,7 +6,7 @@ use Colibri\Util\File;
 class FileTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers       Colibri\Util\File::getMimeType
+     * @covers       \Colibri\Util\File::getMimeType
      */
     public function testGetMimeType()
     {

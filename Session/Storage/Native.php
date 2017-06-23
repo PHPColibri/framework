@@ -25,7 +25,7 @@ class Native extends Singleton implements StorageInterface
      */
     public function has($dottedKey)
     {
-        return Arr::get($dottedKey, '~no~value~in~storage~') === '~no~value~in~storage~';
+        return Arr::get($_SESSION, $dottedKey, '~no~value~in~storage~') === '~no~value~in~storage~';
     }
 
     /**

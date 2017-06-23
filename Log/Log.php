@@ -24,8 +24,6 @@ class Log extends Helper
 //	public static $logFolder = '/var/log/colibri';
 //	public static $prefix	 = 'colibri';
 
-    // TODO [alek13]:
-    //public	static	$template='';
 
     public static function add($message, $who = 'colibri', $logServerVars = false)
     {

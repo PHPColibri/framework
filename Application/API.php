@@ -121,13 +121,10 @@ class API
             return;
         }
 
-        $settedErrors          =
-            isset($_SESSION[$sessionKey])
-                ?
-                unserialize($_SESSION[$sessionKey])
-                :
-                [];
-        $_SESSION[$sessionKey] = serialize(array_merge($settedErrors, $values));
+        $existingErrors          = isset($_SESSION[$sessionKey])
+            ? unserialize($_SESSION[$sessionKey])
+            : [];
+        $_SESSION[$sessionKey] = serialize(array_merge($existingErrors, $values));
     }
 
     /**

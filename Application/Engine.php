@@ -10,7 +10,11 @@ use LogicException;
 /**
  * Description of CModuleEngine
  *
- * @property string $domainPrefix
+ * @property string                                                                    $domainPrefix
+ * @property \Colibri\Controller\MethodsController|\Colibri\Controller\ViewsController $responser
+ *
+ * @property bool                                                                      $showProfilerInfoOnDebug
+ * @property bool                                                                      $showAppDevToolsOnDebug
  */
 class Engine extends Engine\Base
 {
@@ -69,7 +73,7 @@ class Engine extends Engine\Base
     }
 
     /**
-     * @return    string        returns reqwested file name with path: for
+     * @return    string        returns requested file name with path: for
      *                          "http://example.com/some/dir/somefile.php?arg1=val1&arg2=val2" returns
      *                          "/some/dir/somefile.php"
      */
@@ -211,6 +215,7 @@ class Engine extends Engine\Base
             throw new Exception\NotFoundException("Can't load module: file '$fileName' does not exists.");
         else
             // @todo remove this (carefully)
+            /** @noinspection PhpIncludeInspection */
             require_once($fileName);
     }
 

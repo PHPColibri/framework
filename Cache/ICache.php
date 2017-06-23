@@ -20,7 +20,7 @@ interface ICache
 
     /**
      * @param string $key    for data
-     * @param mixed  $val    any type of supported data: object, string, int…
+     * @param mixed  $value  any type of supported data: object, string, int…
      * @param int    $expire seconds
      *
      * @return boolean result
@@ -35,10 +35,11 @@ interface ICache
     public function delete($key);
 
     /**
-     * @param string $key for data
-     * @param mixed  $val any type of supported data: object, string, int…
+     * @param string   $key for data
+     * @param \Closure $getValueCallback
+     * @param null     $expire
      *
-     * @return boolean result OR data
+     * @return bool result OR data
      */
     static
     public function remember($key, \Closure $getValueCallback, $expire = null);

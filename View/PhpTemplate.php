@@ -68,6 +68,7 @@ class PhpTemplate
             $$key = $value;
 
         ob_start();
+        /** @noinspection PhpIncludeInspection */
         include($this->filename);
         $__strCompiled__ = ob_get_contents();
         ob_end_clean();

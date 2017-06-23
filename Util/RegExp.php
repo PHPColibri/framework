@@ -2,7 +2,7 @@
 namespace Colibri\Util;
 
 /**
- * RegExp popular pattrens
+ * RegExp popular patterns
  *
  * @author         Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  * @package        xTeam

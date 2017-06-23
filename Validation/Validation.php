@@ -199,17 +199,17 @@ class Validation extends PropertyAccess
      */
     public function isEqual(array $keys, $message = null)
     {
-        $settedKey = null;
+        $existingKey = null;
         foreach ($keys as $key)
             if (isset($this->scope[$key])) {
-                $settedKey = $key;
+                $existingKey = $key;
                 break;
             }
-        if ($settedKey === null)
+        if ($existingKey === null)
             return $this;
 
         foreach ($keys as $key)
-            if (isset($this->scope[$key]) && $this->scope[$key] != $this->scope[$settedKey]) {
+            if (isset($this->scope[$key]) && $this->scope[$key] != $this->scope[$existingKey]) {
                 $keysList            = implode("', '", $keys);
                 $this->_errors[$key] = sprintf($message !== null ? $message : self::$isEqualMessage, $keysList);
             }

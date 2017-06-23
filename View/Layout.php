@@ -164,13 +164,13 @@ class Layout extends Helper
         }
 
         // make js init code for all js managers
-        $jsMgrsCnt = count(static::$jsMgr);
-        if ($jsMgrsCnt > 0) {
-            $jsMgrsText = '';
-            for ($i = 0; $i < $jsMgrsCnt; $i++) {
-                $jsMgrsText .= "\tnew " . static::$jsMgr[$i] . "_mgr();\n";
+        $jsManagersCount = count(static::$jsMgr);
+        if ($jsManagersCount > 0) {
+            $jsManagersText = '';
+            for ($i = 0; $i < $jsManagersCount; $i++) {
+                $jsManagersText .= '  new ' . static::$jsMgr[$i] . "_mgr();\n";
             }
-            static::addJsTextOnReady($jsMgrsText);
+            static::addJsTextOnReady($jsManagersText);
         }
 
         if (static::$jsTextOnReady != '') {

@@ -74,11 +74,11 @@ class Config extends Helper
      */
     public static function setBaseDir($path)
     {
-        $realpath = realpath(rtrim($path, '/\\ '));
-        if ($realpath === false)
-            throw new \Exception("cat`t get realpath: seems like path does`t exists: $path");
+        $path = realpath(rtrim($path, '/\\ '));
+        if ($path === false)
+            throw new \Exception("cat`t get real path: seems like path does`t exists: $path");
 
-        return static::$baseDir = $realpath;
+        return static::$baseDir = $path;
     }
 
     public static function getBaseDir()

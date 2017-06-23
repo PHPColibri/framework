@@ -6,13 +6,13 @@ use Colibri\Config\LocalConfig;
 
 class LocalConfigTest extends \PHPUnit_Framework_TestCase
 {
-    public function __construct()
+    public function setUp()
     {
         Config::setBaseDir(__DIR__ . '/sample');
     }
 
     /**
-     * @covers Colibri\Config\LocalConfig::getBaseDir
+     * @covers \Colibri\Config\LocalConfig::getBaseDir
      */
     public function testGetBaseDir()
     {

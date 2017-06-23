@@ -51,6 +51,7 @@ abstract class AbstractDb implements IDb
      * @param bool  $rollbackOnFail
      *
      * @return bool
+     * @throws \Colibri\Database\Exception\SqlException
      */
     public function queries(array $arrQueries, $rollbackOnFail = false)
     {
