@@ -14,6 +14,11 @@ use Colibri\Session\Session;
  */
 abstract class Base extends PropertyAccess implements IEngine
 {
+    /**
+     * Base constructor.
+     *
+     * @throws \Colibri\Database\DbException
+     */
     public function __construct()
     {
         $config = Config::get('application');
@@ -38,5 +43,8 @@ abstract class Base extends PropertyAccess implements IEngine
         $this->initialize();
     }
 
+    /**
+     * @return void
+     */
     abstract protected function initialize();
 }

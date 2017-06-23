@@ -2,6 +2,8 @@
 namespace Colibri\Application;
 
 use Colibri\Config\Config;
+use Colibri\Controller\MethodsController;
+use Colibri\Controller\ViewsController;
 use Colibri\Http;
 use Colibri\Log\Log;
 use Colibri\Util\Str;
@@ -10,25 +12,50 @@ use LogicException;
 /**
  * Description of CModuleEngine
  *
- * @property string                                                                    $domainPrefix
- * @property \Colibri\Controller\MethodsController|\Colibri\Controller\ViewsController $responser
+ * @property string                            $domainPrefix
+ * @property MethodsController|ViewsController $responser
  *
- * @property bool                                                                      $showProfilerInfoOnDebug
- * @property bool                                                                      $showAppDevToolsOnDebug
+ * @property bool                              $showProfilerInfoOnDebug
+ * @property bool                              $showAppDevToolsOnDebug
  */
 class Engine extends Engine\Base
 {
+    /**
+     * @var ViewsController|MethodsController
+     */
     protected $_responser = null;
+    /**
+     * @var string
+     */
     protected $_domainPrefix = null;
+    /**
+     * @var string
+     */
     private $_division = null;
+    /**
+     * @var string
+     */
     private $_module = null;
+    /**
+     * @var string
+     */
     private $_method = null;
+    /**
+     * @var array
+     */
     private $_params = [];
 
+    /**
+     * @var bool
+     */
     protected $_showProfilerInfoOnDebug = true;
+    /**
+     * @var bool
+     */
     protected $_showAppDevToolsOnDebug = true;
 
     /**
+     * @return void
      */
     private static function setUpErrorHandling()
     {
@@ -40,7 +67,7 @@ class Engine extends Engine\Base
 
 
     /**
-     * @exception    120x
+     * @return void
      */
     protected function initialize()
     {
@@ -159,11 +186,28 @@ class Engine extends Engine\Base
         return $this->callModuleEssence(CallType::view, $division, $module, $method, $params);
     }
 
+    /**
+     * @param $division
+     * @param $module
+     * @param $method
+     * @param $params
+     *
+     * @return string
+     */
     public function callModuleMethod($division, $module, $method, $params)
     {
         return $this->callModuleEssence(CallType::method, $division, $module, $method, $params);
     }
 
+    /**
+     * @param $type
+     * @param $division
+     * @param $module
+     * @param $method
+     * @param $params
+     *
+     * @return string
+     */
     private function callModuleEssence($type, $division, $module, $method, $params)
     {
         $this->loadModule($division, $module, $type);
@@ -171,6 +215,7 @@ class Engine extends Engine\Base
         $className = ucfirst($module) . ucfirst($division) . ($type == CallType::view ? 'Views' : 'Methods') . 'Controller';
         if (!class_exists($className))
             throw new Exception\NotFoundException("Class '$className' does not exists.");
+        /** @var ViewsController|MethodsController $responser */
         $responser        = new $className($division, $module, $method);
         $this->_responser =& $responser;
 

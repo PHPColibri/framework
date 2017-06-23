@@ -22,7 +22,11 @@ class API
      */
     public static $vars = null;
 
-
+    /**
+     * API constructor.
+     *
+     * @param \Colibri\Application\Engine $mSystem
+     */
     public function __construct(Engine &$mSystem)
     {
         self::$moduleSystem = $mSystem;
@@ -30,11 +34,17 @@ class API
         static::init();
     }
 
+    /**
+     * @return void
+     */
     protected static function init()
     {
         static::initFromSession();
     }
 
+    /**
+     * @return void
+     */
     protected static function initFromSession()
     {
         if (isset($_SESSION['api_errors'])) {
@@ -47,7 +57,14 @@ class API
         }
     }
 
-
+    /**
+     * @param string $division
+     * @param string $module
+     * @param string $method
+     * @param ...
+     *
+     * @return string
+     */
     static public function callModuleMethod($division, $module, $method/* , ... */)
     {
         $params = array_slice(func_get_args(), 3);
@@ -55,6 +72,14 @@ class API
         return self::$moduleSystem->callModuleMethod($division, $module, $method, $params);
     }
 
+    /**
+     * @param string $division
+     * @param string $module
+     * @param string $method
+     * @param ...
+     *
+     * @return string
+     */
     static public function getModuleView($division, $module, $method/* , ... */)
     {
         $params = array_slice(func_get_args(), 3);
@@ -62,6 +87,11 @@ class API
         return self::$moduleSystem->getModuleView($division, $module, $method, $params);
     }
 
+    /**
+     * @param array $params
+     *
+     * @return string
+     */
     static private function getCacheKeyForCall(array $params)
     {
         $params += $_GET;
@@ -74,6 +104,14 @@ class API
         return md5($keyStr);
     }
 
+    /**
+     * @param string $division
+     * @param string $module
+     * @param string $method
+     * @param ...
+     *
+     * @return string
+     */
     public static function callModuleMethodCached($division, $module, $method/* , ... */)
     {
         $params = func_get_args();
@@ -91,6 +129,13 @@ class API
         return $retValue;
     }
 
+    /**
+     * @param string $division
+     * @param string $module
+     * @param string $method
+     *
+     * @return string
+     */
     public static function getModuleViewCached($division, $module, $method/* , ... */)
     {
         $params = func_get_args();
@@ -108,11 +153,20 @@ class API
         return $retValue;
     }
 
+    /**
+     * @param string $varName
+     *
+     * @return mixed
+     */
     public static function getTemplateVar($varName)
     {
         return self::$moduleSystem->responser->getTemplate()->vars[$varName];
     }
 
+    /**
+     * @param string $sessionKey
+     * @param array  $values
+     */
     protected static function pass($sessionKey, array $values)
     {
         if ($values === null) {
@@ -121,7 +175,7 @@ class API
             return;
         }
 
-        $existingErrors          = isset($_SESSION[$sessionKey])
+        $existingErrors        = isset($_SESSION[$sessionKey])
             ? unserialize($_SESSION[$sessionKey])
             : [];
         $_SESSION[$sessionKey] = serialize(array_merge($existingErrors, $values));
@@ -150,6 +204,9 @@ class API
         self::pass('api_vars', $vars);
     }
 
+    /**
+     * @param string $session_id
+     */
     public static function catchSession($session_id)
     {
         // @todo move this into Session
