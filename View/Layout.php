@@ -12,7 +12,7 @@ class Layout extends Helper
      * @var string name of layout template to use
      */
     private static $filename = null;
-    // vars:
+    // Variables that injected into layout:
     private static $description = '';
     private static $keywords = '';
     private static $title = '';
@@ -22,6 +22,11 @@ class Layout extends Helper
     private static $jsTextOnReady = '';
     private static $jsMgr = [];
 
+    /**
+     * Cleans up all layout variables & resets filename if specified.
+     *
+     * @param string $filename
+     */
     public static function clean($filename = null)
     {
         static::filename($filename);
@@ -37,6 +42,8 @@ class Layout extends Helper
     }
 
     /**
+     * Sets or gets filename of layout.
+     *
      * @param string $value
      *
      * @return string
@@ -47,6 +54,8 @@ class Layout extends Helper
     }
 
     /**
+     * Adds included css file from specified uri-$path.
+     *
      * @param string $cssFilename
      * @param string $path
      */
@@ -56,6 +65,8 @@ class Layout extends Helper
     }
 
     /**
+     * Adds included js file from specified uri-$path.
+     *
      * @param string $jsFilename
      * @param string $path
      */
@@ -65,6 +76,8 @@ class Layout extends Helper
     }
 
     /**
+     * Adds specified $jsText as injected js code.
+     *
      * @param string $jsText
      */
     public static function addJsText($jsText)
@@ -73,6 +86,9 @@ class Layout extends Helper
     }
 
     /**
+     * Adds specified $jsText as js code, that will be called on document.ready.
+     * (that will be wrapped with $(document).ready(function(){ ...js-code... });)
+     *
      * @param string $jsText
      */
     public static function addJsTextOnReady($jsText)
@@ -81,16 +97,20 @@ class Layout extends Helper
     }
 
     /**
-     * @param        $jsMgrName
+     * Adds included js page manager class & its call on document.ready
+     *
+     * @param        $jsManagerName
      * @param string $path
      */
-    public static function addJsMgr($jsMgrName, $path = RES_JS)
+    public static function addJsMgr($jsManagerName, $path = RES_JS)
     {
-        static::addJs($jsMgrName . '_mgr.js', $path);
-        static::$jsMgr[] = $jsMgrName;
+        static::addJs($jsManagerName . '_mgr.js', $path);
+        static::$jsMgr[] = $jsManagerName;
     }
 
     /**
+     * Sets or gets layout page keywords to be injected into meta tag.
+     *
      * @param string $value
      *
      * @return string
@@ -101,6 +121,8 @@ class Layout extends Helper
     }
 
     /**
+     * Sets or gets layout page title.
+     *
      * @param string $value
      *
      * @return string
@@ -111,6 +133,8 @@ class Layout extends Helper
     }
 
     /**
+     * Sets or gets layout page description.
+     *
      * @param string $value
      *
      * @return string
@@ -121,6 +145,8 @@ class Layout extends Helper
     }
 
     /**
+     * Deletes specified css filename.
+     *
      * @param string $cssFilename
      * @param string $path
      */
@@ -130,7 +156,9 @@ class Layout extends Helper
     }
 
     /**
-     * @param $content
+     * Compiles the layout. Inject layout variables & given $content.
+     *
+     * @param string $content
      *
      * @return string
      * @throws \Exception

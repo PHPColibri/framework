@@ -2,22 +2,23 @@
 namespace Colibri\View;
 
 /**
+ * Simple Template engine based on php.
  */
 class PhpTemplate
 {
     /**
-     * @var string    path/name of template
+     * @var string path/name of template
      */
     protected $filename = null;
     /**
-     * @var array    variables of template for tpl compile
+     * @var array  variables of template for compile
      */
     public $vars = [];
 
 
     /**
      *
-     * @param    string $filename имя файла
+     * @param string $filename имя файла
      *
      * @throws \Exception file does not exists
      */
@@ -29,7 +30,7 @@ class PhpTemplate
     }
 
     /**
-     * Sets or adds variables of template (merge)
+     * Sets or adds variables of template (merge).
      *
      * @param array $vars
      *
@@ -43,6 +44,8 @@ class PhpTemplate
     }
 
     /**
+     * Loads the $filename in memory.
+     *
      * @param string $filename
      *
      * @return $this
@@ -59,6 +62,7 @@ class PhpTemplate
     }
 
     /**
+     * Compiles template.
      *
      * @return string compiled template text
      */
@@ -77,6 +81,8 @@ class PhpTemplate
     }
 
     /**
+     * Returns template filename.
+     *
      * @return string
      */
     public function getFilename()
