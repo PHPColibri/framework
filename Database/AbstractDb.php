@@ -30,6 +30,7 @@ abstract class AbstractDb implements IDb
      * @param string $tableName
      *
      * @return array
+     * @throws \InvalidArgumentException
      */
     public function &getColumnsMetadata($tableName)
     {

@@ -68,6 +68,7 @@ class Engine extends Engine\Base
 
     /**
      * @return void
+     * @throws \InvalidArgumentException
      */
     protected function initialize()
     {
@@ -116,6 +117,7 @@ class Engine extends Engine\Base
     /**
      * @return string returns prefix of domain: for "sub.domain.example.com" and const $conf['domain']=="example.com",
      *                returns "sub.domain"
+     * @throws \InvalidArgumentException
      */
     private function getDomainPrefix()
     {
@@ -130,6 +132,8 @@ class Engine extends Engine\Base
 
     /**
      * @param    string $file requested file name
+     *
+     * @throws \InvalidArgumentException
      */
     protected function parseRequestedFile($file)
     {
@@ -193,6 +197,8 @@ class Engine extends Engine\Base
      * @param $params
      *
      * @return string
+     * @throws \Colibri\Application\Exception\NotFoundException
+     * @throws \LogicException
      */
     public function callModuleMethod($division, $module, $method, $params)
     {
@@ -207,6 +213,8 @@ class Engine extends Engine\Base
      * @param $params
      *
      * @return string
+     * @throws \Colibri\Application\Exception\NotFoundException
+     * @throws \LogicException
      */
     private function callModuleEssence($type, $division, $module, $method, $params)
     {
@@ -279,6 +287,8 @@ class Engine extends Engine\Base
 
     /**
      * @param \Throwable|\Exception $exc
+     *
+     * @throws \InvalidArgumentException
      */
     public static function exceptionHandler($exc)
     {
