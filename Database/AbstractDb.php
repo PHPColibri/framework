@@ -3,6 +3,9 @@ namespace Colibri\Database;
 
 use Colibri\Cache\Memcache;
 
+/**
+ * Abstract class for Db.
+ */
 abstract class AbstractDb implements IDb
 {
     protected $host;
@@ -13,7 +16,7 @@ abstract class AbstractDb implements IDb
     /**
      * @var bool
      */
-    static public $useMemcacheForMetadata = false;
+    public static $useMemcacheForMetadata = false;
 
     /**
      * @var array
@@ -21,6 +24,9 @@ abstract class AbstractDb implements IDb
     private static $columnsMetadata = [];
 
     /**
+     * Кеширует и возвращает информацию о полях таблицы.
+     * Caches and returns table columns info.
+     *
      * @param string $tableName
      *
      * @return array
@@ -39,23 +45,28 @@ abstract class AbstractDb implements IDb
     }
 
     /**
-     * @param $tableName
+     * Возвращает информацию о полях таблицы.
+     * Returns table columns info.
+     *
+     * @param string $tableName
      *
      * @return array
      */
     abstract protected function &retrieveColumnsMetadata($tableName);
 
     /**
+     * Выполняет несколько запросов.
+     * Executes a number of $queries.
      *
-     * @param array $arrQueries
-     * @param bool  $rollbackOnFail
+     * @param array $queries        запросы, которые нужно выполнить. queries to execute.
+     * @param bool  $rollbackOnFail нужно ли откатывать транзакцию.   if you need to roll back transaction.
      *
      * @return bool
      * @throws \Colibri\Database\Exception\SqlException
      */
-    public function queries(array $arrQueries, $rollbackOnFail = false)
+    public function queries(array $queries, $rollbackOnFail = false)
     {
-        foreach ($arrQueries as &$query)
+        foreach ($queries as &$query)
             if (!$this->query($query . ';'))
                 return $rollbackOnFail ? $this->transactionRollback() && false : false;
 

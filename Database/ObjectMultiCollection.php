@@ -9,6 +9,7 @@ use Colibri\Util\Arr;
  *
  * @property-read string $addToDbQuery
  * @property-read string $delFromDbQuery
+ * @property-read string $delFromDbAllQuery
  */
 class ObjectMultiCollection extends ObjectCollection //implements IObjectMultiCollection
 {
@@ -16,6 +17,11 @@ class ObjectMultiCollection extends ObjectCollection //implements IObjectMultiCo
     private $fkTableFields = [];
     private $intermediateFields = [];
 
+    /**
+     * ObjectMultiCollection constructor.
+     *
+     * @param mixed $parentID
+     */
     public function __construct($parentID = null)
     {
         parent::__construct($parentID);
@@ -25,6 +31,12 @@ class ObjectMultiCollection extends ObjectCollection //implements IObjectMultiCo
         $this->intermediateFields = array_diff($this->fkTableFields, $this->FKName);
     }
 
+    /**
+     * @param string $propertyName
+     *
+     * @return mixed
+     * @throws \RuntimeException
+     */
     public function __get($propertyName)
     {
         switch ($propertyName) {
@@ -77,6 +89,12 @@ class ObjectMultiCollection extends ObjectCollection //implements IObjectMultiCo
     }
     // with DataBase
     ///////////////////////////////////////////////////////////////////////////
+    /**
+     * @param \Colibri\Database\Object $object
+     *
+     * @return bool
+     * @throws \Colibri\Database\Exception\SqlException
+     */
     protected function addToDb(Database\Object &$object)
     {
         $this->FKValue[1] = $object->id;
@@ -84,6 +102,12 @@ class ObjectMultiCollection extends ObjectCollection //implements IObjectMultiCo
         return $this->doQuery($this->addToDbQuery);
     }
 
+    /**
+     * @param int $id
+     *
+     * @return bool
+     * @throws \Colibri\Database\Exception\SqlException
+     */
     protected function delFromDb($id)
     {
         $this->FKValue[1] = $id;
@@ -91,6 +115,10 @@ class ObjectMultiCollection extends ObjectCollection //implements IObjectMultiCo
         return $this->doQuery($this->delFromDbQuery);
     }
 
+    /**
+     * @return array|bool
+     * @throws \Colibri\Database\Exception\SqlException
+     */
     protected function selFromDbAll()
     {
         if (!($this->doQuery($this->selFromDbAllQuery)))
@@ -99,6 +127,10 @@ class ObjectMultiCollection extends ObjectCollection //implements IObjectMultiCo
         return $this->db()->fetchAllRows();
     }
 
+    /**
+     * @return bool
+     * @throws \Colibri\Database\Exception\SqlException
+     */
     protected function delFromDbAll()
     {
         return $this->doQuery($this->delFromDbAllQuery);

@@ -12,14 +12,15 @@ class MySQL extends AbstractDb
 {
     /** @var \mysqli */
     private $connect;
-    /** @var  \mysqli_result */
+    /** @var \mysqli_result */
     private $result;
-    private $persistent;
+    /** @var bool */
+    private $persistent = false;
 
-    static public $monitorQueries = false;
-    static public $strQueries = '';
-    static public $queriesCount = 0;
-    static public $cachedQueriesCount = 0;
+    public static $monitorQueries = false;
+    public static $strQueries = '';
+    public static $queriesCount = 0;
+    public static $cachedQueriesCount = 0;
 
     /**
      * Конструктор
@@ -33,7 +34,7 @@ class MySQL extends AbstractDb
      * @throws DbException
      * @throws SqlException
      */
-    function __construct($host, $login, $pass, $database, $persistent = false)
+    public function __construct($host, $login, $pass, $database, $persistent = false)
     {
         $this->host       = $host;
         $this->login      = $login;
@@ -45,8 +46,8 @@ class MySQL extends AbstractDb
     }
 
     /**
-     * Открывает соединение с базой данных
-     *
+     * Открывает соединение с базой данных.
+     * Opens connection to database.
      */
     public function open(/*$encoding = 'utf8'*/)
     {
@@ -72,7 +73,8 @@ class MySQL extends AbstractDb
     }
 
     /**
-     * Проверка открыт ли коннект к базе
+     * Проверка открыт ли коннект к базе.
+     * Checks that connection is opened (alive).
      *
      * @return bool
      */
@@ -81,6 +83,12 @@ class MySQL extends AbstractDb
         return $this->connect->ping();
     }
 
+    /**
+     * Closes the connection.
+     *
+     * @return bool
+     * @throws \Colibri\Database\DbException
+     */
     public function close()
     {
         if (!($closed = $this->connect->close()))
@@ -89,12 +97,21 @@ class MySQL extends AbstractDb
         return true;
     }
 
+    /**
+     * If instance somehow was stored in session for example, we need to reopen connection.
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     */
     public function __wakeup()
     {
         $this->open();
     }
 
     /**
+     * Получение переменной соединения.
+     * Gets the connection.
+     *
      * @return \mysqli
      */
     public function getConnect()
@@ -102,17 +119,34 @@ class MySQL extends AbstractDb
         return $this->connect;
     }
 
-
+    /**
+     * Returns count of retrieved rows in query result.
+     * Количество строк в результате запроса на выборку.
+     *
+     * @return int
+     */
     public function getNumRows()
     {
         return $this->result->num_rows;
     }
 
+    /**
+     * Возвращает количество строк, затронутых запросом на изменение (insert, update, replace, delete, ...)
+     * Returns count of rows that query affected.
+     *
+     * @return int|string returns string if count > PHP_INT_MAX
+     */
     public function getAffectedRows()
     {
         return $this->connect->affected_rows;
     }
 
+    /**
+     * @param int $row
+     * @param int $field
+     *
+     * @return object
+     */
     public function getResult($row = 0, $field = 0)
     {
         $this->result->data_seek($row);
@@ -121,29 +155,59 @@ class MySQL extends AbstractDb
         return $this->result->fetch_field();
     }
 
-//	public	function	getResult($row=0,$field=0){	return mysql_result($this->result,$row,$field);	}
+    /**
+     * Идентификатор последней добавленной записи.
+     * Returns the auto generated ID of last insert query.
+     *
+     * @return mixed
+     */
     public function lastInsertId()
     {
         return $this->connect->insert_id;
     }
 
+    /**
+     * Достаёт очередную стоку из результата запроса в виде массива указанниго типа.
+     * Fetch row from query result as an associative array, a numeric array, or both.
+     *
+     * @param int $param Fetch type. Модификатор тива возвращаемого значения.
+     *                   Возможные параметры: MYSQLI_NUM | MYSQLI_ASSOC | MYSQLI_BOTH
+     *
+     * @return array
+     */
     public function fetchArray($param = MYSQLI_ASSOC)
     {
         return $this->result->fetch_array($param);
     }
 
+    /**
+     * Достаёт очередную стоку из результата запроса в виде нумерованного массива.
+     * Fetch row from query result as an enumerated array.
+     *
+     * @return array
+     */
     public function fetchRow()
     {
         return $this->result->fetch_row();
     }
 
+    /**
+     * Достаёт очередную стоку из результата запроса в виде асоциативного массива (ключи - названия колонок).
+     * Fetch row from query result as an associative array.
+     *
+     * @return array
+     */
     public function fetchAssoc()
     {
         return $this->result->fetch_assoc();
     }
 
     /**
-     * @param int $param fetch type
+     * Достаёт все строки из результата запроса в массив указанного вида(асоциативный,нумеровынный,оба).
+     * Fetch all rows from query result as specified(assoc,num,both) array.
+     *
+     * @param int $param Fetch type. Модификатор тива возвращаемого значения.
+     *                   Возможные параметры: MYSQLI_NUM | MYSQLI_ASSOC | MYSQLI_BOTH
      *
      * @return array
      */
@@ -156,6 +220,12 @@ class MySQL extends AbstractDb
         return $return;
     }
 
+    /**
+     * Достаёт последнюю строку из результата запроса в виде нумерованного массива.
+     * Fetch last rows from query result as an enumerated array.
+     *
+     * @return array
+     */
     public function fetchLastRow()
     {
         $this->result->data_seek($this->getNumRows() - 1);
@@ -164,21 +234,23 @@ class MySQL extends AbstractDb
     }
 
     /**
+     * Выполняет запрос к базе данных.
+     * Executes given query.
      *
-     * @param string $query_string
+     * @param string $query
      *
      * @return bool
      * @throws SqlException
      * @global int   $time
      */
-    public function query($query_string)
+    public function query($query)
     {
         if (self::$monitorQueries) {
             $queryStartTime   = microtime(true);
-            self::$strQueries .= $query_string . "\n";
+            self::$strQueries .= $query . "\n";
         }
 
-        $this->result = $this->dbQuery($query_string);
+        $this->result = $this->dbQuery($query);
 
         if (self::$monitorQueries) {
             global $time;
@@ -193,18 +265,33 @@ class MySQL extends AbstractDb
         return true;
     }
 
-    static
-    public function getQueryTemplateArray($tpl, $argArr)
+    /**
+     * Соьирает шаблон запроса, подставляя значения из $arguments.
+     * Compile query template with specified $arguments array.
+     *
+     * @param string $tpl
+     * @param array  $arguments
+     *
+     * @return string
+     */
+    public static function getQueryTemplateArray($tpl, array $arguments)
     {
-        $argNum = count($argArr);
+        $argNum = count($arguments);
         for ($i = $argNum; $i > 0; $i--)
-            $tpl = str_replace('%' . $i, $argArr[$i - 1], $tpl);
+            $tpl = str_replace('%' . $i, $arguments[$i - 1], $tpl);
 
         return $tpl;
     }
 
-    static
-    public function getQueryTemplate($tpl)
+    /**
+     * Собирает шаблон запроса, подставляя значения из переданных в метод агргументов.
+     * Compile query template with passed into method arguments.
+     *
+     * @param string $tpl
+     *
+     * @return string
+     */
+    public static function getQueryTemplate($tpl/*, ...*/)
     {
         $argList = func_get_args();
         $argNum  = func_num_args();
@@ -216,7 +303,16 @@ class MySQL extends AbstractDb
         return $strQuery;
     }
 
-    public function queryTemplate($tpl)
+    /**
+     * Выполняет запрос, собранный из указанного шаблона, подставив значения из переданных в метод агргументов.
+     * Executes query template compiles with passed into method arguments.
+     *
+     * @param string $tpl
+     *
+     * @return bool
+     * @throws \Colibri\Database\Exception\SqlException
+     */
+    public function queryTemplate($tpl/*, ...*/)
     {
         $argList  = func_get_args();
         $strQuery = call_user_func_array(['self', 'getQueryTemplate'], $argList);
@@ -225,20 +321,23 @@ class MySQL extends AbstractDb
     }
 
     /**
-     * @param string $query_string
+     * Выполняет переданный запрос.
+     * Executes given query.
+     *
+     * @param string $query
      *
      * @return bool|\mysqli_result
      *
      * @throws SqlException
      */
-    private function    &dbQuery($query_string)
+    private function    &dbQuery($query)
     {
         if (self::$monitorQueries)
             self::$queriesCount++;
-        $result = $this->connect->query($query_string);
+        $result = $this->connect->query($query);
         if ($result === false) {
             throw new SqlException(
-                'SQL-error [' . $this->connect->errno . ']: ' . $this->connect->error . "\nSQL-query: $query_string",
+                'SQL-error [' . $this->connect->errno . ']: ' . $this->connect->error . "\nSQL-query: $query",
                 $this->connect->errno
             );
         }
@@ -246,47 +345,86 @@ class MySQL extends AbstractDb
         return $result;
     }
 
+    /**
+     * Открывает транзакцию.
+     * Starts database transaction.
+     *
+     * @return bool
+     * @throws \Colibri\Database\Exception\SqlException
+     */
     public function transactionStart()
     {
         return $this->query('START TRANSACTION;');
     }
 
+    /**
+     * Откатывает транзакцию.
+     * Rolls back database transaction.
+     *
+     * @return bool
+     * @throws \Colibri\Database\Exception\SqlException
+     */
     public function transactionRollback()
     {
         return $this->query('ROLLBACK;');
     }
 
+    /**
+     * "Комитит" транзакцию в БД.
+     * Commits database transaction.
+     *
+     * @return bool
+     * @throws \Colibri\Database\Exception\SqlException
+     */
     public function transactionCommit()
     {
         return $this->query('COMMIT;');
     }
 
     /**
+     * Возвращает информацию о внешних ключах таблицы.
+     * Returns table foreign keys info.
      *
      * @param string $tableName
      *
-     * @return array поля: [TABLE_SCHEMA] ,TABLE_NAME, COLUMN_NAME    refs to   [REFERENCED_TABLE_SCHEMA ],
-     *               REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
+     * @return array fields:   [TABLE_SCHEMA] ,TABLE_NAME, COLUMN_NAME
+     *               refs to:  [REFERENCED_TABLE_SCHEMA ], REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
      * @throws SqlException
      */
     public function getTableFKs($tableName)
     {
-        // TODO: доделать
-        // поля: [TABLE_SCHEMA] ,TABLE_NAME, COLUMN_NAME    refs to   [REFERENCED_TABLE_SCHEMA ], REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
         $this->query('SELECT * FROM `KEY_COLUMN_USAGE` WHERE `TABLE_NAME` = \'' . $tableName . '\' AND `REFERENCED_COLUMN_NAME` IS NOT NULL');
 
         return $this->fetchAllRows();
     }
 
-    public function commit(array $arrQueries)
+    /**
+     * Выполняет несколько запросов внутри одной транзакции.
+     * Executes number of $queries within transaction.
+     *
+     * @param array $queries
+     *
+     * @return bool
+     * @throws \Colibri\Database\Exception\SqlException
+     */
+    public function commit(array $queries)
     {
         if (!$this->transactionStart()) return false;
-        if (!$this->queries($arrQueries, true)) return false;
+        if (!$this->queries($queries, true)) return false;
         if (!$this->transactionCommit()) return false;
 
         return true;
     }
 
+    /**
+     * Подготавливает значение для вставки в строку запроса.
+     * Prepares value for insert into query string.
+     *
+     * @param mixed  $value
+     * @param string $type
+     *
+     * @return float|int|string
+     */
     public function prepareValue(&$value, $type)
     {
         if ($value === null)
@@ -339,6 +477,9 @@ class MySQL extends AbstractDb
     }
 
     /**
+     * Возвращает информацию о полях таблицы.
+     * Returns table columns info.
+     *
      * @param string $tableName
      *
      * @return array
@@ -373,7 +514,7 @@ class MySQL extends AbstractDb
     }
 
     /**
-     * @param $strFieldType
+     * @param string $strFieldType
      *
      * @return int|null
      */

@@ -9,13 +9,19 @@ use Colibri\Database;
  */
 class ObjectSingleCollection extends ObjectCollection //implements IObjectSingleCollection
 {
-
+    /**
+     * @param string $propertyName
+     *
+     * @return bool|mixed|string
+     * @throws \RuntimeException
+     */
     public function __get($propertyName)
     {
         switch ($propertyName) {
             case 'parentID':
                 return $this->FKValue[0];
-            case 'selFromDbAllQuery':    //$code='$fList='.$this->itemClass.'::getFieldsNameList();';
+            case 'selFromDbAllQuery':
+                //$code='$fList='.$this->itemClass.'::getFieldsNameList();';
                 //eval($code);
                 //'.$fList.'
                 $strQuery =
@@ -43,16 +49,29 @@ class ObjectSingleCollection extends ObjectCollection //implements IObjectSingle
 
     // with DataBase
     ///////////////////////////////////////////////////////////////////////////
+    /**
+     * @param \Colibri\Database\Object $id
+     *
+     * @return bool
+     */
     protected function addToDb(Database\Object &$id)
     {
         return true;
     }
 
+    /**
+     * @param mixed $id
+     *
+     * @return bool
+     */
     protected function delFromDb($id)
     {
         return true;
     }
 
+    /**
+     * @return bool
+     */
     protected function delFromDbAll()
     {
         return true;

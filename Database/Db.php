@@ -3,6 +3,9 @@ namespace Colibri\Database;
 
 use Colibri\Pattern\Helper;
 
+/**
+ * Instantiates and Stores all connections.
+ */
 class Db extends Helper
 {
     /**
@@ -15,6 +18,9 @@ class Db extends Helper
     private static $connection = [];
 
     /**
+     * First of all you need to set a config for your connections.
+     * В первую очередь вам нужно установить кофиг для ваших подключений.
+     *
      * @param array $config
      *
      * @return array
@@ -38,6 +44,9 @@ class Db extends Helper
     }
 
     /**
+     * Returns existing connection by config name or instantiate new one.
+     * Вазвращает существующее подключение по имени из конига или создаёт новое.
+     *
      * @param string $name connection name defined in config
      *
      * @return IDb
@@ -53,7 +62,8 @@ class Db extends Helper
     }
 
     /**
-     * Создает экземпляр класса используя настройки установленные ::setConfig
+     * Создает экземпляр класса используя настройки установленные ::setConfig()
+     * Creates instance of connection using configuration that was set by ::setConfig()
      *
      * @param string $name
      *

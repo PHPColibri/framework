@@ -12,25 +12,39 @@ use Colibri\Database;
  * Класс основан на DynamicCollection, по сему свои элементы подгружает
  * только тогда, когда идёт первое обращение к элементу коллекции.
  *
- * @property string $selFromDbAllQuery
- * @property mixed  $parentID
+ * @property string                           $selFromDbAllQuery
+ * @property mixed                            $parentID
+ * @property \Colibri\Database\Object[]|array $_items
  */
 abstract class ObjectCollection extends DynamicCollection implements IDynamicCollection//IObjectCollection
 {
+    /** @var string */
     protected static $tableName = 'tableName_not_set';
+    /** @var string */
     protected $itemClass = 'itemClass_not_set';
+    /** @var array */
     protected $FKName = ['_id', '_id'];
+    /** @var array */
     protected $FKValue = [null, null];
+    /** @var mixed */
     protected $_parentID;
+    /** @var array */
     protected $itemFields = [];
+    /** @var array */
     protected $itemFieldTypes = [];
 
+    /** @var array */
     protected $where = null;
+    /** @var array */
     protected $order_by = null;
+    /** @var array */
     protected $limit = null;
 
+    /** @var int */
     public $recordsPerPage = 20;
+    /** @var int */
     public $recordsCount = null;
+    /** @var int */
     public $pagesCount = null;
 
     /**
@@ -48,6 +62,7 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
      * @param array $rows
      *
      * @return bool
+     * @throws \Colibri\Database\Exception\SqlException
      */
     public function fillItems(array &$rows = null)
     {
@@ -63,6 +78,13 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
         return true;
     }
 
+    /**
+     * @param string $propertyName
+     * @param mixed  $propertyValue
+     *
+     * @return mixed
+     * @throws \RuntimeException
+     */
     public function __set($propertyName, $propertyValue)
     {
         switch ($propertyName) {
@@ -75,21 +97,34 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
 
     // with Items
     ///////////////////////////////////////////////////////////////////////////
-    final
-    protected function shiftLeftFromPos($pos)
+    /**
+     * @param int $position
+     *
+     * @throws \OutOfBoundsException
+     */
+    final protected function shiftLeftFromPos($position)
     {
         $cnt = count($this->_items);
-        if ($pos < 1 || $pos >= $cnt)
-            throw new \OutOfBoundsException("pos to shift from must be in range 1..Length-1");
-        for ($i = $pos; $i < $cnt; $i++)
+        if ($position < 1 || $position >= $cnt)
+            throw new \OutOfBoundsException("position to shift from must be in range 1..Length-1");
+        for ($i = $position; $i < $cnt; $i++)
             $this->_items[$i - 1] = $this->_items[$i];
     }
 
-    protected function addItem(Database\Object &$obj)
+    /**
+     * @param \Colibri\Database\Object $object
+     */
+    protected function addItem(Database\Object &$object)
     {
-        $this->_items[] = $obj;
+        $this->_items[] = $object;
     }
 
+    /**
+     * @param int $itemID
+     *
+     * @return bool|\Colibri\Database\Object
+     * @throws \OutOfBoundsException
+     */
     protected function delItem($itemID)
     {
         $pos = $this->indexOf($itemID);
@@ -102,6 +137,9 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
         return $item;
     }
 
+    /**
+     * @return void
+     */
     protected function clearItems()
     {
         $this->_items = [];
@@ -121,13 +159,29 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
 
     // with DataBase
     ///////////////////////////////////////////////////////////////////////////
+    /**
+     * @param \Colibri\Database\Object $id
+     */
     abstract protected function addToDb(Database\Object &$id);
 
+    /**
+     * @param mixed $id
+     *
+     * @return mixed
+     */
     abstract protected function delFromDb($id);
 
     //abstract	protected	function	selFromDbAll();
+
+    /**
+     * @return mixed
+     */
     abstract protected function delFromDbAll();
 
+    /**
+     * @return array
+     * @throws \Colibri\Database\Exception\SqlException
+     */
     protected function selFromDbAll()
     {
         $this->doQuery($this->selFromDbAllQuery);
@@ -136,13 +190,23 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
     }
 
     ///////////////////////////////////////////////////////////////////////////
-    protected function doQuery($strQuery)
+
+    /**
+     * @param string $query
+     *
+     * @return bool
+     * @throws \Colibri\Database\Exception\SqlException
+     */
+    protected function doQuery($query)
     {
-        $this->db()->query($strQuery);
+        $this->db()->query($query);
 
         return true;
     }
 
+    /**
+     * @return array
+     */
     protected function getFieldsAndTypes()
     {
         if (empty($this->itemFields)) {
@@ -154,6 +218,12 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
         return ['fields' => &$this->itemFields, 'types' => &$this->itemFieldTypes];
     }
 
+    /**
+     * @param array  $clauses
+     * @param string $type one of 'and'|'or'
+     *
+     * @return string
+     */
     protected function buildWhere(array &$clauses, $type)
     {
         $whereParts = [];
@@ -175,7 +245,12 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
         return '(' . implode(' ' . $type . ' ', $whereParts) . ')';
     }
 
-    protected function rebuildQueryForCustomLoad($strQuery)
+    /**
+     * @param string $query
+     *
+     * @return bool|mixed|string
+     */
+    protected function rebuildQueryForCustomLoad($query)
     {
         if ($this->where !== null) {
             if ($this->getFieldsAndTypes() === false)
@@ -192,26 +267,26 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
             } else
                 return false;
 
-            $strQuery .= ' AND ' . $this->buildWhere($clauses, $type);
+            $query .= ' AND ' . $this->buildWhere($clauses, $type);
 
             $this->where = null;
         }
 
         if ($this->order_by !== null) {
-            $strQuery .= ' ORDER BY ';
+            $query    .= ' ORDER BY ';
             $strOrder = '';
             foreach ($this->order_by as $name => $value)
                 $strOrder .= ', `' . $name . '` ' . $value;
-            $strQuery .= substr($strOrder, 2);
+            $query .= substr($strOrder, 2);
         }
 
         if ($this->limit !== null) {
-            $strQuery = str_ireplace('SELECT ', 'SELECT SQL_CALC_FOUND_ROWS ', $strQuery);
-            $strQuery .= ' LIMIT ' . implode(',', $this->limit);
+            $query = str_ireplace('SELECT ', 'SELECT SQL_CALC_FOUND_ROWS ', $query);
+            $query .= ' LIMIT ' . implode(',', $this->limit);
             //$this->limit=null; // its sets to <null> in load()
         }
 
-        return $strQuery;
+        return $query;
     }
     ///////////////////////////////////////////////////////////////////////////
 
@@ -228,6 +303,13 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
 
         return $this;
     }*/
+    /**
+     * @param array  $where
+     * @param string $type one of 'and'|'or'
+     *
+     * @return array
+     * @throws \InvalidArgumentException
+     */
     private function buildClauses(array $where, $type = 'and')
     {
         if (!in_array($type, ['and', 'or']))
@@ -243,13 +325,13 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
     /// additional function for custom load() /////////////////////////////////
     /**
      *
-     * @param array  $where
-     * @param string $type
+     * @param array  $where array('field [op]' => value, ...)
+     * @param string $type  one of 'and'|'or'
      *
-     * @return ObjectCollection|$this|Object[]
+     * @return $this|\Colibri\Database\ObjectCollection|\Object[]
+     * @throws \InvalidArgumentException
      */
-    final
-    public function where(array $where, $type = 'and')
+    final public function where(array $where, $type = 'and')
     {
         $where = $this->buildClauses($where, $type);
         if ($this->where === null) {
@@ -272,8 +354,7 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
      * @param array $where
      * @return ObjectCollection|$this|Object[]
      *//*
-	final
-	public	function	or_where(array $where)
+	final public function or_where(array $where)
 	{
 		return $this->whereClauses($where,'OR');
 	}*/
@@ -282,8 +363,7 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
      *
      * @return ObjectCollection|$this|Object[]
      */
-    final
-    public function wherePlan(array $plan)
+    final public function wherePlan(array $plan)
     {
         $this->where = $plan;
 
@@ -297,8 +377,7 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
      *
      * @return ObjectCollection|$this|Object[]
      */
-    final
-    public function order_by(array $order_by)
+    final public function order_by(array $order_by)
     {
         $this->order_by = $order_by;
 
@@ -312,8 +391,7 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
      *
      * @return ObjectCollection|$this|Object[]
      */
-    final
-    public function limit($offset_or_count, $count = null)
+    final public function limit($offset_or_count, $count = null)
     {
         if ($count === null) {
             $this->limit['offset'] = 0;
@@ -345,15 +423,29 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
 
 
     ///////////////////////////////////////////////////////////////////////////
-    public function add(Database\Object &$obj)
+
+    /**
+     * @param \Colibri\Database\Object $object
+     *
+     * @return bool
+     * @throws \Colibri\Database\Exception\SqlException
+     */
+    public function add(Database\Object &$object)
     {
         if ($this->_items === null) if (!$this->fillItems()) return false;
-        if (!$this->addToDb($obj)) return false;
-        $this->addItem($obj);
+        if (!$this->addToDb($object)) return false;
+        $this->addItem($object);
 
         return true;
     }
 
+    /**
+     * @param mixed $itemID
+     *
+     * @return bool|\Colibri\Database\Object
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \OutOfBoundsException
+     */
     public function remove($itemID)
     {
         if ($this->_items === null) if (!$this->fillItems()) return false;
@@ -364,6 +456,9 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
         return $item;
     }
 
+    /**
+     * @return bool
+     */
     public function clear()
     {
         if (!$this->delFromDbAll()) return false;
@@ -372,6 +467,12 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
         return true;
     }
 
+    /**
+     * @param mixed $parentID
+     *
+     * @return bool
+     * @throws \Colibri\Database\Exception\SqlException
+     */
     public function load($parentID = null)
     {
         if ($parentID !== null) $this->parentID = $parentID;
@@ -393,11 +494,20 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
         return true;
     }
 
+    /**
+     * @return bool
+     * @throws \Colibri\Database\Exception\SqlException
+     */
     public function reload()
     {
         return $this->load();
     }
 
+    /**
+     * @param int $itemID
+     *
+     * @return int
+     */
     public function indexOf($itemID)
     {
         $cnt = count($this);
@@ -408,10 +518,15 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
         return -1;
     }
 
+    /**
+     * @param int $itemID
+     *
+     * @return bool
+     */
     public function contains($itemID)
     {
         if ($this->indexOf($itemID) == -1) return false;
-        else                                return true;
+        else                               return true;
     }
 
     /**
@@ -421,10 +536,12 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
      */
     public function    &getItemByID($id)
     {
-        $count = count($this->_items);
+        if (!$count = count($this->_items))
+            return false;
         /** @var \Colibri\Database\Object $itemClass */
         $itemClass = $this->itemClass;
-        if ($count > 0) $PKfn = $itemClass::$PKFieldName[0];
+        /** @noinspection PhpUndefinedVariableInspection */
+        $PKfn = $itemClass::$PKFieldName[0];
         for ($i = 0; $i < $count; $i++)
             if (isset($this->_items[$i]->$PKfn) && $this->_items[$i]->$PKfn == $id)
                 return $this->_items[$i];
@@ -452,6 +569,12 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
         return $arr;
     }
 
+    /**
+     * @param string $fieldName
+     * @param string $glue
+     *
+     * @return string
+     */
     public function implode($fieldName, $glue = ', ')
     {
         return implode($glue, $this->toArrayOf($fieldName));

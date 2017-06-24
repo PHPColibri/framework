@@ -8,10 +8,6 @@ use Colibri\Database\Exception\SqlException;
 /**
  * Абстрактный класс объекта базы данных.
  *
- * @author         Александр Чибрикин aka alek13 <alek13.me@gmail.com>
- * @package        Colibri
- * @subpackage     Database
- *
  * @property         int|string $id
  *
  * @method string createQuery()
@@ -19,26 +15,35 @@ use Colibri\Database\Exception\SqlException;
  * @method string saveQuery()
  * @method string loadQuery()
  */
-abstract
-class Object implements IObject
+abstract class Object implements IObject
 {
     const    NEW_OBJECT = -1;
     const    LOAD_ERROR = -2;
 
-    static public $debug = true;
+    /** @var bool */
+    public static $debug = true;
 
+    /** @var string */
     protected static $tableName = 'tableName_not_set';
+    /** @var array */
     protected static $PKFieldName = ['id'];
 
+    /** @var array */
     protected $intermediate;
 
+    /** @var array */
     protected $fieldsNameValuesArray = null;
+    /** @var array */
     protected $where = null;
 
+    /** @var array */
     protected $fields = [];
+    /** @var array */
     protected $fieldTypes = [];
+    /** @var array */
     public $fieldLengths = [];
 
+    /** @var string */
     protected static $connectionName = 'default';
 
     /**
@@ -89,7 +94,7 @@ class Object implements IObject
     /**
      * @param string $field
      *
-     * @return mixed
+     * @return array|mixed
      */
     public function getIntermediate($field = null)
     {
@@ -99,7 +104,7 @@ class Object implements IObject
     }
 
     /**
-     * @param mixed $id_or_where
+     * @param mixed|array $id_or_where
      *
      * @return static
      * @throws DbException
@@ -116,7 +121,7 @@ class Object implements IObject
     }
 
     /**
-     * @param mixed $id_or_where
+     * @param mixed|array $id_or_where
      *
      * @return static
      * @throws DbException
@@ -171,8 +176,8 @@ class Object implements IObject
     }
     /**************************************************************************/
     /**
-     * @param $name
-     * @param $value
+     * @param string $name
+     * @param mixed  $value
      *
      * @return string
      * @throws DbException
@@ -276,8 +281,8 @@ class Object implements IObject
     }
 
     /**
-     * @param $name
-     * @param $arguments
+     * @param string $name
+     * @param array  $arguments
      *
      * @return mixed
      * @throws \Exception
@@ -324,8 +329,8 @@ class Object implements IObject
     }
 
     /**
-     * @param $name
-     * @param $relationsDefinition
+     * @param string $name
+     * @param array  $relationsDefinition
      *
      * @return Object|ObjectCollection|ObjectSingleCollection|ObjectMultiCollection
      */
@@ -342,8 +347,8 @@ class Object implements IObject
     }
 
     /**
-     * @param $propertyName
-     * @param $propertyValue
+     * @param string $propertyName
+     * @param mixed  $propertyValue
      *
      * @return mixed
      * @throws \Exception
@@ -405,7 +410,7 @@ class Object implements IObject
     }
 
     /**
-     * @param null $id_or_where
+     * @param mixed|array $id_or_where
      *
      * @return bool
      * @throws DbException
@@ -453,13 +458,18 @@ class Object implements IObject
         return (new static())->create($values);
     }
 
+    /**
+     * @return bool|null
+     * @throws \Colibri\Database\DbException
+     * @throws \Exception
+     */
     public function reload()
     {
         return $this->load();
     }
 
     /**
-     * @param null $id_or_where
+     * @param mixed|array $id_or_where
      *
      * @return bool|null
      * @throws DbException
@@ -492,14 +502,13 @@ class Object implements IObject
      * @throws DbException
      * @throws \Exception
      */
-    static
-    public function getById($id)
+    public static function getById($id)
     {
         return static::get($id);
     }
 
     /**
-     * @param $sqlQuery
+     * @param string $sqlQuery
      *
      * @return bool|null
      * @throws DbException
@@ -590,15 +599,15 @@ class Object implements IObject
     }
 
     /**
-     * @param $arrQueries
+     * @param array $queries
      *
      * @return bool
      * @throws DbException
      * @throws \Exception
      */
-    protected function doTransaction($arrQueries)
+    protected function doTransaction(array $queries)
     {
-        self::db()->commit($arrQueries);
+        self::db()->commit($queries);
 
         return true;
     }
