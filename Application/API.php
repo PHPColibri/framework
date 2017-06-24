@@ -170,10 +170,10 @@ class API
     }
 
     /**
-     * @param string $sessionKey
-     * @param array  $values
+     * @param string     $sessionKey
+     * @param array|null $values
      */
-    protected static function pass($sessionKey, array $values)
+    protected static function pass($sessionKey, array $values = null)
     {
         if ($values === null) {
             unset($_SESSION[$sessionKey]);
@@ -191,8 +191,8 @@ class API
      * передаёт устанавливает и передаёт ошибки следующему вызванному скрипту-странице (однократно - удаляется в
      * след.вызв-ом скрипте само).
      *
-     * @param array $errors повторный вызов добавляет или перезаписывет с существующие ключами. вызов со значением null
-     *                      стирает ошибки и отменяет передачу в след. контроллер
+     * @param array|null $errors повторный вызов добавляет или перезаписывет с существующими ключами.
+     *                           вызов со значением null стирает ошибки и отменяет передачу в след. контроллер
      */
     public static function passErrors(array $errors = null)
     {
@@ -202,8 +202,9 @@ class API
     /**
      * передаёт переменные в следующий вызванный скрипт
      *
-     * @param array $vars передаваемые переменные в виде ассоциативного массива. повторный вызов затирает предыдущее, а
-     *                    со значением null отменяет передачу
+     * @param array|null $vars передаваемые переменные в виде ассоциативного массива.
+     *                         повторный вызов добавляет или перезаписывет с существующими ключами.
+     *                         вызов со значением null стирает ошибки и отменяет передачу в след. контроллер
      */
     public static function passVars(array $vars = null)
     {
