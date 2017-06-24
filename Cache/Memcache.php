@@ -108,7 +108,7 @@ class Memcache extends Helper implements ICache
             ->set(
                 $key,
                 serialize($val),
-                !MEMCACHE_COMPRESSED, // @todo здесь какая-то лажа (надо бы перейти на Memcached)
+                ! MEMCACHE_COMPRESSED, // @todo здесь какая-то лажа (надо бы перейти на Memcached)
                 $expire !== null ? $expire : self::$defaultExpiration
             )
             ;

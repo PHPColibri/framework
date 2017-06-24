@@ -36,7 +36,7 @@ class Arr extends Helper
         if (isset($array[$dottedKey])) return $array[$dottedKey];
 
         foreach (explode('.', $dottedKey) as $segment) {
-            if (!is_array($array) || !array_key_exists($segment, $array)) {
+            if ( ! is_array($array) || ! array_key_exists($segment, $array)) {
                 return $default;
             }
             $array = $array[$segment];

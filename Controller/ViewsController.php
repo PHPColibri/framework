@@ -84,7 +84,7 @@ abstract class ViewsController extends Base
      */
     public function tearDown()
     {
-        if (!$this->useTemplate) {
+        if ( ! $this->useTemplate) {
             return;
         }
 
@@ -97,7 +97,7 @@ abstract class ViewsController extends Base
         }
 
 
-        if (!$this->useBackbone) {
+        if ( ! $this->useBackbone) {
             if ($this->template->getFilename() === null) {
                 throw new \Exception('template not loaded.');
             }

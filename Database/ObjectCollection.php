@@ -233,9 +233,9 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
             if (is_array($value) && ($name == 'and' || $name == 'or')) {
                 $whereParts[] = $this->buildWhere($value, $name);
             } else {
-                if (!is_array($name = explode(' ', $name, 2)))
+                if ( ! is_array($name = explode(' ', $name, 2)))
                     $name = [$name];
-                if (!isset($name[1]))
+                if ( ! isset($name[1]))
                     $name[1] = $value === null ? 'is' : '=';
 
                 $whereParts[] = '`' . $name[0] . '` ' . $name[1] . ' ' . $this->db()->prepareValue($value, $this->itemFieldTypes[$name[0]]);
@@ -312,7 +312,7 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
      */
     private function buildClauses(array $where, $type = 'and')
     {
-        if (!in_array($type, ['and', 'or']))
+        if ( ! in_array($type, ['and', 'or']))
             throw new \InvalidArgumentException('where-type must be `and` or `or`');
         $whereClauses = [];
         foreach ($where as $name => $value)
@@ -432,8 +432,8 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
      */
     public function add(Database\Object &$object)
     {
-        if ($this->_items === null) if (!$this->fillItems()) return false;
-        if (!$this->addToDb($object)) return false;
+        if ($this->_items === null) if ( ! $this->fillItems()) return false;
+        if ( ! $this->addToDb($object)) return false;
         $this->addItem($object);
 
         return true;
@@ -448,8 +448,8 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
      */
     public function remove($itemID)
     {
-        if ($this->_items === null) if (!$this->fillItems()) return false;
-        if (!$this->delFromDb($itemID)) return false;
+        if ($this->_items === null) if ( ! $this->fillItems()) return false;
+        if ( ! $this->delFromDb($itemID)) return false;
         if (($item = $this->delItem($itemID)) === false)
             return false;
 
@@ -461,7 +461,7 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
      */
     public function clear()
     {
-        if (!$this->delFromDbAll()) return false;
+        if ( ! $this->delFromDbAll()) return false;
         $this->clearItems();
 
         return true;
@@ -476,7 +476,7 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
     public function load($parentID = null)
     {
         if ($parentID !== null) $this->parentID = $parentID;
-        if (!is_array($rows = $this->selFromDbAll()))
+        if ( ! is_array($rows = $this->selFromDbAll()))
             return false;
 
         if ($this->limit !== null) {
@@ -488,7 +488,7 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
             $this->limit        = null;
         }
 
-        if (!$this->fillItems($rows))
+        if ( ! $this->fillItems($rows))
             return false;
 
         return true;
@@ -536,7 +536,7 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
      */
     public function    &getItemByID($id)
     {
-        if (!$count = count($this->_items))
+        if ( ! $count = count($this->_items))
             return false;
         /** @var \Colibri\Database\Object $itemClass */
         $itemClass = $this->itemClass;
@@ -613,7 +613,7 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
      */
     public function get()
     {
-        if (!$this->load())
+        if ( ! $this->load())
             throw new DbException('failed to load collection');
 
         return $this;

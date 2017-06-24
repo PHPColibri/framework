@@ -35,7 +35,7 @@ class Image
 
         if ($resizeType == self::RESIZE_FILLED) {
             // Fill the image gray
-            if (!@imagefilledrectangle($new_img, 0, 0, $width - 1, $height - 1, $bgColor))
+            if ( ! @imagefilledrectangle($new_img, 0, 0, $width - 1, $height - 1, $bgColor))
                 throw new \Exception('can`t create thumbnail: can`t fill new image by bg-color');
         }
 
@@ -44,7 +44,7 @@ class Image
             $src_x, $src_y, $src_w, $src_h,
             $dst_x, $dst_y, $dst_w, $dst_h,
             ) = self::calcResizeParams($resizeType, $img, $width, $height);
-        if (!@imagecopyresampled($new_img, $img, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h))
+        if ( ! @imagecopyresampled($new_img, $img, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h))
             throw new \Exception('can`t create thumbnail: can`t resize image');
 
         return self::getJpegToVar($new_img);
@@ -148,7 +148,7 @@ class Image
                 throw new \Exception('can`t create thumbnail: unknown image type');
         }
 
-        if (!$img)
+        if ( ! $img)
             throw new \Exception('can`t create thumbnail: can`t create image handle from file ' . $path);
 
         return $img;
@@ -164,7 +164,7 @@ class Image
     {
         $width  = imageSX($img);
         $height = imageSY($img);
-        if (!$width || !$height)
+        if ( ! $width || ! $height)
             throw new \Exception('can`t create thumbnail: can`t get image size, invalid image width or height');
 
         return [$width, $height];
@@ -180,7 +180,7 @@ class Image
     {
         // Use a output buffering to load the image into a variable
         ob_start();
-        if (!@imagejpeg($img)) {
+        if ( ! @imagejpeg($img)) {
             ob_end_clean();
             throw new \Exception('can`t create thumbnail: can`t output thumbnail into var');
         }

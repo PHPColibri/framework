@@ -76,7 +76,7 @@ class ObjectMultiCollection extends ObjectCollection //implements IObjectMultiCo
      */
     protected function instantiateItem(array $row)
     {
-        if (!count($this->intermediateFields)) {
+        if ( ! count($this->intermediateFields)) {
             return parent::instantiateItem($row);
         }
 
@@ -121,7 +121,7 @@ class ObjectMultiCollection extends ObjectCollection //implements IObjectMultiCo
      */
     protected function selFromDbAll()
     {
-        if (!($this->doQuery($this->selFromDbAllQuery)))
+        if ( ! ($this->doQuery($this->selFromDbAllQuery)))
             return false;
 
         return $this->db()->fetchAllRows();

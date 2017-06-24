@@ -55,7 +55,7 @@ class PhpTemplate
     {
         if ($filename === null) $filename = $this->filename;
         if ($filename === null) throw new \Exception('Can`t load template: property \'filename\' not set.');
-        if (!file_exists($filename)) throw new \Exception("file '$filename' does not exists.");
+        if ( ! file_exists($filename)) throw new \Exception("file '$filename' does not exists.");
         $this->filename = $filename;
 
         return $this;

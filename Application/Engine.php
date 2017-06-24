@@ -221,14 +221,14 @@ class Engine extends Engine\Base
         $this->loadModule($division, $module, $type);
 
         $className = ucfirst($module) . ucfirst($division) . ($type == CallType::view ? 'Views' : 'Methods') . 'Controller';
-        if (!class_exists($className))
+        if ( ! class_exists($className))
             throw new Exception\NotFoundException("Class '$className' does not exists.");
         /** @var ViewsController|MethodsController $responser */
         $responser        = new $className($division, $module, $method);
         $this->_responser =& $responser;
 
         $classMethods = get_class_methods($className);
-        if (!in_array($method, $classMethods))
+        if ( ! in_array($method, $classMethods))
             throw new Exception\NotFoundException("Method '$method' does not contains in class '$className'.");
 
         call_user_func_array([&$responser, 'setUp'], $params);
@@ -264,7 +264,7 @@ class Engine extends Engine\Base
         else if ($type == CallType::method) $fileName .= $mName . 'Methods.php';
         else                                throw new LogicException("Unknown CallType $type");
 
-        if (!file_exists($fileName))
+        if ( ! file_exists($fileName))
             throw new Exception\NotFoundException("Can't load module: file '$fileName' does not exists.");
         else
             // @todo remove this (carefully)

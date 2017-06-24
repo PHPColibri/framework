@@ -168,10 +168,10 @@ class Layout extends Helper
         $layoutTplVars            = [];
         $layoutTplVars['content'] = $content;
         //TODO: special chars
-        $layoutTplVars['keywords'] = !empty(static::$keywords) ? "<meta name='keywords' content='" . static::$keywords . "' />\n" : '';
-        $layoutTplVars['title']    = !empty(static::$title) ? "<title>" . htmlspecialchars(static::$title) . "</title>\n" : '';
+        $layoutTplVars['keywords'] = ! empty(static::$keywords) ? "<meta name='keywords' content='" . static::$keywords . "' />\n" : '';
+        $layoutTplVars['title']    = ! empty(static::$title) ? "<title>" . htmlspecialchars(static::$title) . "</title>\n" : '';
         //TODO: special chars
-        $layoutTplVars['description'] = !empty(static::$description) ? "<meta name='description' content='" . static::$description . "' />\n" : '';
+        $layoutTplVars['description'] = ! empty(static::$description) ? "<meta name='description' content='" . static::$description . "' />\n" : '';
         $layoutTplVars['javascript']  = '';
         $layoutTplVars['css']         = '';
 

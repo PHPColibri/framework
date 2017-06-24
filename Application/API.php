@@ -121,7 +121,7 @@ class API
     {
         $params = func_get_args();
 
-        if (Config::application('useCache') && !DEBUG) {
+        if (Config::application('useCache') && ! DEBUG) {
             $key      = self::getCacheKeyForCall($params);
             $retValue = Memcache::remember($key, function () use ($params) {
                 return call_user_func_array([self, 'callModuleMethod'], $params);
@@ -146,7 +146,7 @@ class API
     {
         $params = func_get_args();
 
-        if (Config::application('useCache') && !DEBUG) {
+        if (Config::application('useCache') && ! DEBUG) {
             $key      = self::getCacheKeyForCall($params);
             $retValue = Memcache::remember($key, function () use ($params) {
                 return call_user_func_array(['self', 'getModuleView'], $params);

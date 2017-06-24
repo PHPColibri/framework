@@ -96,7 +96,7 @@ class Validation extends PropertyAccess
             foreach ($key as $name)
                 $this->required($name, $message);
         else
-            if (!(isset($this->scope[$key]) && !empty($this->scope[$key])))
+            if ( ! (isset($this->scope[$key]) && ! empty($this->scope[$key])))
                 $this->_errors[$key] = sprintf($message !== null ? $message : self::$requiredMessage, $key);
 
         return $this;
@@ -159,7 +159,7 @@ class Validation extends PropertyAccess
             foreach ($key as $k => $name)
                 $this->regex($name, is_array($pattern) ? $pattern[$k] : $pattern, $message);
         else
-            if (isset($this->scope[$key]) && !(bool)preg_match($pattern, $this->scope[$key]))
+            if (isset($this->scope[$key]) && ! (bool)preg_match($pattern, $this->scope[$key]))
                 $this->_errors[$key] = sprintf($message !== null ? $message : self::$regexMessage, $key);
 
         return $this;
@@ -179,7 +179,7 @@ class Validation extends PropertyAccess
             foreach ($key as $name)
                 $this->isIntGt0($name, $message);
         else
-            if (isset($this->scope[$key]) && !(Str::isInt($this->scope[$key]) && ((int)$this->scope[$key]) > 0))
+            if (isset($this->scope[$key]) && ! (Str::isInt($this->scope[$key]) && ((int)$this->scope[$key]) > 0))
                 $this->_errors[$key] = sprintf($message !== null ? $message : self::$isIntGt0Message, $key);
 
         return $this;
@@ -199,7 +199,7 @@ class Validation extends PropertyAccess
             foreach ($key as $name)
                 $this->isJSON($name, $message);
         else
-            if (isset($this->scope[$key]) && !Str::isJSON($this->scope[$key]))
+            if (isset($this->scope[$key]) && ! Str::isJSON($this->scope[$key]))
                 $this->_errors[$key] = sprintf($message !== null ? $message : self::$isJSONMessage, $key);
 
         return $this;
@@ -219,7 +219,7 @@ class Validation extends PropertyAccess
             foreach ($key as $name)
                 $this->isEmail($name, $message);
         else
-            if (isset($this->scope[$key]) && !Str::isEmail($this->scope[$key]))
+            if (isset($this->scope[$key]) && ! Str::isEmail($this->scope[$key]))
                 $this->_errors[$key] = sprintf($message !== null ? $message : self::$isEmailMessage, $key);
 
         return $this;
@@ -271,7 +271,7 @@ class Validation extends PropertyAccess
             foreach ($key as $name)
                 $this->is($checkFunc, $name, $message);
         else
-            if (isset($this->scope[$key]) && !call_user_func($checkFunc, $this->scope[$key]))
+            if (isset($this->scope[$key]) && ! call_user_func($checkFunc, $this->scope[$key]))
                 $this->_errors[$key] = sprintf($message, $key);
 
         return $this;
@@ -308,7 +308,7 @@ class Validation extends PropertyAccess
      */
     public function valid()
     {
-        return !(bool)count($this->_errors);
+        return ! (bool)count($this->_errors);
     }
 
     /**
@@ -335,7 +335,7 @@ class Validation extends PropertyAccess
      */
     public function ifNotValid(\Closure $callback)
     {
-        if (!$this->valid())
+        if ( ! $this->valid())
             $callback($this->_errors);
 
         return $this;

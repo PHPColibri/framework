@@ -63,7 +63,7 @@ class MySQL extends AbstractDb
         } catch (\Exception $exception) {
             throw new DbException('can\'t connect to database: ' . $exception->getMessage(), $exception->getCode(), $exception);
         }
-        if (!$this->connect)
+        if ( ! $this->connect)
             throw new DbException('can\'t connect to database: ' . $this->connect->connect_error, $this->connect->connect_errno);
 
         if ($this->connect->select_db($this->database) === false)
@@ -91,7 +91,7 @@ class MySQL extends AbstractDb
      */
     public function close()
     {
-        if (!($closed = $this->connect->close()))
+        if ( ! ($closed = $this->connect->close()))
             throw new DbException('can\'t close database connection: ' . $this->connect->error, $this->connect->errno);
 
         return true;
@@ -409,9 +409,9 @@ class MySQL extends AbstractDb
      */
     public function commit(array $queries)
     {
-        if (!$this->transactionStart()) return false;
-        if (!$this->queries($queries, true)) return false;
-        if (!$this->transactionCommit()) return false;
+        if ( ! $this->transactionStart()) return false;
+        if ( ! $this->queries($queries, true)) return false;
+        if ( ! $this->transactionCommit()) return false;
 
         return true;
     }

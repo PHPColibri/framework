@@ -72,8 +72,8 @@ class Log extends Helper
         if (static::$config === null)
             static::loadFromConfig();
 
-        if (!file_exists(self::$config['folder']))
-            if (!mkdir(self::$config['folder'], 0777, true)) // 0777 - just default value, which means that need to use umask()
+        if ( ! file_exists(self::$config['folder']))
+            if ( ! mkdir(self::$config['folder'], 0777, true)) // 0777 - just default value, which means that need to use umask()
                 return false;
         $filename = self::$config['folder'] . '/' . self::$config['prefix'] . '.' . $who . '.log';
 
@@ -89,7 +89,7 @@ class Log extends Helper
     private static function fwrite($filename, $str)
     {
         $f = @fopen($filename, 'a+');
-        if (!$f)
+        if ( ! $f)
             return false;
         fwrite($f, $str);
         fclose($f);

@@ -352,7 +352,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
         $validation
             ->extendScope(['no-cut-message' => 'some text, that does not contains "cut" bb tag'])
             ->isNot(function ($value) {
-                return !Str::isEmail($value);
+                return ! Str::isEmail($value);
             }, 'login', 'field \'%s\' must be a mail')
         ;
         $this->assertEquals(1, count($validation->errors));

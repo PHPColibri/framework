@@ -75,7 +75,7 @@ abstract class Object implements IObject
             if (is_array($id_or_row))
                 $this->fillProperties($id_or_row);
             else
-                if (!$this->load($id_or_row))
+                if ( ! $this->load($id_or_row))
                     $this->{static::$PKFieldName[0]} = self::LOAD_ERROR;
     }
 
@@ -131,7 +131,7 @@ abstract class Object implements IObject
     public static function get($id_or_where)
     {
         $dbObject = static::find($id_or_where);
-        if (!$dbObject)
+        if ( ! $dbObject)
             throw new NotFoundException('Model not found');
 
         return $dbObject;
@@ -206,7 +206,7 @@ abstract class Object implements IObject
         foreach ($obj as $propName => $propValue)
             if (in_array($propName, $this->fields) && (
                 $this->fieldsNameValuesArray === null
-                    ? !in_array($propName, static::$PKFieldName)
+                    ? ! in_array($propName, static::$PKFieldName)
                     : true
                 )
             )
@@ -252,7 +252,7 @@ abstract class Object implements IObject
     protected function fillProperties(array $row, $cast = true)
     {
         foreach ($row as $propName => $propValue) {
-            if ($propValue === null || !$cast) {
+            if ($propValue === null || ! $cast) {
                 $this->$propName = $propValue;
                 continue;
             }
@@ -486,9 +486,9 @@ abstract class Object implements IObject
             }
         else
             ;
-        if (!$this->doQuery($this->loadQuery())) return false;// sql error
+        if ( ! $this->doQuery($this->loadQuery())) return false;// sql error
         if (self::db()->getNumRows() == 0) return null; // no  record
-        if (!$result = self::db()->fetchArray()) return false;
+        if ( ! $result = self::db()->fetchArray()) return false;
         $this->fillProperties($result);
 
         return true;
@@ -516,9 +516,9 @@ abstract class Object implements IObject
      */
     protected function loadByQuery($sqlQuery)
     {
-        if (!$this->doQuery($sqlQuery)) return false;// sql error
+        if ( ! $this->doQuery($sqlQuery)) return false;// sql error
         if (self::db()->getNumRows() == 0) return null; // no  record
-        if (!$result = self::db()->fetchArray()) return false;
+        if ( ! $result = self::db()->fetchArray()) return false;
         $this->fillProperties($result);
 
         return true;

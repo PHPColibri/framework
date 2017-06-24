@@ -34,7 +34,7 @@ abstract class AbstractDb implements IDb
      */
     public function &getColumnsMetadata($tableName)
     {
-        if (!isset(self::$columnsMetadata[$tableName]))
+        if ( ! isset(self::$columnsMetadata[$tableName]))
             self::$columnsMetadata[$tableName] = (static::$useMemcacheForMetadata
                 ? Memcache::remember($this->database . '.' . $tableName . '.meta', function () use ($tableName) {
                     return $this->retrieveColumnsMetadata($tableName);
@@ -68,7 +68,7 @@ abstract class AbstractDb implements IDb
     public function queries(array $queries, $rollbackOnFail = false)
     {
         foreach ($queries as &$query)
-            if (!$this->query($query . ';'))
+            if ( ! $this->query($query . ';'))
                 return $rollbackOnFail ? $this->transactionRollback() && false : false;
 
         return true;

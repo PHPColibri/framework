@@ -111,8 +111,8 @@ class Config extends Helper
     }
 
     /**
-     * @param string $name       config file name
-     * @param array  $arguments  (string $key, mixed $default = null)
+     * @param string $name      config file name
+     * @param array  $arguments (string $key, mixed $default = null)
      *
      * @return mixed
      * @throws \InvalidArgumentException if can`t get the real-path of config file
