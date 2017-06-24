@@ -3,11 +3,20 @@ namespace Colibri\Validation;
 
 use Exception;
 
+/**
+ * Exception for Validation rules fails.
+ * Stores Validation errors for retrieve them in catch block.
+ */
 class ValidationException extends Exception
 {
+    /**
+     * @var array stored validation errors
+     */
     protected $errors = [];
 
     /**
+     * Create new instance.
+     *
      * @param array     $errors
      * @param Exception $previous
      */
@@ -18,6 +27,8 @@ class ValidationException extends Exception
     }
 
     /**
+     * Retrieve validation errors.
+     *
      * @return array
      */
     public function getErrors()

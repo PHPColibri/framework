@@ -6,35 +6,48 @@ use Colibri\Util\Arr;
 use Colibri\Util\Str;
 
 /**
- * Description of Validation
- *
- * @author         Александр Чибрикин aka alek13 <alek13.me@mail.ru>
- * @package        xTeam
- * @version        1.00.0
+ * Organize Validation of your data.
  *
  * @property array $errors array of validation errors.
  */
 class Validation extends PropertyAccess
 {
-    static public $requiredMessage = 'поле \'%s\' является обязательным для заполнения.';
-    static public $minLengthMessage = 'поле \'%s\' должно быть не меньше %d символов.';
-    static public $maxLengthMessage = 'поле \'%s\' не должно быть больше %d символов.';
-    static public $regexMessage = 'поле \'%s\' не удовлетворяет условию.';
-    static public $isIntGt0Message = 'поле \'%s\' должно быть целым числом больше 0.';
-    static public $isJSONMessage = 'поле \'%s\' должно быть строкой в формате JSON.';
-    static public $isEmailMessage = 'поле \'%s\' должно содержать существующий почтовый ящик.';
-    static public $isEqualMessage = 'поля \'%s\' должны быть одинаковыми.';
+    public static $requiredMessage = 'поле \'%s\' является обязательным для заполнения.';
+    public static $minLengthMessage = 'поле \'%s\' должно быть не меньше %d символов.';
+    public static $maxLengthMessage = 'поле \'%s\' не должно быть больше %d символов.';
+    public static $regexMessage = 'поле \'%s\' не удовлетворяет условию.';
+    public static $isIntGt0Message = 'поле \'%s\' должно быть целым числом больше 0.';
+    public static $isJSONMessage = 'поле \'%s\' должно быть строкой в формате JSON.';
+    public static $isEmailMessage = 'поле \'%s\' должно содержать существующий почтовый ящик.';
+    public static $isEqualMessage = 'поля \'%s\' должны быть одинаковыми.';
 
+    /**
+     * @var array occurred validation errors
+     */
     protected $_errors = [];
+    /**
+     * @var array scope of data to validate
+     */
     protected $scope = [];
 
-
+    /**
+     * Validation constructor.
+     *
+     * @param array $scope initial scope of data to validate.
+     */
     public function __construct(array $scope = null)
     {
         if ($scope !== null)
             $this->scope = $scope;
     }
 
+    /**
+     * Adds additional data to existing scope.
+     *
+     * @param array $scope
+     *
+     * @return $this
+     */
     public function extendScope(array $scope)
     {
         $this->scope = array_merge($this->scope, $scope);
@@ -43,6 +56,7 @@ class Validation extends PropertyAccess
     }
 
     /**
+     * Resets scope with new one & resets the errors.
      *
      * @param array $scope
      *
@@ -56,6 +70,12 @@ class Validation extends PropertyAccess
         return $this;
     }
 
+    /**
+     * Adds specified error $message for $key.
+     *
+     * @param $key
+     * @param $message
+     */
     public function addError($key, $message)
     {
         $this->_errors[$key] = $message;
@@ -63,6 +83,8 @@ class Validation extends PropertyAccess
 
 
     /**
+     * 'Required' validation rule. Checks if specified by $key data exists in scope.
+     *
      * @param string|array $key
      * @param string       $message
      *
@@ -81,9 +103,11 @@ class Validation extends PropertyAccess
     }
 
     /**
-     * @param      $key
-     * @param      $minLength
-     * @param null $message
+     * 'MinLength' validation rule. Checks that specified by $key data not shorter than $minLength.
+     *
+     * @param string|array $key
+     * @param int|array    $minLength
+     * @param string       $message
      *
      * @return $this
      */
@@ -100,6 +124,8 @@ class Validation extends PropertyAccess
     }
 
     /**
+     * 'MaxLength' validation rule. Checks that specified by $key data not longer than $maxLength.
+     *
      * @param string|array $key
      * @param int|array    $maxLength
      * @param string       $message
@@ -119,8 +145,10 @@ class Validation extends PropertyAccess
     }
 
     /**
+     * 'Regex' validation rule. Checks that specified by $key data matches to $pattern.
+     *
      * @param string|array $key
-     * @param              $pattern
+     * @param string       $pattern
      * @param string       $message
      *
      * @return $this
@@ -138,6 +166,8 @@ class Validation extends PropertyAccess
     }
 
     /**
+     * 'IsIntGt0' validation rule. Checks that specified by $key data is integer and greater than zero.
+     *
      * @param string|array $key
      * @param string       $message
      *
@@ -156,6 +186,8 @@ class Validation extends PropertyAccess
     }
 
     /**
+     * 'IsJSON' validation rule. Checks that specified by $key data stores a JSON string.
+     *
      * @param string|array $key
      * @param string       $message
      *
@@ -174,6 +206,8 @@ class Validation extends PropertyAccess
     }
 
     /**
+     * 'IsEmail' validation rule. Checks that specified by $key data stores a string with email.
+     *
      * @param string|array $key
      * @param string       $message
      *
@@ -192,6 +226,8 @@ class Validation extends PropertyAccess
     }
 
     /**
+     * 'IsEqual' validation rule. Checks that specified by $keys values are equal.
+     *
      * @param array  $keys
      * @param string $message
      *
@@ -218,6 +254,8 @@ class Validation extends PropertyAccess
     }
 
     /**
+     * >     * 'Is' validation rule. Custom rule specified by $checkFunc().
+     *
      * @param callable     $checkFunc
      * @param string|array $key
      * @param string       $message
@@ -240,6 +278,7 @@ class Validation extends PropertyAccess
     }
 
     /**
+     * 'Is' validation rule. Custom rule specified by $checkFunc(). Checks that data NOT satisfies to rule.
      *
      * @param callable $checkFunc
      * @param string   $key
@@ -263,6 +302,8 @@ class Validation extends PropertyAccess
     }
 
     /**
+     * Checks if scope data is valid or not.
+     *
      * @return bool
      */
     public function valid()
@@ -271,6 +312,8 @@ class Validation extends PropertyAccess
     }
 
     /**
+     * Calls $callback if scope is valid.
+     *
      * @param \Closure $callback
      *
      * @return $this
@@ -284,6 +327,8 @@ class Validation extends PropertyAccess
     }
 
     /**
+     * Calls $callback if scope is NOT valid.
+     *
      * @param \Closure $callback
      *
      * @return $this
@@ -297,6 +342,8 @@ class Validation extends PropertyAccess
     }
 
     /**
+     * Validates the data scope.
+     *
      * @throws ValidationException
      * @return $this
      */
@@ -310,6 +357,8 @@ class Validation extends PropertyAccess
     }
 
     /**
+     * Creates new Validation instance with $scope injected.
+     *
      * @param array $scope
      *
      * @return static
@@ -320,7 +369,8 @@ class Validation extends PropertyAccess
     }
 
     /**
-     * Gets from $_POST only needed keys and use new as scope
+     * Gets from $_POST only needed keys and use new as scope.
+     * Creates new Validation instance with this scope.
      *
      * @param array $keys list of keys in $_POST array that must be validates
      *
