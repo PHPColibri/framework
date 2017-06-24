@@ -366,7 +366,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
     /**
      * @return bool false
      */
-    static protected function theFalse()
+    protected static function theFalse()
     {
         return false;
     }

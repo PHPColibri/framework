@@ -67,7 +67,7 @@ class API
      * @throws \Colibri\Application\Exception\NotFoundException
      * @throws \LogicException
      */
-    static public function callModuleMethod($division, $module, $method/* , ... */)
+    public static function callModuleMethod($division, $module, $method/* , ... */)
     {
         $params = array_slice(func_get_args(), 3);
 
@@ -84,7 +84,7 @@ class API
      * @throws \Colibri\Application\Exception\NotFoundException
      * @throws \LogicException
      */
-    static public function getModuleView($division, $module, $method/* , ... */)
+    public static function getModuleView($division, $module, $method/* , ... */)
     {
         $params = array_slice(func_get_args(), 3);
 
@@ -96,7 +96,7 @@ class API
      *
      * @return string
      */
-    static private function getCacheKeyForCall(array $params)
+    private static function getCacheKeyForCall(array $params)
     {
         $params += $_GET;
         $keyStr = '';

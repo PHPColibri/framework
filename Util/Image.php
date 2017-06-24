@@ -59,7 +59,7 @@ class Image
      * @return array
      * @throws \Exception
      */
-    static private function calcResizeParams($resizeType, $img, $tmbWidth, $tmbHeight)
+    private static function calcResizeParams($resizeType, $img, $tmbWidth, $tmbHeight)
     {
         list($width, $height) = self::getImageSize($img);
 
@@ -131,7 +131,7 @@ class Image
      * @return resource GD image
      * @throws \Exception
      */
-    static private function createFromFileByMime($path)
+    private static function createFromFileByMime($path)
     {
         $mime = File::getMimeType($path);
         switch ($mime) {
@@ -160,7 +160,7 @@ class Image
      * @return array
      * @throws \Exception
      */
-    static private function getImageSize($img)
+    private static function getImageSize($img)
     {
         $width  = imageSX($img);
         $height = imageSY($img);
@@ -176,7 +176,7 @@ class Image
      * @return string
      * @throws \Exception
      */
-    static private function getJpegToVar($img)
+    private static function getJpegToVar($img)
     {
         // Use a output buffering to load the image into a variable
         ob_start();

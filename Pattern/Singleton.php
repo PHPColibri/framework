@@ -11,7 +11,7 @@ abstract class Singleton
     /**
      * @var static
      */
-    static protected $instance = null;
+    protected static $instance = null;
 
     /**
      * Singleton constructor.
@@ -35,7 +35,7 @@ abstract class Singleton
     /**
      * @return static
      */
-    static public function getInstance()
+    public static function getInstance()
     {
         return static::$instance === null
             ? static::$instance = new static()

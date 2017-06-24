@@ -363,7 +363,7 @@ class Validation extends PropertyAccess
      *
      * @return static
      */
-    static public function forScope(array $scope)
+    public static function forScope(array $scope)
     {
         return new static($scope);
     }
