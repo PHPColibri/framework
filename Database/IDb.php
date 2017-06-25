@@ -17,7 +17,7 @@ interface IDb
      * @param      $database
      * @param bool $persistent
      */
-    function __construct($host, $login, $pass, $database, $persistent = false);
+    public function __construct($host, $login, $pass, $database, $persistent = false);
 
     /**
      * Открывает соединение с базой данных.
