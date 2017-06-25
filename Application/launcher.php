@@ -7,7 +7,6 @@ use Colibri\Database\Concrete\MySQL;
 use Colibri\Http\NotFoundException;
 use Colibri\Log\Log;
 
-
 $mEngine = null;
 
 try {

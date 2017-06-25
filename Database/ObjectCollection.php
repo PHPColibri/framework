@@ -5,7 +5,6 @@ use Colibri\Base\DynamicCollection;
 use Colibri\Base\IDynamicCollection;
 use Colibri\Database;
 
-
 /**
  * Абстрактный класс ObjectCollection.
  *
