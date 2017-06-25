@@ -1,7 +1,6 @@
 <?php
 namespace Colibri\Tests\Validation;
 
-
 use Colibri\Util\Str;
 use Colibri\Validation\Validation;
 use Colibri\Validation\ValidationException;

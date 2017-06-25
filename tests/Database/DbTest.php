@@ -1,7 +1,6 @@
 <?php
 namespace Colibri\Tests\Database;
 
-
 use Colibri\Config\Config;
 use Colibri\Database\Db;
 
