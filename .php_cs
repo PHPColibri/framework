@@ -3,11 +3,11 @@
 $finder = PhpCsFixer\Finder::create()->in(__DIR__);
 
 return PhpCsFixer\Config::create()
-    ->setHideProgress(false)
     ->setRiskyAllowed(true)
     ->setRules([
         '@PSR2'        => true,
-        'strict_param' => true,
+        'no_blank_lines_before_namespace' => true,
+        'not_operator_with_space' => true,
         'array_syntax' => ['syntax' => 'short'],
     ])
     ->setFinder($finder)
