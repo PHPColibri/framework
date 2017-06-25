@@ -6,5 +6,4 @@ namespace Colibri\Controller;
  */
 abstract class MethodsController extends Base
 {
-
 }

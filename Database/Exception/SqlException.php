@@ -9,5 +9,4 @@ use Colibri\Database\DbException;
  */
 class SqlException extends DbException
 {
-
 }

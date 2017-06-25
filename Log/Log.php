@@ -116,5 +116,4 @@ class Log extends Helper
 
         return static::$config;
     }
-
 }

@@ -9,5 +9,4 @@ use Exception as PhpException;
  */
 class DbException extends PhpException
 {
-
 }

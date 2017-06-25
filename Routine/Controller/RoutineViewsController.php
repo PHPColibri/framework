@@ -113,13 +113,12 @@ abstract class RoutineViewsController extends ViewsController
         /** @var \Colibri\Database\Object $item */
         $item = new $this->itemClass();
 
-        if ($_POST) // if must save any changes
-        {    // do validation
+        if ($_POST) { // if must save any changes
+            // do validation
             $post = new Validation($_POST);
             $this->validate($post, $id);
             if ($post->valid()) {
-                if ($this->dbChange($item, $id)) // save changes
-                {
+                if ($this->dbChange($item, $id)) { // save changes
                     header('Location: /' . $this->division . '/' . $this->module);
                     exit();
                 }
@@ -134,13 +133,11 @@ abstract class RoutineViewsController extends ViewsController
             $this->template->vars['errors'] = array_merge($errors, $post->errors);
         }
 
-        if ($id === null) // create mode
-        {
+        if ($id === null) { // create mode
             $tplPath = sprintf(MODULE_TEMPLATES, $this->module . '/' . $this->division);
             $tplName = $tplPath . 'edit.php';
             $this->template->load($tplName);
-        } else // edit mode
-        {
+        } else { // edit mode
             $item->load($id);
         }
 

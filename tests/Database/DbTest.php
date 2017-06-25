@@ -7,7 +7,6 @@ use Colibri\Database\Db;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testCreateDb_NoDefault()
     {
         // no database type

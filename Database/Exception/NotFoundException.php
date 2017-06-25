@@ -9,5 +9,4 @@ use Colibri\Database\DbException;
  */
 class NotFoundException extends DbException
 {
-
 }
