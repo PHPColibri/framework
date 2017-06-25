@@ -7,7 +7,7 @@ use Colibri\Database;
  * ObjectSingleCollection
  *
  */
-class ObjectSingleCollection extends ObjectCollection //implements IObjectSingleCollection
+class ObjectSingleCollection extends ObjectCollection
 {
     /**
      * @param string $propertyName

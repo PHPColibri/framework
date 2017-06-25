@@ -16,7 +16,7 @@ use Colibri\Database;
  * @property mixed                            $parentID
  * @property \Colibri\Database\Object[]|array $_items
  */
-abstract class ObjectCollection extends DynamicCollection implements IDynamicCollection//IObjectCollection
+abstract class ObjectCollection extends DynamicCollection implements IDynamicCollection
 {
     /** @var string */
     protected static $tableName = 'tableName_not_set';
