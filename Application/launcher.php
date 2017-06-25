@@ -47,13 +47,15 @@ try {
         ,
         'core.notFound');
 
-    if (Config::application('debug'))
+    if (Config::application('debug')) {
         $error = htmlspecialchars($exc);
+    }
     header('HTTP/1.1 404 Not Found');
     include(HTTPERRORS . '404.php');
 } catch (\Exception $exc) {
-    if (Config::application('debug'))
+    if (Config::application('debug')) {
         $error = htmlspecialchars($exc);
+    }
 
     header('HTTP/1.1 500 Internal Server Error');
     include(HTTPERRORS . '500.php');

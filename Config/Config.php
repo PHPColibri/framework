@@ -93,8 +93,9 @@ class Config extends Helper
     public static function setBaseDir($path)
     {
         $path = realpath(rtrim($path, '/\\ '));
-        if ($path === false)
+        if ($path === false) {
             throw new \InvalidArgumentException("cat`t get real path: seems like path does`t exists: $path");
+        }
 
         return static::$baseDir = $path;
     }

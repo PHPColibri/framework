@@ -41,8 +41,9 @@ class Memcache extends Helper implements ICache
      */
     private static function getMemcache()
     {
-        if (self::$memcache !== null)
+        if (self::$memcache !== null) {
             return self::$memcache;
+        }
 
         $config = self::getConfig();
 
@@ -147,8 +148,9 @@ class Memcache extends Helper implements ICache
      */
     public static function remember($key, \Closure $getValueCallback, $expire = null)
     {
-        if (($fromCache = static::get($key)) !== false)
+        if (($fromCache = static::get($key)) !== false) {
             return $fromCache;
+        }
 
         static::set($key, $value = $getValueCallback(), $expire);
 

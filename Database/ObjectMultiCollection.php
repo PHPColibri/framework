@@ -56,8 +56,9 @@ class ObjectMultiCollection extends ObjectCollection //implements IObjectMultiCo
                     ? "SELECT o.* $intermediateFields FROM `" . static::$tableName . '` o inner join `' . $this->fkTableName . '` f  on o.id=f.' . $this->FKName[1] . ' WHERE f.' . $this->FKName[0] . '=' . $this->FKValue[0]
                     : "SELECT o.* $intermediateFields FROM `" . static::$tableName . '` o WHERE 1';
                 $strQuery = $this->rebuildQueryForCustomLoad($strQuery);
-                if ($strQuery === false)
+                if ($strQuery === false) {
                     throw new \RuntimeException('can\'t rebuild query \'' . $propertyName . '\' for custom load in ' . __METHOD__ . ' [line: ' . __LINE__ . ']. possible: getFieldsAndTypes() failed (check for sql errors) or incorrect wherePlan() format');
+                }
 
                 return $strQuery;
             case 'delFromDbAllQuery':
@@ -121,8 +122,9 @@ class ObjectMultiCollection extends ObjectCollection //implements IObjectMultiCo
      */
     protected function selFromDbAll()
     {
-        if ( ! ($this->doQuery($this->selFromDbAllQuery)))
+        if ( ! ($this->doQuery($this->selFromDbAllQuery))) {
             return false;
+        }
 
         return $this->db()->fetchAllRows();
     }

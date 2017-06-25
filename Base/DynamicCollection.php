@@ -29,7 +29,9 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
      */
     public function offsetExists($offset)
     {
-        if ($this->_items === null) $this->fillItems();
+        if ($this->_items === null) {
+            $this->fillItems();
+        }
 
         return isset($this->_items[$offset]);
     }
@@ -41,7 +43,9 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
      */
     public function offsetGet($offset)
     {
-        if ($this->_items === null) $this->fillItems();
+        if ($this->_items === null) {
+            $this->fillItems();
+        }
 
         return $this->_items[$offset];
     }
@@ -54,7 +58,9 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
      */
     public function offsetSet($offset, $data)
     {
-        if ($this->_items === null) $this->fillItems();
+        if ($this->_items === null) {
+            $this->fillItems();
+        }
 
         return $this->_items[$offset] = $data;
     }
@@ -64,7 +70,9 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
      */
     public function offsetUnset($offset)
     {
-        if ($this->_items === null) $this->fillItems();
+        if ($this->_items === null) {
+            $this->fillItems();
+        }
         unset($this->_items[$offset]);
     }
 
@@ -75,7 +83,9 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
      */
     public function rewind()
     {
-        if ($this->_items === null) $this->fillItems();
+        if ($this->_items === null) {
+            $this->fillItems();
+        }
         reset($this->_items);
     }
 
@@ -84,7 +94,9 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
      */
     public function current()
     {
-        if ($this->_items === null) $this->fillItems();
+        if ($this->_items === null) {
+            $this->fillItems();
+        }
 
         return current($this->_items);
     }
@@ -94,7 +106,9 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
      */
     public function key()
     {
-        if ($this->_items === null) $this->fillItems();
+        if ($this->_items === null) {
+            $this->fillItems();
+        }
 
         return key($this->_items);
     }
@@ -104,7 +118,9 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
      */
     public function next()
     {
-        if ($this->_items === null) $this->fillItems();
+        if ($this->_items === null) {
+            $this->fillItems();
+        }
 
         return next($this->_items);
     }
@@ -114,7 +130,9 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
      */
     public function valid()
     {
-        if ($this->_items === null) $this->fillItems();
+        if ($this->_items === null) {
+            $this->fillItems();
+        }
 
         return $this->current() !== false;
     }
@@ -126,7 +144,9 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
      */
     public function count()
     {
-        if ($this->_items === null) $this->fillItems();
+        if ($this->_items === null) {
+            $this->fillItems();
+        }
 
         return count($this->_items);
     }
@@ -138,7 +158,9 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
      */
     public function toArray()
     {
-        if ($this->_items === null) $this->fillItems();
+        if ($this->_items === null) {
+            $this->fillItems();
+        }
 
         return array_values(get_object_vars($this));
     }
@@ -148,7 +170,9 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
      */
     public function toDblArray()
     {
-        if ($this->_items === null) $this->fillItems();
+        if ($this->_items === null) {
+            $this->fillItems();
+        }
         $retArr = [];
         $count  = count($this->_items);
         for ($i = 0; $i < $count; $i++)

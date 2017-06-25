@@ -36,8 +36,9 @@ class ObjectSingleCollection extends ObjectCollection //implements IObjectSingle
                         :
                         '');
                 $strQuery = $this->rebuildQueryForCustomLoad($strQuery);
-                if ($strQuery === false)
+                if ($strQuery === false) {
                     throw new \RuntimeException('can\'t rebuild query \'' . $propertyName . '\' for custom load in ' . __METHOD__ . ' [line: ' . __LINE__ . ']. possible: getFieldsAndTypes() failed (check for sql errors) or incorrect wherePlan() format');
+                }
 
                 return $strQuery;
             case 'delFromDbAllQuery':

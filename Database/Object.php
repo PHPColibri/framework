@@ -69,14 +69,17 @@ abstract class Object implements IObject
         $this->fieldTypes   = &$metadata['fieldTypes'];
         $this->fieldLengths = &$metadata['fieldLengths'];
 
-        if ($id_or_row === null)
+        if ($id_or_row === null) {
             $this->{static::$PKFieldName[0]} = self::NEW_OBJECT;
-        else
-            if (is_array($id_or_row))
+        } else {
+            if (is_array($id_or_row)) {
                 $this->fillProperties($id_or_row);
-            else
-                if ( ! $this->load($id_or_row))
+            } else {
+                if ( ! $this->load($id_or_row)) {
                     $this->{static::$PKFieldName[0]} = self::LOAD_ERROR;
+                }
+            }
+        }
     }
 
     /**
@@ -131,8 +134,9 @@ abstract class Object implements IObject
     public static function get($id_or_where)
     {
         $dbObject = static::find($id_or_where);
-        if ( ! $dbObject)
+        if ( ! $dbObject) {
             throw new NotFoundException('Model not found');
+        }
 
         return $dbObject;
     }
@@ -209,8 +213,9 @@ abstract class Object implements IObject
                     ? ! in_array($propName, static::$PKFieldName)
                     : true
                 )
-            )
+            ) {
                 $strList .= ', ' . $fieldPrefix . $this->buildNameEqValue($propName, $propValue);
+            }
 
         return substr($strList, 2);
     }
@@ -355,8 +360,9 @@ abstract class Object implements IObject
      */
     public function __set($propertyName, $propertyValue)
     {
-        if (in_array($propertyName, static::$PKFieldName))
+        if (in_array($propertyName, static::$PKFieldName)) {
             return $this->$propertyName = $propertyValue;
+        }
 
         throw new \Exception('свойство $' . $propertyName . ' в классе ' . get_class($this) . ' не определено или не является public.');
     }
@@ -418,15 +424,16 @@ abstract class Object implements IObject
      */
     public function delete($id_or_where = null)
     {
-        if ($id_or_where !== null)
-            if (is_array($id_or_where))
+        if ($id_or_where !== null) {
+            if (is_array($id_or_where)) {
                 $this->where = $id_or_where;
-            else {
+            } else {
                 $this->where                     = null;
                 $this->{static::$PKFieldName[0]} = $id_or_where;
             }
-        else
+        } else {
             ;
+        }
 
         return $this->doQuery($this->deleteQuery());
     }
@@ -477,18 +484,25 @@ abstract class Object implements IObject
      */
     public function load($id_or_where = null)
     {
-        if ($id_or_where !== null)
-            if (is_array($id_or_where))
+        if ($id_or_where !== null) {
+            if (is_array($id_or_where)) {
                 $this->where = $id_or_where;
-            else {
+            } else {
                 $this->where                     = null;
                 $this->{static::$PKFieldName[0]} = $id_or_where;
             }
-        else
+        } else {
             ;
-        if ( ! $this->doQuery($this->loadQuery())) return false;// sql error
-        if (self::db()->getNumRows() == 0) return null; // no  record
-        if ( ! $result = self::db()->fetchArray()) return false;
+        }
+        if ( ! $this->doQuery($this->loadQuery())) {
+            return false;
+        }// sql error
+        if (self::db()->getNumRows() == 0) {
+            return null;
+        } // no  record
+        if ( ! $result = self::db()->fetchArray()) {
+            return false;
+        }
         $this->fillProperties($result);
 
         return true;
@@ -516,9 +530,15 @@ abstract class Object implements IObject
      */
     protected function loadByQuery($sqlQuery)
     {
-        if ( ! $this->doQuery($sqlQuery)) return false;// sql error
-        if (self::db()->getNumRows() == 0) return null; // no  record
-        if ( ! $result = self::db()->fetchArray()) return false;
+        if ( ! $this->doQuery($sqlQuery)) {
+            return false;
+        }// sql error
+        if (self::db()->getNumRows() == 0) {
+            return null;
+        } // no  record
+        if ( ! $result = self::db()->fetchArray()) {
+            return false;
+        }
         $this->fillProperties($result);
 
         return true;
@@ -540,8 +560,9 @@ abstract class Object implements IObject
     {
         $strXMLPart = '';
         foreach ($this as $propName => $propValue)
-            if (in_array($propName, $this->fields))
+            if (in_array($propName, $this->fields)) {
                 $strXMLPart .= '<' . $propName . '>' . (is_null($propValue) ? '<null />' : $propValue) . '</' . $propName . '>';
+            }
 
         return $strXMLPart;
     }
@@ -553,8 +574,9 @@ abstract class Object implements IObject
     {
         $arrRet = [];
         foreach ($this as $propName => $propValue)
-            if (in_array($propName, $this->fields))
+            if (in_array($propName, $this->fields)) {
                 $arrRet[$propName] = $propValue;
+            }
 
         return $arrRet;
     }

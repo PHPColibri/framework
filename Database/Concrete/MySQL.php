@@ -63,11 +63,13 @@ class MySQL extends AbstractDb
         } catch (\Exception $exception) {
             throw new DbException('can\'t connect to database: ' . $exception->getMessage(), $exception->getCode(), $exception);
         }
-        if ( ! $this->connect)
+        if ( ! $this->connect) {
             throw new DbException('can\'t connect to database: ' . $this->connect->connect_error, $this->connect->connect_errno);
+        }
 
-        if ($this->connect->select_db($this->database) === false)
+        if ($this->connect->select_db($this->database) === false) {
             throw new DbException('can\'t connect to database: ' . $this->connect->error, $this->connect->errno);
+        }
 
         $this->query("SET CHARACTER SET 'utf8'"/*, $encoding*/);
     }
@@ -91,8 +93,9 @@ class MySQL extends AbstractDb
      */
     public function close()
     {
-        if ( ! ($closed = $this->connect->close()))
+        if ( ! ($closed = $this->connect->close())) {
             throw new DbException('can\'t close database connection: ' . $this->connect->error, $this->connect->errno);
+        }
 
         return true;
     }
@@ -332,8 +335,9 @@ class MySQL extends AbstractDb
      */
     private function    &dbQuery($query)
     {
-        if (self::$monitorQueries)
+        if (self::$monitorQueries) {
             self::$queriesCount++;
+        }
         $result = $this->connect->query($query);
         if ($result === false) {
             throw new SqlException(
@@ -409,9 +413,15 @@ class MySQL extends AbstractDb
      */
     public function commit(array $queries)
     {
-        if ( ! $this->transactionStart()) return false;
-        if ( ! $this->queries($queries, true)) return false;
-        if ( ! $this->transactionCommit()) return false;
+        if ( ! $this->transactionStart()) {
+            return false;
+        }
+        if ( ! $this->queries($queries, true)) {
+            return false;
+        }
+        if ( ! $this->transactionCommit()) {
+            return false;
+        }
 
         return true;
     }
@@ -427,8 +437,9 @@ class MySQL extends AbstractDb
      */
     public function prepareValue(&$value, $type)
     {
-        if ($value === null)
+        if ($value === null) {
             return $value = 'NULL';
+        }
 
         if (is_array($value)) {
             foreach ($value as &$v) {
@@ -522,10 +533,11 @@ class MySQL extends AbstractDb
     {
         $len = explode(")", $strFieldType);
         $len = explode("(", $len[0]);
-        if (count($len) > 1)
+        if (count($len) > 1) {
             $len = &$len[1];
-        else
+        } else {
             $len = null;
+        }
 
         return $len;
     }

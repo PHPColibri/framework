@@ -37,8 +37,9 @@ class Log extends Helper
         if ($logServerVars) {
             $ret .= "\$_GET:\n" . var_export($_GET, true);
             $ret .= "\$_POST:\n" . var_export($_POST, true);
-            if (isset($_SESSION))
+            if (isset($_SESSION)) {
                 $ret .= "\$_SESSION\n" . var_export($_SESSION, true);
+            }
             $ret .= "\$_COOKIE\n" . var_export($_COOKIE, true) . "\n";
         }
         $ret .= '---------------------------------------------------------------------------------------------------------------- ###' . "\n";
@@ -69,12 +70,15 @@ class Log extends Helper
      */
     private static function write2file($message, $who)
     {
-        if (static::$config === null)
+        if (static::$config === null) {
             static::loadFromConfig();
+        }
 
-        if ( ! file_exists(self::$config['folder']))
-            if ( ! mkdir(self::$config['folder'], 0777, true)) // 0777 - just default value, which means that need to use umask()
+        if ( ! file_exists(self::$config['folder'])) {
+            if ( ! mkdir(self::$config['folder'], 0777, true)) { // 0777 - just default value, which means that need to use umask()
                 return false;
+            }
+        }
         $filename = self::$config['folder'] . '/' . self::$config['prefix'] . '.' . $who . '.log';
 
         return self::fwrite($filename, $message);
@@ -89,8 +93,9 @@ class Log extends Helper
     private static function fwrite($filename, $str)
     {
         $f = @fopen($filename, 'a+');
-        if ( ! $f)
+        if ( ! $f) {
             return false;
+        }
         fwrite($f, $str);
         fclose($f);
 

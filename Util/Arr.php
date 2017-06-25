@@ -32,8 +32,12 @@ class Arr extends Helper
      */
     public static function get(array $array, $dottedKey = null, $default = null)
     {
-        if (is_null($dottedKey)) return $array;
-        if (isset($array[$dottedKey])) return $array[$dottedKey];
+        if (is_null($dottedKey)) {
+            return $array;
+        }
+        if (isset($array[$dottedKey])) {
+            return $array[$dottedKey];
+        }
 
         foreach (explode('.', $dottedKey) as $segment) {
             if ( ! is_array($array) || ! array_key_exists($segment, $array)) {
@@ -56,7 +60,9 @@ class Arr extends Helper
      */
     public static function &set(&$array, $dottedKey, $value)
     {
-        if (is_null($dottedKey)) return $array = $value;
+        if (is_null($dottedKey)) {
+            return $array = $value;
+        }
 
         $k = explode('.', $dottedKey, 2);
 

@@ -50,7 +50,7 @@ abstract class RoutineViewsController extends ViewsController
         $items->load();
 
         $this->template->vars[$this->listTplVar] = $items;
-        if ($this->pagedList)
+        if ($this->pagedList) {
             $this->template->vars['pagination'] = [
                 'page'           => (int)(isset($_GET['page']) ? $_GET['page'] : 0),
                 'recordsPerPage' => $items->recordsPerPage,
@@ -58,6 +58,7 @@ abstract class RoutineViewsController extends ViewsController
                 'pagesCount'     => $items->pagesCount,
                 'base_url'       => '/' . $this->division . '/' . $this->module,
             ];
+        }
     }
 
     /**
@@ -67,8 +68,9 @@ abstract class RoutineViewsController extends ViewsController
      */
     protected function applyListFilters(ObjectCollection $items)
     {
-        if ($this->pagedList)
+        if ($this->pagedList) {
             $items->page(isset($_GET['page']) ? $_GET['page'] : 0, $this->recordsPerPage);
+        }
     }
 
     /**
@@ -115,17 +117,19 @@ abstract class RoutineViewsController extends ViewsController
         {    // do validation
             $post = new Validation($_POST);
             $this->validate($post, $id);
-            if ($post->valid())
+            if ($post->valid()) {
                 if ($this->dbChange($item, $id)) // save changes
                 {
                     header('Location: /' . $this->division . '/' . $this->module);
                     exit();
                 }
+            }
 
-            if (isset($this->template->vars['errors']))
+            if (isset($this->template->vars['errors'])) {
                 $errors = $this->template->vars['errors'];
-            else
+            } else {
                 $errors = [];
+            }
 
             $this->template->vars['errors'] = array_merge($errors, $post->errors);
         }
@@ -143,9 +147,12 @@ abstract class RoutineViewsController extends ViewsController
         $this->initItem($item, $id);
 
         if ($_POST) // if post data not valid ($_POST && isset($this->template->vars['errors']))
+        {
             foreach ($_POST as $key => $value)  // for fill form fields with previous values (entered by user)
-                if (isset($item->$key))
+                if (isset($item->$key)) {
                     $item->$key = $value;
+                }
+        }
 
         $this->template->vars['mode']            = $id === null ? 'create' : 'edit';
         $this->template->vars[$this->itemTplVar] = $item;
@@ -187,18 +194,22 @@ abstract class RoutineViewsController extends ViewsController
         // TODO: $this->setPKValue($id) instead "$PKName[0]" or some else
         $PKName = $item->getPKFieldName();
         $PKName = $PKName[0];
-        if ($id !== null) $item->$PKName = $id;
+        if ($id !== null) {
+            $item->$PKName = $id;
+        }
         $method    = $id === null ? 'create' : 'save';
         $addValues = $this->defaultValuesOnDbChange($id);
-        if (is_array($addValues))
+        if (is_array($addValues)) {
             $values = array_merge($_POST, $addValues);
-        else
+        } else {
             $values = $_POST;
+        }
         try {
             $item->$method($values);
         } catch (SqlException $exception) {
-            if ($exception->getCode() != 1062)
+            if ($exception->getCode() != 1062) {
                 throw $exception;
+            }
 
             $this->template->vars['errors'][] = 'Такая запись существует или находится в Корзине.';
 

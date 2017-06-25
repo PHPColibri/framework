@@ -93,8 +93,9 @@ class Engine extends Engine\Base
             $replacement  = $route['replacement'];
             $requestedUri = preg_replace($pattern, $replacement, $requestedUri);
 
-            if (isset($route['last']))
+            if (isset($route['last'])) {
                 break;
+            }
         }
 
         $this->parseRequestedFile($requestedUri);
@@ -108,8 +109,9 @@ class Engine extends Engine\Base
     private function getRequestedUri()
     {
         $questPos = strpos($_SERVER['REQUEST_URI'], '?');
-        if ($questPos === false)
+        if ($questPos === false) {
             return $_SERVER['REQUEST_URI'];
+        }
 
         return substr($_SERVER['REQUEST_URI'], 0, $questPos);
     }
@@ -124,8 +126,9 @@ class Engine extends Engine\Base
         $appConfig = Config::get('application');
         $prefix    = str_replace($appConfig['domain'], '', $_SERVER['HTTP_HOST']);
         $pLen      = strlen($prefix);
-        if ($pLen)
+        if ($pLen) {
             $prefix = substr($prefix, 0, $pLen - 1);
+        }
 
         return $prefix;
     }
@@ -140,8 +143,12 @@ class Engine extends Engine\Base
         $appConfig = Config::get('application');
 
         $dotPos = strpos($file, '.');
-        if ($dotPos !== false) $file = substr($file, 0, $dotPos);
-        if ($file[0] === '/') $file = substr($file, 1);
+        if ($dotPos !== false) {
+            $file = substr($file, 0, $dotPos);
+        }
+        if ($file[0] === '/') {
+            $file = substr($file, 1);
+        }
 
         $parts    = explode('/', $file);
         $partsCnt = count($parts);
@@ -149,16 +156,25 @@ class Engine extends Engine\Base
         if ($partsCnt > 0 && in_array($parts[0], Config::get('divisions'))) {
             $this->_division = $parts[0];
             $parts           = array_slice($parts, 1);
-        } else
+        } else {
             $this->_division = '';
+        }
 
-        if (empty($parts[0])) $this->_module = $appConfig['module']['default'];
-        else                        $this->_module = $parts[0];
+        if (empty($parts[0])) {
+            $this->_module = $appConfig['module']['default'];
+        } else {
+            $this->_module = $parts[0];
+        }
         if ($partsCnt < 2 ||
-            empty($parts[1])) $this->_method = $appConfig['module']['defaultViewsControllerAction'];
-        else                        $this->_method = Str::camel($parts[1]);
+            empty($parts[1])) {
+            $this->_method = $appConfig['module']['defaultViewsControllerAction'];
+        } else {
+            $this->_method = Str::camel($parts[1]);
+        }
 
-        if ($partsCnt > 2) $this->_params = array_slice($parts, 2);
+        if ($partsCnt > 2) {
+            $this->_params = array_slice($parts, 2);
+        }
     }
 
     /**
@@ -221,15 +237,17 @@ class Engine extends Engine\Base
         $this->loadModule($division, $module, $type);
 
         $className = ucfirst($module) . ucfirst($division) . ($type == CallType::view ? 'Views' : 'Methods') . 'Controller';
-        if ( ! class_exists($className))
+        if ( ! class_exists($className)) {
             throw new Exception\NotFoundException("Class '$className' does not exists.");
+        }
         /** @var ViewsController|MethodsController $responser */
         $responser        = new $className($division, $module, $method);
         $this->_responser =& $responser;
 
         $classMethods = get_class_methods($className);
-        if ( ! in_array($method, $classMethods))
+        if ( ! in_array($method, $classMethods)) {
             throw new Exception\NotFoundException("Method '$method' does not contains in class '$className'.");
+        }
 
         call_user_func_array([&$responser, 'setUp'], $params);
         $response = call_user_func_array([&$responser, $method], $params);
@@ -240,8 +258,9 @@ class Engine extends Engine\Base
             $this->_showAppDevToolsOnDebug  = $responser->showAppDevToolsOnDebug;
         }
 
-        if ($type == CallType::view)
+        if ($type == CallType::view) {
             return $responser->response;
+        }
 
         return $response;
     }
@@ -260,16 +279,22 @@ class Engine extends Engine\Base
         $mName = ucfirst($moduleName) . ucfirst($division);
 
         $fileName = MODULES . $mPath;
-        if ($type == CallType::view) $fileName .= $mName . 'ViewsController.php';
-        else if ($type == CallType::method) $fileName .= $mName . 'Methods.php';
-        else                                throw new LogicException("Unknown CallType $type");
+        if ($type == CallType::view) {
+            $fileName .= $mName . 'ViewsController.php';
+        } else {
+            if ($type == CallType::method) {
+                $fileName .= $mName . 'Methods.php';
+            } else {
+                throw new LogicException("Unknown CallType $type");
+            }
+        }
 
-        if ( ! file_exists($fileName))
+        if ( ! file_exists($fileName)) {
             throw new Exception\NotFoundException("Can't load module: file '$fileName' does not exists.");
-        else
-            // @todo remove this (carefully)
-            /** @noinspection PhpIncludeInspection */
+        } else
+            // @todo remove this (carefully) /** @noinspection PhpIncludeInspection */ {
             require_once($fileName);
+        }
     }
 
     /**
@@ -293,9 +318,9 @@ class Engine extends Engine\Base
     public static function exceptionHandler($exc)
     {
         $message = $exc->__toString();
-        if (DEBUG)
-            /** @noinspection PhpUnusedLocalVariableInspection variable uses in 500.php */
+        if (DEBUG) /** @noinspection PhpUnusedLocalVariableInspection variable uses in 500.php */ {
             $error = $message;
+        }
 
         include(HTTPERRORS . '500.php');
 

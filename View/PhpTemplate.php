@@ -24,7 +24,9 @@ class PhpTemplate
      */
     public function __construct($filename = null)
     {
-        if ($filename === null) return;
+        if ($filename === null) {
+            return;
+        }
 
         $this->load($filename);
     }
@@ -53,9 +55,15 @@ class PhpTemplate
      */
     public function load($filename = null)
     {
-        if ($filename === null) $filename = $this->filename;
-        if ($filename === null) throw new \Exception('Can`t load template: property \'filename\' not set.');
-        if ( ! file_exists($filename)) throw new \Exception("file '$filename' does not exists.");
+        if ($filename === null) {
+            $filename = $this->filename;
+        }
+        if ($filename === null) {
+            throw new \Exception('Can`t load template: property \'filename\' not set.');
+        }
+        if ( ! file_exists($filename)) {
+            throw new \Exception("file '$filename' does not exists.");
+        }
         $this->filename = $filename;
 
         return $this;
