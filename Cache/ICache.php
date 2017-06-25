@@ -2,7 +2,7 @@
 namespace Colibri\Cache;
 
 /**
- * Cache interface
+ * Cache interface.
  */
 interface ICache
 {
@@ -30,7 +30,7 @@ interface ICache
     /**
      * Tries to ::get() data from cache; and if not exists,
      *   get the real date through $getValueCallback()
-     *   and store it in cache, than return
+     *   and store it in cache, than return.
      *
      * @param string   $key              key for data
      * @param \Closure $getValueCallback closure that get the real (not cached) value

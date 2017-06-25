@@ -4,7 +4,7 @@ namespace Colibri\Pattern;
 /**
  * Represent a singleton pattern:
  *   not public __construct, __clone & __wakeup,
- *   implement ::getInstance()
+ *   implement ::getInstance().
  */
 abstract class Singleton
 {
@@ -26,7 +26,7 @@ abstract class Singleton
     }
 
     /**
-     * Close public access/
+     * Close public access/.
      */
     private function __wakeup()
     {

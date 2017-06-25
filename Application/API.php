@@ -5,7 +5,7 @@ use Colibri\Cache\Memcache;
 use Colibri\Config\Config;
 
 /**
- * Application API for most common functionality of app manipulation
+ * Application API for most common functionality of app manipulation.
  */
 class API
 {

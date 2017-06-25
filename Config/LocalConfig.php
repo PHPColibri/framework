@@ -2,12 +2,12 @@
 namespace Colibri\Config;
 
 /**
- * Ability to overwrite config values with local environment ones
+ * Ability to overwrite config values with local environment ones.
  */
 class LocalConfig extends Config
 {
     /**
-     * If no file in `local` dir, so just empty overwrites array
+     * If no file in `local` dir, so just empty overwrites array.
      *
      * @param string $name
      *
@@ -22,7 +22,7 @@ class LocalConfig extends Config
     }
 
     /**
-     * Just override base dir (with `.../local`)
+     * Just override base dir (with `.../local`).
      *
      * @return string
      * @throws \InvalidArgumentException

@@ -2,7 +2,7 @@
 namespace Colibri\Application\Engine;
 
 /**
- * Engine interface
+ * Engine interface.
  */
 interface IEngine
 {

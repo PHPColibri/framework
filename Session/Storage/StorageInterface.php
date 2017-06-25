@@ -2,7 +2,7 @@
 namespace Colibri\Session\Storage;
 
 /**
- * Interface StorageInterface for Session Storage drivers
+ * Interface StorageInterface for Session Storage drivers.
  */
 interface StorageInterface
 {

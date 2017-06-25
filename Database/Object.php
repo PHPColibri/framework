@@ -640,7 +640,7 @@ abstract class Object implements IObject
     }
 
     /**
-     * bring out into Query class
+     * bring out into Query class.
      */
     private function cleanUpQueryVars()
     {

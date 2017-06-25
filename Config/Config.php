@@ -5,7 +5,7 @@ use Colibri\Pattern\Helper;
 use Colibri\Util\Arr;
 
 /**
- * Config
+ * Config.
  *
  * @method static mixed application(string $key, mixed $default = null) gets config value by keys, separated with dot
  */
@@ -70,7 +70,7 @@ class Config extends Helper
     }
 
     /**
-     * Returns config if exists or empty array if not
+     * Returns config if exists or empty array if not.
      *
      * @param string $name config file name
      *

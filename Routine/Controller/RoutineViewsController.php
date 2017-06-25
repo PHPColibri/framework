@@ -8,7 +8,7 @@ use Colibri\Database\ObjectCollection;
 use Colibri\Validation\Validation;
 
 /**
- * Controller for routine CRUD actions like list, create, edit, delete
+ * Controller for routine CRUD actions like list, create, edit, delete.
  */
 abstract class RoutineViewsController extends ViewsController
 {

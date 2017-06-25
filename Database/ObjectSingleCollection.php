@@ -4,7 +4,7 @@ namespace Colibri\Database;
 use Colibri\Database;
 
 /**
- * ObjectSingleCollection
+ * ObjectSingleCollection.
  *
  */
 class ObjectSingleCollection extends ObjectCollection

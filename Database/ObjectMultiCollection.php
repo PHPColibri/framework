@@ -5,7 +5,7 @@ use Colibri\Database;
 use Colibri\Util\Arr;
 
 /**
- * ObjectMultiCollection
+ * ObjectMultiCollection.
  *
  * @property-read string $addToDbQuery
  * @property-read string $delFromDbQuery

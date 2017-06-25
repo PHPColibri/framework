@@ -7,7 +7,7 @@ namespace Colibri\Util;
 class File
 {
     /**
-     * Get mime-type og the file
+     * Get mime-type og the file.
      *
      * @param string $filePath
      *

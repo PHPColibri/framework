@@ -2,7 +2,7 @@
 namespace Colibri\Application;
 
 /**
- * CallType constants
+ * CallType constants.
  */
 class CallType
 {

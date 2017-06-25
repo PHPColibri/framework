@@ -63,7 +63,7 @@ class Db extends Helper
 
     /**
      * Создает экземпляр класса используя настройки установленные ::setConfig()
-     * Creates instance of connection using configuration that was set by ::setConfig()
+     * Creates instance of connection using configuration that was set by ::setConfig().
      *
      * @param string $name
      *

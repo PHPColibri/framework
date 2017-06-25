@@ -3,7 +3,7 @@ namespace Colibri\Pattern;
 
 /**
  * Represent a helper pattern:
- *   not public __construct
+ *   not public __construct.
  */
 abstract class Helper
 {

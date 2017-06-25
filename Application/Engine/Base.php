@@ -10,7 +10,7 @@ use Colibri\Database\Object;
 use Colibri\Session\Session;
 
 /**
- * Engine base class
+ * Engine base class.
  */
 abstract class Base extends PropertyAccess implements IEngine
 {

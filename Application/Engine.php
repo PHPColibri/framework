@@ -10,7 +10,7 @@ use Colibri\Util\Str;
 use LogicException;
 
 /**
- * Description of CModuleEngine
+ * Description of CModuleEngine.
  *
  * @property string                            $domainPrefix
  * @property MethodsController|ViewsController $responser

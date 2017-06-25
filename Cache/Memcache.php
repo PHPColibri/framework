@@ -6,7 +6,7 @@ use Colibri\Pattern\Helper;
 use Colibri\Util\Arr;
 
 /**
- * Memcache implementation of Cache
+ * Memcache implementation of Cache.
  */
 class Memcache extends Helper implements ICache
 {
@@ -134,7 +134,7 @@ class Memcache extends Helper implements ICache
     /**
      * Tries to ::get() data from cache; and if not exists,
      *   get the real date through $getValueCallback()
-     *   and store it in cache, than return
+     *   and store it in cache, than return.
      *
      * @param string   $key              key for data
      * @param \Closure $getValueCallback closure that get the real (not cached) value

@@ -7,7 +7,7 @@ use Colibri\Session\Storage\StorageInterface;
 use Colibri\Util\Arr;
 
 /**
- * Class Session
+ * Class Session.
  */
 class Session extends Helper
 {

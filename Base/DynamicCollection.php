@@ -2,7 +2,7 @@
 namespace Colibri\Base;
 
 /**
- * class DynamicCollection
+ * class DynamicCollection.
  *
  * Реализует интерфейс для доступа к элементам при обращении к классу как к массиву
  * А также добавляет функции доступа к свойствам, реализованные в PropertyAccess

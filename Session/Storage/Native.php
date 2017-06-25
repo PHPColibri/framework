@@ -5,7 +5,7 @@ use Colibri\Pattern\Singleton;
 use Colibri\Util\Arr;
 
 /**
- * Class Native
+ * Class Native.
  */
 class Native extends Singleton implements StorageInterface
 {

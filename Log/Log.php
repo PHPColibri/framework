@@ -6,7 +6,7 @@ use Colibri\Pattern\Helper;
 use Colibri\Util\Arr;
 
 /**
- * Simple Log
+ * Simple Log.
  */
 class Log extends Helper
 {

@@ -56,7 +56,7 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
     }
 
     /**
-     * IDynamicCollection ::fillItems() implementation
+     * IDynamicCollection ::fillItems() implementation.
      *
      * @param array $rows
      *

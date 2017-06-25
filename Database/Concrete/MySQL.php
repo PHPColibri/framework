@@ -6,7 +6,7 @@ use Colibri\Database\DbException;
 use Colibri\Database\Exception\SqlException;
 
 /**
- * Класс для работы с MySQL
+ * Класс для работы с MySQL.
  */
 class MySQL extends AbstractDb
 {

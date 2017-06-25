@@ -9,7 +9,7 @@ use Colibri\Pattern\Helper;
 class Arr extends Helper
 {
     /**
-     * Overwrites values of the $array with values from $with array
+     * Overwrites values of the $array with values from $with array.
      *
      * @param array $array
      * @param array $with

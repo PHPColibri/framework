@@ -2,7 +2,7 @@
 namespace Colibri\Database;
 
 /**
- * Database Type aka driver
+ * Database Type aka driver.
  *
  * @author Александр Чибрикин aka alek13 <alek13.me@gmail.com>
  */

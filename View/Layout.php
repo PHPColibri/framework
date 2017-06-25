@@ -4,7 +4,7 @@ namespace Colibri\View;
 use Colibri\Pattern\Helper;
 
 /**
- * Class Layout
+ * Class Layout.
  */
 class Layout extends Helper
 {
@@ -96,7 +96,7 @@ class Layout extends Helper
 
     /**
      * Adds specified $jsText as js code, that will be called on document.ready.
-     * (that will be wrapped with $(document).ready(function(){ ...js-code... });)
+     * (that will be wrapped with $(document).ready(function(){ ...js-code... });).
      *
      * @param string $jsText
      */
@@ -106,7 +106,7 @@ class Layout extends Helper
     }
 
     /**
-     * Adds included js page manager class & its call on document.ready
+     * Adds included js page manager class & its call on document.ready.
      *
      * @param        $jsManagerName
      * @param string $path
