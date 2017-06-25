@@ -17,9 +17,13 @@ class MySQL extends AbstractDb
     /** @var bool */
     private $persistent = false;
 
+    /** @var bool */
     public static $monitorQueries = false;
+    /** @var string */
     public static $strQueries = '';
+    /** @var int */
     public static $queriesCount = 0;
+    /** @var int */
     public static $cachedQueriesCount = 0;
 
     /**

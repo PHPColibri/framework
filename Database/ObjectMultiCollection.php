@@ -13,8 +13,11 @@ use Colibri\Util\Arr;
  */
 class ObjectMultiCollection extends ObjectCollection
 {
+    /** @var string */
     protected $fkTableName = 'fkTableName_not_set';
+    /** @var array */
     private $fkTableFields = [];
+    /** @var array */
     private $intermediateFields = [];
 
     /**

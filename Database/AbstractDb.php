@@ -8,9 +8,13 @@ use Colibri\Cache\Memcache;
  */
 abstract class AbstractDb implements IDb
 {
+    /** @var string */
     protected $host;
+    /** @var string */
     protected $login;
+    /** @var string */
     protected $pass;
+    /** @var string */
     protected $database;
 
     /**

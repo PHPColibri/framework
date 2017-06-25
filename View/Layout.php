@@ -12,14 +12,23 @@ class Layout extends Helper
      * @var string name of layout template to use
      */
     private static $filename = null;
+
     // Variables that injected into layout:
+    /** @var string */
     private static $description = '';
+    /** @var string */
     private static $keywords = '';
+    /** @var string */
     private static $title = '';
+    /** @var array */
     private static $css = [];
+    /** @var array */
     private static $js = [];
+    /** @var array */
     private static $jsText = [];
+    /** @var string */
     private static $jsTextOnReady = '';
+    /** @var array */
     private static $jsMgr = [];
 
     /**

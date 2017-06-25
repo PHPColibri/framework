@@ -10,12 +10,14 @@ use Colibri\Util\Arr;
  */
 class Memcache extends Helper implements ICache
 {
+    /** @var array */
     private static $defaultConfig = [
         'server'            => '127.0.0.1',
         'port'              => 11211,
         'defaultExpiration' => 300,
     ];
 
+    /** @var int|null */
     private static $defaultExpiration = null;
     /**
      * @var \Memcache
