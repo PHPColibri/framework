@@ -29,11 +29,11 @@ class MySQL extends AbstractDb
     /**
      * Конструктор
      *
-     * @param    string $host       mysql server name/ip[:port]
-     * @param    string $login      mysql user login
-     * @param    string $pass       mysql user password
-     * @param    string $database   mysql database name
-     * @param    bool   $persistent make persistent connection
+     * @param string $host       mysql server name/ip[:port]
+     * @param string $login      mysql user login
+     * @param string $pass       mysql user password
+     * @param string $database   mysql database name
+     * @param bool   $persistent make persistent connection
      *
      * @throws DbException
      * @throws SqlException
@@ -218,7 +218,7 @@ class MySQL extends AbstractDb
      *
      * @return array
      */
-    public function    &fetchAllRows($param = MYSQLI_ASSOC)
+    public function &fetchAllRows($param = MYSQLI_ASSOC)
     {
         $return = [];
         while ($row = $this->fetchArray($param)) {
@@ -340,7 +340,7 @@ class MySQL extends AbstractDb
      *
      * @throws SqlException
      */
-    private function    &dbQuery($query)
+    private function &dbQuery($query)
     {
         if (self::$monitorQueries) {
             self::$queriesCount++;

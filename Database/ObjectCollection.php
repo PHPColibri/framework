@@ -577,7 +577,7 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
      *
      * @return bool
      */
-    public function    &getItemByID($id)
+    public function &getItemByID($id)
     {
         if ( ! $count = count($this->_items)) {
             return false;
@@ -601,7 +601,7 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
      *
      * @return array
      */
-    public function    &toArrayOf($fieldName, $keyField = null)
+    public function &toArrayOf($fieldName, $keyField = null)
     {
         $arr = [];
         foreach ($this as $object) {
