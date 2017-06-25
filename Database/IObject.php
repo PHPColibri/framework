@@ -4,7 +4,7 @@ namespace Colibri\Database;
 /**
  *
  */
-interface    IObject
+interface IObject
 {
     /**
      * @param string $propertyName

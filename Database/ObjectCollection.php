@@ -272,7 +272,7 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
                 $type    = 'and';
                 $clauses = $where['and'];
             } else {
-                if (isset ($where['or'])) {
+                if (isset($where['or'])) {
                     $type    = 'or';
                     $clauses = $where['or'];
                 } else {

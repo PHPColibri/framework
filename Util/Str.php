@@ -53,9 +53,9 @@ class Str extends Helper
                 }
 
                 return $str;
-            case 'unique' :
+            case 'unique':
                 return md5(uniqid(mt_rand()));
-            case 'guid'   :
+            case 'guid':
                 return self::generateGUID();
             default:
                 throw new \Exception('unknown random type');
