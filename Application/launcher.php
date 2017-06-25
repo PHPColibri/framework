@@ -42,9 +42,9 @@ try {
 } catch (NotFoundException $exc) {
     Log::warning(
         ' Request: ' . $_SERVER['REQUEST_URI'] .
-        ' Referer: ' . (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '')
-        ,
-        'core.notFound');
+        ' Referer: ' . (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ''),
+        'core.notFound'
+    );
 
     if (Config::application('debug')) {
         $error = htmlspecialchars($exc);
