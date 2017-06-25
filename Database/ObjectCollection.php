@@ -429,7 +429,7 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
      *
      * @return ObjectCollection|$this|Object[]
      */
-    final function page($pageNumber, $recordsPerPage = null)
+    final public function page($pageNumber, $recordsPerPage = null)
     {
         if ($recordsPerPage !== null) {
             $this->recordsPerPage = (int)$recordsPerPage;
