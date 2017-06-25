@@ -371,10 +371,10 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
      * @param array $where
      * @return ObjectCollection|$this|Object[]
      *//*
-	final public function or_where(array $where)
-	{
-		return $this->whereClauses($where,'OR');
-	}*/
+    final public function or_where(array $where)
+    {
+        return $this->whereClauses($where,'OR');
+    }*/
     /**
      * @param array $plan
      *
