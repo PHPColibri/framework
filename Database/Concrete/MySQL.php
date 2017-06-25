@@ -280,8 +280,9 @@ class MySQL extends AbstractDb
     public static function getQueryTemplateArray($tpl, array $arguments)
     {
         $argNum = count($arguments);
-        for ($i = $argNum; $i > 0; $i--)
+        for ($i = $argNum; $i > 0; $i--) {
             $tpl = str_replace('%' . $i, $arguments[$i - 1], $tpl);
+        }
 
         return $tpl;
     }
@@ -300,8 +301,9 @@ class MySQL extends AbstractDb
         $argNum  = func_num_args();
 
         $strQuery = $tpl;
-        for ($i = $argNum - 1; $i > 0; $i--)
+        for ($i = $argNum - 1; $i > 0; $i--) {
             $strQuery = str_replace('%' . $i, $argList[$i], $strQuery);
+        }
 
         return $strQuery;
     }

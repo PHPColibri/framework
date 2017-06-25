@@ -100,8 +100,9 @@ class API
     {
         $params += $_GET;
         $keyStr = '';
-        foreach ($params as $param)
+        foreach ($params as $param) {
             $keyStr .= serialize($param);
+        }
 
         $keyStr .= self::$moduleSystem->domainPrefix;
 

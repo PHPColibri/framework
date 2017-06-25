@@ -47,9 +47,10 @@ class Str extends Helper
                         break;
                 }
                 $str = '';
-                for ($i = 0; $i < $len; $i++)
+                for ($i = 0; $i < $len; $i++) {
                     /** @noinspection PhpUndefinedVariableInspection */
                     $str .= substr($pool, mt_rand(0, strlen($pool) - 1), 1);
+                }
 
                 return $str;
             case 'unique' :

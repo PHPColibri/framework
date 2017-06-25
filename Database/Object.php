@@ -207,7 +207,7 @@ abstract class Object implements IObject
         $obj = $this->fieldsNameValuesArray === null ? $this : $this->fieldsNameValuesArray;
 
         $strList = '';
-        foreach ($obj as $propName => $propValue)
+        foreach ($obj as $propName => $propValue) {
             if (in_array($propName, $this->fields) && (
                 $this->fieldsNameValuesArray === null
                     ? ! in_array($propName, static::$PKFieldName)
@@ -216,6 +216,7 @@ abstract class Object implements IObject
             ) {
                 $strList .= ', ' . $fieldPrefix . $this->buildNameEqValue($propName, $propValue);
             }
+        }
 
         return substr($strList, 2);
     }
@@ -229,8 +230,9 @@ abstract class Object implements IObject
     protected function getWhereCondition($fieldPrefix = '')
     {
         $strList = '';
-        foreach ($this->where as $name => $value)
+        foreach ($this->where as $name => $value) {
             $strList .= ' AND ' . $fieldPrefix . $this->buildNameEqValue($name, $value);
+        }
 
         return substr($strList, 5);
     }
@@ -244,8 +246,9 @@ abstract class Object implements IObject
     protected function getPKCondition($fieldPrefix = '')
     {
         $strList = '';
-        foreach (static::$PKFieldName as $PKName)
+        foreach (static::$PKFieldName as $PKName) {
             $strList .= ' AND ' . $fieldPrefix . $this->buildNameEqValue($PKName, $this->$PKName);
+        }
 
         return substr($strList, 5);
     }
@@ -559,10 +562,11 @@ abstract class Object implements IObject
     public function getFieldsAsXMLstring()
     {
         $strXMLPart = '';
-        foreach ($this as $propName => $propValue)
+        foreach ($this as $propName => $propValue) {
             if (in_array($propName, $this->fields)) {
                 $strXMLPart .= '<' . $propName . '>' . (is_null($propValue) ? '<null />' : $propValue) . '</' . $propName . '>';
             }
+        }
 
         return $strXMLPart;
     }
@@ -573,10 +577,11 @@ abstract class Object implements IObject
     public function toArray()
     {
         $arrRet = [];
-        foreach ($this as $propName => $propValue)
+        foreach ($this as $propName => $propValue) {
             if (in_array($propName, $this->fields)) {
                 $arrRet[$propName] = $propValue;
             }
+        }
 
         return $arrRet;
     }

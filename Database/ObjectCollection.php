@@ -109,8 +109,9 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
         if ($position < 1 || $position >= $cnt) {
             throw new \OutOfBoundsException("position to shift from must be in range 1..Length-1");
         }
-        for ($i = $position; $i < $cnt; $i++)
+        for ($i = $position; $i < $cnt; $i++) {
             $this->_items[$i - 1] = $this->_items[$i];
+        }
     }
 
     /**
@@ -288,8 +289,9 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
         if ($this->order_by !== null) {
             $query    .= ' ORDER BY ';
             $strOrder = '';
-            foreach ($this->order_by as $name => $value)
+            foreach ($this->order_by as $name => $value) {
                 $strOrder .= ', `' . $name . '` ' . $value;
+            }
             $query .= substr($strOrder, 2);
         }
 
@@ -329,8 +331,9 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
             throw new \InvalidArgumentException('where-type must be `and` or `or`');
         }
         $whereClauses = [];
-        foreach ($where as $name => $value)
+        foreach ($where as $name => $value) {
             $whereClauses[] = [$name, $value];
+        }
 
         return [$type => $whereClauses];
     }
@@ -546,10 +549,11 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
     public function indexOf($itemID)
     {
         $cnt = count($this);
-        for ($i = 0; $i < $cnt; $i++)
+        for ($i = 0; $i < $cnt; $i++) {
             if ($this->_items[$i]->id == $itemID) {
                 return $i;
             }
+        }
 
         return -1;
     }
@@ -582,10 +586,11 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
         $itemClass = $this->itemClass;
         /** @noinspection PhpUndefinedVariableInspection */
         $PKfn = $itemClass::$PKFieldName[0];
-        for ($i = 0; $i < $count; $i++)
+        for ($i = 0; $i < $count; $i++) {
             if (isset($this->_items[$i]->$PKfn) && $this->_items[$i]->$PKfn == $id) {
                 return $this->_items[$i];
             }
+        }
 
         return false;
     }

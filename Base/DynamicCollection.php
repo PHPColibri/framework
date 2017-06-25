@@ -175,8 +175,9 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
         }
         $retArr = [];
         $count  = count($this->_items);
-        for ($i = 0; $i < $count; $i++)
+        for ($i = 0; $i < $count; $i++) {
             $retArr[] = get_object_vars($this->_items[$i]);
+        }
 
         return $retArr;
     }

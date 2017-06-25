@@ -94,8 +94,9 @@ class Validation extends PropertyAccess
     public function required($key, $message = null)
     {
         if (is_array($key)) {
-            foreach ($key as $name)
+            foreach ($key as $name) {
                 $this->required($name, $message);
+            }
         } else {
             if ( ! (isset($this->scope[$key]) && ! empty($this->scope[$key]))) {
                 $this->_errors[$key] = sprintf($message !== null ? $message : self::$requiredMessage, $key);
@@ -117,8 +118,9 @@ class Validation extends PropertyAccess
     public function minLength($key, $minLength, $message = null)
     {
         if (is_array($key)) {
-            foreach ($key as $k => $name)
+            foreach ($key as $k => $name) {
                 $this->minLength($name, is_array($minLength) ? $minLength[$k] : $minLength, $message);
+            }
         } else {
             if (isset($this->scope[$key]) && mb_strlen($this->scope[$key]) < $minLength) {
                 $this->_errors[$key] = sprintf($message !== null ? $message : self::$minLengthMessage, $key, $minLength);
@@ -140,8 +142,9 @@ class Validation extends PropertyAccess
     public function maxLength($key, $maxLength, $message = null)
     {
         if (is_array($key)) {
-            foreach ($key as $k => $name)
+            foreach ($key as $k => $name) {
                 $this->maxLength($name, is_array($maxLength) ? $maxLength[$k] : $maxLength, $message);
+            }
         } else {
             if (isset($this->scope[$key]) && mb_strlen($this->scope[$key]) > $maxLength) {
                 $this->_errors[$key] = sprintf($message !== null ? $message : self::$maxLengthMessage, $key, $maxLength);
@@ -163,8 +166,9 @@ class Validation extends PropertyAccess
     public function regex($key, $pattern, $message = null)
     {
         if (is_array($key)) {
-            foreach ($key as $k => $name)
+            foreach ($key as $k => $name) {
                 $this->regex($name, is_array($pattern) ? $pattern[$k] : $pattern, $message);
+            }
         } else {
             if (isset($this->scope[$key]) && ! (bool)preg_match($pattern, $this->scope[$key])) {
                 $this->_errors[$key] = sprintf($message !== null ? $message : self::$regexMessage, $key);
@@ -185,8 +189,9 @@ class Validation extends PropertyAccess
     public function isIntGt0($key, $message = null)
     {
         if (is_array($key)) {
-            foreach ($key as $name)
+            foreach ($key as $name) {
                 $this->isIntGt0($name, $message);
+            }
         } else {
             if (isset($this->scope[$key]) && ! (Str::isInt($this->scope[$key]) && ((int)$this->scope[$key]) > 0)) {
                 $this->_errors[$key] = sprintf($message !== null ? $message : self::$isIntGt0Message, $key);
@@ -207,8 +212,9 @@ class Validation extends PropertyAccess
     public function isJSON($key, $message = null)
     {
         if (is_array($key)) {
-            foreach ($key as $name)
+            foreach ($key as $name) {
                 $this->isJSON($name, $message);
+            }
         } else {
             if (isset($this->scope[$key]) && ! Str::isJSON($this->scope[$key])) {
                 $this->_errors[$key] = sprintf($message !== null ? $message : self::$isJSONMessage, $key);
@@ -229,8 +235,9 @@ class Validation extends PropertyAccess
     public function isEmail($key, $message = null)
     {
         if (is_array($key)) {
-            foreach ($key as $name)
+            foreach ($key as $name) {
                 $this->isEmail($name, $message);
+            }
         } else {
             if (isset($this->scope[$key]) && ! Str::isEmail($this->scope[$key])) {
                 $this->_errors[$key] = sprintf($message !== null ? $message : self::$isEmailMessage, $key);
@@ -251,20 +258,22 @@ class Validation extends PropertyAccess
     public function isEqual(array $keys, $message = null)
     {
         $existingKey = null;
-        foreach ($keys as $key)
+        foreach ($keys as $key) {
             if (isset($this->scope[$key])) {
                 $existingKey = $key;
                 break;
             }
+        }
         if ($existingKey === null) {
             return $this;
         }
 
-        foreach ($keys as $key)
+        foreach ($keys as $key) {
             if (isset($this->scope[$key]) && $this->scope[$key] != $this->scope[$existingKey]) {
                 $keysList            = implode("', '", $keys);
                 $this->_errors[$key] = sprintf($message !== null ? $message : self::$isEqualMessage, $keysList);
             }
+        }
 
         return $this;
     }
@@ -284,8 +293,9 @@ class Validation extends PropertyAccess
         //	throw new Exception('$checkFunc param is not callable');
 
         if (is_array($key)) {
-            foreach ($key as $name)
+            foreach ($key as $name) {
                 $this->is($checkFunc, $name, $message);
+            }
         } else {
             if (isset($this->scope[$key]) && ! call_user_func($checkFunc, $this->scope[$key])) {
                 $this->_errors[$key] = sprintf($message, $key);
@@ -310,8 +320,9 @@ class Validation extends PropertyAccess
         //	throw new Exception('$checkFunc param is not callable');
 
         if (is_array($key)) {
-            foreach ($key as $name)
+            foreach ($key as $name) {
                 $this->isNot($checkFunc, $name, $message);
+            }
         } else {
             if (isset($this->scope[$key]) && call_user_func($checkFunc, $this->scope[$key])) {
                 $this->_errors[$key] = sprintf($message, $key);

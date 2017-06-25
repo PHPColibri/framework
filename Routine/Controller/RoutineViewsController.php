@@ -146,12 +146,12 @@ abstract class RoutineViewsController extends ViewsController
 
         $this->initItem($item, $id);
 
-        if ($_POST) // if post data not valid ($_POST && isset($this->template->vars['errors']))
-        {
-            foreach ($_POST as $key => $value)  // for fill form fields with previous values (entered by user)
+        if ($_POST) { // if post data not valid ($_POST && isset($this->template->vars['errors']))
+            foreach ($_POST as $key => $value) { // for fill form fields with previous values (entered by user)
                 if (isset($item->$key)) {
                     $item->$key = $value;
                 }
+            }
         }
 
         $this->template->vars['mode']            = $id === null ? 'create' : 'edit';

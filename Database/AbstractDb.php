@@ -68,10 +68,11 @@ abstract class AbstractDb implements IDb
      */
     public function queries(array $queries, $rollbackOnFail = false)
     {
-        foreach ($queries as &$query)
+        foreach ($queries as &$query) {
             if ( ! $this->query($query . ';')) {
                 return $rollbackOnFail ? $this->transactionRollback() && false : false;
             }
+        }
 
         return true;
     }
