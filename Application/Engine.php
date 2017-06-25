@@ -281,18 +281,16 @@ class Engine extends Engine\Base
         $fileName = MODULES . $mPath;
         if ($type == CallType::view) {
             $fileName .= $mName . 'ViewsController.php';
+        } elseif ($type == CallType::method) {
+            $fileName .= $mName . 'Methods.php';
         } else {
-            if ($type == CallType::method) {
-                $fileName .= $mName . 'Methods.php';
-            } else {
-                throw new LogicException("Unknown CallType $type");
-            }
+            throw new LogicException("Unknown CallType $type");
         }
 
         if ( ! file_exists($fileName)) {
             throw new Exception\NotFoundException("Can't load module: file '$fileName' does not exists.");
-        } else
-            // @todo remove this (carefully) /** @noinspection PhpIncludeInspection */ {
+        } else {
+            // @todo remove this (carefully) /** @noinspection PhpIncludeInspection */
             require_once($fileName);
         }
     }
