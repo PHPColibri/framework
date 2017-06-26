@@ -61,17 +61,15 @@ class API
      * @param string $division
      * @param string $module
      * @param string $method
-     * @param ...
+     * @param array  $params
      *
      * @return string
      *
      * @throws \Colibri\Application\Exception\NotFoundException
      * @throws \LogicException
      */
-    public static function callModuleMethod($division, $module, $method/* , ... */)
+    public static function callModuleMethod($division, $module, $method, ...$params)
     {
-        $params = array_slice(func_get_args(), 3);
-
         return self::$moduleSystem->callModuleMethod($division, $module, $method, $params);
     }
 
@@ -79,17 +77,15 @@ class API
      * @param string $division
      * @param string $module
      * @param string $method
-     * @param ...
+     * @param array  $params
      *
      * @return string
      *
      * @throws \Colibri\Application\Exception\NotFoundException
      * @throws \LogicException
      */
-    public static function getModuleView($division, $module, $method/* , ... */)
+    public static function getModuleView($division, $module, $method, ...$params)
     {
-        $params = array_slice(func_get_args(), 3);
-
         return self::$moduleSystem->getModuleView($division, $module, $method, $params);
     }
 
@@ -115,24 +111,24 @@ class API
      * @param string $division
      * @param string $module
      * @param string $method
-     * @param ...
+     * @param array  $params
      *
      * @return string
      *
+     * @throws \Colibri\Application\Exception\NotFoundException
      * @throws \InvalidArgumentException
+     * @throws \LogicException
      */
-    public static function callModuleMethodCached($division, $module, $method/* , ... */)
+    public static function callModuleMethodCached($division, $module, $method, ...$params)
     {
-        $params = func_get_args();
-
         if (Config::application('useCache') && ! DEBUG) {
-            $key      = self::getCacheKeyForCall($params);
-            $retValue = Memcache::remember($key, function () use ($params) {
-                return call_user_func_array([self, 'callModuleMethod'], $params);
+            $key      = self::getCacheKeyForCall(func_get_args());
+            $retValue = Memcache::remember($key, function () use ($division, $module, $method, $params) {
+                return self::callModuleMethod($division, $module, $method, ...$params);
             });
-        } else { // TODO [alek13]: cache 2 file
-            $retValue = call_user_func_array([self, 'callModuleMethod'], $params);
-            //$retValue=self::callModuleMethod($division,$module,$method);
+        } else {
+            // TODO [alek13]: cache 2 file
+            $retValue = self::callModuleMethod($division, $module, $method, ...$params);
         }
 
         return $retValue;
@@ -142,23 +138,24 @@ class API
      * @param string $division
      * @param string $module
      * @param string $method
+     * @param array  $params
      *
      * @return string
      *
+     * @throws \Colibri\Application\Exception\NotFoundException
      * @throws \InvalidArgumentException
+     * @throws \LogicException
      */
-    public static function getModuleViewCached($division, $module, $method/* , ... */)
+    public static function getModuleViewCached($division, $module, $method, ...$params)
     {
-        $params = func_get_args();
-
         if (Config::application('useCache') && ! DEBUG) {
-            $key      = self::getCacheKeyForCall($params);
-            $retValue = Memcache::remember($key, function () use ($params) {
-                return call_user_func_array(['self', 'getModuleView'], $params);
+            $key      = self::getCacheKeyForCall(func_get_args());
+            $retValue = Memcache::remember($key, function () use ($division, $module, $method, $params) {
+                return self::getModuleView($division, $module, $method, ...$params);
             });
-        } else { // [TODO]: cache 2 file
-            //call_user_func_array(array(self,'getModuleView'),$params);
-            $retValue = call_user_func_array(['self', 'getModuleView'], $params);
+        } else {
+            // TODO: cache 2 file
+            $retValue = self::getModuleView($division, $module, $method, ...$params);
         }
 
         return $retValue;
