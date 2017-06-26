@@ -98,7 +98,7 @@ class MySQL extends AbstractDb
      */
     public function close()
     {
-        if ( ! ($closed = $this->connect->close())) {
+        if ( ! $this->connect->close()) {
             throw new DbException('can\'t close database connection: ' . $this->connect->error, $this->connect->errno);
         }
 
