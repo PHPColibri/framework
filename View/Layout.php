@@ -4,7 +4,7 @@ namespace Colibri\View;
 use Colibri\Pattern\Helper;
 
 /**
- * Class Layout
+ * Class Layout.
  */
 class Layout extends Helper
 {
@@ -12,31 +12,47 @@ class Layout extends Helper
      * @var string name of layout template to use
      */
     private static $filename = null;
-    // vars:
+
+    // Variables that injected into layout:
+    /** @var string */
     private static $description = '';
+    /** @var string */
     private static $keywords = '';
+    /** @var string */
     private static $title = '';
+    /** @var array */
     private static $css = [];
+    /** @var array */
     private static $js = [];
+    /** @var array */
     private static $jsText = [];
+    /** @var string */
     private static $jsTextOnReady = '';
+    /** @var array */
     private static $jsMgr = [];
 
+    /**
+     * Cleans up all layout variables & resets filename if specified.
+     *
+     * @param string $filename
+     */
     public static function clean($filename = null)
     {
         static::filename($filename);
 
-        static::$description =
-        static::$keywords =
-        static::$title =
+        static::$description   =
+        static::$keywords      =
+        static::$title         =
         static::$jsTextOnReady = '';
-        static::$css         =
-        static::$js =
-        static::$jsText =
-        static::$jsMgr = [];
+        static::$css           =
+        static::$js            =
+        static::$jsText        =
+        static::$jsMgr         = [];
     }
 
     /**
+     * Sets or gets filename of layout.
+     *
      * @param string $value
      *
      * @return string
@@ -47,6 +63,8 @@ class Layout extends Helper
     }
 
     /**
+     * Adds included css file from specified uri-$path.
+     *
      * @param string $cssFilename
      * @param string $path
      */
@@ -56,15 +74,19 @@ class Layout extends Helper
     }
 
     /**
+     * Adds included js file from specified uri-$path.
+     *
      * @param string $jsFilename
      * @param string $path
      */
     public static function addJs($jsFilename, $path = RES_JS)
     {
-        static::$js [] = $path . $jsFilename;
+        static::$js[] = $path . $jsFilename;
     }
 
     /**
+     * Adds specified $jsText as injected js code.
+     *
      * @param string $jsText
      */
     public static function addJsText($jsText)
@@ -73,6 +95,9 @@ class Layout extends Helper
     }
 
     /**
+     * Adds specified $jsText as js code, that will be called on document.ready.
+     * (that will be wrapped with $(document).ready(function(){ ...js-code... });).
+     *
      * @param string $jsText
      */
     public static function addJsTextOnReady($jsText)
@@ -81,16 +106,20 @@ class Layout extends Helper
     }
 
     /**
-     * @param        $jsMgrName
+     * Adds included js page manager class & its call on document.ready.
+     *
+     * @param        $jsManagerName
      * @param string $path
      */
-    public static function addJsMgr($jsMgrName, $path = RES_JS)
+    public static function addJsMgr($jsManagerName, $path = RES_JS)
     {
-        static::addJs($jsMgrName . '_mgr.js', $path);
-        static::$jsMgr[] = $jsMgrName;
+        static::addJs($jsManagerName . '_mgr.js', $path);
+        static::$jsMgr[] = $jsManagerName;
     }
 
     /**
+     * Sets or gets layout page keywords to be injected into meta tag.
+     *
      * @param string $value
      *
      * @return string
@@ -101,6 +130,8 @@ class Layout extends Helper
     }
 
     /**
+     * Sets or gets layout page title.
+     *
      * @param string $value
      *
      * @return string
@@ -111,6 +142,8 @@ class Layout extends Helper
     }
 
     /**
+     * Sets or gets layout page description.
+     *
      * @param string $value
      *
      * @return string
@@ -121,6 +154,8 @@ class Layout extends Helper
     }
 
     /**
+     * Deletes specified css filename.
+     *
      * @param string $cssFilename
      * @param string $path
      */
@@ -130,9 +165,12 @@ class Layout extends Helper
     }
 
     /**
-     * @param $content
+     * Compiles the layout. Inject layout variables & given $content.
+     *
+     * @param string $content
      *
      * @return string
+     *
      * @throws \Exception
      */
     public static function compile($content)
@@ -140,10 +178,10 @@ class Layout extends Helper
         $layoutTplVars            = [];
         $layoutTplVars['content'] = $content;
         //TODO: special chars
-        $layoutTplVars['keywords'] = !empty(static::$keywords) ? "<meta name='keywords' content='" . static::$keywords . "' />\n" : '';
-        $layoutTplVars['title']    = !empty(static::$title) ? "<title>" . htmlspecialchars(static::$title) . "</title>\n" : '';
+        $layoutTplVars['keywords'] = ! empty(static::$keywords) ? "<meta name='keywords' content='" . static::$keywords . "' />\n" : '';
+        $layoutTplVars['title']    = ! empty(static::$title) ? '<title>' . htmlspecialchars(static::$title) . "</title>\n" : '';
         //TODO: special chars
-        $layoutTplVars['description'] = !empty(static::$description) ? "<meta name='description' content='" . static::$description . "' />\n" : '';
+        $layoutTplVars['description'] = ! empty(static::$description) ? "<meta name='description' content='" . static::$description . "' />\n" : '';
         $layoutTplVars['javascript']  = '';
         $layoutTplVars['css']         = '';
 
@@ -164,13 +202,13 @@ class Layout extends Helper
         }
 
         // make js init code for all js managers
-        $jsMgrsCnt = count(static::$jsMgr);
-        if ($jsMgrsCnt > 0) {
-            $jsMgrsText = '';
-            for ($i = 0; $i < $jsMgrsCnt; $i++) {
-                $jsMgrsText .= "\tnew " . static::$jsMgr[$i] . "_mgr();\n";
+        $jsManagersCount = count(static::$jsMgr);
+        if ($jsManagersCount > 0) {
+            $jsManagersText = '';
+            for ($i = 0; $i < $jsManagersCount; $i++) {
+                $jsManagersText .= '  new ' . static::$jsMgr[$i] . "_mgr();\n";
             }
-            static::addJsTextOnReady($jsMgrsText);
+            static::addJsTextOnReady($jsManagersText);
         }
 
         if (static::$jsTextOnReady != '') {

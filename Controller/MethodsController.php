@@ -1,17 +1,9 @@
 <?php
 namespace Colibri\Controller;
 
-use Colibri\Controller\Base;
-
 /**
- * Description of MethodsController
- *
- * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
- * @package		xTeam
- * @version		1.00.0
+ * Base Controller for Module-Methods (ala Http-API).
  */
-abstract
-class MethodsController extends Base
+abstract class MethodsController extends Base
 {
-	
 }

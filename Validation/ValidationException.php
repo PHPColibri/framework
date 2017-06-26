@@ -3,25 +3,36 @@ namespace Colibri\Validation;
 
 use Exception;
 
+/**
+ * Exception for Validation rules fails.
+ * Stores Validation errors for retrieve them in catch block.
+ */
 class ValidationException extends Exception
 {
-	protected $errors = array();
+    /**
+     * @var array stored validation errors
+     */
+    protected $errors = [];
 
-	/**
-	 * @param array $errors
-	 * @param Exception $previous
-	 */
-	public function __construct(array $errors, Exception $previous = null)
-	{
-		parent::__construct("", 0, $previous);
-		$this->errors = $errors;
-	}
+    /**
+     * Create new instance.
+     *
+     * @param array     $errors
+     * @param Exception $previous
+     */
+    public function __construct(array $errors, Exception $previous = null)
+    {
+        parent::__construct('', 0, $previous);
+        $this->errors = $errors;
+    }
 
-	/**
-	 * @return array
-	 */
-	public function getErrors()
-	{
-		return $this->errors;
-	}
+    /**
+     * Retrieve validation errors.
+     *
+     * @return array
+     */
+    public function getErrors()
+    {
+        return $this->errors;
+    }
 }

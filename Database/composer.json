@@ -1,26 +1,25 @@
 {
-	"name": "colibri-fw/database",
-	"description": "Colibri database component",
-	"type": "library",
-	"license": "MIT",
-	"authors": [{
-		"name": "Alexander Chibrikin",
-		"email": "alek13.me@gmail.com"
-	}],
-
-	"require": {
-		"php": ">=5.6",
-		"ext-mysqlnd": "*",
-		"colibri-fw/base": "dev-master@dev",
-		"colibri-fw/cache": "dev-master@dev",
-		"nesbot/carbon": "dev-master"
-	},
-	
-	"autoload": {
-		"psr-4": {
-			"Colibri\\Database\\": ""
-		}
-	},
-
-	"minimum-stability": "dev"
+    "name": "colibri-fw/database",
+    "description": "Colibri database component",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander Chibrikin",
+            "email": "alek13.me@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6",
+        "ext-mysqlnd": "*",
+        "colibri-fw/base": "dev-master@dev",
+        "colibri-fw/cache": "dev-master@dev",
+        "nesbot/carbon": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Colibri\\Database\\": ""
+        }
+    },
+    "minimum-stability": "dev"
 }

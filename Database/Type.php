@@ -2,12 +2,10 @@
 namespace Colibri\Database;
 
 /**
- * Database Type aka driver
- *
- * @author Александр Чибрикин aka alek13 <alek13.me@gmail.com>
+ * Database Type aka driver.
  */
 class Type
 {
-	const MYSQL = 'mysql';
-	const POSTGRESQL = 'postgresql';
+    const MYSQL      = 'mysql';
+    const POSTGRESQL = 'postgresql';
 }

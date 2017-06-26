@@ -1,22 +1,22 @@
 {
-	"name": "colibri-fw/util",
-	"description": "Colibri util component",
-	"type": "library",
-	"license": "MIT",
-	"authors": [{
-		"name": "Alexander Chibrikin",
-		"email": "alek13.me@gmail.com"
-	}],
-
-	"require": {
-		"php": ">=5.6",
-		"colibri-fw/pattern": "dev-master@dev"
-	},
-	
-	"autoload": {
-		"psr-4": {
-			"Colibri\\Util\\": ""
-		}
-	},
-	"minimum-stability": "dev"
+    "name": "colibri-fw/util",
+    "description": "Colibri util component",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander Chibrikin",
+            "email": "alek13.me@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6",
+        "colibri-fw/pattern": "dev-master@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Colibri\\Util\\": ""
+        }
+    },
+    "minimum-stability": "dev"
 }

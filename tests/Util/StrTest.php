@@ -82,18 +82,18 @@ class StrTest extends PHPUnit_Framework_TestCase
     public function randomProvider()
     {
         return [
-            ['alnum',   2,  '/[0-9a-zA-Z]{2}/'],
-            ['alnum',   8,  '/[0-9a-zA-Z]{8}/'],
-            ['alnum',   15, '/[0-9a-zA-Z]{15}/'],
-            ['numeric', 2,  '/[0-9]{2}/'],
-            ['numeric', 8,  '/[0-9]{8}/'],
+            ['alnum', 2, '/[0-9a-zA-Z]{2}/'],
+            ['alnum', 8, '/[0-9a-zA-Z]{8}/'],
+            ['alnum', 15, '/[0-9a-zA-Z]{15}/'],
+            ['numeric', 2, '/[0-9]{2}/'],
+            ['numeric', 8, '/[0-9]{8}/'],
             ['numeric', 15, '/[0-9]{15}/'],
-            ['nozero',  2,  '/[1-9]{2}/'],
-            ['nozero',  8,  '/[1-9]{8}/'],
-            ['nozero',  15, '/[1-9]{15}/'],
-            ['unique',  2,  '/[0-9a-f]{32}/'],
-            ['unique',  8,  '/[0-9a-f]{32}/'],
-            ['unique',  15, '/[0-9a-f]{32}/'],
+            ['nozero', 2, '/[1-9]{2}/'],
+            ['nozero', 8, '/[1-9]{8}/'],
+            ['nozero', 15, '/[1-9]{15}/'],
+            ['unique', 2, '/[0-9a-f]{32}/'],
+            ['unique', 8, '/[0-9a-f]{32}/'],
+            ['unique', 15, '/[0-9a-f]{32}/'],
         ];
     }
 
@@ -112,11 +112,11 @@ class StrTest extends PHPUnit_Framework_TestCase
     public function randomDefaultLengthProvider()
     {
         return [
-            ['alnum',   8],
+            ['alnum', 8],
             ['numeric', 8],
-            ['nozero',  8],
-            ['unique',  32],
-            ['guid',    36],
+            ['nozero', 8],
+            ['unique', 32],
+            ['guid', 36],
         ];
     }
 
@@ -135,10 +135,10 @@ class StrTest extends PHPUnit_Framework_TestCase
     public function snakeProvider()
     {
         return [
-            ['camelCase',  'camel_case'],
+            ['camelCase', 'camel_case'],
             ['snake_case', 'snake_case'],
             ['camelCAse1', 'camel_c_ase1'],
-            ['string',     'string'],
+            ['string', 'string'],
         ];
     }
 
@@ -157,12 +157,12 @@ class StrTest extends PHPUnit_Framework_TestCase
     public function camelProvider()
     {
         return [
-            ['camel_case',   'camelCase'],
-            ['camel-case',   'camelCase'],
-            ['camelCase',    'camelCase'],
+            ['camel_case', 'camelCase'],
+            ['camel-case', 'camelCase'],
+            ['camelCase', 'camelCase'],
             ['camel_c_ase1', 'camelCAse1'],
             ['camel-c-ase1', 'camelCAse1'],
-            ['string',       'string'],
+            ['string', 'string'],
         ];
     }
 
@@ -181,11 +181,11 @@ class StrTest extends PHPUnit_Framework_TestCase
     public function studlyProvider()
     {
         return [
-            ['camel_case',   'CamelCase'],
-            ['camel-case',   'CamelCase'],
-            ['camelCase',    'CamelCase'],
+            ['camel_case', 'CamelCase'],
+            ['camel-case', 'CamelCase'],
+            ['camelCase', 'CamelCase'],
             ['camel_c_ase1', 'CamelCAse1'],
-            ['string',       'String'],
+            ['string', 'String'],
         ];
     }
 
@@ -251,7 +251,7 @@ class StrTest extends PHPUnit_Framework_TestCase
     public function beginsWithPositiveProvider()
     {
         return [
-            ['foobar',           'foo'],
+            ['foobar', 'foo'],
             ['Colibri the best', 'Col'],
         ];
     }
@@ -271,7 +271,7 @@ class StrTest extends PHPUnit_Framework_TestCase
     public function beginsWithNegativeProvider()
     {
         return [
-            ['foobar',           'bar'],
+            ['foobar', 'bar'],
             ['Colibri the best', 'Laravel'],
         ];
     }
@@ -291,7 +291,7 @@ class StrTest extends PHPUnit_Framework_TestCase
     public function endsWithPositiveProvider()
     {
         return [
-            ['foobar',           'bar'],
+            ['foobar', 'bar'],
             ['Colibri the best', 'best'],
             ['Colibri the best', 'est'],
         ];
@@ -312,7 +312,7 @@ class StrTest extends PHPUnit_Framework_TestCase
     public function endsWithNegativeProvider()
     {
         return [
-            ['foobar',           'foo'],
+            ['foobar', 'foo'],
             ['Colibri the best', 'test'],
             ['Colibri the best', ''],
         ];

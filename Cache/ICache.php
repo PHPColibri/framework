@@ -2,41 +2,41 @@
 namespace Colibri\Cache;
 
 /**
- *
- * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
- * @package		xTeam
- * @subpackage	a13FW
- * @version		1.0.0
+ * Cache interface.
  */
 interface ICache
 {
-	/**
-	 * @param string $key for data
-	 * @return boolean result OR data
-	 */
-static
-	public function get($key);
+    /**
+     * @param string $key for data
+     *
+     * @return bool result OR data
+     */
+    public static function get($key);
 
-	/**
-	 * @param string $key for data
-	 * @param mixed $val any type of supported data: object, string, int…
-	 * @param int $expire seconds
-	 * @return boolean result
-	 */
-static
-	public function set($key, $value, $expire=null);
+    /**
+     * @param string $key    key for data
+     * @param mixed  $value  any type of supported data: object, string, int…
+     * @param int    $expire seconds
+     *
+     * @return bool result
+     */
+    public static function set($key, $value, $expire = null);
 
-	/**
-	 * @param	string	$key for data
-	 */
-static
-	public function delete($key);
+    /**
+     * @param string $key key for data
+     */
+    public static function delete($key);
 
-	/**
-	 * @param string $key for data
-	 * @param mixed $val any type of supported data: object, string, int…
-	 * @return boolean result OR data
-	 */
-static
-	public function remember($key, \Closure $getValueCallback, $expire = null);
+    /**
+     * Tries to ::get() data from cache; and if not exists,
+     *   get the real date through $getValueCallback()
+     *   and store it in cache, than return.
+     *
+     * @param string   $key              key for data
+     * @param \Closure $getValueCallback closure that get the real (not cached) value
+     * @param null     $expire           seconds
+     *
+     * @return bool result OR data
+     */
+    public static function remember($key, \Closure $getValueCallback, $expire = null);
 }

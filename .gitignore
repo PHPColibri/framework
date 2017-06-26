@@ -1,4 +1,5 @@
 .idea
-vendor
-phpunit.xml
+/vendor/
+/phpunit.xml
 composer.lock
+/.php_cs.cache

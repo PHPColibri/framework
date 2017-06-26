@@ -4,47 +4,81 @@ namespace Colibri\Controller;
 use Colibri\Base\PropertyAccess;
 
 /**
- * base controller
- *
- * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
- * @package		xTeam
- * @version		1.01.0
+ * Base controller class.
  *
  * @property string $response
  * @property string $division site division
  * @property string $module
  * @property string $method
  */
-abstract
-class Base extends PropertyAccess
+abstract class Base extends PropertyAccess
 {
-	protected	$_response=null;
-	protected	$_division=null;
-	protected	$_module=null;
-	protected	$_method=null;
+    /**
+     * @var string
+     */
+    protected $_response = null;
+    /**
+     * @var string
+     */
+    protected $_division = null;
+    /**
+     * @var string
+     */
+    protected $_module = null;
+    /**
+     * @var string
+     */
+    protected $_method = null;
 
-	final
-	public		function	__construct($division,$module,$method)
-	{
-		// $this->db=&$db;
-		$this->_division=$division;
-		$this->_module=$module;
-		$this->_method=$method;
+    /**
+     * Base constructor.
+     *
+     * @param string $division
+     * @param string $module
+     * @param string $method
+     */
+    final public function __construct($division, $module, $method)
+    {
+        $this->_division = $division;
+        $this->_module   = $module;
+        $this->_method   = $method;
 
-		$this->init();
-	}
+        $this->init();
+    }
 
-	protected	function	init()		{}
+    /**
+     * Custom initialize for controller (calls after ::__construct()).
+     */
+    protected function init()
+    {
+    }
 
-	public		function	setUp()		{}
-						//  anyMethod() {}
-	public		function	tearDown()	{}
+    /**
+     * Custom setups before controller-method called (calls each time before any ::$method() called).
+     */
+    public function setUp()
+    {
+    }
 
-	protected	function	done()		{}
+    /**
+     * Custom cleanups after controller-method called (calls each time after any ::$method() called).
+     */
+    public function tearDown()
+    {
+    }
 
-	final
-	public		function	__destruct()
-	{
-		$this->done();
-	}
+    /**
+     * Custom utilize/cleanups for whole controller (calls in ::__destruct()).
+     */
+    protected function done()
+    {
+    }
+
+    /**
+     * Base destructor.
+     */
+    final public function __destruct()
+    {
+        $this->done();
+    }
 }

@@ -2,15 +2,10 @@
 namespace Colibri\Application;
 
 /**
- * Description of CallType
- *
- * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
- * @package		xTeam
- * @version		1.00
+ * CallType constants.
  */
 class CallType
 {
-	const	view	=0x00;
-	const	method	=0x01;
+    const    view   = 0x00;
+    const    method = 0x01;
 }
-

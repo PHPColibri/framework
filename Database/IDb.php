@@ -4,12 +4,7 @@ namespace Colibri\Database;
 use Colibri\Database\Exception\SqlException;
 
 /**
- * IDb Интерфейс класса для работы с базами данных
- *  
- * @author		alek13
- * @version		1.00
- * @package		xTeam
- * @subpackage	a13FW
+ * IDb Интерфейс класса для работы с базами данных.
  */
 interface IDb
 {
@@ -22,86 +17,193 @@ interface IDb
      * @param      $database
      * @param bool $persistent
      */
-	function __construct($host, $login, $pass, $database, $persistent = false);
-	/**
-	 * Открытие соединения
-	 */
-	public function open();
-	/**
-	 * Проверка открыт ли коннект к базе
-	 *
-	 * @return bool
-	 */
-	public function opened();
-	/**
-	 * Закрытие соединения
-	 */
-	public function close();
-	/**
-	 * Получение переменной соединения
-	 */
-	public function getConnect();
-	/**
-	 * Выборка значения одного поля таблицы из результата
-	 * @param int $row Строка таблицы
-	 * @param int $field Столбец таблицы
- 	 */
-	public function getResult($row = 0, $field = 0);
-	/**
-	 * Запрос к базе данных
-	 * @param string $query_string Строка запроса
-     *
-     * @throws SqlException
-	 */
-	public function query($query_string);
-	/**
-	 * Количество строк в результате запроса на выборку
-	 */
-	public function getNumRows();
-	/**
-	 * Идентификатор последней добавленной записи
-	 */
-	public function lastInsertId();
+    public function __construct($host, $login, $pass, $database, $persistent = false);
 
     /**
-     * Выгрузка результата запроса в массив
+     * Открывает соединение с базой данных.
+     * Opens connection to database.
+     */
+    public function open();
+
+    /**
+     * Проверка открыт ли коннект к базе.
+     * Checks that connection is opened (alive).
+     *
+     * @return bool
+     */
+    public function opened();
+
+    /**
+     * Закрывает соединения.
+     * Closes the connection.
+     *
+     * @return bool TRUE on success
+     */
+    public function close();
+
+    /**
+     * Получение переменной соединения.
+     * Gets the connection.
+     *
+     * @return mixed
+     */
+    public function getConnect();
+
+    /**
+     * Выборка значения одного поля из указанной строки.
+     *
+     * @param int $row   Строка таблицы
+     * @param int $field Столбец таблицы
+     */
+    public function getResult($row = 0, $field = 0);
+
+    /**
+     * Выполняет запрос к базе данных.
+     * Executes given query.
+     *
+     * @param string $query Строка запроса
+     *
+     * @return bool
+     *
+     * @throws SqlException
+     */
+    public function query($query);
+
+    /**
+     * Returns count of retrieved rows in query result.
+     * Количество строк в результате запроса на выборку.
+     *
+     * @return int
+     */
+    public function getNumRows();
+
+    /**
+     * Идентификатор последней добавленной записи.
+     * Returns the auto generated ID of last insert query.
+     *
+     * @return mixed
+     */
+    public function lastInsertId();
+
+    /**
+     * Достаёт все строки из результата запроса в массив указанного вида(асоциативный,нумеровынный,оба).
+     * Fetch all rows from query result as specified(assoc,num,both) array.
      *
      * @param int $param
      *
-     * @return
+     * @return array
      */
-	public function fetchAllRows($param = MYSQLI_ASSOC);
-	/**
-	 * Стока результата запроса в виде массива
-	 * @param int $param Модификатор тива возвращаемого значения
-	 * Возможные параметры: MYSQLI_NUM | MYSQLI_ASSOC | MYSQLI_BOTH
-	 */
-	public function fetchArray($param = MYSQLI_ASSOC);
-	/**
-	 * Возвращает ассоциативный массив с названиями индексов,
-	 * соответсвующими названиям колонок
-	 */
-	public function fetchAssoc();
-	/**
-	 * Количество строк в результате запроса на изменение
-	 */
-	public function getAffectedRows();
-	
-	public	function	transactionStart();
-	public	function	transactionRollback();
-	public	function	transactionCommit();
-
-    public function queries(array $arrQueries,$rollbackOnFail=false);
-
-    public function commit(array $arrQueries);
+    public function fetchAllRows($param = MYSQLI_ASSOC);
 
     /**
+     * Достаёт очередную стоку из результата запроса в виде массива указанниго типа.
+     * Fetch row from query result as an associative array, a numeric array, or both.
+     *
+     * @param int $param Модификатор тива возвращаемого значения
+     *                   Возможные параметры: MYSQLI_NUM | MYSQLI_ASSOC | MYSQLI_BOTH
+     *
+     * @return array
+     */
+    public function fetchArray($param = MYSQLI_ASSOC);
+
+    /**
+     * Достаёт очередную стоку из результата запроса в виде нумерованного массива.
+     * Fetch row from query result as an enumerated array.
+     *
+     * @return array
+     */
+    public function fetchRow();
+
+    /**
+     * Достаёт очередную стоку из результата запроса в виде асоциативного массива (ключи - названия колонок).
+     * Fetch row from query result as an associative array.
+     *
+     * @return array
+     */
+    public function fetchAssoc();
+
+    /**
+     * Возвращает количество строк, затронутых запросом на изменение (insert, update, replace, delete, ...)
+     * Returns count of rows that query affected.
+     *
+     * @return int|string
+     */
+    public function getAffectedRows();
+
+    /**
+     * Открывает транзакцию.
+     * Starts database transaction.
+     *
+     * @return bool
+     */
+    public function transactionStart();
+
+    /**
+     * Откатывает транзакцию.
+     * Rolls back database transaction.
+     *
+     * @return bool
+     */
+    public function transactionRollback();
+
+    /**
+     * "Комитит" транзакцию в БД.
+     * Commits database transaction.
+     *
+     * @return bool
+     */
+    public function transactionCommit();
+
+    /**
+     * Выполняет несколько запросов.
+     * Executes a number of $queries.
+     *
+     * @param array $queries        запросы, которые нужно выполнить. queries to execute.
+     * @param bool  $rollbackOnFail нужно ли откатывать транзакцию.   if you need to roll back transaction.
+     *
+     * @return bool
+     */
+    public function queries(array $queries, $rollbackOnFail = false);
+
+    /**
+     * Выполняет несколько запросов внутри одной транзакции.
+     * Executes number of $queries within transaction.
+     *
+     * @param array $queries
+     *
+     * @return bool
+     */
+    public function commit(array $queries);
+
+    /**
+     * Кеширует и возвращает информацию о полях таблицы.
+     * Caches and returns table columns info.
+     *
      * @param string $tableName
+     *
      * @return array
      */
     public function &getColumnsMetadata($tableName);
 
+    /**
+     * Подготавливает значение для вставки в строку запроса.
+     * Prepares value for insert into query string.
+     *
+     * @param mixed  $value
+     * @param string $type
+     *
+     * @return float|int|string
+     */
     public function prepareValue(&$value, $type);
 
-    public static function getQueryTemplateArray($tpl, $arguments);
+    /**
+     * Собирает шаблон запроса, подставляя значения из $arguments.
+     * Compile query template with specified $arguments array.
+     *
+     * @param string $tpl
+     * @param array  $arguments
+     *
+     * @return string
+     */
+    public static function getQueryTemplateArray($tpl, array $arguments);
 }

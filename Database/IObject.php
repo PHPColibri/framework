@@ -1,21 +1,41 @@
 <?php
 namespace Colibri\Database;
 
-/**
- *
- *
- * @author		Александр Чибрикин aka alek13 <alek13.me@gmail.com>
- * @package		xTeam
- * @subpackage	a13FW
- * @category	interfaces
- * @version		1.00
- */
-interface	IObject
+interface IObject
 {
-		public	function	__get($propertyName);
-		public	function	create();
-		public	function	delete();
-		public	function	save(array $attributes=null);
-		public	function	load($id=null);
-		public	function	reload();
+    /**
+     * @param string $propertyName
+     *
+     * @return mixed
+     */
+    public function __get($propertyName);
+
+    /**
+     * @return static
+     */
+    public function create();
+
+    /**
+     * @return void
+     */
+    public function delete();
+
+    /**
+     * @param array|null $attributes
+     *
+     * @return bool
+     */
+    public function save(array $attributes = null);
+
+    /**
+     * @param int|array|null $id_or_where
+     *
+     * @return bool|null
+     */
+    public function load($id_or_where = null);
+
+    /**
+     * @return bool|null
+     */
+    public function reload();
 }

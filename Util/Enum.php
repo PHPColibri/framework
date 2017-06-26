@@ -4,19 +4,19 @@ namespace Colibri\Util;
 use Colibri\Pattern\Helper;
 
 /**
- * Class Enum.
+ * Enum-like class. Specify possible values with const-ants.
  */
 abstract class Enum extends Helper
 {
-
-// @todo
-//	/**
-//	 * @var array cached valid values for classes
-//	 */
-//	protected static $validValues = [] или null;
+    // @todo
+//  /**
+//   * @var array cached valid values for classes
+//   */
+//  protected static $validValues = [] или null;
 
     /**
      * @todo LLP: можно сделать "кеш", если это вообще хоть как-то ускорит (см. комменты)
+     *
      * @return array
      */
     public static function getValidValues()
@@ -25,8 +25,10 @@ abstract class Enum extends Helper
             /* ? <self::$validValues[get_called_class()]> или <static::$validValues> : */
             static::getConstList();
     }
+
     /**
      * @param string $value
+     *
      * @return bool
      */
     public static function isValid($value)
