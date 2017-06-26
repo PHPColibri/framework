@@ -16,7 +16,6 @@ class Image
     const RESIZE_CROPPED = 'cropped';
 
     /**
-     *
      * @param string $path
      * @param int    $width
      * @param int    $height
@@ -24,6 +23,7 @@ class Image
      * @param int    $bgColor
      *
      * @return string binary stream with thumbnail
+     *
      * @throws \Exception
      */
     public static function createThumbnail($path, $width = 100, $height = 100, $resizeType = self::RESIZE_FILLED, $bgColor = 0xfff5ee)
@@ -31,7 +31,7 @@ class Image
         $img = self::createFromFileByMime($path);
 
         // Build the thumbnail
-        $new_img = ImageCreateTrueColor($width, $height);
+        $new_img = imagecreatetruecolor($width, $height);
 
         if ($resizeType == self::RESIZE_FILLED) {
             // Fill the image gray
@@ -43,8 +43,9 @@ class Image
         // Resize and copy to the new image
         list(
             $src_x, $src_y, $src_w, $src_h,
-            $dst_x, $dst_y, $dst_w, $dst_h,
-            ) = self::calcResizeParams($resizeType, $img, $width, $height);
+            $dst_x, $dst_y, $dst_w, $dst_h
+            )
+            = self::calcResizeParams($resizeType, $img, $width, $height);
         if ( ! @imagecopyresampled($new_img, $img, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h)) {
             throw new \Exception('can`t create thumbnail: can`t resize image');
         }
@@ -59,6 +60,7 @@ class Image
      * @param int      $tmbHeight
      *
      * @return array
+     *
      * @throws \Exception
      */
     private static function calcResizeParams($resizeType, $img, $tmbWidth, $tmbHeight)
@@ -86,14 +88,14 @@ class Image
                 }
 
                 return [
-                    0,                             // $src_x
-                    0,                             // $src_y
-                    $width,                        // $src_w
-                    $height,                       // $src_h
-                    ($tmbWidth - $new_width) / 2,  // $dst_x
-                    ($tmbHeight - $new_height) / 2,// $dst_y
-                    $new_width,                    // $dst_w
-                    $new_height,                   // $dst_h
+                    0,                              // $src_x
+                    0,                              // $src_y
+                    $width,                         // $src_w
+                    $height,                        // $src_h
+                    ($tmbWidth - $new_width) / 2,   // $dst_x
+                    ($tmbHeight - $new_height) / 2, // $dst_y
+                    $new_width,                     // $dst_w
+                    $new_height,                    // $dst_h
                 ];
 
             case self::RESIZE_CROPPED:
@@ -112,7 +114,6 @@ class Image
                     $w =
                     $h = $width;
                 }
-
 
                 return [
                     $x,         // $src_x
@@ -134,6 +135,7 @@ class Image
      * @param string $path
      *
      * @return resource GD image
+     *
      * @throws \Exception
      */
     private static function createFromFileByMime($path)
@@ -164,12 +166,13 @@ class Image
      * @param resource $img GD image
      *
      * @return array
+     *
      * @throws \Exception
      */
     private static function getImageSize($img)
     {
-        $width  = imageSX($img);
-        $height = imageSY($img);
+        $width  = imagesx($img);
+        $height = imagesy($img);
         if ( ! $width || ! $height) {
             throw new \Exception('can`t create thumbnail: can`t get image size, invalid image width or height');
         }
@@ -181,6 +184,7 @@ class Image
      * @param resource $img
      *
      * @return string
+     *
      * @throws \Exception
      */
     private static function getJpegToVar($img)

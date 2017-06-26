@@ -27,6 +27,7 @@ abstract class PropertyAccess
      * @param string $propName
      *
      * @return mixed
+     *
      * @throws \RuntimeException
      */
     public function __get($propName)
@@ -44,6 +45,7 @@ abstract class PropertyAccess
      * @param mixed  $propValue
      *
      * @return mixed
+     *
      * @throws \RuntimeException
      */
     public function __set($propName, $propValue)

@@ -28,6 +28,7 @@ class Log extends Helper
      * @param bool   $logServerVars log or not additional info ($_GET, $_POST, $_SESSION, $_COOKIE)
      *
      * @return bool
+     *
      * @throws \InvalidArgumentException if can`t get the real-path of log config file
      */
     public static function add($message, $who = 'colibri', $logServerVars = false)
@@ -52,6 +53,7 @@ class Log extends Helper
      * @param string $who     log name
      *
      * @return bool TRUE on success, FALSE on fail
+     *
      * @throws \InvalidArgumentException if can`t get the real-path of log config file
      */
     public static function warning($message, $who = 'colibri')
@@ -66,6 +68,7 @@ class Log extends Helper
      * @param $who
      *
      * @return bool
+     *
      * @throws \InvalidArgumentException if can`t get the real-path of log config file
      */
     private static function write2file($message, $who)
@@ -104,6 +107,7 @@ class Log extends Helper
 
     /**
      * @return array
+     *
      * @throws \InvalidArgumentException if can`t get the real-path of log config file
      */
     private static function loadFromConfig()

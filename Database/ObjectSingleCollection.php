@@ -5,7 +5,6 @@ use Colibri\Database;
 
 /**
  * ObjectSingleCollection.
- *
  */
 class ObjectSingleCollection extends ObjectCollection
 {
@@ -13,6 +12,7 @@ class ObjectSingleCollection extends ObjectCollection
      * @param string $propertyName
      *
      * @return bool|mixed|string
+     *
      * @throws \RuntimeException
      */
     public function __get($propertyName)
@@ -50,6 +50,7 @@ class ObjectSingleCollection extends ObjectCollection
 
     // with DataBase
     ///////////////////////////////////////////////////////////////////////////
+
     /**
      * @param \Colibri\Database\Object $id
      *
@@ -77,5 +78,6 @@ class ObjectSingleCollection extends ObjectCollection
     {
         return true;
     }
+
     ///////////////////////////////////////////////////////////////////////////
 }

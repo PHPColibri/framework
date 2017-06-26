@@ -28,7 +28,6 @@ class Memcache extends Helper implements ICache
      */
     private static $queriesCount = 0;
 
-
     /**
      * @return int count of queries to Memcache statistics
      */
@@ -39,6 +38,7 @@ class Memcache extends Helper implements ICache
 
     /**
      * @return \Memcache
+     *
      * @throws \InvalidArgumentException
      */
     private static function getMemcache()
@@ -62,6 +62,7 @@ class Memcache extends Helper implements ICache
 
     /**
      * @return array
+     *
      * @throws \InvalidArgumentException
      */
     private static function getConfig()
@@ -80,6 +81,7 @@ class Memcache extends Helper implements ICache
      * @param string $key for data
      *
      * @return bool|mixed returns false if failed OR cached data
+     *
      * @throws \InvalidArgumentException
      */
     public static function get($key)
@@ -100,7 +102,8 @@ class Memcache extends Helper implements ICache
      *                       You can also use Unix timestamp or a number of seconds starting from current time,
      *                       but in the latter case the number of seconds may not exceed 2592000 (30 days).
      *
-     * @return bool Returns <b>TRUE</b> on success or <b>FALSE</b> on failure.
+     * @return bool returns <b>TRUE</b> on success or <b>FALSE</b> on failure
+     *
      * @throws \InvalidArgumentException
      */
     public static function set($key, $val, $expire = null)
@@ -118,10 +121,10 @@ class Memcache extends Helper implements ICache
     }
 
     /**
-     *
      * @param string $key
      *
-     * @return bool true on success and false on fail.
+     * @return bool true on success and false on fail
+     *
      * @throws \InvalidArgumentException
      */
     public static function delete($key)
@@ -146,6 +149,7 @@ class Memcache extends Helper implements ICache
      *                                   days).
      *
      * @return mixed
+     *
      * @throws \InvalidArgumentException
      */
     public static function remember($key, \Closure $getValueCallback, $expire = null)

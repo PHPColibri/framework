@@ -64,6 +64,7 @@ class API
      * @param ...
      *
      * @return string
+     *
      * @throws \Colibri\Application\Exception\NotFoundException
      * @throws \LogicException
      */
@@ -81,6 +82,7 @@ class API
      * @param ...
      *
      * @return string
+     *
      * @throws \Colibri\Application\Exception\NotFoundException
      * @throws \LogicException
      */
@@ -116,6 +118,7 @@ class API
      * @param ...
      *
      * @return string
+     *
      * @throws \InvalidArgumentException
      */
     public static function callModuleMethodCached($division, $module, $method/* , ... */)
@@ -141,6 +144,7 @@ class API
      * @param string $method
      *
      * @return string
+     *
      * @throws \InvalidArgumentException
      */
     public static function getModuleViewCached($division, $module, $method/* , ... */)

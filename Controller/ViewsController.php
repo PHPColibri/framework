@@ -20,11 +20,11 @@ abstract class ViewsController extends Base
      */
     protected $template = null;
     /**
-     * @var    bool tells to core to use template or not
+     * @var bool tells to core to use template or not
      */
     protected $useTemplate = true;
     /**
-     * @var    bool
+     * @var bool
      */
     protected $useBackbone = true;
     /**
@@ -35,7 +35,6 @@ abstract class ViewsController extends Base
      * @var bool
      */
     protected $_showAppDevToolsOnDebug = true;
-
 
     /**
      * @var string
@@ -95,7 +94,6 @@ abstract class ViewsController extends Base
                 $this->template->load($tplName);
             }
         }
-
 
         if ( ! $this->useBackbone) {
             if ($this->template->getFilename() === null) {

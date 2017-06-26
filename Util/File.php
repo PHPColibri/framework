@@ -12,7 +12,8 @@ class File
      * @param string $filePath
      *
      * @throws \Exception
-     * @return string string with mime-type like 'image/jpeg' & etc.
+     *
+     * @return string string with mime-type like 'image/jpeg' & etc
      */
     public static function getMimeType($filePath)
     {

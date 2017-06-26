@@ -4,7 +4,7 @@ namespace Colibri\Tests\Database;
 use Colibri\Config\Config;
 use Colibri\Database\Db;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class DbTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateDb_NoDefault()
     {

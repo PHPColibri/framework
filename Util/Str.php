@@ -24,9 +24,10 @@ class Str extends Helper
      * Generates random string.
      *
      * @param string $type one of 'alnum', 'numeric', 'nozero', 'unique', 'guid'
-     * @param int    $len  length of generated string.
+     * @param int    $len  length of generated string
      *
      * @return string
+     *
      * @throws \Exception
      */
     public static function random($type = 'alnum', $len = 8)
@@ -48,7 +49,7 @@ class Str extends Helper
                 }
                 $str = '';
                 for ($i = 0; $i < $len; $i++) {
-                    /** @noinspection PhpUndefinedVariableInspection */
+                    /* @noinspection PhpUndefinedVariableInspection */
                     $str .= substr($pool, mt_rand(0, strlen($pool) - 1), 1);
                 }
 
@@ -69,9 +70,9 @@ class Str extends Helper
      */
     public static function generateGUID()
     {
-        $guidStr = "";
+        $guidStr = '';
         for ($i = 1; $i <= 16; $i++) {
-            $b = (int)rand(0, 0xff);
+            $b = (int)mt_rand(0, 0xff);
             if ($i == 7) {
                 $b &= 0x0f;
                 $b |= 0x40;
@@ -80,7 +81,7 @@ class Str extends Helper
                 $b &= 0x3f;
                 $b |= 0x80;
             } // variant
-            $guidStr .= sprintf("%02s", base_convert($b, 10, 16));
+            $guidStr .= sprintf('%02s', base_convert($b, 10, 16));
             if ($i == 4 || $i == 6 || $i == 8 || $i == 10) {
                 $guidStr .= '-';
             }

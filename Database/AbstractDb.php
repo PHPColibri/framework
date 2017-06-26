@@ -34,6 +34,7 @@ abstract class AbstractDb implements IDb
      * @param string $tableName
      *
      * @return array
+     *
      * @throws \InvalidArgumentException
      */
     public function &getColumnsMetadata($tableName)
@@ -68,6 +69,7 @@ abstract class AbstractDb implements IDb
      * @param bool  $rollbackOnFail нужно ли откатывать транзакцию.   if you need to roll back transaction.
      *
      * @return bool
+     *
      * @throws \Colibri\Database\Exception\SqlException
      */
     public function queries(array $queries, $rollbackOnFail = false)

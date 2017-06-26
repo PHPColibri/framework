@@ -22,7 +22,7 @@ class ValidationException extends Exception
      */
     public function __construct(array $errors, Exception $previous = null)
     {
-        parent::__construct("", 0, $previous);
+        parent::__construct('', 0, $previous);
         $this->errors = $errors;
     }
 

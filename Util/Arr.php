@@ -24,15 +24,15 @@ class Arr extends Helper
     /**
      * Gets value from $array using "dot" notation, or returns $default value.
      *
-     * @param  array  $array
-     * @param  string $dottedKey
-     * @param  mixed  $default
+     * @param array  $array
+     * @param string $dottedKey
+     * @param mixed  $default
      *
      * @return mixed
      */
     public static function get(array $array, $dottedKey = null, $default = null)
     {
-        if (is_null($dottedKey)) {
+        if ($dottedKey === null) {
             return $array;
         }
         if (isset($array[$dottedKey])) {
@@ -60,14 +60,14 @@ class Arr extends Helper
      */
     public static function &set(&$array, $dottedKey, $value)
     {
-        if (is_null($dottedKey)) {
+        if ($dottedKey === null) {
             return $array = $value;
         }
 
         $k = explode('.', $dottedKey, 2);
 
         $array[$k[0]] = isset($k[1])
-            ? Arr::set($array[$k[0]], $k[1], $value)
+            ? self::set($array[$k[0]], $k[1], $value)
             : $value;
 
         return $array;
@@ -93,7 +93,7 @@ class Arr extends Helper
         $k = explode('.', $dottedKey, 2);
 
         return isset($k[1])
-            ? Arr::remove($array[$k[0]], $k[1])
+            ? self::remove($array[$k[0]], $k[1])
             : null;
     }
 

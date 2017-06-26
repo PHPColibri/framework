@@ -64,6 +64,7 @@ interface IDb
      * @param string $query Строка запроса
      *
      * @return bool
+     *
      * @throws SqlException
      */
     public function query($query);

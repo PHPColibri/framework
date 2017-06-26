@@ -12,6 +12,7 @@ class LocalConfig extends Config
      * @param string $name
      *
      * @return array
+     *
      * @throws \InvalidArgumentException
      */
     protected static function load($name)
@@ -25,6 +26,7 @@ class LocalConfig extends Config
      * Just override base dir (with `.../local`).
      *
      * @return string
+     *
      * @throws \InvalidArgumentException
      */
     public static function getBaseDir()

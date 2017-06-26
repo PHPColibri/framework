@@ -40,14 +40,14 @@ class Layout extends Helper
     {
         static::filename($filename);
 
-        static::$description =
-        static::$keywords =
-        static::$title =
+        static::$description   =
+        static::$keywords      =
+        static::$title         =
         static::$jsTextOnReady = '';
-        static::$css         =
-        static::$js =
-        static::$jsText =
-        static::$jsMgr = [];
+        static::$css           =
+        static::$js            =
+        static::$jsText        =
+        static::$jsMgr         = [];
     }
 
     /**
@@ -81,7 +81,7 @@ class Layout extends Helper
      */
     public static function addJs($jsFilename, $path = RES_JS)
     {
-        static::$js [] = $path . $jsFilename;
+        static::$js[] = $path . $jsFilename;
     }
 
     /**
@@ -170,6 +170,7 @@ class Layout extends Helper
      * @param string $content
      *
      * @return string
+     *
      * @throws \Exception
      */
     public static function compile($content)
@@ -178,7 +179,7 @@ class Layout extends Helper
         $layoutTplVars['content'] = $content;
         //TODO: special chars
         $layoutTplVars['keywords'] = ! empty(static::$keywords) ? "<meta name='keywords' content='" . static::$keywords . "' />\n" : '';
-        $layoutTplVars['title']    = ! empty(static::$title) ? "<title>" . htmlspecialchars(static::$title) . "</title>\n" : '';
+        $layoutTplVars['title']    = ! empty(static::$title) ? '<title>' . htmlspecialchars(static::$title) . "</title>\n" : '';
         //TODO: special chars
         $layoutTplVars['description'] = ! empty(static::$description) ? "<meta name='description' content='" . static::$description . "' />\n" : '';
         $layoutTplVars['javascript']  = '';

@@ -20,7 +20,6 @@ class Session extends Helper
      */
     private static $storage = null;
 
-
     /**
      * Starts the Session.
      */

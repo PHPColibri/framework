@@ -19,7 +19,6 @@ abstract class DynamicCollection extends PropertyAccess implements IDynamicColle
      */
     abstract protected function fillItems();
 
-
     //// ArrayAccess implementation
 
     /**

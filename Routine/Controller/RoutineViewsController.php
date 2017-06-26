@@ -184,6 +184,7 @@ abstract class RoutineViewsController extends ViewsController
      * @param int                      $id
      *
      * @return bool
+     *
      * @throws \Colibri\Database\Exception\SqlException
      */
     protected function dbChange(Database\Object $item, $id = null)

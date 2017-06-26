@@ -11,13 +11,11 @@ class PhpTemplate
      */
     protected $filename = null;
     /**
-     * @var array  variables of template for compile
+     * @var array variables of template for compile
      */
     public $vars = [];
 
-
     /**
-     *
      * @param string $filename имя файла
      *
      * @throws \Exception file does not exists
@@ -51,6 +49,7 @@ class PhpTemplate
      * @param string $filename
      *
      * @return $this
+     *
      * @throws \Exception filename not set or file does not exists
      */
     public function load($filename = null)
@@ -82,7 +81,7 @@ class PhpTemplate
 
         ob_start();
         /** @noinspection PhpIncludeInspection */
-        include($this->filename);
+        include $this->filename;
         $__strCompiled__ = ob_get_contents();
         ob_end_clean();
 

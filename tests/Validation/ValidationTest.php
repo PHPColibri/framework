@@ -29,6 +29,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Colibri\Validation\Validation::forScope
+     *
      * @return Validation
      */
     public function testForScope()
@@ -460,6 +461,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     *
      * @throws \Colibri\Validation\ValidationException
      */
     public function testValidate(Validation $validation)

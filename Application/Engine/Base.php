@@ -34,9 +34,7 @@ abstract class Base extends PropertyAccess implements IEngine
         AbstractDb::$useMemcacheForMetadata =
             $config['useCache'];
 
-        Object::$debug =
-        MySQL::$monitorQueries =
-            $config['debug'];
+        Object::$debug = MySQL::$monitorQueries = $config['debug'];
 
         Db::setConfig(Config::get('database'));
 

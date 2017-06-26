@@ -8,15 +8,15 @@ use Colibri\Pattern\Helper;
  */
 abstract class Enum extends Helper
 {
-
-// @todo
-//	/**
-//	 * @var array cached valid values for classes
-//	 */
-//	protected static $validValues = [] или null;
+    // @todo
+//  /**
+//   * @var array cached valid values for classes
+//   */
+//  protected static $validValues = [] или null;
 
     /**
      * @todo LLP: можно сделать "кеш", если это вообще хоть как-то ускорит (см. комменты)
+     *
      * @return array
      */
     public static function getValidValues()

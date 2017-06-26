@@ -1,9 +1,6 @@
 <?php
 namespace Colibri\Database;
 
-/**
- *
- */
 interface IObject
 {
     /**

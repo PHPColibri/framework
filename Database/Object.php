@@ -55,7 +55,6 @@ abstract class Object implements IObject
      */
     protected $objects = [];
 
-
     /**
      * @param int|array $id_or_row
      *
@@ -110,6 +109,7 @@ abstract class Object implements IObject
      * @param mixed|array $id_or_where
      *
      * @return static
+     *
      * @throws DbException
      * @throws \Exception
      */
@@ -127,6 +127,7 @@ abstract class Object implements IObject
      * @param mixed|array $id_or_where
      *
      * @return static
+     *
      * @throws DbException
      * @throws NotFoundException
      * @throws \Exception
@@ -172,18 +173,22 @@ abstract class Object implements IObject
 
     /**
      * @return IDb
+     *
      * @throws DbException
      */
     final public static function db()
     {
         return Db::connection(static::$connectionName);
     }
+
     /**************************************************************************/
+
     /**
      * @param string $name
      * @param mixed  $value
      *
      * @return string
+     *
      * @throws DbException
      */
     protected function buildNameEqValue($name, $value)
@@ -200,6 +205,7 @@ abstract class Object implements IObject
      * @param string $fieldPrefix
      *
      * @return string
+     *
      * @throws DbException
      */
     protected function getFieldsNameValueList($fieldPrefix = '')
@@ -225,6 +231,7 @@ abstract class Object implements IObject
      * @param string $fieldPrefix
      *
      * @return string
+     *
      * @throws DbException
      */
     protected function getWhereCondition($fieldPrefix = '')
@@ -241,6 +248,7 @@ abstract class Object implements IObject
      * @param string $fieldPrefix
      *
      * @return string
+     *
      * @throws DbException
      */
     protected function getPKCondition($fieldPrefix = '')
@@ -293,6 +301,7 @@ abstract class Object implements IObject
      * @param array  $arguments
      *
      * @return mixed
+     *
      * @throws \Exception
      */
     public function __call($name, $arguments)
@@ -323,6 +332,7 @@ abstract class Object implements IObject
      * @param string $propertyName
      *
      * @return ObjectCollection|ObjectMultiCollection|ObjectSingleCollection|Object
+     *
      * @throws \Exception
      */
     public function __get($propertyName)
@@ -359,6 +369,7 @@ abstract class Object implements IObject
      * @param mixed  $propertyValue
      *
      * @return mixed
+     *
      * @throws \Exception
      */
     public function __set($propertyName, $propertyValue)
@@ -386,6 +397,7 @@ abstract class Object implements IObject
      * @param array $where
      *
      * @return bool
+     *
      * @throws \Exception
      */
     protected static function recordExists(array $where)
@@ -403,6 +415,7 @@ abstract class Object implements IObject
      * @param array $attributes
      *
      * @return $this
+     *
      * @throws DbException
      * @throws \Exception
      */
@@ -422,6 +435,7 @@ abstract class Object implements IObject
      * @param mixed|array $id_or_where
      *
      * @return bool
+     *
      * @throws DbException
      * @throws \Exception
      */
@@ -435,7 +449,6 @@ abstract class Object implements IObject
                 $this->{static::$PKFieldName[0]} = $id_or_where;
             }
         } else {
-            ;
         }
 
         return $this->doQuery($this->deleteQuery());
@@ -445,6 +458,7 @@ abstract class Object implements IObject
      * @param array $attributes
      *
      * @return bool
+     *
      * @throws DbException
      * @throws \Exception
      */
@@ -460,6 +474,7 @@ abstract class Object implements IObject
      * @param array $values
      *
      * @return static
+     *
      * @throws DbException
      * @throws \Exception
      */
@@ -470,6 +485,7 @@ abstract class Object implements IObject
 
     /**
      * @return bool|null
+     *
      * @throws \Colibri\Database\DbException
      * @throws \Exception
      */
@@ -482,6 +498,7 @@ abstract class Object implements IObject
      * @param mixed|array $id_or_where
      *
      * @return bool|null
+     *
      * @throws DbException
      * @throws \Exception
      */
@@ -495,7 +512,6 @@ abstract class Object implements IObject
                 $this->{static::$PKFieldName[0]} = $id_or_where;
             }
         } else {
-            ;
         }
         if ( ! $this->doQuery($this->loadQuery())) {
             return false;
@@ -512,10 +528,10 @@ abstract class Object implements IObject
     }
 
     /**
-     *
      * @param mixed $id PK value - int, string or array if multifield PK
      *
      * @return static
+     *
      * @throws DbException
      * @throws \Exception
      */
@@ -528,6 +544,7 @@ abstract class Object implements IObject
      * @param string $sqlQuery
      *
      * @return bool|null
+     *
      * @throws DbException
      * @throws \Exception
      */
@@ -557,6 +574,7 @@ abstract class Object implements IObject
 
     /**
      * @deprecated will be removed
+     *
      * @return string
      */
     public function getFieldsAsXMLstring()
@@ -564,7 +582,7 @@ abstract class Object implements IObject
         $strXMLPart = '';
         foreach ($this as $propName => $propValue) {
             if (in_array($propName, $this->fields)) {
-                $strXMLPart .= '<' . $propName . '>' . (is_null($propValue) ? '<null />' : $propValue) . '</' . $propName . '>';
+                $strXMLPart .= '<' . $propName . '>' . ($propValue === null? '<null />' : $propValue) . '</' . $propName . '>';
             }
         }
 
@@ -598,6 +616,7 @@ abstract class Object implements IObject
      * @param string $strQuery
      *
      * @return bool true on success or false on failure (if no exceptions on)
+     *
      * @throws DbException
      * @throws SqlException
      * @throws \Exception
@@ -615,6 +634,7 @@ abstract class Object implements IObject
      * @param array $arrQueries
      *
      * @return bool
+     *
      * @throws DbException
      * @throws \Exception
      */
@@ -629,6 +649,7 @@ abstract class Object implements IObject
      * @param array $queries
      *
      * @return bool
+     *
      * @throws DbException
      * @throws \Exception
      */

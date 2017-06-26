@@ -41,7 +41,7 @@ class Validation extends PropertyAccess
     /**
      * Validation constructor.
      *
-     * @param array $scope initial scope of data to validate.
+     * @param array $scope initial scope of data to validate
      */
     public function __construct(array $scope = null)
     {
@@ -89,7 +89,6 @@ class Validation extends PropertyAccess
     {
         $this->_errors[$key] = $message;
     }
-
 
     /**
      * 'Required' validation rule. Checks if specified by $key data exists in scope.
@@ -386,6 +385,7 @@ class Validation extends PropertyAccess
      * Validates the data scope.
      *
      * @throws ValidationException
+     *
      * @return $this
      */
     public function validate()

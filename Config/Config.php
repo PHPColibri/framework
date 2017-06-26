@@ -26,6 +26,7 @@ class Config extends Helper
      * @param string $name config file name
      *
      * @return string
+     *
      * @throws \InvalidArgumentException if can`t get the real-path of config file
      */
     protected static function getFilepath($name)
@@ -37,18 +38,20 @@ class Config extends Helper
      * @param string $name config file name
      *
      * @return array
+     *
      * @throws \InvalidArgumentException if can`t get the real-path of config file
      */
     protected static function load($name)
     {
-        /** @noinspection PhpIncludeInspection */
-        return include(static::getFilepath($name));
+        /* @noinspection PhpIncludeInspection */
+        return include static::getFilepath($name);
     }
 
     /**
      * @param string $name config file name
      *
      * @return bool
+     *
      * @throws \InvalidArgumentException if can`t get the real-path of config file
      */
     public static function exists($name)
@@ -60,6 +63,7 @@ class Config extends Helper
      * @param string $name config file name
      *
      * @return array
+     *
      * @throws \InvalidArgumentException if can`t get the real-path of config file
      */
     final public static function get($name)
@@ -75,6 +79,7 @@ class Config extends Helper
      * @param string $name config file name
      *
      * @return array
+     *
      * @throws \InvalidArgumentException if can`t get the real-path of config file
      */
     final public static function getOrEmpty($name)
@@ -88,6 +93,7 @@ class Config extends Helper
      * @param string $path
      *
      * @return string returns the real path
+     *
      * @throws \InvalidArgumentException if can`t get the real-path of config file
      */
     public static function setBaseDir($path)
@@ -102,6 +108,7 @@ class Config extends Helper
 
     /**
      * @return string
+     *
      * @throws \InvalidArgumentException if can`t get the real-path of config file
      */
     public static function getBaseDir()
@@ -116,6 +123,7 @@ class Config extends Helper
      * @param array  $arguments (string $key, mixed $default = null)
      *
      * @return mixed
+     *
      * @throws \InvalidArgumentException if can`t get the real-path of config file
      */
     public static function __callStatic($name, $arguments)

@@ -7,6 +7,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @covers \Colibri\Config\Config::setBaseDir
+     *
      * @throws \Exception
      */
     public function testSetBaseDir()
@@ -59,6 +60,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers  \Colibri\Config\Config::get
      * @depends testSetBaseDir
+     *
      * @throws \Exception
      */
     public function testGet()
@@ -75,9 +77,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function test__callStatic()
     {
-        /** @noinspection PhpUndefinedMethodInspection */
+        /* @noinspection PhpUndefinedMethodInspection */
         $this->assertEquals(true, Config::sample('test'));
-        /** @noinspection PhpUndefinedMethodInspection */
+        /* @noinspection PhpUndefinedMethodInspection */
         $this->assertEquals('inArrValue', Config::sample('arraySetting.arrSettingKey'));
     }
 }

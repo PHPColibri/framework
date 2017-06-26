@@ -38,6 +38,7 @@ class ObjectMultiCollection extends ObjectCollection
      * @param string $propertyName
      *
      * @return mixed
+     *
      * @throws \RuntimeException
      */
     public function __get($propertyName)
@@ -73,6 +74,7 @@ class ObjectMultiCollection extends ObjectCollection
 
     // with Items
     ///////////////////////////////////////////////////////////////////////////
+
     /**
      * @param array $row
      *
@@ -91,12 +93,15 @@ class ObjectMultiCollection extends ObjectCollection
 
         return $item->setIntermediate($intermediateAttributes);
     }
+
     // with DataBase
     ///////////////////////////////////////////////////////////////////////////
+
     /**
      * @param \Colibri\Database\Object $object
      *
      * @return bool
+     *
      * @throws \Colibri\Database\Exception\SqlException
      */
     protected function addToDb(Database\Object &$object)
@@ -110,6 +115,7 @@ class ObjectMultiCollection extends ObjectCollection
      * @param int $id
      *
      * @return bool
+     *
      * @throws \Colibri\Database\Exception\SqlException
      */
     protected function delFromDb($id)
@@ -121,6 +127,7 @@ class ObjectMultiCollection extends ObjectCollection
 
     /**
      * @return array|bool
+     *
      * @throws \Colibri\Database\Exception\SqlException
      */
     protected function selFromDbAll()
@@ -134,11 +141,13 @@ class ObjectMultiCollection extends ObjectCollection
 
     /**
      * @return bool
+     *
      * @throws \Colibri\Database\Exception\SqlException
      */
     protected function delFromDbAll()
     {
         return $this->doQuery($this->delFromDbAllQuery);
     }
+
     ///////////////////////////////////////////////////////////////////////////
 }

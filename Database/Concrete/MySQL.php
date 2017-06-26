@@ -93,6 +93,7 @@ class MySQL extends AbstractDb
      * Closes the connection.
      *
      * @return bool
+     *
      * @throws \Colibri\Database\DbException
      */
     public function close()
@@ -248,7 +249,9 @@ class MySQL extends AbstractDb
      * @param string $query
      *
      * @return bool
+     *
      * @throws SqlException
+     *
      * @global int   $time
      */
     public function query($query)
@@ -320,6 +323,7 @@ class MySQL extends AbstractDb
      * @param string $tpl
      *
      * @return bool
+     *
      * @throws \Colibri\Database\Exception\SqlException
      */
     public function queryTemplate($tpl/*, ...*/)
@@ -361,6 +365,7 @@ class MySQL extends AbstractDb
      * Starts database transaction.
      *
      * @return bool
+     *
      * @throws \Colibri\Database\Exception\SqlException
      */
     public function transactionStart()
@@ -373,6 +378,7 @@ class MySQL extends AbstractDb
      * Rolls back database transaction.
      *
      * @return bool
+     *
      * @throws \Colibri\Database\Exception\SqlException
      */
     public function transactionRollback()
@@ -385,6 +391,7 @@ class MySQL extends AbstractDb
      * Commits database transaction.
      *
      * @return bool
+     *
      * @throws \Colibri\Database\Exception\SqlException
      */
     public function transactionCommit()
@@ -400,6 +407,7 @@ class MySQL extends AbstractDb
      *
      * @return array fields:   [TABLE_SCHEMA] ,TABLE_NAME, COLUMN_NAME
      *               refs to:  [REFERENCED_TABLE_SCHEMA ], REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
+     *
      * @throws SqlException
      */
     public function getTableFKs($tableName)
@@ -416,6 +424,7 @@ class MySQL extends AbstractDb
      * @param array $queries
      *
      * @return bool
+     *
      * @throws \Colibri\Database\Exception\SqlException
      */
     public function commit(array $queries)
@@ -501,6 +510,7 @@ class MySQL extends AbstractDb
      * @param string $tableName
      *
      * @return array
+     *
      * @throws DbException
      * @throws SqlException
      */
@@ -538,8 +548,8 @@ class MySQL extends AbstractDb
      */
     private function &extractFieldTypeLength(&$strFieldType)
     {
-        $len = explode(")", $strFieldType);
-        $len = explode("(", $len[0]);
+        $len = explode(')', $strFieldType);
+        $len = explode('(', $len[0]);
         if (count($len) > 1) {
             $len = &$len[1];
         } else {

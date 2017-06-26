@@ -14,7 +14,6 @@ use LogicException;
  *
  * @property string                            $domainPrefix
  * @property MethodsController|ViewsController $responser
- *
  * @property bool                              $showProfilerInfoOnDebug
  * @property bool                              $showAppDevToolsOnDebug
  */
@@ -65,9 +64,9 @@ class Engine extends Engine\Base
         set_exception_handler('\Colibri\Application\Engine::exceptionHandler');
     }
 
-
     /**
      * @return void
+     *
      * @throws \InvalidArgumentException
      */
     protected function initialize()
@@ -80,10 +79,9 @@ class Engine extends Engine\Base
         define('DEBUG', $appConfig['debug']);
         self::setUpErrorHandling();
 
-
         $this->_domainPrefix = $this->getDomainPrefix();
 
-        new \API($this);// initialize API
+        new \API($this); // initialize API
 
         $requestedUri = $this->getRequestedUri();
         /** @noinspection PhpUndefinedMethodInspection */
@@ -102,9 +100,9 @@ class Engine extends Engine\Base
     }
 
     /**
-     * @return    string        returns requested file name with path: for
-     *                          "http://example.com/some/dir/somefile.php?arg1=val1&arg2=val2" returns
-     *                          "/some/dir/somefile.php"
+     * @return string returns requested file name with path: for
+     *                "http://example.com/some/dir/somefile.php?arg1=val1&arg2=val2" returns
+     *                "/some/dir/somefile.php"
      */
     private function getRequestedUri()
     {
@@ -119,6 +117,7 @@ class Engine extends Engine\Base
     /**
      * @return string returns prefix of domain: for "sub.domain.example.com" and const $conf['domain']=="example.com",
      *                returns "sub.domain"
+     *
      * @throws \InvalidArgumentException
      */
     private function getDomainPrefix()
@@ -134,7 +133,7 @@ class Engine extends Engine\Base
     }
 
     /**
-     * @param    string $file requested file name
+     * @param string $file requested file name
      *
      * @throws \InvalidArgumentException
      */
@@ -179,6 +178,7 @@ class Engine extends Engine\Base
 
     /**
      * @return string
+     *
      * @throws Http\NotFoundException
      * @throws LogicException
      */
@@ -198,6 +198,7 @@ class Engine extends Engine\Base
      * @param array  $params
      *
      * @return string
+     *
      * @throws Exception\NotFoundException
      * @throws LogicException
      */
@@ -213,6 +214,7 @@ class Engine extends Engine\Base
      * @param $params
      *
      * @return string
+     *
      * @throws \Colibri\Application\Exception\NotFoundException
      * @throws \LogicException
      */
@@ -229,6 +231,7 @@ class Engine extends Engine\Base
      * @param $params
      *
      * @return string
+     *
      * @throws \Colibri\Application\Exception\NotFoundException
      * @throws \LogicException
      */
@@ -242,7 +245,7 @@ class Engine extends Engine\Base
         }
         /** @var ViewsController|MethodsController $responser */
         $responser        = new $className($division, $module, $method);
-        $this->_responser =& $responser;
+        $this->_responser = &$responser;
 
         $classMethods = get_class_methods($className);
         if ( ! in_array($method, $classMethods)) {
@@ -291,7 +294,7 @@ class Engine extends Engine\Base
             throw new Exception\NotFoundException("Can't load module: file '$fileName' does not exists.");
         } else {
             // @todo remove this (carefully) /** @noinspection PhpIncludeInspection */
-            require_once($fileName);
+            require_once $fileName;
         }
     }
 
@@ -316,11 +319,12 @@ class Engine extends Engine\Base
     public static function exceptionHandler($exc)
     {
         $message = $exc->__toString();
-        if (DEBUG) /** @noinspection PhpUnusedLocalVariableInspection variable uses in 500.php */ {
+        if (DEBUG) {
+            /* @noinspection PhpUnusedLocalVariableInspection variable uses in 500.php */
             $error = $message;
         }
 
-        include(HTTPERRORS . '500.php');
+        include HTTPERRORS . '500.php';
 
         Log::add($message, 'core.module');
     }

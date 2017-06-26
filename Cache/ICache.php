@@ -9,7 +9,7 @@ interface ICache
     /**
      * @param string $key for data
      *
-     * @return boolean result OR data
+     * @return bool result OR data
      */
     public static function get($key);
 
@@ -18,7 +18,7 @@ interface ICache
      * @param mixed  $value  any type of supported data: object, string, int…
      * @param int    $expire seconds
      *
-     * @return boolean result
+     * @return bool result
      */
     public static function set($key, $value, $expire = null);
 

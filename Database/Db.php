@@ -24,6 +24,7 @@ class Db extends Helper
      * @param array $config
      *
      * @return array
+     *
      * @throws DbException
      */
     public static function setConfig(array $config)
@@ -50,6 +51,7 @@ class Db extends Helper
      * @param string $name connection name defined in config
      *
      * @return IDb
+     *
      * @throws DbException
      */
     public static function connection($name = 'default')
@@ -68,6 +70,7 @@ class Db extends Helper
      * @param string $name
      *
      * @return IDb Объект базы данных
+     *
      * @throws DbException
      */
     private static function createForConnection($name)

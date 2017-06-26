@@ -6,8 +6,6 @@ use Colibri\Util\Str;
 
 /**
  * Request helper.
- *
- * @package Colibri\Http
  */
 class Request extends Helper
 {
