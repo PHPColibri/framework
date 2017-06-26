@@ -582,7 +582,7 @@ abstract class Object implements IObject
         $strXMLPart = '';
         foreach ($this as $propName => $propValue) {
             if (in_array($propName, $this->fields)) {
-                $strXMLPart .= '<' . $propName . '>' . ($propValue === null? '<null />' : $propValue) . '</' . $propName . '>';
+                $strXMLPart .= '<' . $propName . '>' . ($propValue === null ? '<null />' : $propValue) . '</' . $propName . '>';
             }
         }
 
