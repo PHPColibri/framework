@@ -21,9 +21,6 @@ class ObjectSingleCollection extends ObjectCollection
             case 'parentID':
                 return $this->FKValue[0];
             case 'selFromDbAllQuery':
-                //$code='$fList='.$this->itemClass.'::getFieldsNameList();';
-                //eval($code);
-                //'.$fList.'
                 $strQuery =
                     'SELECT * FROM `' . static::$tableName . '` WHERE 1 ' .
                     ($this->FKValue[1] !== null ?
