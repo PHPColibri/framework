@@ -265,11 +265,11 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
      */
     protected function rebuildQueryForCustomLoad($query)
     {
-        if ($this->where !== null) {
-            if ($this->getFieldsAndTypes() === false) {
-                return false;
-            }
+        if ($this->getFieldsAndTypes() === false) {
+            return false;
+        }
 
+        if ($this->where !== null) {
             $where = $this->where;
             if (count($where) !== 1) {
                 return false;
