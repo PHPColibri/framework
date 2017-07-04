@@ -14,12 +14,17 @@ class StrTest extends PHPUnit_Framework_TestCase
      * @dataProvider invalidEmailProvider
      *
      * @param string $email
+     *
+     * @throws \PHPUnit_Framework_AssertionFailedError
      */
     public function testIsEmailNegative($email)
     {
         $this->assertFalse(Str::isEmail($email));
     }
 
+    /**
+     * @return array
+     */
     public function invalidEmailProvider()
     {
         return [
@@ -38,6 +43,8 @@ class StrTest extends PHPUnit_Framework_TestCase
      * @dataProvider validEmailProvider
      *
      * @param string $email
+     *
+     * @throws \PHPUnit_Framework_AssertionFailedError
      */
     public function testIsEmailPositive($email)
     {
@@ -70,9 +77,12 @@ class StrTest extends PHPUnit_Framework_TestCase
      * @covers ::random
      * @dataProvider randomProvider
      *
-     * @param string  $type
-     * @param integer $length
-     * @param string  $regexp
+     * @param string $type
+     * @param int    $length
+     * @param string $regexp
+     *
+     * @throws \Exception
+     * @throws \PHPUnit_Framework_Exception
      */
     public function testRandom($type, $length, $regexp)
     {
@@ -101,14 +111,19 @@ class StrTest extends PHPUnit_Framework_TestCase
      * @covers ::random
      * @dataProvider randomDefaultLengthProvider
      *
-     * @param string  $type
-     * @param integer $expectedLength
+     * @param string $type
+     * @param int    $expectedLength
+     *
+     * @throws \Exception
      */
     public function testRandomDefaultLength($type, $expectedLength)
     {
         $this->assertEquals($expectedLength, mb_strlen(Str::random($type)));
     }
 
+    /**
+     * @return array
+     */
     public function randomDefaultLengthProvider()
     {
         return [
@@ -132,6 +147,9 @@ class StrTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedString, Str::snake($stringSnakeCase));
     }
 
+    /**
+     * @return array
+     */
     public function snakeProvider()
     {
         return [
@@ -154,6 +172,9 @@ class StrTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedString, Str::camel($stringCamelCase));
     }
 
+    /**
+     * @return array
+     */
     public function camelProvider()
     {
         return [
@@ -178,6 +199,9 @@ class StrTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedString, Str::studly($stringCamelCase));
     }
 
+    /**
+     * @return array
+     */
     public function studlyProvider()
     {
         return [
@@ -194,12 +218,17 @@ class StrTest extends PHPUnit_Framework_TestCase
      * @dataProvider isIntPositiveProvider
      *
      * @param string $string
+     *
+     * @throws \PHPUnit_Framework_AssertionFailedError
      */
     public function testIsIntPositive($string)
     {
         $this->assertTrue(Str::isInt($string));
     }
 
+    /**
+     * @return array
+     */
     public function isIntPositiveProvider()
     {
         return [
@@ -216,12 +245,17 @@ class StrTest extends PHPUnit_Framework_TestCase
      * @dataProvider isIntNegativeProvider
      *
      * @param string $string
+     *
+     * @throws \PHPUnit_Framework_AssertionFailedError
      */
     public function testIsIntNegative($string)
     {
         $this->assertFalse(Str::isInt($string));
     }
 
+    /**
+     * @return array
+     */
     public function isIntNegativeProvider()
     {
         return [
@@ -242,12 +276,17 @@ class StrTest extends PHPUnit_Framework_TestCase
      *
      * @param string $sourceString
      * @param string $beginsWith
+     *
+     * @throws \PHPUnit_Framework_AssertionFailedError
      */
     public function testBeginsWithPositive($sourceString, $beginsWith)
     {
         $this->assertTrue(Str::beginsWith($sourceString, $beginsWith));
     }
 
+    /**
+     * @return array
+     */
     public function beginsWithPositiveProvider()
     {
         return [
@@ -262,12 +301,17 @@ class StrTest extends PHPUnit_Framework_TestCase
      *
      * @param string $sourceString
      * @param string $beginsWith
+     *
+     * @throws \PHPUnit_Framework_AssertionFailedError
      */
     public function testBeginsWithNegative($sourceString, $beginsWith)
     {
         $this->assertFalse(Str::beginsWith($sourceString, $beginsWith));
     }
 
+    /**
+     * @return array
+     */
     public function beginsWithNegativeProvider()
     {
         return [
@@ -282,12 +326,17 @@ class StrTest extends PHPUnit_Framework_TestCase
      *
      * @param string $sourceString
      * @param string $beginsWith
+     *
+     * @throws \PHPUnit_Framework_AssertionFailedError
      */
     public function testEndsWithPositive($sourceString, $beginsWith)
     {
         $this->assertTrue(Str::endsWith($sourceString, $beginsWith));
     }
 
+    /**
+     * @return array
+     */
     public function endsWithPositiveProvider()
     {
         return [
@@ -303,12 +352,17 @@ class StrTest extends PHPUnit_Framework_TestCase
      *
      * @param string $sourceString
      * @param string $beginsWith
+     *
+     * @throws \PHPUnit_Framework_AssertionFailedError
      */
     public function testEndsWithNegative($sourceString, $beginsWith)
     {
         $this->assertFalse(Str::endsWith($sourceString, $beginsWith));
     }
 
+    /**
+     * @return array
+     */
     public function endsWithNegativeProvider()
     {
         return [
