@@ -2,6 +2,7 @@ Colibri
 =======
 
 [![Build Status](https://travis-ci.org/PHPColibri/framework.svg?branch=master)](https://travis-ci.org/PHPColibri/framework)
+[![StyleCI](https://styleci.io/repos/5138117/shield?branch=master&style=plastic)](https://styleci.io/repos/5138117)
 [![Latest Stable Version](https://poser.pugx.org/colibri/framework/v/stable.svg)](https://packagist.org/packages/colibri/framework)
 [![Total Downloads](https://poser.pugx.org/colibri/framework/downloads.svg)](https://packagist.org/packages/colibri/framework)
 [![Latest Unstable Version](https://poser.pugx.org/colibri/framework/v/unstable.svg)](https://packagist.org/packages/colibri/framework)
@@ -9,6 +10,6 @@ Colibri
 
 PHP Framework
 
-[установка](https://github.com/PHPColibri/docs/blob/master/quick.md)
+[Установка](https://github.com/PHPColibri/docs/blob/master/quick.md)
 
 [Документация](https://github.com/PHPColibri/docs#colibri-documentation)
