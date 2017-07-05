@@ -258,4 +258,16 @@ class Str extends Helper
     {
         return static::part($str, $i, ' ', $default);
     }
+
+    /**
+     * Checks if string contains any digit or not.
+     *
+     * @param $str
+     *
+     * @return bool
+     */
+    public static function hasDigits($str)
+    {
+        return strpbrk($str, '0123456789') !== false;
+    }
 }
