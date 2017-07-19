@@ -4,7 +4,7 @@ namespace Colibri\Application\Engine;
 /**
  * Engine interface.
  */
-interface IEngine
+interface EngineInterface
 {
     /**
      * Engine constructor.

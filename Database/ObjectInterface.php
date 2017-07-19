@@ -1,7 +1,7 @@
 <?php
 namespace Colibri\Database;
 
-interface IObject
+interface ObjectInterface
 {
     /**
      * @param string $propertyName

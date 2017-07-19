@@ -12,7 +12,7 @@ use Colibri\Session\Session;
 /**
  * Engine base class.
  */
-abstract class Base extends PropertyAccess implements IEngine
+abstract class Base extends PropertyAccess implements EngineInterface
 {
     /**
      * Base constructor.

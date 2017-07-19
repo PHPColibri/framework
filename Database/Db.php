@@ -50,7 +50,7 @@ class Db extends Helper
      *
      * @param string $name connection name defined in config
      *
-     * @return IDb
+     * @return DbInterface
      *
      * @throws DbException
      */
@@ -69,7 +69,7 @@ class Db extends Helper
      *
      * @param string $name
      *
-     * @return IDb Объект базы данных
+     * @return DbInterface Объект базы данных
      *
      * @throws DbException
      */

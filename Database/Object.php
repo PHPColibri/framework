@@ -15,7 +15,7 @@ use Colibri\Database\Exception\SqlException;
  * @method string saveQuery()
  * @method string loadQuery()
  */
-abstract class Object implements IObject
+abstract class Object implements ObjectInterface
 {
     const    NEW_OBJECT = -1;
     const    LOAD_ERROR = -2;
@@ -172,7 +172,7 @@ abstract class Object implements IObject
     }
 
     /**
-     * @return IDb
+     * @return DbInterface
      *
      * @throws DbException
      */

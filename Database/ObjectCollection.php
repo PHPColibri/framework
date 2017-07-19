@@ -2,7 +2,7 @@
 namespace Colibri\Database;
 
 use Colibri\Base\DynamicCollection;
-use Colibri\Base\IDynamicCollection;
+use Colibri\Base\DynamicCollectionInterface;
 use Colibri\Database;
 
 /**
@@ -15,7 +15,7 @@ use Colibri\Database;
  * @property mixed                            $parentID
  * @property \Colibri\Database\Object[]|array $_items
  */
-abstract class ObjectCollection extends DynamicCollection implements IDynamicCollection
+abstract class ObjectCollection extends DynamicCollection implements DynamicCollectionInterface
 {
     /** @var string */
     protected static $tableName = 'tableName_not_set';
@@ -55,7 +55,7 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
     }
 
     /**
-     * IDynamicCollection ::fillItems() implementation.
+     * DynamicCollectionInterface ::fillItems() implementation.
      *
      * @param array $rows
      *
@@ -638,7 +638,7 @@ abstract class ObjectCollection extends DynamicCollection implements IDynamicCol
     }
 
     /**
-     * @return IDb
+     * @return DbInterface
      */
     protected function db()
     {

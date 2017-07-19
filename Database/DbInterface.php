@@ -6,7 +6,7 @@ use Colibri\Database\Exception\SqlException;
 /**
  * IDb Интерфейс класса для работы с базами данных.
  */
-interface IDb
+interface DbInterface
 {
     /**
      * Конструктор

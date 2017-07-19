@@ -6,7 +6,7 @@ use Colibri\Cache\Memcache;
 /**
  * Abstract class for Db.
  */
-abstract class AbstractDb implements IDb
+abstract class AbstractDb implements DbInterface
 {
     /** @var string */
     protected $host;

@@ -8,7 +8,7 @@ use Colibri\Util\Arr;
 /**
  * Memcache implementation of Cache.
  */
-class Memcache extends Helper implements ICache
+class Memcache extends Helper implements CacheInterface
 {
     /** @var array */
     private static $defaultConfig = [

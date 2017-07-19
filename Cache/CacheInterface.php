@@ -4,7 +4,7 @@ namespace Colibri\Cache;
 /**
  * Cache interface.
  */
-interface ICache
+interface CacheInterface
 {
     /**
      * @param string $key for data
