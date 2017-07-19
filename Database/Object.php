@@ -405,7 +405,7 @@ abstract class Object implements IObject
         $dbObject = new static();
         $loaded   = $dbObject->load($where);
         if ($loaded === false) {
-            throw new \Exception('can`t load user. where clause: ' . var_export($where));
+            throw new \Exception('can`t load record. where clause: ' . json_encode($where));
         }
 
         return $loaded !== null;
