@@ -448,7 +448,6 @@ abstract class Object implements IObject
                 $this->where                     = null;
                 $this->{static::$PKFieldName[0]} = $id_or_where;
             }
-        } else {
         }
 
         return $this->doQuery($this->deleteQuery());
@@ -511,7 +510,6 @@ abstract class Object implements IObject
                 $this->where                     = null;
                 $this->{static::$PKFieldName[0]} = $id_or_where;
             }
-        } else {
         }
         if ( ! $this->doQuery($this->loadQuery())) {
             return false;
