@@ -13,3 +13,7 @@ PHP Framework
 [Установка](https://github.com/PHPColibri/docs/blob/master/quick.md)
 
 [Документация](https://github.com/PHPColibri/docs#colibri-documentation)
+
+Contributing
+------------
+Любая помощь [приветствуется](/contributing.md)
