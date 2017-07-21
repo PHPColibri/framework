@@ -320,9 +320,6 @@ class Validation extends PropertyAccess
      */
     public function isNot($checkFunc, $key, $message)
     {
-        //if (!is_callable($checkFunc));
-        //	throw new Exception('$checkFunc param is not callable');
-
         if (is_array($key)) {
             foreach ($key as $name) {
                 $this->isNot($checkFunc, $name, $message);
