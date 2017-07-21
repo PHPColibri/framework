@@ -405,7 +405,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
      *
      * @return ObjectCollection|$this|Object[]
      */
-    final public function order_by(array $order_by)
+    final public function orderBy(array $order_by)
     {
         $this->order_by = $order_by;
 
