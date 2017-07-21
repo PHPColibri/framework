@@ -204,7 +204,7 @@ class Engine extends Engine\Base
      */
     public function getModuleView($division, $module, $method, $params)
     {
-        return $this->callModuleEssence(CallType::view, $division, $module, $method, $params);
+        return $this->callModuleEssence(CallType::VIEW, $division, $module, $method, $params);
     }
 
     /**
@@ -220,7 +220,7 @@ class Engine extends Engine\Base
      */
     public function callModuleMethod($division, $module, $method, $params)
     {
-        return $this->callModuleEssence(CallType::method, $division, $module, $method, $params);
+        return $this->callModuleEssence(CallType::METHOD, $division, $module, $method, $params);
     }
 
     /**
@@ -239,7 +239,7 @@ class Engine extends Engine\Base
     {
         $this->loadModule($division, $module, $type);
 
-        $className = ucfirst($module) . ucfirst($division) . ($type == CallType::view ? 'Views' : 'Methods') . 'Controller';
+        $className = ucfirst($module) . ucfirst($division) . ($type == CallType::VIEW ? 'Views' : 'Methods') . 'Controller';
         if ( ! class_exists($className)) {
             throw new Exception\NotFoundException("Class '$className' does not exists.");
         }
@@ -256,12 +256,12 @@ class Engine extends Engine\Base
         $response = call_user_func_array([&$responser, $method], $params);
         call_user_func_array([&$responser, 'tearDown'], $params);
 
-        if ($type == CallType::view) {
+        if ($type == CallType::VIEW) {
             $this->_showProfilerInfoOnDebug = $responser->showProfilerInfoOnDebug;
             $this->_showAppDevToolsOnDebug  = $responser->showAppDevToolsOnDebug;
         }
 
-        if ($type == CallType::view) {
+        if ($type == CallType::VIEW) {
             return $responser->response;
         }
 
@@ -276,15 +276,15 @@ class Engine extends Engine\Base
      * @throws Exception\NotFoundException
      * @throws LogicException
      */
-    private function loadModule($division, $moduleName, $type = CallType::view)
+    private function loadModule($division, $moduleName, $type = CallType::VIEW)
     {
         $mPath = $moduleName . '/' . ($division === '' ? 'primary/' : $division . '/');
         $mName = ucfirst($moduleName) . ucfirst($division);
 
         $fileName = MODULES . $mPath;
-        if ($type == CallType::view) {
+        if ($type == CallType::VIEW) {
             $fileName .= $mName . 'ViewsController.php';
-        } elseif ($type == CallType::method) {
+        } elseif ($type == CallType::METHOD) {
             $fileName .= $mName . 'Methods.php';
         } else {
             throw new LogicException("Unknown CallType $type");

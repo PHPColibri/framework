@@ -17,7 +17,7 @@ class Str extends Helper
      */
     public static function isEmail($str)
     {
-        return (bool)preg_match(RegExp::isEmail, $str);
+        return (bool)preg_match(RegExp::IS_EMAIL, $str);
     }
 
     /**

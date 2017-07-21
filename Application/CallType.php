@@ -6,6 +6,6 @@ namespace Colibri\Application;
  */
 class CallType
 {
-    const    view   = 0x00;
-    const    method = 0x01;
+    const    VIEW   = 0x00;
+    const    METHOD = 0x01;
 }
