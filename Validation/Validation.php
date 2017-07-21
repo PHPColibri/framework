@@ -286,7 +286,7 @@ class Validation extends PropertyAccess
     }
 
     /**
-     * >     * 'Is' validation rule. Custom rule specified by $checkFunc().
+     * 'Is' validation rule. Custom rule specified by $checkFunc().
      *
      * @param callable     $checkFunc
      * @param string|array $key
@@ -296,9 +296,6 @@ class Validation extends PropertyAccess
      */
     public function is($checkFunc, $key, $message)
     {
-        //if (!is_callable($checkFunc));
-        //	throw new Exception('$checkFunc param is not callable');
-
         if (is_array($key)) {
             foreach ($key as $name) {
                 $this->is($checkFunc, $name, $message);
