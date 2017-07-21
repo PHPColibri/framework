@@ -595,8 +595,6 @@ abstract class Object implements ObjectInterface
     /**
      * @param string $strQuery
      *
-     * @return bool true on success or false on failure (if no exceptions on)
-     *
      * @throws DbException
      * @throws SqlException
      * @throws \Exception
