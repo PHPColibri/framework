@@ -395,7 +395,7 @@ abstract class Object implements ObjectInterface
      */
     protected static function recordExists(array $where)
     {
-        $loaded   = (new static())->load($where);
+        $loaded = (new static())->load($where);
 
         return $loaded !== null;
     }
