@@ -74,9 +74,7 @@ abstract class Object implements ObjectInterface
             if (is_array($id_or_row)) {
                 $this->fillProperties($id_or_row);
             } else {
-                if ( ! $this->load($id_or_row)) {
-                    $this->{static::$PKFieldName[0]} = self::LOAD_ERROR;
-                }
+                $this->load($id_or_row);
             }
         }
     }
@@ -115,12 +113,7 @@ abstract class Object implements ObjectInterface
      */
     public static function find($id_or_where)
     {
-        $dbObject = new static();
-        $loaded   = $dbObject->load($id_or_where);
-
-        return $loaded
-            ? $dbObject
-            : null;
+        return (new static())->load($id_or_where);
     }
 
     /**
@@ -402,11 +395,7 @@ abstract class Object implements ObjectInterface
      */
     protected static function recordExists(array $where)
     {
-        $dbObject = new static();
-        $loaded   = $dbObject->load($where);
-        if ($loaded === false) {
-            throw new \Exception('can`t load record. where clause: ' . json_encode($where));
-        }
+        $loaded   = (new static())->load($where);
 
         return $loaded !== null;
     }
@@ -434,8 +423,6 @@ abstract class Object implements ObjectInterface
     /**
      * @param mixed|array $id_or_where
      *
-     * @return bool
-     *
      * @throws DbException
      * @throws \Exception
      */
@@ -450,13 +437,11 @@ abstract class Object implements ObjectInterface
             }
         }
 
-        return $this->doQuery($this->deleteQuery());
+        $this->doQuery($this->deleteQuery());
     }
 
     /**
      * @param array $attributes
-     *
-     * @return bool
      *
      * @throws DbException
      * @throws \Exception
@@ -466,7 +451,7 @@ abstract class Object implements ObjectInterface
         $this->fieldsNameValuesArray = $attributes;
         $this->fillProperties($attributes, false);
 
-        return $this->doQuery($this->saveQuery());
+        $this->doQuery($this->saveQuery());
     }
 
     /**
@@ -483,7 +468,7 @@ abstract class Object implements ObjectInterface
     }
 
     /**
-     * @return bool|null
+     * @return $this|null
      *
      * @throws \Colibri\Database\DbException
      * @throws \Exception
@@ -496,7 +481,7 @@ abstract class Object implements ObjectInterface
     /**
      * @param mixed|array $id_or_where
      *
-     * @return bool|null
+     * @return $this|null
      *
      * @throws DbException
      * @throws \Exception
@@ -511,18 +496,17 @@ abstract class Object implements ObjectInterface
                 $this->{static::$PKFieldName[0]} = $id_or_where;
             }
         }
-        if ( ! $this->doQuery($this->loadQuery())) {
-            return false;
-        }// sql error
+
+        $this->doQuery($this->loadQuery());
+
         if (self::db()->getNumRows() == 0) {
             return null;
-        } // no  record
-        if ( ! $result = self::db()->fetchArray()) {
-            return false;
         }
+
+        $result = self::db()->fetchArray();
         $this->fillProperties($result);
 
-        return true;
+        return $this;
     }
 
     /**
@@ -541,25 +525,23 @@ abstract class Object implements ObjectInterface
     /**
      * @param string $sqlQuery
      *
-     * @return bool|null
+     * @return $this|null
      *
      * @throws DbException
      * @throws \Exception
      */
     protected function loadByQuery($sqlQuery)
     {
-        if ( ! $this->doQuery($sqlQuery)) {
-            return false;
-        }// sql error
+        $this->doQuery($sqlQuery);
+
         if (self::db()->getNumRows() == 0) {
             return null;
-        } // no  record
-        if ( ! $result = self::db()->fetchArray()) {
-            return false;
         }
+
+        $result = self::db()->fetchArray();
         $this->fillProperties($result);
 
-        return true;
+        return $this;
     }
 
     /**
@@ -624,8 +606,6 @@ abstract class Object implements ObjectInterface
         self::db()->query($strQuery);
 
         $this->cleanUpQueryVars();
-
-        return true;
     }
 
     /**
