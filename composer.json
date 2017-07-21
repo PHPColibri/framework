@@ -19,7 +19,7 @@
     ],
     "require": {
         "php": ">=5.6",
-        "nesbot/carbon": "dev-master"
+        "nesbot/carbon": "^1.22"
     },
     "require-dev": {
         "phpunit/phpunit": "4.2.*",
@@ -46,5 +46,6 @@
             "Colibri\\": ""
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
