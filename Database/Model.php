@@ -324,7 +324,7 @@ abstract class Model
     /**
      * @param string $propertyName
      *
-     * @return ModelCollection|ObjectMultiCollection|ObjectSingleCollection|Model
+     * @return ModelCollection|ModelMultiCollection|ModelSingleCollection|Model
      *
      * @throws \Exception
      */
@@ -343,7 +343,7 @@ abstract class Model
      * @param string $name
      * @param array  $relationsDefinition
      *
-     * @return Model|ModelCollection|ObjectSingleCollection|ObjectMultiCollection
+     * @return Model|ModelCollection|ModelSingleCollection|ModelMultiCollection
      */
     private function getRelated($name, &$relationsDefinition)
     {
