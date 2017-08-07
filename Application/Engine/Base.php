@@ -6,7 +6,7 @@ use Colibri\Config\Config;
 use Colibri\Database\AbstractDb;
 use Colibri\Database\Concrete\MySQL;
 use Colibri\Database\Db;
-use Colibri\Database\Object;
+use Colibri\Database\Model;
 use Colibri\Session\Session;
 
 /**
@@ -34,7 +34,7 @@ abstract class Base extends PropertyAccess implements EngineInterface
         AbstractDb::$useMemcacheForMetadata =
             $config['useCache'];
 
-        Object::$debug = MySQL::$monitorQueries = $config['debug'];
+        Model::$debug = MySQL::$monitorQueries = $config['debug'];
 
         Db::setConfig(Config::get('database'));
 

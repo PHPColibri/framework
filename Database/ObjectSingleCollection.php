@@ -49,11 +49,11 @@ class ObjectSingleCollection extends ObjectCollection
     ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * @param \Colibri\Database\Object $id
+     * @param \Colibri\Database\Model $id
      *
      * @return bool
      */
-    protected function addToDb(Database\Object &$id)
+    protected function addToDb(Database\Model &$id)
     {
         return true;
     }

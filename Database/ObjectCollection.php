@@ -11,9 +11,9 @@ use Colibri\Database;
  * Класс основан на DynamicCollection, по сему свои элементы подгружает
  * только тогда, когда идёт первое обращение к элементу коллекции.
  *
- * @property string                           $selFromDbAllQuery
- * @property mixed                            $parentID
- * @property \Colibri\Database\Object[]|array $_items
+ * @property string                          $selFromDbAllQuery
+ * @property mixed                           $parentID
+ * @property \Colibri\Database\Model[]|array $_items
  */
 abstract class ObjectCollection extends DynamicCollection implements DynamicCollectionInterface
 {
@@ -116,9 +116,9 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
     }
 
     /**
-     * @param \Colibri\Database\Object $object
+     * @param \Colibri\Database\Model $object
      */
-    protected function addItem(Database\Object &$object)
+    protected function addItem(Database\Model &$object)
     {
         $this->_items[] = $object;
     }
@@ -126,7 +126,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
     /**
      * @param int $itemID
      *
-     * @return bool|\Colibri\Database\Object
+     * @return bool|\Colibri\Database\Model
      *
      * @throws \OutOfBoundsException
      */
@@ -156,7 +156,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
     /**
      * @param array $row
      *
-     * @return \Colibri\Database\Object
+     * @return \Colibri\Database\Model
      */
     protected function instantiateItem(array $row)
     {
@@ -169,9 +169,9 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
     ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * @param \Colibri\Database\Object $id
+     * @param \Colibri\Database\Model $id
      */
-    abstract protected function addToDb(Database\Object &$id);
+    abstract protected function addToDb(Database\Model &$id);
 
     /**
      * @param mixed $id
@@ -451,13 +451,13 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
     ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * @param \Colibri\Database\Object $object
+     * @param \Colibri\Database\Model $object
      *
      * @return bool
      *
      * @throws \Colibri\Database\Exception\SqlException
      */
-    public function add(Database\Object &$object)
+    public function add(Database\Model &$object)
     {
         if ($this->_items === null) {
             if ( ! $this->fillItems()) {
@@ -475,7 +475,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
     /**
      * @param mixed $itemID
      *
-     * @return bool|\Colibri\Database\Object
+     * @return bool|\Colibri\Database\Model
      *
      * @throws \Colibri\Database\Exception\SqlException
      * @throws \OutOfBoundsException
@@ -593,7 +593,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
         if ( ! $count = count($this->_items)) {
             return false;
         }
-        /** @var \Colibri\Database\Object $itemClass */
+        /** @var \Colibri\Database\Model $itemClass */
         $itemClass = $this->itemClass;
         /** @noinspection PhpUndefinedVariableInspection */
         $PKfn = $itemClass::$PKFieldName[0];

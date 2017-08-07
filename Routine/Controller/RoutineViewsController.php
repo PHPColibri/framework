@@ -110,7 +110,7 @@ abstract class RoutineViewsController extends ViewsController
      */
     protected function prepareEditorTpl($id = null)
     {
-        /** @var \Colibri\Database\Object $item */
+        /** @var \Colibri\Database\Model $item */
         $item = new $this->itemClass();
 
         if ($_POST) { // if must save any changes
@@ -158,11 +158,11 @@ abstract class RoutineViewsController extends ViewsController
     /**
      * Override this method, if you want to initialize entity before display. For example, with defaults.
      *
-     * @param \Colibri\Database\Object $item entity to be initialized
-     * @param int|mixed                $id   if equals null, then create action is called, and otherwise edit action is
+     * @param \Colibri\Database\Model $item  entity to be initialized
+     * @param int|mixed               $id    if equals null, then create action is called, and otherwise edit action is
      *                                       called
      */
-    protected function initItem(Database\Object $item, $id = null)
+    protected function initItem(Database\Model $item, $id = null)
     {
     }
 
@@ -180,14 +180,14 @@ abstract class RoutineViewsController extends ViewsController
     }
 
     /**
-     * @param \Colibri\Database\Object $item
-     * @param int                      $id
+     * @param \Colibri\Database\Model $item
+     * @param int                     $id
      *
      * @return bool
      *
      * @throws \Colibri\Database\Exception\SqlException
      */
-    protected function dbChange(Database\Object $item, $id = null)
+    protected function dbChange(Database\Model $item, $id = null)
     {
         // TODO: $this->setPKValue($id) instead "$PKName[0]" or some else
         $PKName = $item->getPKFieldName();
@@ -238,7 +238,7 @@ abstract class RoutineViewsController extends ViewsController
      */
     public function delete($id)
     {
-        /** @var \Colibri\Database\Object $item */
+        /** @var \Colibri\Database\Model $item */
         $item = new $this->itemClass();
         $item->delete($id);
 

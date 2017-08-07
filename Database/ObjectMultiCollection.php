@@ -78,7 +78,7 @@ class ObjectMultiCollection extends ObjectCollection
     /**
      * @param array $row
      *
-     * @return \Colibri\Database\Object
+     * @return \Colibri\Database\Model
      */
     protected function instantiateItem(array $row)
     {
@@ -88,7 +88,7 @@ class ObjectMultiCollection extends ObjectCollection
 
         $itemAttributes         = Arr::only($row, $this->itemFields);
         $intermediateAttributes = Arr::only($row, $this->intermediateFields);
-        /** @var \Colibri\Database\Object $item */
+        /** @var \Colibri\Database\Model $item */
         $item = new $this->itemClass($itemAttributes);
 
         return $item->setIntermediate($intermediateAttributes);
@@ -98,13 +98,13 @@ class ObjectMultiCollection extends ObjectCollection
     ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * @param \Colibri\Database\Object $object
+     * @param \Colibri\Database\Model $object
      *
      * @return bool
      *
      * @throws \Colibri\Database\Exception\SqlException
      */
-    protected function addToDb(Database\Object &$object)
+    protected function addToDb(Database\Model &$object)
     {
         $this->FKValue[1] = $object->id;
 
