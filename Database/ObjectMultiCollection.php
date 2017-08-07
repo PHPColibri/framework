@@ -24,6 +24,8 @@ class ObjectMultiCollection extends ModelCollection
      * ObjectMultiCollection constructor.
      *
      * @param mixed $parentID
+     *
+     * @throws \Colibri\Database\DbException
      */
     public function __construct($parentID = null)
     {
@@ -39,6 +41,7 @@ class ObjectMultiCollection extends ModelCollection
      *
      * @return mixed
      *
+     * @throws \Colibri\Database\DbException
      * @throws \RuntimeException
      */
     public function __get($propertyName)
@@ -102,6 +105,7 @@ class ObjectMultiCollection extends ModelCollection
      *
      * @return bool
      *
+     * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      */
     protected function addToDb(Database\Model &$object)
@@ -116,6 +120,7 @@ class ObjectMultiCollection extends ModelCollection
      *
      * @return bool
      *
+     * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      */
     protected function delFromDb($id)
@@ -128,6 +133,7 @@ class ObjectMultiCollection extends ModelCollection
     /**
      * @return array|bool
      *
+     * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      */
     protected function selFromDbAll()
@@ -142,6 +148,7 @@ class ObjectMultiCollection extends ModelCollection
     /**
      * @return bool
      *
+     * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      */
     protected function delFromDbAll()
