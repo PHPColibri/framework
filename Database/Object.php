@@ -497,16 +497,7 @@ abstract class Object implements ObjectInterface
             }
         }
 
-        $this->doQuery($this->loadQuery());
-
-        if (self::db()->getNumRows() == 0) {
-            return null;
-        }
-
-        $result = self::db()->fetchArray();
-        $this->fillProperties($result);
-
-        return $this;
+        return $this->loadByQuery($this->loadQuery());
     }
 
     /**
