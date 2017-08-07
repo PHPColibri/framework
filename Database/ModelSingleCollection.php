@@ -13,6 +13,7 @@ class ModelSingleCollection extends ModelCollection
      *
      * @return bool|mixed|string
      *
+     * @throws \Colibri\Database\DbException
      * @throws \RuntimeException
      */
     public function __get($propertyName)

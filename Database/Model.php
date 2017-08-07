@@ -350,10 +350,10 @@ abstract class Model
         $container          = &$relationsDefinition[$name];
         $relatedObject      = &$container[1];
         $relatedObjectClass = $container[0];
-        $objectFKName       = isset($container[2]) ? $container[2] : static::$PKFieldName[0]; // TODO:
+        $objectFKName       = isset($container[2]) ? $container[2] : static::$PKFieldName[0];
 
         return $relatedObject === null
-            ? $relatedObject = new $relatedObjectClass($this->$objectFKName) // TODO: ссылки бывают не только на PK
+            ? $relatedObject = new $relatedObjectClass($this->$objectFKName)
             : $relatedObject;
     }
 
