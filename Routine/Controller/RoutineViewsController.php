@@ -4,7 +4,7 @@ namespace Colibri\Routine\Controller;
 use Colibri\Controller\ViewsController;
 use Colibri\Database;
 use Colibri\Database\Exception\SqlException;
-use Colibri\Database\ObjectCollection;
+use Colibri\Database\ModelCollection;
 use Colibri\Validation\Validation;
 
 /**
@@ -44,7 +44,7 @@ abstract class RoutineViewsController extends ViewsController
      */
     public function defaultView()
     {
-        /** @var \Colibri\Database\ObjectCollection $items */
+        /** @var \Colibri\Database\ModelCollection $items */
         $items = new $this->listClass();
         $this->applyListFilters($items);
         $items->load();
@@ -64,9 +64,9 @@ abstract class RoutineViewsController extends ViewsController
     /**
      * Apply additional criteria to list query.
      *
-     * @param \Colibri\Database\ObjectCollection $items
+     * @param \Colibri\Database\ModelCollection $items
      */
-    protected function applyListFilters(ObjectCollection $items)
+    protected function applyListFilters(ModelCollection $items)
     {
         if ($this->pagedList) {
             $items->page(isset($_GET['page']) ? $_GET['page'] : 0, $this->recordsPerPage);

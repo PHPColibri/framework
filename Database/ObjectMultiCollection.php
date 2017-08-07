@@ -11,7 +11,7 @@ use Colibri\Util\Arr;
  * @property-read string $delFromDbQuery
  * @property-read string $delFromDbAllQuery
  */
-class ObjectMultiCollection extends ObjectCollection
+class ObjectMultiCollection extends ModelCollection
 {
     /** @var string */
     protected $fkTableName = 'fkTableName_not_set';

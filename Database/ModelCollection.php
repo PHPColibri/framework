@@ -6,7 +6,7 @@ use Colibri\Base\DynamicCollectionInterface;
 use Colibri\Database;
 
 /**
- * Абстрактный класс ObjectCollection.
+ * Абстрактный класс ModelCollection.
  *
  * Класс основан на DynamicCollection, по сему свои элементы подгружает
  * только тогда, когда идёт первое обращение к элементу коллекции.
@@ -15,7 +15,7 @@ use Colibri\Database;
  * @property mixed                           $parentID
  * @property \Colibri\Database\Model[]|array $_items
  */
-abstract class ObjectCollection extends DynamicCollection implements DynamicCollectionInterface
+abstract class ModelCollection extends DynamicCollection implements DynamicCollectionInterface
 {
     /** @var string */
     protected static $tableName = 'tableName_not_set';
@@ -362,7 +362,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
      * @param array  $where array('field [op]' => value, ...)
      * @param string $type  one of 'and'|'or'
      *
-     * @return $this|\Colibri\Database\ObjectCollection|Model[]
+     * @return $this|\Colibri\Database\ModelCollection|Model[]
      *
      * @throws \InvalidArgumentException
      */
@@ -389,7 +389,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
     /*
      *
      * @param array $where
-     * @return ObjectCollection|$this|Model[]
+     * @return ModelCollection|$this|Model[]
      *//*
     final public function or_where(array $where)
     {
@@ -399,7 +399,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
     /**
      * @param array $plan
      *
-     * @return ObjectCollection|$this|Model[]
+     * @return ModelCollection|$this|Model[]
      */
     final public function wherePlan(array $plan)
     {
@@ -412,7 +412,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
      * @param array $order_by array('field1'=>'orientation','field2'=>'orientation'), 'fieldN' - name of field,
      *                        'orientation' - ascending or descending abbreviation ('asc' or 'desc')
      *
-     * @return ObjectCollection|$this|Model[]
+     * @return ModelCollection|$this|Model[]
      */
     final public function orderBy(array $order_by)
     {
@@ -425,7 +425,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
      * @param int $offset_or_count
      * @param int $count
      *
-     * @return ObjectCollection|$this|Model[]
+     * @return ModelCollection|$this|Model[]
      */
     final public function limit($offset_or_count, $count = null)
     {
@@ -444,7 +444,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
      * @param int $pageNumber     0..N
      * @param int $recordsPerPage
      *
-     * @return ObjectCollection|$this|Model[]
+     * @return ModelCollection|$this|Model[]
      */
     final public function page($pageNumber, $recordsPerPage = null)
     {
@@ -669,7 +669,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
      * @param string $fieldName
      * @param string $keyField
      *
-     * @return static|ObjectCollection|Model[]|array
+     * @return static|ModelCollection|Model[]|array
      */
     public static function &all($fieldName = null, $keyField = null)
     {
