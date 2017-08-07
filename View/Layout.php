@@ -230,13 +230,6 @@ class Layout extends Helper
         $tpl       = new PhpTemplate(TEMPLATES . static::$filename);
         $tpl->vars = $layoutTplVars;
 
-        //login error information - to be shown only once
-        // @todo bring out
-        if (isset($_SESSION['login_error'])) {
-            $tpl->vars['login_error'] = $_SESSION['login_error'];
-            unset($_SESSION['login_error']);
-        }
-
         $compiledHtml = $tpl->compile();
         foreach ($layoutTplVars as $key => $value) {
             $compiledHtml = str_replace('{' . $key . '}', $value, $compiledHtml);
