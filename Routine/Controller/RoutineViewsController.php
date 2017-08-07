@@ -158,9 +158,9 @@ abstract class RoutineViewsController extends ViewsController
     /**
      * Override this method, if you want to initialize entity before display. For example, with defaults.
      *
-     * @param \Colibri\Database\Model $item  entity to be initialized
-     * @param int|mixed               $id    if equals null, then create action is called, and otherwise edit action is
-     *                                       called
+     * @param \Colibri\Database\Model $item entity to be initialized
+     * @param int|mixed               $id   if equals null, then create action is called, and otherwise edit action is
+     *                                      called
      */
     protected function initItem(Database\Model $item, $id = null)
     {
