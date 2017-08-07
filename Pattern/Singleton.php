@@ -26,6 +26,7 @@ abstract class Singleton
     }
 
     /** @noinspection PhpUnusedPrivateMethodInspection */
+
     /**
      * Close public access/.
      */
