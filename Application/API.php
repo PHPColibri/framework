@@ -127,7 +127,6 @@ class API
                 return self::callModuleMethod($division, $module, $method, ...$params);
             });
         } else {
-            // TODO [alek13]: cache 2 file
             $retValue = self::callModuleMethod($division, $module, $method, ...$params);
         }
 
@@ -154,7 +153,6 @@ class API
                 return self::getModuleView($division, $module, $method, ...$params);
             });
         } else {
-            // TODO: cache 2 file
             $retValue = self::getModuleView($division, $module, $method, ...$params);
         }
 
