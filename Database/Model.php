@@ -293,7 +293,7 @@ abstract class Model
      * @param string $name
      * @param array  $arguments
      *
-     * @return mixed
+     * @return string
      *
      * @throws \Exception
      */
