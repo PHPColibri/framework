@@ -61,6 +61,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
      *
      * @return bool
      *
+     * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      */
     public function fillItems(array &$rows = null)
@@ -190,6 +191,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
     /**
      * @return array
      *
+     * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      */
     protected function selFromDbAll()
@@ -206,6 +208,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
      *
      * @return bool
      *
+     * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      */
     protected function doQuery($query)
@@ -217,6 +220,8 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
 
     /**
      * @return array
+     *
+     * @throws \Colibri\Database\DbException
      */
     protected function getFieldsAndTypes()
     {
@@ -234,6 +239,8 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
      * @param string $type    one of 'and'|'or'
      *
      * @return string
+     *
+     * @throws \Colibri\Database\DbException
      */
     protected function buildWhere(array &$clauses, $type)
     {
@@ -262,6 +269,8 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
      * @param string $query
      *
      * @return bool|mixed|string
+     *
+     * @throws \Colibri\Database\DbException
      */
     protected function rebuildQueryForCustomLoad($query)
     {
@@ -353,7 +362,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
      * @param array  $where array('field [op]' => value, ...)
      * @param string $type  one of 'and'|'or'
      *
-     * @return $this|\Colibri\Database\ObjectCollection|\Object[]
+     * @return $this|\Colibri\Database\ObjectCollection|Model[]
      *
      * @throws \InvalidArgumentException
      */
@@ -380,7 +389,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
     /*
      *
      * @param array $where
-     * @return ObjectCollection|$this|Object[]
+     * @return ObjectCollection|$this|Model[]
      *//*
     final public function or_where(array $where)
     {
@@ -390,7 +399,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
     /**
      * @param array $plan
      *
-     * @return ObjectCollection|$this|Object[]
+     * @return ObjectCollection|$this|Model[]
      */
     final public function wherePlan(array $plan)
     {
@@ -403,7 +412,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
      * @param array $order_by array('field1'=>'orientation','field2'=>'orientation'), 'fieldN' - name of field,
      *                        'orientation' - ascending or descending abbreviation ('asc' or 'desc')
      *
-     * @return ObjectCollection|$this|Object[]
+     * @return ObjectCollection|$this|Model[]
      */
     final public function orderBy(array $order_by)
     {
@@ -416,7 +425,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
      * @param int $offset_or_count
      * @param int $count
      *
-     * @return ObjectCollection|$this|Object[]
+     * @return ObjectCollection|$this|Model[]
      */
     final public function limit($offset_or_count, $count = null)
     {
@@ -435,7 +444,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
      * @param int $pageNumber     0..N
      * @param int $recordsPerPage
      *
-     * @return ObjectCollection|$this|Object[]
+     * @return ObjectCollection|$this|Model[]
      */
     final public function page($pageNumber, $recordsPerPage = null)
     {
@@ -455,6 +464,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
      *
      * @return bool
      *
+     * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      */
     public function add(Database\Model &$object)
@@ -477,6 +487,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
      *
      * @return bool|\Colibri\Database\Model
      *
+     * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      * @throws \OutOfBoundsException
      */
@@ -515,6 +526,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
      *
      * @return bool
      *
+     * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      */
     public function load($parentID = null)
@@ -545,6 +557,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
     /**
      * @return bool
      *
+     * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      */
     public function reload()
@@ -638,11 +651,13 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
     }
 
     /**
-     * @return DbInterface
+     * @return \Colibri\Database\DbInterface
+     *
+     * @throws \Colibri\Database\DbException
      */
     protected function db()
     {
-        /** @var Object $itemClass */
+        /** @var Model $itemClass */
         $itemClass = $this->itemClass;
 
         return $itemClass::db();
@@ -654,7 +669,7 @@ abstract class ObjectCollection extends DynamicCollection implements DynamicColl
      * @param string $fieldName
      * @param string $keyField
      *
-     * @return static|ObjectCollection|Object[]|array
+     * @return static|ObjectCollection|Model[]|array
      */
     public static function &all($fieldName = null, $keyField = null)
     {

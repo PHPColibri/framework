@@ -82,7 +82,7 @@ abstract class Model
     /**
      * @param mixed $intermediate
      *
-     * @return $this|Object
+     * @return $this|Model
      */
     public function setIntermediate($intermediate)
     {
@@ -324,7 +324,7 @@ abstract class Model
     /**
      * @param string $propertyName
      *
-     * @return ObjectCollection|ObjectMultiCollection|ObjectSingleCollection|Object
+     * @return ObjectCollection|ObjectMultiCollection|ObjectSingleCollection|Model
      *
      * @throws \Exception
      */
@@ -343,7 +343,7 @@ abstract class Model
      * @param string $name
      * @param array  $relationsDefinition
      *
-     * @return Object|ObjectCollection|ObjectSingleCollection|ObjectMultiCollection
+     * @return Model|ObjectCollection|ObjectSingleCollection|ObjectMultiCollection
      */
     private function getRelated($name, &$relationsDefinition)
     {
