@@ -39,12 +39,15 @@ class Str extends Helper
                 switch ($type) {
                     case 'alnum':
                         $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
                         break;
                     case 'numeric':
                         $pool = '0123456789';
+
                         break;
                     case 'nozero':
                         $pool = '123456789';
+
                         break;
                 }
                 $str = '';
