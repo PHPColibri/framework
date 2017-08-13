@@ -2,8 +2,9 @@
 namespace Colibri\Tests\Config;
 
 use Colibri\Config\Config;
+use PHPUnit\Framework\TestCase;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends TestCase
 {
     /**
      * @covers \Colibri\Config\Config::setBaseDir

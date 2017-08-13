@@ -3,8 +3,9 @@ namespace Colibri\Tests\Config;
 
 use Colibri\Config\Config;
 use Colibri\Config\LocalConfig;
+use PHPUnit\Framework\TestCase;
 
-class LocalConfigTest extends \PHPUnit_Framework_TestCase
+class LocalConfigTest extends TestCase
 {
     public function setUp()
     {

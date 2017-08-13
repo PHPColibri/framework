@@ -2,12 +2,13 @@
 namespace Colibri\Tests\Util;
 
 use Colibri\Util\Str;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_TestCase;
 
 /**
  * @coversDefaultClass \Colibri\Util\Str
  */
-class StrTest extends PHPUnit_Framework_TestCase
+class StrTest extends TestCase
 {
     /**
      * @covers ::isEmail

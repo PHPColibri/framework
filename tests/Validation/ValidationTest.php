@@ -4,8 +4,9 @@ namespace Colibri\Tests\Validation;
 use Colibri\Util\Str;
 use Colibri\Validation\Validation;
 use Colibri\Validation\ValidationException;
+use PHPUnit\Framework\TestCase;
 
-class ValidationTest extends \PHPUnit_Framework_TestCase
+class ValidationTest extends TestCase
 {
     private function assertScopeEquals(array $expected, Validation $validation)
     {
@@ -34,11 +35,18 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
      */
     public function testForScope()
     {
-        return Validation::forScope([
+        $scope = [
             'name'     => 'Василий',
             'lastName' => 'Попов',
             'email'    => 'vasyok.popov@gmail.com',
-        ]);
+        ];
+
+        $validation = Validation::forScope($scope);
+
+        $this->assertInstanceOf(Validation::class, $validation);
+        $this->attributeEqualTo('scope', $scope);
+
+        return $validation;
     }
 
     /**
