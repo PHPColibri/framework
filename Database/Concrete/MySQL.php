@@ -477,10 +477,12 @@ class MySQL extends AbstractDb
                         :
                         '\'' . $this->connect->escape_string($value) . '\''
                     );
+
                 break;
 
             case 'bit':
                 $value = (int)intval($value);
+
                 break;
 
             case 'dec':
@@ -490,10 +492,12 @@ class MySQL extends AbstractDb
             case 'bigint':
             case 'int':
                 $value = (int)intval($value);
+
                 break;
             case 'double':
             case 'float':
                 $value = (float)floatval($value);
+
                 break;
 
             default:
