@@ -144,12 +144,15 @@ class Image
         switch ($mime) {
             case 'image/jpeg':
                 $img = imagecreatefromjpeg($path);
+
                 break;
             case 'image/gif':
                 $img = imagecreatefromgif($path);
+
                 break;
             case 'image/png':
                 $img = imagecreatefrompng($path);
+
                 break;
             default:
                 throw new \Exception('can`t create thumbnail: unknown image type');
@@ -193,6 +196,7 @@ class Image
         ob_start();
         if ( ! imagejpeg($img)) {
             ob_end_clean();
+
             throw new \Exception('can`t create thumbnail: can`t output thumbnail into var');
         }
         $imageVariable = ob_get_contents();

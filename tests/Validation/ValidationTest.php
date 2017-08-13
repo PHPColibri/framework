@@ -467,6 +467,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
     public function testValidate(Validation $validation)
     {
         $caught = 0;
+
         try {
             $validation->validate();
             $this->fail('no exception was thrown');

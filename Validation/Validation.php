@@ -268,6 +268,7 @@ class Validation extends PropertyAccess
         foreach ($keys as $key) {
             if (isset($this->scope[$key])) {
                 $existingKey = $key;
+
                 break;
             }
         }
