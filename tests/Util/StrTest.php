@@ -3,7 +3,6 @@ namespace Colibri\Tests\Util;
 
 use Colibri\Util\Str;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_TestCase;
 
 /**
  * @coversDefaultClass \Colibri\Util\Str
