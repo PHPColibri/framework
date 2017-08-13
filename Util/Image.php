@@ -193,6 +193,7 @@ class Image
         ob_start();
         if ( ! imagejpeg($img)) {
             ob_end_clean();
+
             throw new \Exception('can`t create thumbnail: can`t output thumbnail into var');
         }
         $imageVariable = ob_get_contents();

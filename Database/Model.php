@@ -263,6 +263,7 @@ abstract class Model
         foreach ($row as $propName => $propValue) {
             if ($propValue === null || ! $cast) {
                 $this->$propName = $propValue;
+
                 continue;
             }
 
@@ -336,6 +337,7 @@ abstract class Model
         if (isset($this->objects[$propertyName])) {
             return $this->getRelated($propertyName, $this->objects);
         }
+
         throw new \Exception('свойство $' . $propertyName . ' в классе ' . get_class($this) . ' не определено или не является public.');
     }
 
