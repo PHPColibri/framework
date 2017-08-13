@@ -263,6 +263,7 @@ abstract class Model
         foreach ($row as $propName => $propValue) {
             if ($propValue === null || ! $cast) {
                 $this->$propName = $propValue;
+
                 continue;
             }
 
@@ -275,15 +276,19 @@ abstract class Model
                 case 'mediumint':
                 case 'bigint':
                     $this->$propName = (int)$propValue;
+
                     break;
                 case 'bit':
                     $this->$propName = (bool)$propValue;
+
                     break;
                 case 'timestamp':
                     $this->$propName = new Carbon($propValue);
+
                     break;
                 default:
                     $this->$propName = $propValue;
+
                     break;
             }
         }
@@ -303,16 +308,20 @@ abstract class Model
             case 'createQuery':
                 /** @noinspection SqlNoDataSourceInspection */
                 $tpl = 'INSERT INTO `' . static::$tableName . '` SET ' . $this->getFieldsNameValueList();
+
                 break;
             case 'deleteQuery':
                 /** @noinspection SqlNoDataSourceInspection */
                 $tpl = 'DELETE FROM `' . static::$tableName . '` WHERE ' . $this->getPKCondition();
+
                 break;
             case 'saveQuery':
                 $tpl = 'UPDATE `' . static::$tableName . '` SET ' . $this->getFieldsNameValueList() . ' WHERE ' . $this->getPKCondition();
+
                 break;
             case 'loadQuery':
                 $tpl = 'SELECT ' . $this->getFieldsNamesList() . ' FROM `' . static::$tableName . '` WHERE ' . ($this->where === null ? $this->getPKCondition() : $this->getWhereCondition());
+
                 break;
             default:
                 throw new \Exception('unknown query __called method name.');
@@ -336,6 +345,7 @@ abstract class Model
         if (isset($this->objects[$propertyName])) {
             return $this->getRelated($propertyName, $this->objects);
         }
+
         throw new \Exception('свойство $' . $propertyName . ' в классе ' . get_class($this) . ' не определено или не является public.');
     }
 
