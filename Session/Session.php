@@ -94,4 +94,17 @@ class Session extends Helper
     {
         static::set('flashed', $keyValues);
     }
+
+    /**
+     * Closes current session and try to find and open new with <$sessionId>.
+     *
+     * @param string $id
+     * @param bool   $saveCurrent
+     *
+     * @throws \Colibri\Session\Exception
+     */
+    public static function catch($id, $saveCurrent = true)
+    {
+        self::$storage->catch($id, $saveCurrent);
+    }
 }

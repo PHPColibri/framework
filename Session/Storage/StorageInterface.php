@@ -35,4 +35,14 @@ interface StorageInterface
      * @return mixed|null returns removed value or null if key not found
      */
     public function remove($dottedKey);
+
+    /**
+     * Closes current session and try to find and open new with <$sessionId>.
+     *
+     * @param string $id
+     * @param bool   $saveCurrent
+     *
+     * @throws \Colibri\Session\Exception
+     */
+    public function catch($id, $saveCurrent);
 }

@@ -2,6 +2,7 @@
 namespace Colibri\Session\Storage;
 
 use Colibri\Pattern\Singleton;
+use Colibri\Session\Exception;
 use Colibri\Util\Arr;
 
 /**
@@ -14,7 +15,9 @@ class Native extends Singleton implements StorageInterface
      */
     protected function __construct()
     {
-        session_start();
+        if ( ! session_start()) {
+            throw new Exception('can`t start session');
+        }
     }
 
     /**
@@ -57,5 +60,28 @@ class Native extends Singleton implements StorageInterface
     public function remove($dottedKey)
     {
         return Arr::remove($_SESSION, $dottedKey);
+    }
+
+    /**
+     * Closes current session and try to find and open new with <$sessionId>.
+     *
+     * @param string $id
+     * @param bool   $saveCurrent
+     *
+     * @throws \Colibri\Session\Exception
+     */
+    public function catch($id, $saveCurrent = true)
+    {
+        if ($saveCurrent) {
+            session_write_close();
+        } else {
+            session_abort();
+        }
+
+        if (session_id($id) === '')
+            throw new Exception("can`t find session with id $id");
+        if ( ! session_start()) {
+            throw new Exception('can`t start session');
+        }
     }
 }
