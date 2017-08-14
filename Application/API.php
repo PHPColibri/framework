@@ -3,6 +3,7 @@ namespace Colibri\Application;
 
 use Colibri\Cache\Memcache;
 use Colibri\Config\Config;
+use Colibri\Session\Session;
 
 /**
  * Application API for most common functionality of app manipulation.
@@ -13,14 +14,6 @@ class API
      * @var Engine
      */
     protected static $moduleSystem = null;
-    /**
-     * @var array assoc-array of errors (key/field => error-message);
-     */
-    public static $errors = null;
-    /**
-     * @var array assoc-array of vars (name => value);
-     */
-    public static $vars = null;
 
     /**
      * API constructor.
@@ -30,31 +23,6 @@ class API
     public function __construct(Engine &$mSystem)
     {
         self::$moduleSystem = $mSystem;
-
-        static::init();
-    }
-
-    /**
-     * @return void
-     */
-    protected static function init()
-    {
-        static::initFromSession();
-    }
-
-    /**
-     * @return void
-     */
-    protected static function initFromSession()
-    {
-        if (isset($_SESSION['api_errors'])) {
-            self::$errors = unserialize($_SESSION['api_errors']);
-            unset($_SESSION['api_errors']);
-        }
-        if (isset($_SESSION['api_vars'])) {
-            self::$vars = unserialize($_SESSION['api_vars']);
-            unset($_SESSION['api_vars']);
-        }
     }
 
     /**
@@ -170,33 +138,23 @@ class API
     }
 
     /**
-     * @param string     $sessionKey
-     * @param array|null $values
+     * @param string $type
+     * @param array  $values
      */
-    protected static function pass($sessionKey, array $values = null)
+    protected static function pass($type, array $values)
     {
-        if ($values === null) {
-            unset($_SESSION[$sessionKey]);
-
-            return;
-        }
-
-        $existingErrors        = isset($_SESSION[$sessionKey])
-            ? unserialize($_SESSION[$sessionKey])
-            : [];
-        $_SESSION[$sessionKey] = serialize(array_merge($existingErrors, $values));
+        Session::flash($type, $values);
     }
 
     /**
      * передаёт устанавливает и передаёт ошибки следующему вызванному скрипту-странице (однократно - удаляется в
      * след.вызв-ом скрипте само).
      *
-     * @param array|null $errors повторный вызов добавляет или перезаписывет с существующими ключами.
-     *                           вызов со значением null стирает ошибки и отменяет передачу в след. контроллер
+     * @param array $errors повторный вызов добавляет или перезаписывет с существующими ключами
      */
-    public static function passErrors(array $errors = null)
+    public static function passErrors(array $errors)
     {
-        self::pass('api_errors', $errors);
+        self::pass('app_errors', $errors);
     }
 
     /**
@@ -206,20 +164,45 @@ class API
      *                         повторный вызов добавляет или перезаписывет с существующими ключами.
      *                         вызов со значением null стирает ошибки и отменяет передачу в след. контроллер
      */
-    public static function passVars(array $vars = null)
+    public static function passVars(array $vars)
     {
-        self::pass('api_vars', $vars);
+        self::pass('app_vars', $vars);
     }
 
     /**
-     * @param string $session_id
+     * @param string $type
+     * @param string $key
+     * @param mixed  $default
+     *
+     * @return mixed
      */
-    public static function catchSession($session_id)
+    protected static function passed($type, $key = null, $default = null)
     {
-        // @todo move this into Session
-        session_write_close();
-        session_id($session_id);
-        session_start();
-        self::initFromSession();
+        return Session::get(
+            $type . ($key !== null ? '.' . $key : ''),
+            $key === null && $default === null ? [] : $default
+        );
+    }
+
+    /**
+     * @param string|null      $key
+     * @param array|mixed|null $default
+     *
+     * @return mixed
+     */
+    public static function errors($key = null, $default = null)
+    {
+        return self::passed('app_errors', $key, $default);
+    }
+
+    /**
+     * @param string|null      $key
+     * @param array|mixed|null $default
+     *
+     * @return mixed
+     */
+    public static function vars($key = null, $default = null)
+    {
+        return self::passed('app_vars', $key, $default);
     }
 }
