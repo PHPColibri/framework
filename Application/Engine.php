@@ -293,7 +293,7 @@ class Engine extends Engine\Base
         if ( ! file_exists($fileName)) {
             throw new Exception\NotFoundException("Can't load module: file '$fileName' does not exists.");
         } else {
-            // @todo remove this (carefully) /** @noinspection PhpIncludeInspection */
+            /** @noinspection PhpIncludeInspection */
             require_once $fileName;
         }
     }
