@@ -208,9 +208,9 @@ class Engine extends Engine\Base
     }
 
     /**
-     * @param $division
-     * @param $module
-     * @param $method
+     * @param string $division
+     * @param string $module
+     * @param string $method
      * @param $params
      *
      * @return string
