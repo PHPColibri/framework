@@ -108,7 +108,7 @@ class Layout extends Helper
     /**
      * Adds included js page manager class & its call on document.ready.
      *
-     * @param        $jsManagerName
+     * @param string $jsManagerName
      * @param string $path
      */
     public static function addJsMgr($jsManagerName, $path = RES_JS)
