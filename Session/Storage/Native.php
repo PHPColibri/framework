@@ -78,8 +78,9 @@ class Native extends Singleton implements StorageInterface
             session_abort();
         }
 
-        if (session_id($id) === '')
+        if (session_id($id) === '') {
             throw new Exception("can`t find session with id $id");
+        }
         if ( ! session_start()) {
             throw new Exception('can`t start session');
         }

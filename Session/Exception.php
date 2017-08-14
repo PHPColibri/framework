@@ -2,9 +2,8 @@
 namespace Colibri\Session;
 
 /**
- * Session specific Exception
+ * Session specific Exception.
  */
 class Exception extends \Exception
 {
-
 }
