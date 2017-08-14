@@ -5,6 +5,7 @@ use Colibri\Controller\ViewsController;
 use Colibri\Database;
 use Colibri\Database\Exception\SqlException;
 use Colibri\Database\ModelCollection;
+use Colibri\Http\Redirect;
 use Colibri\Validation\Validation;
 
 /**
@@ -119,8 +120,7 @@ abstract class RoutineViewsController extends ViewsController
             $this->validate($post, $id);
             if ($post->valid()) {
                 if ($this->dbChange($item, $id)) { // save changes
-                    header('Location: /' . $this->division . '/' . $this->module);
-                    exit();
+                    Redirect::to('/' . $this->division . '/' . $this->module);
                 }
             }
 

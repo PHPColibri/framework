@@ -13,6 +13,7 @@
         "php": ">=5.6",
         "colibri-fw/controller": "dev-master@dev",
         "colibri-fw/database": "dev-master@dev",
+        "colibri-fw/http": "dev-master@dev",
         "colibri-fw/validation": "dev-master@dev"
     },
     "autoload": {
