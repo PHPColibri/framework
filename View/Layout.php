@@ -176,41 +176,9 @@ class Layout extends Helper
      */
     public static function compile($content)
     {
-        $layoutTplVars                = [];
-        $layoutTplVars['content']     = $content;
-        $layoutTplVars['keywords']    = static::eWrap(static::$keywords, "<meta name='keywords' content='%s' />\n");
-        $layoutTplVars['title']       = static::eWrap(static::$title, "<title>%s</title>\n");
-        $layoutTplVars['description'] = static::eWrap(static::$description, "<meta name='description' content='%s'/>\n");
-        $layoutTplVars['css']         =
-            static::concatWrapped(static::$css, '<link   type="text/css" rel="stylesheet" href="%s"/>' . "\n");
-        $layoutTplVars['javascript']  =
-            static::concatWrapped(static::$js, '<script type="text/javascript" src="%s"></script>' . "\n");
+        $layoutTplVars = static::assembleTemplateVars($content);
 
-        // make js init code for all js managers
-        if (count(static::$jsMgr)) {
-            static::addJsTextOnReady(static::concatWrapped(static::$jsMgr, "  new %s_mgr();\n"));
-        }
-
-        if (static::$jsTextOnReady != '') {
-            static::addJsText("$(document).ready(function(){\n" . static::$jsTextOnReady . '});');
-        }
-
-        $layoutTplVars['javascript'] .=
-            static::concatWrapped(static::$jsText, "<script type=\"text/javascript\">%s</script>\n");
-
-        if (static::$filename === null) {
-            throw new \Exception('Layout template file name does not set: use Layout::setFilename().');
-        }
-
-        $tpl       = new PhpTemplate(TEMPLATES . static::$filename);
-        $tpl->vars = $layoutTplVars;
-
-        $compiledHtml = $tpl->compile();
-        foreach ($layoutTplVars as $key => $value) {
-            $compiledHtml = str_replace('{' . $key . '}', $value, $compiledHtml);
-        }
-
-        return $compiledHtml;
+        return static::compileWith($layoutTplVars);
     }
 
     /**
@@ -241,5 +209,66 @@ class Layout extends Helper
         return ! empty($value)
             ? sprintf($template, Html::e($value))
             : '';
+    }
+
+    /**
+     * Prepare and assemble all variables for Layout PhpTemplate.
+     *
+     * @param string $content
+     *
+     * @return array
+     */
+    protected static function assembleTemplateVars($content)
+    {
+        $layoutTplVars = [
+            'content'     => $content,
+            'keywords'    => static::eWrap(static::$keywords, "<meta name='keywords' content='%s' />\n"),
+            'title'       => static::eWrap(static::$title, "<title>%s</title>\n"),
+            'description' => static::eWrap(static::$description, "<meta name='description' content='%s'/>\n"),
+            'css'         => static::concatWrapped(static::$css,
+                '<link   type="text/css" rel="stylesheet" href="%s"/>' . "\n"),
+            'javascript'  => static::concatWrapped(static::$js,
+                '<script type="text/javascript" src="%s"></script>' . "\n"),
+        ];
+
+        // make js init code for all js managers
+        if (count(static::$jsMgr)) {
+            static::addJsTextOnReady(static::concatWrapped(static::$jsMgr, "  new %s_mgr();\n"));
+        }
+
+        if (static::$jsTextOnReady != '') {
+            static::addJsText("$(document).ready(function(){\n" . static::$jsTextOnReady . '});');
+        }
+
+        $layoutTplVars['javascript'] .=
+            static::concatWrapped(static::$jsText, "<script type=\"text/javascript\">%s</script>\n");
+
+        return $layoutTplVars;
+    }
+
+    /**
+     * Compiles layout template with given variables.
+     *
+     * @param array $layoutTplVars
+     *
+     * @return string
+     *
+     * @throws \Exception
+     */
+    protected static function compileWith(array $layoutTplVars)
+    {
+        if (static::$filename === null) {
+            throw new \Exception('Layout template file name does not set: use Layout::setFilename().');
+        }
+
+        $tpl       = new PhpTemplate(TEMPLATES . static::$filename);
+        $tpl->vars = $layoutTplVars;
+
+        $compiledHtml = $tpl->compile();
+        foreach ($layoutTplVars as $key => $value) {
+            $compiledHtml = str_replace('{' . $key . '}', $value, $compiledHtml);
+        }
+
+        return $compiledHtml;
     }
 }
