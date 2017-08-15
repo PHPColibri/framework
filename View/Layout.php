@@ -175,53 +175,34 @@ class Layout extends Helper
      */
     public static function compile($content)
     {
-        $layoutTplVars            = [];
-        $layoutTplVars['content'] = $content;
-        //TODO: special chars
-        $layoutTplVars['keywords'] = ! empty(static::$keywords) ? "<meta name='keywords' content='" . static::$keywords . "' />\n" : '';
-        $layoutTplVars['title']    = ! empty(static::$title) ? '<title>' . htmlspecialchars(static::$title) . "</title>\n" : '';
-        //TODO: special chars
-        $layoutTplVars['description'] = ! empty(static::$description) ? "<meta name='description' content='" . static::$description . "' />\n" : '';
-        $layoutTplVars['javascript']  = '';
-        $layoutTplVars['css']         = '';
+        $layoutTplVars                = [];
+        $layoutTplVars['content']     = $content;
+        $layoutTplVars['keywords']    = ! empty(static::$keywords)
+            ? "<meta name='keywords' content='" . htmlspecialchars(static::$keywords) . "' />\n"
+            : '';
+        $layoutTplVars['title']       = ! empty(static::$title)
+            ? '<title>' . htmlspecialchars(static::$title) . "</title>\n"
+            : '';
+        $layoutTplVars['description'] = ! empty(static::$description)
+            ? "<meta name='description' content='" . htmlspecialchars(static::$description) . "' />\n"
+            : '';
+        $layoutTplVars['css']         =
+            static::concatWrapped(static::$css, '<link   type="text/css" rel="stylesheet" href="%s"/>' . "\n");
+        $layoutTplVars['javascript']  =
+            static::concatWrapped(static::$js, '<script type="text/javascript" src="%s"></script>' . "\n");
 
-        $cssCnt = count(static::$css);
-        if ($cssCnt > 0) {
-            for ($i = 0; $i < $cssCnt; $i++) {
-                $layoutTplVars['css'] .=
-                    '<link   type="text/css" rel="stylesheet" href="' . static::$css[$i] . '"/>' . "\n";
-            }
-        }
-
-        $jsCnt = count(static::$js);
-        if ($jsCnt > 0) {
-            for ($i = 0; $i < $jsCnt; $i++) {
-                $layoutTplVars['javascript'] .=
-                    '<script type="text/javascript" src="' . static::$js[$i] . '"></script>' . "\n";
-            }
-        }
 
         // make js init code for all js managers
-        $jsManagersCount = count(static::$jsMgr);
-        if ($jsManagersCount > 0) {
-            $jsManagersText = '';
-            for ($i = 0; $i < $jsManagersCount; $i++) {
-                $jsManagersText .= '  new ' . static::$jsMgr[$i] . "_mgr();\n";
-            }
-            static::addJsTextOnReady($jsManagersText);
+        if (count(static::$jsMgr)) {
+            static::addJsTextOnReady(static::concatWrapped(static::$jsMgr, "  new %s_mgr();\n"));
         }
 
         if (static::$jsTextOnReady != '') {
             static::addJsText("$(document).ready(function(){\n" . static::$jsTextOnReady . '});');
         }
 
-        $jsTextCnt = count(static::$jsText);
-        if ($jsTextCnt > 0) {
-            for ($i = 0; $i < $jsTextCnt; $i++) {
-                $layoutTplVars['javascript'] .=
-                    "<script type=\"text/javascript\">\n" . static::$jsText[$i] . "\n</script>\n";
-            }
-        }
+        $layoutTplVars['javascript'] .=
+            static::concatWrapped(static::$jsText, "<script type=\"text/javascript\">%s</script>\n");
 
         if (static::$filename === null) {
             throw new \Exception('Layout template file name does not set: use Layout::setFilename().');
@@ -236,5 +217,18 @@ class Layout extends Helper
         }
 
         return $compiledHtml;
+    }
+
+    /**
+     * @param array  $texts
+     * @param string $tpl
+     *
+     * @return string
+     */
+    protected static function concatWrapped(array $texts, $tpl)
+    {
+        return array_reduce($texts, function ($concatenated, $textItem) use ($tpl) {
+            return $concatenated . sprintf($tpl, $textItem);
+        }, '');
     }
 }
