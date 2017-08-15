@@ -191,7 +191,6 @@ class Layout extends Helper
         $layoutTplVars['javascript']  =
             static::concatWrapped(static::$js, '<script type="text/javascript" src="%s"></script>' . "\n");
 
-
         // make js init code for all js managers
         if (count(static::$jsMgr)) {
             static::addJsTextOnReady(static::concatWrapped(static::$jsMgr, "  new %s_mgr();\n"));
