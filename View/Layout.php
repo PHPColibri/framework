@@ -178,15 +178,9 @@ class Layout extends Helper
     {
         $layoutTplVars                = [];
         $layoutTplVars['content']     = $content;
-        $layoutTplVars['keywords']    = ! empty(static::$keywords)
-            ? "<meta name='keywords' content='" . Html::e(static::$keywords) . "' />\n"
-            : '';
-        $layoutTplVars['title']       = ! empty(static::$title)
-            ? '<title>' . Html::e(static::$title) . "</title>\n"
-            : '';
-        $layoutTplVars['description'] = ! empty(static::$description)
-            ? "<meta name='description' content='" . Html::e(static::$description) . "' />\n"
-            : '';
+        $layoutTplVars['keywords']    = static::eWrap(static::$keywords, "<meta name='keywords' content='%s' />\n");
+        $layoutTplVars['title']       = static::eWrap(static::$title, "<title>%s</title>\n");
+        $layoutTplVars['description'] = static::eWrap(static::$description, "<meta name='description' content='%s'/>\n");
         $layoutTplVars['css']         =
             static::concatWrapped(static::$css, '<link   type="text/css" rel="stylesheet" href="%s"/>' . "\n");
         $layoutTplVars['javascript']  =
@@ -220,15 +214,32 @@ class Layout extends Helper
     }
 
     /**
+     * Goes through $texts array, wraps items with $template & concatenates into single string.
+     *
      * @param array  $texts
-     * @param string $tpl
+     * @param string $template sprintf-like
      *
      * @return string
      */
-    protected static function concatWrapped(array $texts, $tpl)
+    protected static function concatWrapped(array $texts, $template)
     {
-        return array_reduce($texts, function ($concatenated, $textItem) use ($tpl) {
-            return $concatenated . sprintf($tpl, $textItem);
+        return array_reduce($texts, function ($concatenated, $textItem) use ($template) {
+            return $concatenated . sprintf($template, $textItem);
         }, '');
+    }
+
+    /**
+     * If $value is not Empty, escapes html & wraps with $template.
+     *
+     * @param string $value
+     * @param string $template sprintf-like
+     *
+     * @return string
+     */
+    protected static function eWrap($value, $template)
+    {
+        return ! empty($value)
+            ? sprintf($template, Html::e($value))
+            : '';
     }
 }
