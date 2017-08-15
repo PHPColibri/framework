@@ -11,25 +11,25 @@ class Layout extends Helper
     /**
      * @var string name of layout template to use
      */
-    private static $filename = null;
+    protected static $filename = null;
 
     // Variables that injected into layout:
     /** @var string */
-    private static $description = '';
+    protected static $description = '';
     /** @var string */
-    private static $keywords = '';
+    protected static $keywords = '';
     /** @var string */
-    private static $title = '';
+    protected static $title = '';
     /** @var array */
-    private static $css = [];
+    protected static $css = [];
     /** @var array */
-    private static $js = [];
+    protected static $js = [];
     /** @var array */
-    private static $jsText = [];
+    protected static $jsText = [];
     /** @var string */
-    private static $jsTextOnReady = '';
+    protected static $jsTextOnReady = '';
     /** @var array */
-    private static $jsMgr = [];
+    protected static $jsMgr = [];
 
     /**
      * Cleans up all layout variables & resets filename if specified.
