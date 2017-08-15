@@ -6,6 +6,7 @@ use Colibri\Config\Config;
 use Colibri\Database\Concrete\MySQL;
 use Colibri\Http\NotFoundException;
 use Colibri\Log\Log;
+use Colibri\Util\Html;
 
 $mEngine = null;
 
@@ -47,13 +48,13 @@ try {
     );
 
     if (Config::application('debug')) {
-        $error = htmlspecialchars($exc);
+        $error = Html::e($exc);
     }
     header('HTTP/1.1 404 Not Found');
     include HTTPERRORS . '404.php';
 } catch (\Exception $exc) {
     if (Config::application('debug')) {
-        $error = htmlspecialchars($exc);
+        $error = Html::e($exc);
     }
 
     header('HTTP/1.1 500 Internal Server Error');

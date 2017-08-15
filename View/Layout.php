@@ -2,6 +2,7 @@
 namespace Colibri\View;
 
 use Colibri\Pattern\Helper;
+use Colibri\Util\Html;
 
 /**
  * Class Layout.
@@ -178,13 +179,13 @@ class Layout extends Helper
         $layoutTplVars                = [];
         $layoutTplVars['content']     = $content;
         $layoutTplVars['keywords']    = ! empty(static::$keywords)
-            ? "<meta name='keywords' content='" . htmlspecialchars(static::$keywords) . "' />\n"
+            ? "<meta name='keywords' content='" . Html::e(static::$keywords) . "' />\n"
             : '';
         $layoutTplVars['title']       = ! empty(static::$title)
-            ? '<title>' . htmlspecialchars(static::$title) . "</title>\n"
+            ? '<title>' . Html::e(static::$title) . "</title>\n"
             : '';
         $layoutTplVars['description'] = ! empty(static::$description)
-            ? "<meta name='description' content='" . htmlspecialchars(static::$description) . "' />\n"
+            ? "<meta name='description' content='" . Html::e(static::$description) . "' />\n"
             : '';
         $layoutTplVars['css']         =
             static::concatWrapped(static::$css, '<link   type="text/css" rel="stylesheet" href="%s"/>' . "\n");
