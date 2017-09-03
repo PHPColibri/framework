@@ -322,16 +322,6 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
 
     ///////////////////////////////////////////////////////////////////////////
     // for where() function additional functions.
-    /*private	function	whereClauses(array $where,$type='and')
-    {
-        $whereClauses=$this->buildClauses($where,$type);
-        if (is_array($this->where))
-            $this->where=array_merge($this->where,$whereClauses);
-        else
-            $this->where=$whereClauses;
-
-        return $this;
-    }*/
 
     /**
      * @param array  $where
@@ -385,16 +375,6 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
 
         return $this; //->whereClauses($where);
     }
-
-    /*
-     *
-     * @param array $where
-     * @return ModelCollection|$this|Model[]
-     *//*
-    final public function or_where(array $where)
-    {
-        return $this->whereClauses($where,'OR');
-    }*/
 
     /**
      * @param array $plan
