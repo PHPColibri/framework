@@ -121,13 +121,12 @@ class Query
         return $this;
     }
 
-
     // for where() additional functions.
     ///////////////////////////////////////////////////////////////////////////
 
     /**
      * @param array  $where
-     * @param string $type one of 'and'|'or'
+     * @param string $type  one of 'and'|'or'
      *
      * @return array
      *
@@ -220,7 +219,6 @@ class Query
 
         return $this;
     }
-
 
     /**
      * @param \Colibri\Database\DbInterface $db
@@ -322,8 +320,7 @@ class Query
             } else {
                 return false;
             }
-        };
-
+        }
 
         return ' where ' . $this->buildClauses($clauses, $logicOp);
     }
@@ -380,6 +377,7 @@ class Query
 
     /**
      * @return string
+     *
      * @throws \Colibri\Database\DbException
      */
     private function buildSet(): string

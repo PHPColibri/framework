@@ -4,10 +4,10 @@ namespace Colibri\Database\Query;
 use Colibri\Util\Enum;
 
 /**
- * Query logic operator: 'and', 'or'
+ * Query logic operator: 'and', 'or'.
  */
 class LogicOp extends Enum
 {
     const AND = 'and';
-    const OR = 'or';
+    const OR  = 'or';
 }
