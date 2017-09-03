@@ -40,6 +40,9 @@ class Query
         $this->type = $type;
     }
 
+    // 'factories' static functions:
+    ///////////////////////////////////////////////////////////////////////////
+
     /**
      * Creates instance of insert-type Query.
      *
@@ -85,6 +88,33 @@ class Query
         return new static(Query\Type::DELETE);
     }
 
+    // for where() additional functions:
+    ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * @param array  $where
+     * @param string $type  one of 'and'|'or'
+     *
+     * @return array
+     *
+     * @throws \InvalidArgumentException
+     */
+    private function configureClauses(array $where, $type = 'and')
+    {
+        if ( ! in_array($type, ['and', 'or'])) {
+            throw new \InvalidArgumentException('where-type must be `and` or `or`');
+        }
+        $whereClauses = [];
+        foreach ($where as $name => $value) {
+            $whereClauses[] = [$name, $value];
+        }
+
+        return [$type => $whereClauses];
+    }
+
+    // public user functions:
+    ///////////////////////////////////////////////////////////////////////////
+
     /**
      * @param string $tableName
      *
@@ -120,33 +150,6 @@ class Query
 
         return $this;
     }
-
-    // for where() additional functions.
-    ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * @param array  $where
-     * @param string $type  one of 'and'|'or'
-     *
-     * @return array
-     *
-     * @throws \InvalidArgumentException
-     */
-    private function configureClauses(array $where, $type = 'and')
-    {
-        if ( ! in_array($type, ['and', 'or'])) {
-            throw new \InvalidArgumentException('where-type must be `and` or `or`');
-        }
-        $whereClauses = [];
-        foreach ($where as $name => $value) {
-            $whereClauses[] = [$name, $value];
-        }
-
-        return [$type => $whereClauses];
-    }
-
-    // public user functions
-    ///////////////////////////////////////////////////////////////////////////
 
     /**
      * @param array  $where array('column [op]' => value, ...)
@@ -225,7 +228,8 @@ class Query
      *
      * @return string
      *
-     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
      * @throws \UnexpectedValueException
      */
     public function build(DbInterface $db): string
@@ -264,7 +268,7 @@ class Query
         return $sql . ';';
     }
 
-    // private build-functions
+    // private build-functions:
     ///////////////////////////////////////////////////////////////////////////
 
     /**
@@ -296,7 +300,8 @@ class Query
     /**
      * @return string
      *
-     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
      * @throws \UnexpectedValueException
      */
     private function buildWhere(): string
@@ -331,7 +336,8 @@ class Query
      *
      * @return string
      *
-     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
      */
     private function buildClauses(array $clauses, string $logicOp): string
     {
@@ -355,7 +361,8 @@ class Query
      *
      * @return string
      *
-     * @throws DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
      */
     private function buildClause($name, $value): string
     {
@@ -378,7 +385,8 @@ class Query
     /**
      * @return string
      *
-     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
      */
     private function buildSet(): string
     {
