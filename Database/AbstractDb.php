@@ -82,4 +82,20 @@ abstract class AbstractDb implements DbInterface
 
         return true;
     }
+
+    /**
+     * Возвращает тип поля таблицы.
+     * Returns table column type.
+     *
+     * @param string $table
+     * @param string $column
+     *
+     * @return string
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function getFieldType(string $table, string $column): string
+    {
+        return $this->getColumnsMetadata($table)['fieldTypes'][$column];
+    }
 }

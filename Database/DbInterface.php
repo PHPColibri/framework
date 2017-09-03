@@ -206,4 +206,17 @@ interface DbInterface
      * @return string
      */
     public static function getQueryTemplateArray($tpl, array $arguments);
+
+    /**
+     * Возвращает тип поля таблицы.
+     * Returns table column type.
+     *
+     * @param string $table
+     * @param string $column
+     *
+     * @return string
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function getFieldType(string $table, string $column): string;
 }
