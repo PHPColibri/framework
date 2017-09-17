@@ -444,8 +444,9 @@ class Query
      */
     private function buildOrderBy(): string
     {
-        if ($this->orderBy === null)
+        if ($this->orderBy === null) {
             return '';
+        }
 
         $orderSQLs = [];
         foreach ($this->orderBy as $column => $orientation) {
