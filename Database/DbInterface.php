@@ -216,6 +216,7 @@ interface DbInterface
      *
      * @return string
      *
+     * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
      */
     public function getFieldType(string $table, string $column): string;

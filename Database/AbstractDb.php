@@ -35,6 +35,7 @@ abstract class AbstractDb implements DbInterface
      *
      * @return array
      *
+     * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
      */
     public function &getColumnsMetadata($tableName)
@@ -42,6 +43,7 @@ abstract class AbstractDb implements DbInterface
         if ( ! isset(self::$columnsMetadata[$tableName])) {
             self::$columnsMetadata[$tableName] = (static::$useMemcacheForMetadata
                 ? Memcache::remember($this->database . '.' . $tableName . '.meta', function () use ($tableName) {
+                    /** @noinspection PhpUnhandledExceptionInspection */
                     return $this->retrieveColumnsMetadata($tableName);
                 })
                 : $this->retrieveColumnsMetadata($tableName)
@@ -58,6 +60,8 @@ abstract class AbstractDb implements DbInterface
      * @param string $tableName
      *
      * @return array
+     *
+     * @throws \Colibri\Database\Exception\SqlException
      */
     abstract protected function &retrieveColumnsMetadata($tableName);
 
@@ -92,6 +96,7 @@ abstract class AbstractDb implements DbInterface
      *
      * @return string
      *
+     * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
      */
     public function getFieldType(string $table, string $column): string

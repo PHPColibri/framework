@@ -36,7 +36,6 @@ class MySQL extends AbstractDb
      * @param bool   $persistent make persistent connection
      *
      * @throws DbException
-     * @throws SqlException
      */
     public function __construct($host, $login, $pass, $database, $persistent = false)
     {
@@ -52,6 +51,8 @@ class MySQL extends AbstractDb
     /**
      * Открывает соединение с базой данных.
      * Opens connection to database.
+     *
+     * @throws \Colibri\Database\DbException
      */
     public function open(/*$encoding = 'utf8'*/)
     {
@@ -109,7 +110,6 @@ class MySQL extends AbstractDb
      * If instance somehow was stored in session for example, we need to reopen connection.
      *
      * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
      */
     public function __wakeup()
     {
@@ -546,16 +546,11 @@ class MySQL extends AbstractDb
      *
      * @return int|null
      */
-    private function &extractFieldTypeLength(&$strFieldType)
+    private function extractFieldTypeLength(&$strFieldType)
     {
         $len = explode(')', $strFieldType);
         $len = explode('(', $len[0]);
-        if (count($len) > 1) {
-            $len = &$len[1];
-        } else {
-            $len = null;
-        }
 
-        return $len;
+        return (int)(count($len) > 1 ? $len[1] : null);
     }
 }
