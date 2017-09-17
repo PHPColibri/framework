@@ -30,6 +30,8 @@ class QueryTest extends TestCase
 
     /**
      * @param array $values
+     *
+     * @return $this
      */
     private function mockPreparedValues(...$values)
     {
@@ -41,6 +43,24 @@ class QueryTest extends TestCase
         /* @noinspection PhpMethodParametersCountMismatchInspection */
         $this->dbMock
             ->shouldReceive('getFieldType');
+
+        return $this;
+    }
+
+    /**
+     * @param string                  $expected
+     * @param \Colibri\Database\Query $query
+     *
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
+     */
+    private function assertQueryIs(string $expected, Query $query)
+    {
+        static::assertEquals(
+            $expected,
+            $query->build($this->dbMock)
+        );
     }
 
     // -------------------------------------------------------------------------------------
@@ -80,23 +100,19 @@ class QueryTest extends TestCase
         $twoMonthsAgo       = (new \DateTime())->sub(new \DateInterval('P2M'));
         $twoMonthsAgoString = '\'' . $twoMonthsAgo->format('Y-m-d H:i:s') . '\'';
 
-        $this->mockPreparedValues('0', '0', $twoMonthsAgoString);
-
-        $selectQuery =
-            Query::select(['*'])
-                ->from('users')
-                ->where([
-                    'status >'    => 0,
-                    'gender'      => 0,
-                    'createdAt >' => $twoMonthsAgo,
-                ])
-                ->build($this->dbMock)
+        $this
+            ->mockPreparedValues('0', '0', $twoMonthsAgoString)
+            ->assertQueryIs(
+                "select t.* from users t where (`status` > 0 and `gender` = 0 and `createdAt` > $twoMonthsAgoString);",
+                Query::select(['*'])
+                    ->from('users')
+                    ->where([
+                        'status >'    => 0,
+                        'gender'      => 0,
+                        'createdAt >' => $twoMonthsAgo,
+                    ])
+            )
         ;
-
-        self::assertEquals(
-            "select t.* from users t where (`status` > 0 and `gender` = 0 and `createdAt` > $twoMonthsAgoString);",
-            $selectQuery
-        );
     }
 
     /**
@@ -107,15 +123,12 @@ class QueryTest extends TestCase
      */
     public function testSelectJoin()
     {
-        $selectJoinQuery = Query::select(['*'], ['*'])
-            ->from('users')
-            ->join('user_sites', 'user_id', 'id')
-            ->build($this->dbMock)
-        ;
-
-        self::assertEquals(
-            'select t.*, j1.* from users t left join user_sites j1 on j1.user_id = t.id;',
-            $selectJoinQuery
+        $this->assertQueryIs(
+            'select t.*, j1.* from users t left join user_sites j1 on j1.user_id = t.id inner join sites j2 on j2.id = j1.site_id;',
+            Query::select(['*'], ['*'])
+                ->from('users')
+                ->join('user_sites', 'user_id', 'id')
+                ->join('sites', 'id', 'j1.site_id', Query\JoinType::INNER)
         );
     }
 
@@ -127,20 +140,16 @@ class QueryTest extends TestCase
      */
     public function testUpdate()
     {
-        $this->mockPreparedValues(2, 0, '\'alek13\'', 0);
-
-        $updateQuery =
-            Query::update()
-                ->into('users')
-                ->values(['status' => 2, 'gender' => 0, 'email' => 'alek13'])
-                ->where(['gender' => 0])
-                ->build($this->dbMock)
+        $this
+            ->mockPreparedValues(2, 0, '\'alek13\'', 0)
+            ->assertQueryIs(
+                'update users set `status` = 2, `gender` = 0, `email` = \'alek13\' where (`gender` = 0);',
+                Query::update()
+                    ->into('users')
+                    ->values(['status' => 2, 'gender' => 0, 'email' => 'alek13'])
+                    ->where(['gender' => 0])
+            )
         ;
-
-        self::assertEquals(
-            'update users set `status` = 2, `gender` = 0, `email` = \'alek13\' where (`gender` = 0);',
-            $updateQuery
-        );
     }
 
     /**
@@ -150,18 +159,14 @@ class QueryTest extends TestCase
      */
     public function testDelete()
     {
-        $this->mockPreparedValues(3);
-
-        $deleteQuery =
-            Query::delete()
-                ->from('users')
-                ->where(['id' => 3])
-                ->build($this->dbMock)
+        $this
+            ->mockPreparedValues(3)
+            ->assertQueryIs(
+                'delete from users where (`id` = 3);',
+                Query::delete()
+                    ->from('users')
+                    ->where(['id' => 3])
+            )
         ;
-
-        self::assertEquals(
-            'delete from users where (`id` = 3);',
-            $deleteQuery
-        );
     }
 }
