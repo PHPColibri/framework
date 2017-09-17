@@ -289,7 +289,9 @@ class Query
                 $sql .=
                     $this->buildColumns() .
                     $this->buildFrom() .
-                    $this->buildWhere();
+                    $this->buildWhere() .
+                    $this->buildOrderBy() .
+                    $this->buildLimit();
                 break;
             case Query\Type::UPDATE:
                 $sql .=
@@ -435,6 +437,30 @@ class Query
         $value     = $this->db->prepareValue($value, $this->db->getFieldType($this->table, $name));
 
         return "`$name` $operator $value";
+    }
+
+    /**
+     * @return string
+     */
+    private function buildOrderBy(): string
+    {
+        if ($this->orderBy === null)
+            return '';
+
+        $orderSQLs = [];
+        foreach ($this->orderBy as $column => $orientation) {
+            $orderSQLs[] = '`' . $column . '` ' . $orientation;
+        }
+
+        return ' order by ' . implode(', ', $orderSQLs);
+    }
+
+    /**
+     * @return string
+     */
+    private function buildLimit(): string
+    {
+        return $this->limit ? ' limit ' . implode(', ', $this->limit) : '';
     }
 
     /**

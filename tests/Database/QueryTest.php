@@ -51,6 +51,8 @@ class QueryTest extends TestCase
      * @param string                  $expected
      * @param \Colibri\Database\Query $query
      *
+     * @return $this
+     *
      * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
      * @throws \UnexpectedValueException
@@ -61,6 +63,8 @@ class QueryTest extends TestCase
             $expected,
             $query->build($this->dbMock)
         );
+
+        return $this;
     }
 
     // -------------------------------------------------------------------------------------
@@ -130,6 +134,25 @@ class QueryTest extends TestCase
                 ->join('user_sites', 'user_id', 'id')
                 ->join('sites', 'id', 'j1.site_id', Query\JoinType::INNER)
         );
+    }
+
+    /**
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
+     */
+    public function testSelectOrderLimit()
+    {
+        $this
+            ->assertQueryIs(
+                'select t.* from users t order by `registered` asc limit 0, 10;',
+                Query::select()->from('users')->orderBy(['registered' => 'asc'])->limit(10)
+            )
+            ->assertQueryIs(
+                'select t.* from users t order by `registered` desc limit 2110, 10;',
+                Query::select()->from('users')->orderBy(['registered' => 'desc'])->limit(2110, 10)
+            )
+        ;
     }
 
     /**
