@@ -43,7 +43,7 @@ abstract class AbstractDb implements DbInterface
         if ( ! isset(self::$columnsMetadata[$tableName])) {
             self::$columnsMetadata[$tableName] = (static::$useMemcacheForMetadata
                 ? Memcache::remember($this->database . '.' . $tableName . '.meta', function () use ($tableName) {
-                    /** @noinspection PhpUnhandledExceptionInspection */
+                    /* @noinspection PhpUnhandledExceptionInspection */
                     return $this->retrieveColumnsMetadata($tableName);
                 })
                 : $this->retrieveColumnsMetadata($tableName)
