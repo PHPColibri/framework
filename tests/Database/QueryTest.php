@@ -69,6 +69,15 @@ class QueryTest extends TestCase
 
     // -------------------------------------------------------------------------------------
 
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testInvalidTypeConstructor()
+    {
+        new Query('qwerty');
+    }
+
     /**
      * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
