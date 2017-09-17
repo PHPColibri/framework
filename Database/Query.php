@@ -12,11 +12,15 @@ class Query
     private $db;
     /** @var string */
     protected $type = null;
+    /** @var string */
+    private $joinCurrentAlias = 'j1';
 
     /** @var array */
     protected $columns = null;
     /** @var string */
     protected $table = null;
+    /** @var array */
+    protected $joins = [];
     /** @var array */
     protected $values = null;
 
@@ -57,13 +61,20 @@ class Query
      * Creates instance of select-type Query.
      *
      * @param array $columns
+     * @param array $joinsColumns
      *
      * @return static
      */
-    public static function select(array $columns = ['*'])
+    public static function select(array $columns = ['*'], ...$joinsColumns)
     {
-        $query          = new static(Query\Type::SELECT);
-        $query->columns = $columns;
+        $query               = new static(Query\Type::SELECT);
+        $query->columns['t'] = $columns;
+
+        $alias = 'j1';
+        foreach ($joinsColumns as $joinColumns) {
+            $query->columns[$alias] = (array)$joinColumns;
+            $alias++;
+        }
 
         return $query;
     }
@@ -93,7 +104,7 @@ class Query
 
     /**
      * @param array  $where
-     * @param string $type  one of 'and'|'or'
+     * @param string $type one of 'and'|'or'
      *
      * @return array
      *
@@ -120,7 +131,7 @@ class Query
      *
      * @return $this
      */
-    public function from(string $tableName)
+    public function into(string $tableName)
     {
         $this->table = $tableName;
 
@@ -132,9 +143,40 @@ class Query
      *
      * @return $this
      */
-    public function into(string $tableName)
+    public function from(string $tableName)
     {
         $this->table = $tableName;
+
+        return $this;
+    }
+
+    /**
+     * @param string $table
+     * @param string $column
+     * @param string $toColumn
+     * @param string $type
+     *
+     * @return $this
+     */
+    public function join(string $table, string $column, string $toColumn, string $type = Query\JoinType::LEFT)
+    {
+        $toAliasAndColumn = explode('.', $toColumn);
+        if (count($toAliasAndColumn) === 2) {
+            $toAlias  = $toAliasAndColumn[0];
+            $toColumn = $toAliasAndColumn[1];
+        } else {
+            $toAlias  = 't';
+            $toColumn = $toAliasAndColumn[0];
+        }
+
+
+        $this->joins[] = [
+            'type'   => $type,
+            'table'  => $table,
+            'alias'  => $this->joinCurrentAlias++,
+            'column' => $column,
+            'to'     => [$toAlias, $toColumn],
+        ];
 
         return $this;
     }
@@ -176,7 +218,7 @@ class Query
                 : ['and' => array_merge($where['and'], [['or', $this->where['or']]])];
         }
 
-        return $this; //->whereClauses($where);
+        return $this;
     }
 
     /**
@@ -276,7 +318,12 @@ class Query
      */
     private function buildColumns(): string
     {
-        return ' t.' . implode(', t.', $this->columns);
+        $columnsGroups = [];
+        foreach ($this->columns as $alias => $columns) {
+            $columnsGroups[] = $alias . '.' . implode(", $alias.", $columns);
+        }
+
+        return ' ' . implode(', ', $columnsGroups);
     }
 
     /**
@@ -294,7 +341,24 @@ class Query
      */
     private function buildJoins(): string
     {
-        return '';
+        /**
+         * формат $this->joins[i] (памятка):
+         *      type   => left / right / inner / cross,
+         *      table  => joined table name,
+         *      alias  => joined table alias,
+         *      column => column in joined table (usually FK),
+         *      to     => [to-Alias, to-Column] - of table to which joined-to,
+         */
+        $joinSQLs = [];
+        foreach ($this->joins as $join) {
+            /** @var string $type */ /** @var string $table */ /** @var string $alias */
+            /** @var string $column */ /** @var string $to */
+            extract($join);
+            list($toAlias, $toColumn) = $to;
+            $joinSQLs[] = "$type join $table $alias on $alias.$column = $toAlias.$toColumn";
+        }
+
+        return $joinSQLs ? ' ' . implode(' ', $joinSQLs) : '';
     }
 
     /**
