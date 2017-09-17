@@ -7,9 +7,8 @@ use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 
-
 /**
- * Class QueryTest
+ * Class QueryTest.
  */
 class QueryTest extends TestCase
 {
@@ -34,12 +33,12 @@ class QueryTest extends TestCase
      */
     private function mockPreparedValues(...$values)
     {
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
+        /* @noinspection PhpMethodParametersCountMismatchInspection */
         $this->dbMock
             ->shouldReceive('prepareValue')
             ->andReturnValues($values)
         ;
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
+        /* @noinspection PhpMethodParametersCountMismatchInspection */
         $this->dbMock
             ->shouldReceive('getFieldType');
     }
@@ -137,7 +136,6 @@ class QueryTest extends TestCase
                 ->where(['gender' => 0])
                 ->build($this->dbMock)
         ;
-
 
         self::assertEquals(
             'update users set `status` = 2, `gender` = 0, `email` = \'alek13\' where (`gender` = 0);',

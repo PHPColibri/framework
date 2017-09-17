@@ -169,7 +169,6 @@ class Query
             $toColumn = $toAliasAndColumn[0];
         }
 
-
         $this->joins[] = [
             'type'   => $type,
             'table'  => $table,
@@ -347,15 +346,15 @@ class Query
          *      table  => joined table name,
          *      alias  => joined table alias,
          *      column => column in joined table (usually FK),
-         *      to     => [to-Alias, to-Column] - of table to which joined-to,
+         *      to     => [to-Alias, to-Column] - of table to which joined-to,.
          */
         $joinSQLs = [];
         foreach ($this->joins as $join) {
-            /** @var string $type */ /** @var string $table */ /** @var string $alias */
-            /** @var string $column */ /** @var string $to */
+            /* @var string $type */ /* @var string $table */ /* @var string $alias */
+            /* @var string $column */ /* @var string $to */
             extract($join);
             list($toAlias, $toColumn) = $to;
-            $joinSQLs[] = "$type join $table $alias on $alias.$column = $toAlias.$toColumn";
+            $joinSQLs[]               = "$type join $table $alias on $alias.$column = $toAlias.$toColumn";
         }
 
         return $joinSQLs ? ' ' . implode(' ', $joinSQLs) : '';
