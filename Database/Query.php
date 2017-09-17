@@ -104,7 +104,7 @@ class Query
 
     /**
      * @param array  $where
-     * @param string $type one of 'and'|'or'
+     * @param string $type  one of 'and'|'or'
      *
      * @return array
      *
