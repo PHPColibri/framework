@@ -39,6 +39,7 @@ class ValidationTest extends TestCase
      * @covers \Colibri\Validation\Validation::forScope
      *
      * @return Validation
+     *
      * @throws \PHPUnit\Framework\Exception
      */
     public function testForScope()
