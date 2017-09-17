@@ -69,7 +69,6 @@ class QueryTest extends TestCase
 
     // -------------------------------------------------------------------------------------
 
-
     /**
      * @expectedException \InvalidArgumentException
      */
