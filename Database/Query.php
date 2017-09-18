@@ -468,7 +468,7 @@ class Query
             ? $this->table
             : $this->joins[$alias]['table'];
 
-        $sqlName = $alias !== null ? "$alias.`$name`" : "`$name`";
+        $sqlName  = $alias !== null ? "$alias.`$name`" : "`$name`";
         $sqlValue = $this->db->prepareValue($value, $this->db->getFieldType($table, $name));
 
         return "$sqlName $operator $sqlValue";
@@ -517,7 +517,7 @@ class Query
     {
         $assignments = [];
         foreach ($this->values as $column => $value) {
-            $alias = $this->type !== Query\Type::INSERT ? self::cutAlias($column) : null;
+            $alias         = $this->type !== Query\Type::INSERT ? self::cutAlias($column) : null;
             $assignments[] = $this->buildClause($column, $value, '=', $alias);
         }
 
