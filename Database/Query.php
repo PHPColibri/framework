@@ -99,28 +99,65 @@ class Query
         return new static(Query\Type::DELETE);
     }
 
+    /**
+     * @param array $clause
+     *
+     * @return bool
+     */
+    private static function clauseIsNested(array $clause): bool
+    {
+        $nestedLogicOp = $clause[0];
+        $nestedClauses = $clause[1];
+
+        return is_array($nestedClauses) && ($nestedLogicOp == LogicOp:: AND || $nestedLogicOp == LogicOp:: OR);
+    }
+
     // for where() additional functions:
     ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * @param array  $where
+     * @param array  $where array('column [op]' => value, ...)
      * @param string $type  one of 'and'|'or'
      *
      * @return array
      *
      * @throws \InvalidArgumentException
      */
-    private function configureClauses(array $where, $type = 'and')
+    private static function configureClauses(array $where, $type = 'and')
     {
         if ( ! in_array($type, ['and', 'or'])) {
             throw new \InvalidArgumentException('where-type must be `and` or `or`');
         }
         $whereClauses = [];
         foreach ($where as $name => $value) {
-            $whereClauses[] = [$name, $value];
+            $nameAndOp = explode(' ', $name, 2);
+            $name      = $nameAndOp[0];
+            $operator  = isset($nameAndOp[1]) ? $nameAndOp[1] : ($value === null ? 'is' : '=');
+            $alias     = self::cutAlias($name);
+
+            $whereClauses[] = [$name, $value, $operator, $alias];
         }
 
         return [$type => $whereClauses];
+    }
+
+    /**
+     * @param string $column
+     *
+     * @return string
+     */
+    private static function cutAlias(string &$column): string
+    {
+        $aliasAndColumn = explode('.', $column);
+        if (count($aliasAndColumn) === 2) {
+            $alias  = $aliasAndColumn[0];
+            $column = $aliasAndColumn[1];
+        } else {
+            $alias  = 't';
+            $column = $aliasAndColumn[0];
+        }
+
+        return $alias;
     }
 
     // public user functions:
@@ -160,19 +197,13 @@ class Query
      */
     public function join(string $table, string $column, string $toColumn, string $type = Query\JoinType::LEFT)
     {
-        $toAliasAndColumn = explode('.', $toColumn);
-        if (count($toAliasAndColumn) === 2) {
-            $toAlias  = $toAliasAndColumn[0];
-            $toColumn = $toAliasAndColumn[1];
-        } else {
-            $toAlias  = 't';
-            $toColumn = $toAliasAndColumn[0];
-        }
+        $alias = $this->joinCurrentAlias++;
 
-        $this->joins[] = [
+        $toAlias = self::cutAlias($toColumn);
+
+        $this->joins[$alias] = [
             'type'   => $type,
             'table'  => $table,
-            'alias'  => $this->joinCurrentAlias++,
             'column' => $column,
             'to'     => [$toAlias, $toColumn],
         ];
@@ -202,7 +233,7 @@ class Query
      */
     final public function where(array $where, $type = 'and')
     {
-        $where = $this->configureClauses($where, $type);
+        $where = self::configureClauses($where, $type);
         if ($this->where === null) {
             $this->where = $where;
 
@@ -295,7 +326,7 @@ class Query
                 break;
             case Query\Type::UPDATE:
                 $sql .=
-                    ' ' . $this->table .
+                    ' ' . $this->table . ' t' .
                     $this->buildSet() .
                     $this->buildWhere();
                 break;
@@ -332,7 +363,7 @@ class Query
      */
     private function buildFrom(): string
     {
-        $alias = $this->type == Query\Type::SELECT ? ' t' : '';
+        $alias = $this->type !== Query\Type::INSERT ? ' t' : '';
 
         return ' from ' . $this->table . $alias . $this->buildJoins();
     }
@@ -343,20 +374,23 @@ class Query
     private function buildJoins(): string
     {
         /**
-         * формат $this->joins[i] (памятка):
+         * формат $this->joins[<alias>] (памятка):
+         * (key is joined table alias)
          *      type   => left / right / inner / cross,
          *      table  => joined table name,
-         *      alias  => joined table alias,
          *      column => column in joined table (usually FK),
          *      to     => [to-Alias, to-Column] - of table to which joined-to,.
          */
         $joinSQLs = [];
-        foreach ($this->joins as $join) {
-            /* @var string $type */ /* @var string $table */ /* @var string $alias */
-            /* @var string $column */ /* @var string $to */
+        foreach ($this->joins as $alias => $join) {
+            /* @var string $type */
+            /* @var string $table */
+            /* @var string $column */
+            /* @var string $to */
             extract($join);
             list($toAlias, $toColumn) = $to;
-            $joinSQLs[]               = "$type join $table $alias on $alias.$column = $toAlias.$toColumn";
+
+            $joinSQLs[] = "$type join $table $alias on $alias.$column = $toAlias.$toColumn";
         }
 
         return $joinSQLs ? ' ' . implode(' ', $joinSQLs) : '';
@@ -392,29 +426,26 @@ class Query
             }
         }
 
-        return ' where ' . $this->buildClauses($clauses, $logicOp);
+        return ' where ' . $this->buildClauses($logicOp, $clauses);
     }
 
     /**
-     * @param array  $clauses
      * @param string $logicOp
+     * @param array  $clauses
      *
      * @return string
      *
      * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
      */
-    private function buildClauses(array $clauses, string $logicOp): string
+    private function buildClauses(string $logicOp, array $clauses): string
     {
         $clausesParts = [];
         foreach ($clauses as $clause) {
-            $name  = $nestedLogicOp = $clause[0];
-            $value = $nestedClauses = $clause[1];
-
             $clausesParts[] =
-                is_array($nestedClauses) && ($nestedLogicOp == LogicOp:: AND || $nestedLogicOp == LogicOp:: OR)
-                    ? $this->buildClauses($nestedClauses, $nestedLogicOp)
-                    : $this->buildClause($name, $value);
+                self::clauseIsNested($clause)
+                    ? $this->buildClauses(...$clause)
+                    : $this->buildClause(...$clause);
         }
 
         return '(' . implode(' ' . $logicOp . ' ', $clausesParts) . ')';
@@ -423,20 +454,24 @@ class Query
     /**
      * @param string $name
      * @param mixed  $value
+     * @param string $operator
+     * @param string $alias
      *
      * @return string
      *
      * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
      */
-    private function buildClause($name, $value): string
+    private function buildClause(string $name, $value, string $operator, string $alias = null): string
     {
-        $nameAndOp = explode(' ', $name, 2);
-        $name      = $nameAndOp[0];
-        $operator  = isset($nameAndOp[1]) ? $nameAndOp[1] : ($value === null ? 'is' : '=');
-        $value     = $this->db->prepareValue($value, $this->db->getFieldType($this->table, $name));
+        $table = $alias === 't' || $alias === null
+            ? $this->table
+            : $this->joins[$alias]['table'];
 
-        return "`$name` $operator $value";
+        $sqlName = $alias !== null ? "$alias.`$name`" : "`$name`";
+        $sqlValue = $this->db->prepareValue($value, $this->db->getFieldType($table, $name));
+
+        return "$sqlName $operator $sqlValue";
     }
 
     /**
@@ -482,7 +517,8 @@ class Query
     {
         $assignments = [];
         foreach ($this->values as $column => $value) {
-            $assignments[] = $this->buildClause($column, $value);
+            $alias = $this->type !== Query\Type::INSERT ? self::cutAlias($column) : null;
+            $assignments[] = $this->buildClause($column, $value, '=', $alias);
         }
 
         return ' set ' . implode(', ', $assignments);

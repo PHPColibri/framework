@@ -115,7 +115,7 @@ class QueryTest extends TestCase
         $this
             ->mockPreparedValues('0', '0', $twoMonthsAgoString)
             ->assertQueryIs(
-                "select t.* from users t where (`status` > 0 and `gender` = 0 and `createdAt` > $twoMonthsAgoString);",
+                "select t.* from users t where (t.`status` > 0 and t.`gender` = 0 and t.`createdAt` > $twoMonthsAgoString);",
                 Query::select(['*'])
                     ->from('users')
                     ->where([
@@ -174,7 +174,7 @@ class QueryTest extends TestCase
         $this
             ->mockPreparedValues(2, 0, '\'alek13\'', 0)
             ->assertQueryIs(
-                'update users set `status` = 2, `gender` = 0, `email` = \'alek13\' where (`gender` = 0);',
+                'update users t set t.`status` = 2, t.`gender` = 0, t.`email` = \'alek13\' where (t.`gender` = 0);',
                 Query::update()
                     ->into('users')
                     ->values(['status' => 2, 'gender' => 0, 'email' => 'alek13'])
@@ -193,7 +193,7 @@ class QueryTest extends TestCase
         $this
             ->mockPreparedValues(3)
             ->assertQueryIs(
-                'delete from users where (`id` = 3);',
+                'delete from users t where (t.`id` = 3);',
                 Query::delete()
                     ->from('users')
                     ->where(['id' => 3])
