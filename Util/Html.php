@@ -17,6 +17,6 @@ class Html extends Helper
      */
     public static function e($value)
     {
-        return htmlspecialchars($value, ENT_QUOTES);
+        return htmlspecialchars($value, ENT_QUOTES | ENT_HTML5);
     }
 }
