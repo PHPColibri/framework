@@ -42,7 +42,10 @@ class ModelMultiCollection extends ModelCollection
      * @return mixed
      *
      * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
      * @throws \RuntimeException
+     * @throws \UnexpectedValueException
      */
     public function __get($propertyName)
     {
@@ -50,18 +53,30 @@ class ModelMultiCollection extends ModelCollection
             case 'parentID':
                 return $this->FKValue[0];
             case 'addToDbQuery':
-                return 'INSERT INTO `' . $this->fkTableName . '` SET ' . $this->FKName[0] . '=' . $this->FKValue[0] . ', ' . $this->FKName[1] . '=' . $this->FKValue[1];
+                return Query::insert()->into($this->fkTableName)->values([
+                    $this->FKName[0] => $this->FKValue[0],
+                    $this->FKName[1] => $this->FKValue[1],
+                ])->build(static::db());
             case 'delFromDbQuery':
-                return 'DELETE FROM `' . $this->fkTableName . '` WHERE ' . $this->FKName[0] . '=' . $this->FKValue[0] . ' AND ' . $this->FKName[1] . '=' . $this->FKValue[1];
+                return Query::delete()->from($this->fkTableName)->where([
+                    $this->FKName[0] => $this->FKValue[0],
+                    $this->FKName[1] => $this->FKValue[1],
+                ])->build(static::db());
             case 'selFromDbAllQuery':
-                $intermediateFields = '';
-                if (count($this->intermediateFields)) {
-                    $intermediateFields = ', f.' . implode(', f.', $this->intermediateFields);
-                }
 
                 $strQuery = $this->FKValue[0] !== null
-                    ? "SELECT o.* $intermediateFields FROM `" . static::$tableName . '` o inner join `' . $this->fkTableName . '` f  on o.id=f.' . $this->FKName[1] . ' WHERE f.' . $this->FKName[0] . '=' . $this->FKValue[0]
-                    : "SELECT o.* $intermediateFields FROM `" . static::$tableName . '` o WHERE 1';
+                    ? Query::select(['*'], $this->intermediateFields)
+                        ->from(static::$tableName)
+                        ->join($this->fkTableName, $this->FKName[1], 'id', Query\JoinType::INNER)
+                        ->where([
+                            'j1.' . $this->FKName[0] => $this->FKValue[0],
+                        ])
+                        ->build(static::db())
+                    : Query::select(['*'], $this->intermediateFields)
+                        ->from(static::$tableName)
+                        ->build(static::db())
+                ;
+
                 $strQuery = $this->rebuildQueryForCustomLoad($strQuery);
                 if ($strQuery === false) {
                     throw new \RuntimeException('can\'t rebuild query \'' . $propertyName . '\' for custom load in ' . __METHOD__ . ' [line: ' . __LINE__ . ']. possible: getFieldsAndTypes() failed (check for sql errors) or incorrect wherePlan() format');
@@ -69,7 +84,10 @@ class ModelMultiCollection extends ModelCollection
 
                 return $strQuery;
             case 'delFromDbAllQuery':
-                return 'DELETE FROM `' . $this->fkTableName . '` WHERE ' . $this->FKName[0] . '=' . $this->FKValue[0];
+                return Query::delete()
+                    ->from($this->fkTableName)
+                    ->where([$this->FKName[0] => $this->FKValue[0]])
+                    ->build(static::db());
             default:
                 return parent::__get($propertyName);
         }

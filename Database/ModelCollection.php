@@ -4,6 +4,7 @@ namespace Colibri\Database;
 use Colibri\Base\DynamicCollection;
 use Colibri\Base\DynamicCollectionInterface;
 use Colibri\Database;
+use Colibri\Util\Str;
 
 /**
  * Абстрактный класс ModelCollection.
@@ -295,7 +296,8 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
                 }
             }
 
-            $query .= ' AND ' . $this->buildWhere($clauses, $type);
+            $query = rtrim(trim($query), ';');
+            $query .= (Str::contains($query, ' where ') ? ' and ' : ' where ') . $this->buildWhere($clauses, $type);
 
             $this->where = null;
         }

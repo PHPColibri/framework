@@ -15,6 +15,7 @@ class ModelSingleCollection extends ModelCollection
      *
      * @throws \Colibri\Database\DbException
      * @throws \RuntimeException
+     * @throws \InvalidArgumentException
      */
     public function __get($propertyName)
     {
@@ -22,17 +23,16 @@ class ModelSingleCollection extends ModelCollection
             case 'parentID':
                 return $this->FKValue[0];
             case 'selFromDbAllQuery':
-                $strQuery =
-                    'SELECT * FROM `' . static::$tableName . '` WHERE 1 ' .
-                    ($this->FKValue[1] !== null ?
-                        ' AND ' . $this->FKName[1] . '=' . $this->FKValue[1] : '') .
-                    ($this->FKValue[0] !== null
-                        ?
-                        ' AND ' . $this->FKName[0] .
-                        ($this->FKValue[0] === 'NULL' ? ' IS ' : '=') .
-                        $this->FKValue[0]
-                        :
-                        '');
+                $query = Query::select()->from(static::$tableName);
+                if ($this->FKValue[1] !== null) {
+                    $query->where([$this->FKName[1] => $this->FKValue[1]]);
+                }
+                if ($this->FKValue[0] !== null) {
+                    $query->where([$this->FKName[0] => $this->FKValue[0]]);
+                }
+
+                $strQuery = $query->build(static::db());
+
                 $strQuery = $this->rebuildQueryForCustomLoad($strQuery);
                 if ($strQuery === false) {
                     throw new \RuntimeException('can\'t rebuild query \'' . $propertyName . '\' for custom load in ' . __METHOD__ . ' [line: ' . __LINE__ . ']. possible: getFieldsAndTypes() failed (check for sql errors) or incorrect wherePlan() format');
@@ -40,7 +40,10 @@ class ModelSingleCollection extends ModelCollection
 
                 return $strQuery;
             case 'delFromDbAllQuery':
-                return 'DELETE FROM `' . static::$tableName . '` WHERE ' . $this->FKName[0] . '=' . $this->FKValue[0];
+                return Query::delete()
+                    ->from(static::$tableName)
+                    ->where([$this->FKName[0] => $this->FKValue[0]])
+                    ->build(static::db());
             default:
                 return parent::__get($propertyName);
         }
