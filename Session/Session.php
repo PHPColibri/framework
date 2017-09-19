@@ -2,7 +2,6 @@
 namespace Colibri\Session;
 
 use Colibri\Pattern\Helper;
-use Colibri\Session\Storage\Native;
 use Colibri\Session\Storage\StorageInterface;
 use Colibri\Util\Arr;
 
@@ -19,13 +18,19 @@ class Session extends Helper
      * @var StorageInterface storage driver
      */
     private static $storage = null;
+    /**
+     * @var string|StorageInterface class name (Native::class, ...)
+     */
+    private static $driver = Storage\Native::class;
 
     /**
      * Starts the Session.
      */
     public static function start()
     {
-        self::$storage     = Native::getInstance();
+        $driver = self::getDriver();
+
+        self::$storage     = $driver::getInstance();
         self::$flashedVars = self::$storage->remove('flashed');
     }
 
@@ -106,5 +111,39 @@ class Session extends Helper
     public static function catch($id, $saveCurrent = true)
     {
         self::$storage->catch($id, $saveCurrent);
+    }
+
+    /**
+     * @return string|StorageInterface
+     */
+    public static function getDriver(): string
+    {
+        return static::$driver;
+    }
+
+    /**
+     * @param string $driver name of class that implements \Colibri\Session\Storage\StorageInterface
+     *
+     * @throws \InvalidArgumentException
+     */
+    public static function setDriver(string $driver)
+    {
+        if ( ! self::isValidDriver($driver)) {
+            throw new \InvalidArgumentException("invalid session driver '$driver'");
+        }
+
+        self::$driver = $driver;
+    }
+
+    /**
+     * @param string $driver
+     *
+     * @return bool
+     */
+    private static function isValidDriver(string $driver): bool
+    {
+        return
+            class_exists($driver) &&
+            Arr::contains(class_implements($driver), StorageInterface::class);
     }
 }
