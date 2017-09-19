@@ -12,6 +12,8 @@ class Native extends Singleton implements StorageInterface
 {
     /**
      * Session Native driver constructor.
+     *
+     * @throws \Colibri\Session\Exception
      */
     protected function __construct()
     {
