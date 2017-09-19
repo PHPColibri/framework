@@ -23,6 +23,7 @@ class ConfigTest extends TestCase
     /**
      * @covers  \Colibri\Config\Config::getBaseDir
      * @depends testSetBaseDir
+     *
      * @throws \InvalidArgumentException
      */
     public function testGetBaseDir()
@@ -46,6 +47,7 @@ class ConfigTest extends TestCase
     /**
      * @covers  \Colibri\Config\Config::getOrEmpty
      * @depends testSetBaseDir
+     *
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\Exception
