@@ -1,5 +1,5 @@
 <?php
-namespace Colibri\Tests\Util;
+namespace Colibri\tests\Util;
 
 use Colibri\Util\Str;
 use PHPUnit\Framework\TestCase;
@@ -15,11 +15,11 @@ class StrTest extends TestCase
      *
      * @param string $email
      *
-     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \PHPUnit\Framework\AssertionFailedError
      */
     public function testIsEmailNegative($email)
     {
-        $this->assertFalse(Str::isEmail($email));
+        self::assertFalse(Str::isEmail($email));
     }
 
     /**
@@ -44,13 +44,16 @@ class StrTest extends TestCase
      *
      * @param string $email
      *
-     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \PHPUnit\Framework\AssertionFailedError
      */
     public function testIsEmailPositive($email)
     {
-        $this->assertTrue(Str::isEmail($email));
+        self::assertTrue(Str::isEmail($email));
     }
 
+    /**
+     * @return array
+     */
     public function validEmailProvider()
     {
         return [
@@ -70,6 +73,7 @@ class StrTest extends TestCase
      */
     public function testRandomInvalidTypeException()
     {
+        /** @noinspection PhpUnhandledExceptionInspection */
         Str::random('invalid_type');
     }
 
@@ -82,13 +86,16 @@ class StrTest extends TestCase
      * @param string $regexp
      *
      * @throws \Exception
-     * @throws \PHPUnit_Framework_Exception
+     * @throws \PHPUnit\Framework\Exception
      */
     public function testRandom($type, $length, $regexp)
     {
-        $this->assertRegExp($regexp, Str::random($type, $length));
+        self::assertRegExp($regexp, Str::random($type, $length));
     }
 
+    /**
+     * @return array
+     */
     public function randomProvider()
     {
         return [
@@ -118,7 +125,7 @@ class StrTest extends TestCase
      */
     public function testRandomDefaultLength($type, $expectedLength)
     {
-        $this->assertEquals($expectedLength, mb_strlen(Str::random($type)));
+        self::assertEquals($expectedLength, mb_strlen(Str::random($type)));
     }
 
     /**
@@ -144,7 +151,7 @@ class StrTest extends TestCase
      */
     public function testSnake($stringSnakeCase, $expectedString)
     {
-        $this->assertEquals($expectedString, Str::snake($stringSnakeCase));
+        self::assertEquals($expectedString, Str::snake($stringSnakeCase));
     }
 
     /**
@@ -169,7 +176,7 @@ class StrTest extends TestCase
      */
     public function testCamel($stringCamelCase, $expectedString)
     {
-        $this->assertEquals($expectedString, Str::camel($stringCamelCase));
+        self::assertEquals($expectedString, Str::camel($stringCamelCase));
     }
 
     /**
@@ -196,7 +203,7 @@ class StrTest extends TestCase
      */
     public function testStudly($stringCamelCase, $expectedString)
     {
-        $this->assertEquals($expectedString, Str::studly($stringCamelCase));
+        self::assertEquals($expectedString, Str::studly($stringCamelCase));
     }
 
     /**
@@ -219,11 +226,11 @@ class StrTest extends TestCase
      *
      * @param string $string
      *
-     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \PHPUnit\Framework\AssertionFailedError
      */
     public function testIsIntPositive($string)
     {
-        $this->assertTrue(Str::isInt($string));
+        self::assertTrue(Str::isInt($string));
     }
 
     /**
@@ -246,11 +253,11 @@ class StrTest extends TestCase
      *
      * @param string $string
      *
-     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \PHPUnit\Framework\AssertionFailedError
      */
     public function testIsIntNegative($string)
     {
-        $this->assertFalse(Str::isInt($string));
+        self::assertFalse(Str::isInt($string));
     }
 
     /**
@@ -277,11 +284,11 @@ class StrTest extends TestCase
      * @param string $sourceString
      * @param string $beginsWith
      *
-     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \PHPUnit\Framework\AssertionFailedError
      */
     public function testBeginsWithPositive($sourceString, $beginsWith)
     {
-        $this->assertTrue(Str::beginsWith($sourceString, $beginsWith));
+        self::assertTrue(Str::beginsWith($sourceString, $beginsWith));
     }
 
     /**
@@ -302,11 +309,11 @@ class StrTest extends TestCase
      * @param string $sourceString
      * @param string $beginsWith
      *
-     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \PHPUnit\Framework\AssertionFailedError
      */
     public function testBeginsWithNegative($sourceString, $beginsWith)
     {
-        $this->assertFalse(Str::beginsWith($sourceString, $beginsWith));
+        self::assertFalse(Str::beginsWith($sourceString, $beginsWith));
     }
 
     /**
@@ -327,11 +334,11 @@ class StrTest extends TestCase
      * @param string $sourceString
      * @param string $beginsWith
      *
-     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \PHPUnit\Framework\AssertionFailedError
      */
     public function testEndsWithPositive($sourceString, $beginsWith)
     {
-        $this->assertTrue(Str::endsWith($sourceString, $beginsWith));
+        self::assertTrue(Str::endsWith($sourceString, $beginsWith));
     }
 
     /**
@@ -353,11 +360,11 @@ class StrTest extends TestCase
      * @param string $sourceString
      * @param string $beginsWith
      *
-     * @throws \PHPUnit_Framework_AssertionFailedError
+     * @throws \PHPUnit\Framework\AssertionFailedError
      */
     public function testEndsWithNegative($sourceString, $beginsWith)
     {
-        $this->assertFalse(Str::endsWith($sourceString, $beginsWith));
+        self::assertFalse(Str::endsWith($sourceString, $beginsWith));
     }
 
     /**
