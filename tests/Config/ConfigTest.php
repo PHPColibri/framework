@@ -1,9 +1,12 @@
 <?php
-namespace Colibri\Tests\Config;
+namespace Colibri\tests\Config;
 
 use Colibri\Config\Config;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test Config class.
+ */
 class ConfigTest extends TestCase
 {
     /**
@@ -14,46 +17,53 @@ class ConfigTest extends TestCase
     public function testSetBaseDir()
     {
         Config::setBaseDir(__DIR__ . '/sample');
-        $this->assertAttributeEquals(realpath(__DIR__ . '/sample'), 'baseDir', 'Colibri\Config\Config');
+        static::assertAttributeEquals(realpath(__DIR__ . '/sample'), 'baseDir', 'Colibri\Config\Config');
     }
 
     /**
      * @covers  \Colibri\Config\Config::getBaseDir
      * @depends testSetBaseDir
+     * @throws \InvalidArgumentException
      */
     public function testGetBaseDir()
     {
-        $this->assertEquals(realpath(__DIR__ . '/sample'), Config::getBaseDir());
+        static::assertEquals(realpath(__DIR__ . '/sample'), Config::getBaseDir());
     }
 
     /**
      * @covers  \Colibri\Config\Config::exists
      * @depends testSetBaseDir
+     *
+     * @throws \PHPUnit\Framework\AssertionFailedError
+     * @throws \InvalidArgumentException
      */
     public function testExists()
     {
-        $this->assertTrue(Config::exists('sample'));
-        $this->assertFalse(Config::exists('no-file'));
+        static::assertTrue(Config::exists('sample'));
+        static::assertFalse(Config::exists('no-file'));
     }
 
     /**
      * @covers  \Colibri\Config\Config::getOrEmpty
      * @depends testSetBaseDir
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \InvalidArgumentException
+     * @throws \PHPUnit\Framework\Exception
      */
     public function testGetOrEmpty()
     {
-        $this->assertThat(
+        static::assertThat(
             Config::getOrEmpty('no-file'),
-            $this->logicalAnd(
-                $this->isType('array'),
-                $this->isEmpty()
+            static::logicalAnd(
+                static::isType('array'),
+                static::isEmpty()
             )
         );
-        $this->assertThat(
+        static::assertThat(
             Config::getOrEmpty('sample'),
-            $this->logicalAnd(
-                $this->isType('array'),
-                $this->logicalNot($this->isEmpty())
+            static::logicalAnd(
+                static::isType('array'),
+                static::logicalNot(static::isEmpty())
             )
         );
     }
@@ -67,9 +77,9 @@ class ConfigTest extends TestCase
     public function testGet()
     {
         $config = Config::get('sample');
-        $this->assertArrayHasKey('test', $config);
-        $this->assertArrayHasKey('anotherSetting', $config);
-        $this->assertEquals('localValue', $config['anotherSetting']);
+        static::assertArrayHasKey('test', $config);
+        static::assertArrayHasKey('anotherSetting', $config);
+        static::assertEquals('localValue', $config['anotherSetting']);
     }
 
     /**
@@ -79,8 +89,8 @@ class ConfigTest extends TestCase
     public function test__callStatic()
     {
         /* @noinspection PhpUndefinedMethodInspection */
-        $this->assertEquals(true, Config::sample('test'));
+        static::assertEquals(true, Config::sample('test'));
         /* @noinspection PhpUndefinedMethodInspection */
-        $this->assertEquals('inArrValue', Config::sample('arraySetting.arrSettingKey'));
+        static::assertEquals('inArrValue', Config::sample('arraySetting.arrSettingKey'));
     }
 }
