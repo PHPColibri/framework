@@ -7,6 +7,11 @@ namespace Colibri\Session\Storage;
 interface StorageInterface
 {
     /**
+     * @return static
+     */
+    public static function getInstance();
+
+    /**
      * @param string $dottedKey
      *
      * @return bool
