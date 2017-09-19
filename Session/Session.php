@@ -118,7 +118,7 @@ class Session extends Helper
      */
     public static function getDriver(): string
     {
-        return static::$driver;
+        return self::$driver;
     }
 
     /**
