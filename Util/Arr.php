@@ -109,4 +109,17 @@ class Arr extends Helper
     {
         return array_intersect_key($array, array_flip($keys));
     }
+
+    /**
+     * in_array() alias.
+     *
+     * @param array $array
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    public static function contains(array $array, $value)
+    {
+        return in_array($value, $array);
+    }
 }
