@@ -10,12 +10,12 @@ use PHPUnit_Framework_MockObject_MockObject;
 /**
  * Tests for Session class.
  *
- * @coversDefaultClass \Session
+ * @coversDefaultClass \Colibri\Session\Session
  */
 class SessionTest extends TestCase
 {
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject 121212|StorageInterface
+     * @var PHPUnit_Framework_MockObject_MockObject
      */
     private $storageMock;
 
@@ -44,6 +44,7 @@ class SessionTest extends TestCase
     // -------------------------------------------------------------------------------------
 
     /**
+     * @covers ::get
      * @dataProvider getDataProvider
      *
      * @param string $variable
