@@ -73,7 +73,7 @@ class StrTest extends TestCase
      */
     public function testRandomInvalidTypeException()
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
+        /* @noinspection PhpUnhandledExceptionInspection */
         Str::random('invalid_type');
     }
 
