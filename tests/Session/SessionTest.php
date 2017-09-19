@@ -7,16 +7,15 @@ use Colibri\tests\TestCase;
 use PHPUnit_Framework_MockObject_Invocation_Object;
 use PHPUnit_Framework_MockObject_MockObject;
 
-
 /**
  * Tests for Session class.
  *
- * @coversDefaultClass Session
+ * @coversDefaultClass \Session
  */
 class SessionTest extends TestCase
 {
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject   121212|StorageInterface
+     * @var PHPUnit_Framework_MockObject_MockObject 121212|StorageInterface
      */
     private $storageMock;
 
@@ -81,5 +80,4 @@ class SessionTest extends TestCase
             ['var6', new \stdClass()],
         ];
     }
-
 }
