@@ -243,26 +243,26 @@ class Engine extends Engine\Base
         if ( ! class_exists($className)) {
             throw new Exception\NotFoundException("Class '$className' does not exists.");
         }
-        /** @var ViewsController|MethodsController $responser */
-        $responser        = new $className($division, $module, $method);
-        $this->_responser = &$responser;
+        /** @var ViewsController|MethodsController $responder */
+        $responder        = new $className($division, $module, $method);
+        $this->_responser = &$responder;
 
         $classMethods = get_class_methods($className);
         if ( ! in_array($method, $classMethods)) {
             throw new Exception\NotFoundException("Method '$method' does not contains in class '$className'.");
         }
 
-        call_user_func_array([&$responser, 'setUp'], $params);
-        $response = call_user_func_array([&$responser, $method], $params);
-        call_user_func_array([&$responser, 'tearDown'], $params);
+        call_user_func_array([&$responder, 'setUp'], $params);
+        $response = call_user_func_array([&$responder, $method], $params);
+        call_user_func_array([&$responder, 'tearDown'], $params);
 
         if ($type == CallType::VIEW) {
-            $this->_showProfilerInfoOnDebug = $responser->showProfilerInfoOnDebug;
-            $this->_showAppDevToolsOnDebug  = $responser->showAppDevToolsOnDebug;
+            $this->_showProfilerInfoOnDebug = $responder->showProfilerInfoOnDebug;
+            $this->_showAppDevToolsOnDebug  = $responder->showAppDevToolsOnDebug;
         }
 
         if ($type == CallType::VIEW) {
-            return $responser->response;
+            return $responder->response;
         }
 
         return $response;
