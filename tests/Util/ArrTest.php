@@ -5,7 +5,8 @@ use Colibri\Util\Arr;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests for Colibri\Util\Arr
+ * Tests for Colibri\Util\Arr.
+ *
  * @coversDefaultClass \Colibri\Util\Arr
  */
 class ArrTest extends TestCase
@@ -81,15 +82,15 @@ class ArrTest extends TestCase
     public function containsDataProvider()
     {
         return [
-            [[111,222,333], 333, true],
-            [[111,222,333], 444, false],
-            [[true,false,false], true, true],
-            [[false,false,false], true, false],
-            [[false,true,true], false, true],
-            [[true,true,true], false, false],
-            [['aaa','bbb','ccc'], 'bbb', true],
-            [['aaa','bbb','ccc'], 'ddd', false],
-            [[.012,'',.013], .012, true],
+            [[111, 222, 333], 333, true],
+            [[111, 222, 333], 444, false],
+            [[true, false, false], true, true],
+            [[false, false, false], true, false],
+            [[false, true, true], false, true],
+            [[true, true, true], false, false],
+            [['aaa', 'bbb', 'ccc'], 'bbb', true],
+            [['aaa', 'bbb', 'ccc'], 'ddd', false],
+            [[.012, '', .013], .012, true],
         ];
     }
 
