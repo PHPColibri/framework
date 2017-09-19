@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 class QueryTest extends TestCase
 {
-    /** @var MockInterface|DbInterface $mock */
+    /** @var MockInterface|DbInterface */
     private $dbMock;
 
     protected function setUp()
