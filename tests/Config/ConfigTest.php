@@ -2,7 +2,7 @@
 namespace Colibri\tests\Config;
 
 use Colibri\Config\Config;
-use PHPUnit\Framework\TestCase;
+use Colibri\tests\TestCase;
 
 /**
  * Test Config class.
@@ -11,6 +11,17 @@ class ConfigTest extends TestCase
 {
     /**
      * @covers \Colibri\Config\Config::setBaseDir
+     * @expectedException \InvalidArgumentException
+     */
+    public function testSetInvalidBaseDir()
+    {
+        /** @noinspection PhpUnhandledExceptionInspection */
+        Config::setBaseDir('/a/b/c');
+    }
+
+    /**
+     * @covers \Colibri\Config\Config::setBaseDir
+     * @depends testSetInvalidBaseDir
      *
      * @throws \Exception
      */
