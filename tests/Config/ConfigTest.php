@@ -15,7 +15,7 @@ class ConfigTest extends TestCase
      */
     public function testSetInvalidBaseDir()
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
+        /* @noinspection PhpUnhandledExceptionInspection */
         Config::setBaseDir('/a/b/c');
     }
 
