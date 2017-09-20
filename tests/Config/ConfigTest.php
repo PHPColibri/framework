@@ -83,6 +83,7 @@ class ConfigTest extends TestCase
 
     /**
      * @covers  \Colibri\Config\Config::get
+     * @covers  \Colibri\Config\LocalConfig::load
      * @depends testSetBaseDir
      *
      * @throws \Exception

@@ -1,12 +1,18 @@
 <?php
-namespace Colibri\Tests\Config;
+namespace Colibri\tests\Config;
 
 use Colibri\Config\Config;
 use Colibri\Config\LocalConfig;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test LocalConfigTest class
+ */
 class LocalConfigTest extends TestCase
 {
+    /**
+     * @throws \InvalidArgumentException
+     */
     public function setUp()
     {
         Config::setBaseDir(__DIR__ . '/sample');
@@ -14,9 +20,10 @@ class LocalConfigTest extends TestCase
 
     /**
      * @covers \Colibri\Config\LocalConfig::getBaseDir
+     * @throws \InvalidArgumentException
      */
     public function testGetBaseDir()
     {
-        $this->assertEquals(realpath(__DIR__ . '/sample') . '/local', LocalConfig::getBaseDir());
+        static::assertEquals(realpath(__DIR__ . '/sample') . '/local', LocalConfig::getBaseDir());
     }
 }
