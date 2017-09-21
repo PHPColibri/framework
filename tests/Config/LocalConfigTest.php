@@ -6,7 +6,7 @@ use Colibri\Config\LocalConfig;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test LocalConfigTest class
+ * Test LocalConfigTest class.
  */
 class LocalConfigTest extends TestCase
 {
@@ -20,6 +20,7 @@ class LocalConfigTest extends TestCase
 
     /**
      * @covers \Colibri\Config\LocalConfig::getBaseDir
+     *
      * @throws \InvalidArgumentException
      */
     public function testGetBaseDir()

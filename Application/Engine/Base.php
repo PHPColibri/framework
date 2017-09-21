@@ -6,7 +6,6 @@ use Colibri\Config\Config;
 use Colibri\Database\AbstractDb;
 use Colibri\Database\Concrete\MySQL;
 use Colibri\Database\Db;
-use Colibri\Database\Model;
 use Colibri\Session\Session;
 
 /**
