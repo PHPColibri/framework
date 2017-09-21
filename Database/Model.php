@@ -9,20 +9,9 @@ use Colibri\Database\Exception\SqlException;
  * Абстрактный класс объекта базы данных.
  *
  * @property         int|string $id
- *
- * @method string createQuery()
- * @method string deleteQuery()
- * @method string saveQuery()
- * @method string loadQuery()
  */
 abstract class Model
 {
-    const    NEW_OBJECT = -1;
-    const    LOAD_ERROR = -2;
-
-    /** @var bool */
-    public static $debug = true;
-
     /** @var string */
     protected static $tableName = 'tableName_not_set';
     /** @var array */
@@ -31,8 +20,6 @@ abstract class Model
     /** @var array */
     protected $intermediate;
 
-    /** @var array */
-    protected $fieldsNameValuesArray = null;
     /** @var array */
     protected $where = null;
 
@@ -68,9 +55,7 @@ abstract class Model
         $this->fieldTypes   = &$metadata['fieldTypes'];
         $this->fieldLengths = &$metadata['fieldLengths'];
 
-        if ($id_or_row === null) {
-            $this->{static::$PKFieldName[0]} = self::NEW_OBJECT;
-        } else {
+        if ($id_or_row !== null) {
             if (is_array($id_or_row)) {
                 $this->fillProperties($id_or_row);
             } else {
@@ -136,16 +121,14 @@ abstract class Model
     }
 
     /**
-     * @param string $everyFieldPrefix
-     *
-     * @return string
+     * @return array
      */
-    public function getFieldsNamesList($everyFieldPrefix = '')
+    public function getFieldsNames(): array
     {
         $classVars      = array_keys(get_class_vars(get_class($this)));
         $selectedFields = array_intersect($classVars, $this->fields);
 
-        return $everyFieldPrefix . '`' . implode('`, ' . $everyFieldPrefix . '`', $selectedFields) . '`';
+        return $selectedFields;
     }
 
     /**
@@ -177,81 +160,31 @@ abstract class Model
     /**************************************************************************/
 
     /**
-     * @param string $name
-     * @param mixed  $value
-     *
-     * @return string
-     *
-     * @throws DbException
+     * @return array
      */
-    protected function buildNameEqValue($name, $value)
+    protected function getFieldsValues(): array
     {
-        $nameAndOp = explode(' ', $name, 2);
-        $name      = $nameAndOp[0];
-        $operator  = isset($nameAndOp[1]) ? $nameAndOp[1] : ($value === null ? 'is' : '=');
-        $value     = self::db()->prepareValue($value, $this->fieldTypes[$name]);
-
-        return "`$name` $operator $value";
-    }
-
-    /**
-     * @param string $fieldPrefix
-     *
-     * @return string
-     *
-     * @throws DbException
-     */
-    protected function getFieldsNameValueList($fieldPrefix = '')
-    {
-        $obj = $this->fieldsNameValuesArray === null ? $this : $this->fieldsNameValuesArray;
-
-        $strList = '';
-        foreach ($obj as $propName => $propValue) {
-            if (in_array($propName, $this->fields) && (
-                $this->fieldsNameValuesArray === null
-                    ? ! in_array($propName, static::$PKFieldName)
-                    : true
-                )
-            ) {
-                $strList .= ', ' . $fieldPrefix . $this->buildNameEqValue($propName, $propValue);
+        $values = [];
+        foreach ($this as $propName => $propValue) {
+            if ($this->hasColumn($propName) && ! self::isInPrimaryKey($propName)) {
+                $values[$propName] = $propValue;
             }
         }
 
-        return substr($strList, 2);
+        return $values;
     }
 
     /**
-     * @param string $fieldPrefix
-     *
-     * @return string
-     *
-     * @throws DbException
+     * @return array
      */
-    protected function getWhereCondition($fieldPrefix = '')
+    protected function getPKValues(): array
     {
-        $strList = '';
-        foreach ($this->where as $name => $value) {
-            $strList .= ' AND ' . $fieldPrefix . $this->buildNameEqValue($name, $value);
-        }
-
-        return substr($strList, 5);
-    }
-
-    /**
-     * @param string $fieldPrefix
-     *
-     * @return string
-     *
-     * @throws DbException
-     */
-    protected function getPKCondition($fieldPrefix = '')
-    {
-        $strList = '';
+        $pkWhere = [];
         foreach (static::$PKFieldName as $PKName) {
-            $strList .= ' AND ' . $fieldPrefix . $this->buildNameEqValue($PKName, $this->$PKName);
+            $pkWhere[$PKName] = $this->$PKName;
         }
 
-        return substr($strList, 5);
+        return $pkWhere;
     }
 
     /**
@@ -290,35 +223,94 @@ abstract class Model
     }
 
     /**
-     * @param string $name
-     * @param array  $arguments
+     * @return string
+     *
+     * @throws \InvalidArgumentException
+     * @throws \Colibri\Database\DbException
+     * @throws \UnexpectedValueException
+     */
+    protected function loadQuery(): string
+    {
+        $query = Query::select($this->getFieldsNames())
+            ->from(static::$tableName)
+            ->where($this->where ?? $this->getPKValues());
+
+        return $query->build(static::db());
+    }
+
+    /**
+     * @param array|null $attributes
      *
      * @return string
      *
-     * @throws \Exception
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
      */
-    public function __call($name, $arguments)
+    protected function createQuery(array $attributes = null): string
     {
-        switch ($name) {
-            case 'createQuery':
-                /** @noinspection SqlNoDataSourceInspection */
-                $tpl = 'INSERT INTO `' . static::$tableName . '` SET ' . $this->getFieldsNameValueList();
-                break;
-            case 'deleteQuery':
-                /** @noinspection SqlNoDataSourceInspection */
-                $tpl = 'DELETE FROM `' . static::$tableName . '` WHERE ' . $this->getPKCondition();
-                break;
-            case 'saveQuery':
-                $tpl = 'UPDATE `' . static::$tableName . '` SET ' . $this->getFieldsNameValueList() . ' WHERE ' . $this->getPKCondition();
-                break;
-            case 'loadQuery':
-                $tpl = 'SELECT ' . $this->getFieldsNamesList() . ' FROM `' . static::$tableName . '` WHERE ' . ($this->where === null ? $this->getPKCondition() : $this->getWhereCondition());
-                break;
-            default:
-                throw new \Exception('unknown query __called method name.');
-        }
+        $query = Query::insert()->into(static::$tableName)
+            ->set($attributes ?? $this->getFieldsValues());
 
-        return self::db()->getQueryTemplateArray($tpl, $arguments);
+        return $query->build(static::db());
+    }
+
+    /**
+     * @param array|null $attributes
+     *
+     * @return string
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
+     */
+    protected function saveQuery(array $attributes = null): string
+    {
+        $query = Query::update(static::$tableName)
+            ->set($attributes ?? $this->getFieldsValues())
+            ->where($this->getPKValues())
+        ;
+
+        return $query->build(static::db());
+    }
+
+    /**
+     * @return string
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
+     */
+    protected function deleteQuery(): string
+    {
+        $query = Query::delete()
+            ->from(static::$tableName)
+            ->where($this->getPKValues());
+
+        return $query->build(static::db());
+    }
+
+    /**
+     * @param string $field
+     *
+     * @return bool
+     */
+    private static function isInPrimaryKey(string $field): bool
+    {
+        return in_array($field, static::$PKFieldName);
+    }
+
+    /**
+     * @param $propName
+     *
+     * @return bool
+     */
+    protected function hasColumn($propName): bool
+    {
+        return in_array($propName, $this->fields);
     }
 
     /**
@@ -367,7 +359,7 @@ abstract class Model
      */
     public function __set($propertyName, $propertyValue)
     {
-        if (in_array($propertyName, static::$PKFieldName)) {
+        if (self::isInPrimaryKey($propertyName)) {
             return $this->$propertyName = $propertyValue;
         }
 
@@ -410,8 +402,7 @@ abstract class Model
      */
     public function create(array $attributes = null)
     {
-        $this->fieldsNameValuesArray = $attributes;
-        $this->doQuery($this->createQuery());
+        $this->doQuery($this->createQuery($attributes));
         $this->{static::$PKFieldName[0]} = self::db()->lastInsertId();
         if ($attributes) {
             $this->fillProperties($attributes);
@@ -448,10 +439,9 @@ abstract class Model
      */
     public function save(array $attributes = null)
     {
-        $this->fieldsNameValuesArray = $attributes;
         $this->fillProperties($attributes, false);
 
-        $this->doQuery($this->saveQuery());
+        $this->doQuery($this->saveQuery($attributes));
     }
 
     /**
@@ -475,7 +465,7 @@ abstract class Model
      */
     public function reload()
     {
-        return $this->load();
+        return $this->load($this->getPKValues());
     }
 
     /**
@@ -544,30 +534,13 @@ abstract class Model
     }
 
     /**
-     * @deprecated will be removed
-     *
-     * @return string
-     */
-    public function getFieldsAsXMLstring()
-    {
-        $strXMLPart = '';
-        foreach ($this as $propName => $propValue) {
-            if (in_array($propName, $this->fields)) {
-                $strXMLPart .= '<' . $propName . '>' . ($propValue === null ? '<null />' : $propValue) . '</' . $propName . '>';
-            }
-        }
-
-        return $strXMLPart;
-    }
-
-    /**
      * @return array
      */
     public function toArray()
     {
         $arrRet = [];
         foreach ($this as $propName => $propValue) {
-            if (in_array($propName, $this->fields)) {
+            if ($this->hasColumn($propName)) {
                 $arrRet[$propName] = $propValue;
             }
         }
@@ -632,7 +605,6 @@ abstract class Model
      */
     private function cleanUpQueryVars()
     {
-        $this->where                 = null;
-        $this->fieldsNameValuesArray = null;
+        $this->where = null;
     }
 }

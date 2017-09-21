@@ -82,11 +82,13 @@ class Query
     /**
      * Creates instance of update-type Query.
      *
+     * @param string $tableName
+     *
      * @return static
      */
-    public static function update()
+    public static function update(string $tableName)
     {
-        return new static(Query\Type::UPDATE);
+        return (new static(Query\Type::UPDATE))->into($tableName);
     }
 
     /**
@@ -216,9 +218,9 @@ class Query
      *
      * @return $this
      */
-    public function values(array $values)
+    public function set(array $values)
     {
-        $this->values = $values;
+        $this->values = $this->values === null ? $values : array_replace($this->values, $values);
 
         return $this;
     }

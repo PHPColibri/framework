@@ -87,7 +87,7 @@ class QueryTest extends TestCase
         $this->mockPreparedValues('\'alek13\'', '\'alek13\'', 1);
 
         $insertQuery = Query::insert()->into('users')
-            ->values([
+            ->set([
                 'email'    => 'alek13',
                 'password' => 'alek13',
                 'status'   => true,
@@ -175,9 +175,8 @@ class QueryTest extends TestCase
             ->mockPreparedValues(2, 0, '\'alek13\'', 0)
             ->assertQueryIs(
                 'update users t set t.`status` = 2, t.`gender` = 0, t.`email` = \'alek13\' where (t.`gender` = 0);',
-                Query::update()
-                    ->into('users')
-                    ->values(['status' => 2, 'gender' => 0, 'email' => 'alek13'])
+                Query::update('users')
+                    ->set(['status' => 2, 'gender' => 0, 'email' => 'alek13'])
                     ->where(['gender' => 0])
             )
         ;

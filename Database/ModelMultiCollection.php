@@ -53,7 +53,7 @@ class ModelMultiCollection extends ModelCollection
             case 'parentID':
                 return $this->FKValue[0];
             case 'addToDbQuery':
-                return Query::insert()->into($this->fkTableName)->values([
+                return Query::insert()->into($this->fkTableName)->set([
                     $this->FKName[0] => $this->FKValue[0],
                     $this->FKName[1] => $this->FKValue[1],
                 ])->build(static::db());
