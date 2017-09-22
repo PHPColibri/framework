@@ -124,7 +124,7 @@ abstract class RoutineViewsController extends ViewsController
                 }
             }
 
-            $errors = $this->template->vars['errors'] ?? [];
+            $errors                         = $this->template->vars['errors'] ?? [];
             $this->template->vars['errors'] = array_merge($errors, $post->errors);
         }
 
@@ -192,7 +192,7 @@ abstract class RoutineViewsController extends ViewsController
         }
 
         $addValues = $this->defaultValuesOnDbChange($id);
-        $values = is_array($addValues)
+        $values    = is_array($addValues)
             ? array_merge($_POST, $addValues)
             : $values = $_POST;
 
