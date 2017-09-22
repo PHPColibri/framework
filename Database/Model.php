@@ -177,7 +177,7 @@ abstract class Model
     /**
      * @return array
      */
-    protected function getPKValues(): array
+    public function getPKValue(): array
     {
         $pkWhere = [];
         foreach (static::$PKFieldName as $PKName) {
@@ -185,6 +185,36 @@ abstract class Model
         }
 
         return $pkWhere;
+    }
+
+    /**
+     * @param array $id
+     *
+     * @return \Colibri\Database\Model|$this|static
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function setPKValue(array $id)
+    {
+        if (count($id) !== count(static::$PKFieldName)) {
+            throw new \InvalidArgumentException('Can`t set PK: passed values count not identical with primary key fields count');
+        }
+
+        if (count($id) === 1) {
+            $this->{static::$PKFieldName[0]} = array_values($id)[0];
+
+            return $this;
+        }
+
+        foreach ($id as $column => $value) {
+            if ( ! self::isInPrimaryKey($column)) {
+                throw new \InvalidArgumentException('Can`t set PK: Field `' . $column . '` is not a part of primary key.');
+            }
+
+            $this->$column = $value;
+        }
+
+        return $this;
     }
 
     /**
@@ -233,7 +263,7 @@ abstract class Model
     {
         $query = Query::select($this->getFieldsNames())
             ->from(static::$tableName)
-            ->where($this->where ?? $this->getPKValues());
+            ->where($this->where ?? $this->getPKValue());
 
         return $query->build(static::db());
     }
@@ -270,7 +300,7 @@ abstract class Model
     {
         $query = Query::update(static::$tableName)
             ->set($attributes ?? $this->getFieldsValues())
-            ->where($this->getPKValues())
+            ->where($this->getPKValue())
         ;
 
         return $query->build(static::db());
@@ -288,7 +318,7 @@ abstract class Model
     {
         $query = Query::delete()
             ->from(static::$tableName)
-            ->where($this->getPKValues());
+            ->where($this->getPKValue());
 
         return $query->build(static::db());
     }
@@ -298,7 +328,7 @@ abstract class Model
      *
      * @return bool
      */
-    private static function isInPrimaryKey(string $field): bool
+    protected static function isInPrimaryKey(string $field): bool
     {
         return in_array($field, static::$PKFieldName);
     }
@@ -398,6 +428,7 @@ abstract class Model
      * @return $this
      *
      * @throws DbException
+     * @throws SqlException
      * @throws \Exception
      */
     public function create(array $attributes = null)
@@ -465,7 +496,7 @@ abstract class Model
      */
     public function reload()
     {
-        return $this->load($this->getPKValues());
+        return $this->load($this->getPKValue());
     }
 
     /**

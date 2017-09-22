@@ -124,12 +124,7 @@ abstract class RoutineViewsController extends ViewsController
                 }
             }
 
-            if (isset($this->template->vars['errors'])) {
-                $errors = $this->template->vars['errors'];
-            } else {
-                $errors = [];
-            }
-
+            $errors = $this->template->vars['errors'] ?? [];
             $this->template->vars['errors'] = array_merge($errors, $post->errors);
         }
 
@@ -185,25 +180,28 @@ abstract class RoutineViewsController extends ViewsController
      *
      * @return bool
      *
+     * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
+     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     protected function dbChange(Database\Model $item, $id = null)
     {
-        // TODO: $this->setPKValue($id) instead "$PKName[0]" or some else
-        $PKName = $item->getPKFieldName();
-        $PKName = $PKName[0];
         if ($id !== null) {
-            $item->$PKName = $id;
+            $item->setPKValue([$id]);
         }
-        $method    = $id === null ? 'create' : 'save';
+
         $addValues = $this->defaultValuesOnDbChange($id);
-        if (is_array($addValues)) {
-            $values = array_merge($_POST, $addValues);
-        } else {
-            $values = $_POST;
-        }
+        $values = is_array($addValues)
+            ? array_merge($_POST, $addValues)
+            : $values = $_POST;
+
         try {
-            $item->$method($values);
+            if ($id === null) {
+                $item->create($values);
+            } else {
+                $item->save($values);
+            }
         } catch (SqlException $exception) {
             if ($exception->getCode() != 1062) {
                 throw $exception;
@@ -242,6 +240,9 @@ abstract class RoutineViewsController extends ViewsController
         $item = new $this->itemClass();
         $item->delete($id);
 
-        header('Location: ' . (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/' . $this->division . '/' . $this->module));
+        header(
+            'Location: ' .
+            (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/' . $this->division . '/' . $this->module)
+        );
     }
 }
