@@ -253,74 +253,53 @@ abstract class Model
     }
 
     /**
-     * @return string
+     * @return \Colibri\Database\Query
      *
      * @throws \InvalidArgumentException
-     * @throws \Colibri\Database\DbException
-     * @throws \UnexpectedValueException
      */
-    protected function loadQuery(): string
+    protected function loadQuery(): Query
     {
-        $query = Query::select($this->getFieldsNames())
+        return Query::select($this->getFieldsNames())
             ->from(static::$tableName)
             ->where($this->where ?? $this->getPKValue());
-
-        return $query->build(static::db());
     }
 
     /**
      * @param array|null $attributes
      *
-     * @return string
-     *
-     * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \InvalidArgumentException
-     * @throws \UnexpectedValueException
+     * @return \Colibri\Database\Query
      */
-    protected function createQuery(array $attributes = null): string
+    protected function createQuery(array $attributes = null): Query
     {
-        $query = Query::insert()->into(static::$tableName)
+        return Query::insert()->into(static::$tableName)
             ->set($attributes ?? $this->getFieldsValues());
-
-        return $query->build(static::db());
     }
 
     /**
      * @param array|null $attributes
      *
-     * @return string
+     * @return \Colibri\Database\Query
      *
-     * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
-     * @throws \UnexpectedValueException
      */
-    protected function saveQuery(array $attributes = null): string
+    protected function saveQuery(array $attributes = null): Query
     {
-        $query = Query::update(static::$tableName)
+        return Query::update(static::$tableName)
             ->set($attributes ?? $this->getFieldsValues())
             ->where($this->getPKValue())
         ;
-
-        return $query->build(static::db());
     }
 
     /**
-     * @return string
+     * @return \Colibri\Database\Query
      *
-     * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
-     * @throws \UnexpectedValueException
      */
-    protected function deleteQuery(): string
+    protected function deleteQuery(): Query
     {
-        $query = Query::delete()
+        return Query::delete()
             ->from(static::$tableName)
             ->where($this->getPKValue());
-
-        return $query->build(static::db());
     }
 
     /**
@@ -535,16 +514,16 @@ abstract class Model
     }
 
     /**
-     * @param string $sqlQuery
+     * @param \Colibri\Database\Query $query
      *
      * @return $this|null
      *
      * @throws DbException
      * @throws \Exception
      */
-    protected function loadByQuery($sqlQuery)
+    protected function loadByQuery($query)
     {
-        $this->doQuery($sqlQuery);
+        $this->doQuery($query);
 
         if (self::db()->getNumRows() == 0) {
             return null;
@@ -588,15 +567,16 @@ abstract class Model
     }
 
     /**
-     * @param string $strQuery
+     * @param Query $query
      *
      * @throws DbException
      * @throws SqlException
      * @throws \Exception
      */
-    protected function doQuery($strQuery)
+    protected function doQuery(Query $query)
     {
-        self::db()->query($strQuery);
+        $db = static::db();
+        $db->query($query->build($db));
 
         $this->cleanUpQueryVars();
     }
@@ -611,7 +591,7 @@ abstract class Model
      */
     protected function doQueries(array $arrQueries)
     {
-        self::db()->queries($arrQueries);
+        static::db()->queries($arrQueries);
 
         return true;
     }
@@ -626,7 +606,7 @@ abstract class Model
      */
     protected function doTransaction(array $queries)
     {
-        self::db()->commit($queries);
+        static::db()->commit($queries);
 
         return true;
     }
