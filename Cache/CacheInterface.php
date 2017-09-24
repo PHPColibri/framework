@@ -9,23 +9,25 @@ interface CacheInterface
     /**
      * @param string $key for data
      *
-     * @return bool result OR data
+     * @return mixed Returns cached data.
      */
-    public static function get($key);
+    public static function get(string $key);
 
     /**
-     * @param string $key    key for data
-     * @param mixed  $value  any type of supported data: object, string, int…
-     * @param int    $expire seconds
+     * @param string   $key    key for data
+     * @param mixed    $value  any type of supported data: object, string, int…
+     * @param int|null $expire seconds
      *
-     * @return bool result
+     * @return bool True on success and false on failure.
      */
-    public static function set($key, $value, $expire = null);
+    public static function set(string $key, $value, int $expire = null): bool;
 
     /**
      * @param string $key key for data
+     *
+     * @return bool True on success and false on failure.
      */
-    public static function delete($key);
+    public static function delete(string $key): bool;
 
     /**
      * Tries to ::get() data from cache; and if not exists,
@@ -34,9 +36,9 @@ interface CacheInterface
      *
      * @param string   $key              key for data
      * @param \Closure $getValueCallback closure that get the real (not cached) value
-     * @param null     $expire           seconds
+     * @param int|null $expire           seconds
      *
-     * @return bool result OR data
+     * @return mixed Returns cached data
      */
-    public static function remember($key, \Closure $getValueCallback, $expire = null);
+    public static function remember(string $key, \Closure $getValueCallback, int $expire = null);
 }

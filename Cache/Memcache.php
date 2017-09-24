@@ -80,11 +80,11 @@ class Memcache extends Helper implements CacheInterface
     /**
      * @param string $key for data
      *
-     * @return bool|mixed returns false if failed OR cached data
+     * @return mixed returns cached data
      *
      * @throws \InvalidArgumentException
      */
-    public static function get($key)
+    public static function get(string $key)
     {
         self::$queriesCount++;
 
@@ -94,19 +94,19 @@ class Memcache extends Helper implements CacheInterface
     }
 
     /**
-     * @param string $key    for data
-     * @param mixed  $val    any type of supported data: object, string, int…
-     * @param int    $expire Expiration time of the item (usually in seconds).
-     *                       If it's equal to null, the 'defaultExpiration' config value will used.
-     *                       If it's equal to zero, the item will never expire.
-     *                       You can also use Unix timestamp or a number of seconds starting from current time,
-     *                       but in the latter case the number of seconds may not exceed 2592000 (30 days).
+     * @param string   $key    for data
+     * @param mixed    $val    any type of supported data: object, string, int…
+     * @param int|null $expire Expiration time of the item (usually in seconds).
+     *                         If it's equal to null, the 'defaultExpiration' config value will used.
+     *                         If it's equal to zero, the item will never expire.
+     *                         You can also use Unix timestamp or a number of seconds starting from current time,
+     *                         but in the latter case the number of seconds may not exceed 2592000 (30 days).
      *
      * @return bool returns <b>TRUE</b> on success or <b>FALSE</b> on failure
      *
      * @throws \InvalidArgumentException
      */
-    public static function set($key, $val, $expire = null)
+    public static function set(string $key, $val, int $expire = null): bool
     {
         self::$queriesCount++;
 
@@ -127,7 +127,7 @@ class Memcache extends Helper implements CacheInterface
      *
      * @throws \InvalidArgumentException
      */
-    public static function delete($key)
+    public static function delete(string $key): bool
     {
         self::$queriesCount++;
 
@@ -141,7 +141,7 @@ class Memcache extends Helper implements CacheInterface
      *
      * @param string   $key              key for data
      * @param \Closure $getValueCallback closure that get the real (not cached) value
-     * @param int      $expire           Expiration time of the item (usually in seconds).
+     * @param int|null $expire           Expiration time of the item (usually in seconds).
      *                                   If it's equal to null, the 'defaultExpiration' config value will used.
      *                                   If it's equal to zero, the item will never expire.
      *                                   You can also use Unix timestamp or a number of seconds starting from current
@@ -152,7 +152,7 @@ class Memcache extends Helper implements CacheInterface
      *
      * @throws \InvalidArgumentException
      */
-    public static function remember($key, \Closure $getValueCallback, $expire = null)
+    public static function remember(string $key, \Closure $getValueCallback, int $expire = null)
     {
         if (($fromCache = static::get($key)) !== false) {
             return $fromCache;
