@@ -9,7 +9,7 @@ interface CacheInterface
     /**
      * @param string $key for data
      *
-     * @return mixed Returns cached data.
+     * @return mixed returns cached data
      */
     public static function get(string $key);
 
@@ -18,14 +18,14 @@ interface CacheInterface
      * @param mixed    $value  any type of supported data: object, string, int…
      * @param int|null $expire seconds
      *
-     * @return bool True on success and false on failure.
+     * @return bool true on success and false on failure
      */
     public static function set(string $key, $value, int $expire = null): bool;
 
     /**
      * @param string $key key for data
      *
-     * @return bool True on success and false on failure.
+     * @return bool true on success and false on failure
      */
     public static function delete(string $key): bool;
 
