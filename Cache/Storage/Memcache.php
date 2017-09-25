@@ -39,7 +39,7 @@ class Memcache extends AbstractStorage implements StorageInterface
     }
 
     /**
-     * @param string|array $key for data
+     * @param string|array $key     for data
      * @param mixed|null   $default
      *
      * @return bool|mixed returns false if failed OR cached data

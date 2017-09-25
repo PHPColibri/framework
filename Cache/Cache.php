@@ -21,7 +21,7 @@ class Cache extends Helper implements CacheInterface
                 'driver' => 'memcache',
                 'config' => [],
             ],
-        ]
+        ],
     ];
     /**
      * @var array|Storage\StorageInterface[]
