@@ -108,8 +108,7 @@ class Session extends Helper
      *
      * @throws \Colibri\Session\Exception
      */
-    public static function catch($id, $saveCurrent = true)
-    {
+    public static function catch($id, $saveCurrent = true) {
         self::$storage->catch($id, $saveCurrent);
     }
 
