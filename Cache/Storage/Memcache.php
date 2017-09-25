@@ -39,7 +39,7 @@ class Memcache extends AbstractStorage implements StorageInterface
     }
 
     /**
-     * @param string|array $key for data
+     * @param string|array $key     for data
      * @param mixed|null   $default
      *
      * @return bool|mixed returns false if failed OR cached data
@@ -100,7 +100,7 @@ class Memcache extends AbstractStorage implements StorageInterface
     /**
      * Wipes clean the entire cache's keys.
      *
-     * @return bool True on success and false on failure.
+     * @return bool true on success and false on failure
      */
     public function clear()
     {
@@ -110,15 +110,15 @@ class Memcache extends AbstractStorage implements StorageInterface
     /**
      * Obtains multiple cache items by their unique keys.
      *
-     * @param iterable $keys    A list of keys that can obtained in a single operation.
-     * @param mixed    $default Default value to return for keys that do not exist.
+     * @param iterable $keys    a list of keys that can obtained in a single operation
+     * @param mixed    $default default value to return for keys that do not exist
      *
      * @return iterable A list of key => value pairs. Cache keys that do not exist or are stale will have $default as
      *                  value.
      *
      * @throws \Psr\SimpleCache\InvalidArgumentException
-     *   MUST be thrown if $keys is neither an array nor a Traversable,
-     *   or if any of the $keys are not a legal value.
+     *                                                   MUST be thrown if $keys is neither an array nor a Traversable,
+     *                                                   or if any of the $keys are not a legal value
      */
     public function getMultiple($keys, $default = null)
     {
@@ -135,12 +135,12 @@ class Memcache extends AbstractStorage implements StorageInterface
     /**
      * Persists a set of key => value pairs in the cache, with an optional TTL.
      *
-     * @param iterable               $values A list of key => value pairs for a multiple-set operation.
+     * @param iterable               $values a list of key => value pairs for a multiple-set operation
      * @param null|int|\DateInterval $ttl    Optional. The TTL value of this item. If no value is sent and
      *                                       the driver supports TTL then the library may set a default value
      *                                       for it or let the driver take care of that.
      *
-     * @return bool True on success and false on failure.
+     * @return bool true on success and false on failure
      *
      * @throws \Colibri\Cache\Storage\Exception\InvalidArgumentException
      */
@@ -165,13 +165,13 @@ class Memcache extends AbstractStorage implements StorageInterface
     /**
      * Deletes multiple cache items in a single operation.
      *
-     * @param iterable $keys A list of string-based keys to be deleted.
+     * @param iterable $keys a list of string-based keys to be deleted
      *
      * @return bool True if the items were successfully removed. False if there was an error.
      *
      * @throws \Psr\SimpleCache\InvalidArgumentException
-     *   MUST be thrown if $keys is neither an array nor a Traversable,
-     *   or if any of the $keys are not a legal value.
+     *                                                   MUST be thrown if $keys is neither an array nor a Traversable,
+     *                                                   or if any of the $keys are not a legal value
      */
     public function deleteMultiple($keys)
     {
@@ -191,11 +191,11 @@ class Memcache extends AbstractStorage implements StorageInterface
      * is subject to a race condition where your has() will return true and immediately after,
      * another script can remove it making the state of your app out of date.
      *
-     * @param string $key The cache item key.
+     * @param string $key the cache item key
      *
      * @return bool
      *
-     * @throws \Psr\SimpleCache\InvalidArgumentException if the $key string is not a legal value.
+     * @throws \Psr\SimpleCache\InvalidArgumentException if the $key string is not a legal value
      */
     public function has($key)
     {

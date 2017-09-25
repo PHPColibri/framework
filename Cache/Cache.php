@@ -39,6 +39,7 @@ class Cache extends Helper implements CacheInterface
      * @param mixed|null $default
      *
      * @return mixed
+     *
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public static function get(string $key, $default = null)
@@ -51,7 +52,7 @@ class Cache extends Helper implements CacheInterface
      * @param mixed  $value  any type of supported data: object, string, int…
      * @param int    $expire seconds
      *
-     * @return bool True on success and false on failure.
+     * @return bool true on success and false on failure
      *
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
@@ -61,9 +62,9 @@ class Cache extends Helper implements CacheInterface
     }
 
     /**
-     * @param string $key The unique cache key of the item to delete.
+     * @param string $key the unique cache key of the item to delete
      *
-     * @return bool True on success and false on failure.
+     * @return bool true on success and false on failure
      *
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */

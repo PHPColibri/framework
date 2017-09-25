@@ -2,12 +2,12 @@
 namespace Colibri\Cache\Storage;
 
 /**
- * Class AbstractStorage
+ * Class AbstractStorage.
  */
 abstract class AbstractStorage implements StorageInterface
 {
     /**
-     * @var int count of queries to Cache.
+     * @var int count of queries to Cache
      */
     protected $queriesCount = 0;
 
