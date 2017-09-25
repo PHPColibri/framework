@@ -54,6 +54,21 @@ class Engine extends Engine\Base
     protected $_showAppDevToolsOnDebug = true;
 
     /**
+     * @param $file
+     *
+     * @return bool|string
+     */
+    private static function removeExtension($file)
+    {
+        $dotPos = strpos($file, '.');
+        if ($dotPos !== false) {
+            $file = substr($file, 0, $dotPos);
+        }
+
+        return $file;
+    }
+
+    /**
      * @return void
      */
     private static function setUpErrorHandling()
@@ -139,15 +154,10 @@ class Engine extends Engine\Base
      */
     protected function parseRequestedFile($file)
     {
-        $appConfig = Config::get('application');
+        $file = self::removeExtension($file);
+        $file = ltrim($file, '/');
 
-        $dotPos = strpos($file, '.');
-        if ($dotPos !== false) {
-            $file = substr($file, 0, $dotPos);
-        }
-        if ($file[0] === '/') {
-            $file = substr($file, 1);
-        }
+        $moduleConfig = Config::application('module');
 
         $parts    = explode('/', $file);
         $partsCnt = count($parts);
@@ -159,17 +169,13 @@ class Engine extends Engine\Base
             $this->_division = '';
         }
 
-        if (empty($parts[0])) {
-            $this->_module = $appConfig['module']['default'];
-        } else {
-            $this->_module = $parts[0];
-        }
-        if ($partsCnt < 2 ||
-            empty($parts[1])) {
-            $this->_method = $appConfig['module']['defaultViewsControllerAction'];
-        } else {
-            $this->_method = Str::camel($parts[1]);
-        }
+        $this->_module = empty($parts[0])
+            ? $moduleConfig['default']
+            : $parts[0];
+
+        $this->_method = $partsCnt < 2 || empty($parts[1])
+            ? $moduleConfig['defaultViewsControllerAction']
+            : Str::camel($parts[1]);
 
         if ($partsCnt > 2) {
             $this->_params = array_slice($parts, 2);
@@ -211,7 +217,7 @@ class Engine extends Engine\Base
      * @param string $division
      * @param string $module
      * @param string $method
-     * @param $params
+     * @param        $params
      *
      * @return string
      *
@@ -239,7 +245,8 @@ class Engine extends Engine\Base
     {
         $this->loadModule($division, $module, $type);
 
-        $className = ucfirst($module) . ucfirst($division) . ($type == CallType::VIEW ? 'Views' : 'Methods') . 'Controller';
+        $className =
+            ucfirst($module) . ucfirst($division) . ($type == CallType::VIEW ? 'Views' : 'Methods') . 'Controller';
         if ( ! class_exists($className)) {
             throw new Exception\NotFoundException("Class '$className' does not exists.");
         }
