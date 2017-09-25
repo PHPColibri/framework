@@ -7,6 +7,11 @@ namespace Colibri\Cache;
 interface CacheInterface
 {
     /**
+     * @return int
+     */
+    public static function getQueriesCount(): int;
+
+    /**
      * @param string $key for data
      *
      * @return mixed returns cached data
@@ -38,7 +43,7 @@ interface CacheInterface
      * @param \Closure $getValueCallback closure that get the real (not cached) value
      * @param int|null $expire           seconds
      *
-     * @return mixed Returns cached data
+     * @return mixed returns cached data
      */
     public static function remember(string $key, \Closure $getValueCallback, int $expire = null);
 }

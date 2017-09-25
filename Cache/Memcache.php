@@ -31,7 +31,7 @@ class Memcache extends Helper implements CacheInterface
     /**
      * @return int count of queries to Memcache statistics
      */
-    public static function getQueriesCount()
+    public static function getQueriesCount(): int
     {
         return self::$queriesCount;
     }
