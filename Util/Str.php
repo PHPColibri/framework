@@ -23,44 +23,67 @@ class Str extends Helper
     /**
      * Generates random string.
      *
-     * @param string $type one of 'alnum', 'numeric', 'nozero', 'unique', 'guid'
-     * @param int    $len  length of generated string
+     * @param string $type   one of 'alnum', 'numeric', 'nozero', 'unique', 'guid'
+     * @param int    $length length of generated string
      *
      * @return string
      *
      * @throws \Exception
      */
-    public static function random($type = 'alnum', $len = 8)
+    public static function random($type = 'alnum', $length = 8)
     {
         switch ($type) {
             case 'alnum':
             case 'numeric':
             case 'nozero':
-                switch ($type) {
-                    case 'alnum':
-                        $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                        break;
-                    case 'numeric':
-                        $pool = '0123456789';
-                        break;
-                    case 'nozero':
-                        $pool = '123456789';
-                        break;
-                }
-                $str = '';
-                for ($i = 0; $i < $len; $i++) {
-                    /* @noinspection PhpUndefinedVariableInspection */
-                    $str .= substr($pool, mt_rand(0, strlen($pool) - 1), 1);
-                }
+                $pool = self::getPoolForRandom($type);
 
-                return $str;
+                return static::randomFrom($pool, $length);
             case 'unique':
-                return md5(uniqid(mt_rand()));
+                return md5(uniqid(mt_rand(), true));
             case 'guid':
                 return self::generateGUID();
             default:
                 throw new \Exception('unknown random type');
         }
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return string
+     *
+     * @throws \Exception
+     */
+    private static function getPoolForRandom(string $type): string
+    {
+        switch ($type) {
+            case 'alnum':
+                return '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            case 'numeric':
+                return '0123456789';
+            case 'nozero':
+                return '123456789';
+            default:
+                throw new \Exception('unknown random type');
+        }
+    }
+
+    /**
+     * @param string $pool
+     * @param int    $length
+     *
+     * @return string
+     */
+    public static function randomFrom(string $pool, $length = 8): string
+    {
+        $str        = '';
+        $poolLength = strlen($pool);
+        for ($i = 0; $i < $length; $i++) {
+            $str .= $pool[mt_rand(0, $poolLength - 1)];
+        }
+
+        return $str;
     }
 
     /**
