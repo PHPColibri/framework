@@ -1,7 +1,7 @@
 <?php
 namespace Colibri\Application;
 
-use Colibri\Cache\Memcache;
+use Colibri\Cache\Cache;
 use Colibri\Config\Config;
 use Colibri\Session\Session;
 
@@ -84,14 +84,14 @@ class API
      * @return string
      *
      * @throws \Colibri\Application\Exception\NotFoundException
-     * @throws \InvalidArgumentException
      * @throws \LogicException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public static function callModuleMethodCached($division, $module, $method, ...$params)
     {
         if (Config::application('useCache') && ! DEBUG) {
             $key      = self::getCacheKeyForCall(func_get_args());
-            $retValue = Memcache::remember($key, function () use ($division, $module, $method, $params) {
+            $retValue = Cache::remember($key, function () use ($division, $module, $method, $params) {
                 return self::callModuleMethod($division, $module, $method, ...$params);
             });
         } else {
@@ -110,14 +110,14 @@ class API
      * @return string
      *
      * @throws \Colibri\Application\Exception\NotFoundException
-     * @throws \InvalidArgumentException
      * @throws \LogicException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public static function getModuleViewCached($division, $module, $method, ...$params)
     {
         if (Config::application('useCache') && ! DEBUG) {
             $key      = self::getCacheKeyForCall(func_get_args());
-            $retValue = Memcache::remember($key, function () use ($division, $module, $method, $params) {
+            $retValue = Cache::remember($key, function () use ($division, $module, $method, $params) {
                 return self::getModuleView($division, $module, $method, ...$params);
             });
         } else {

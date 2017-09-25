@@ -1,7 +1,7 @@
 <?php
 
 use Colibri\Application\Engine as ApplicationEngine;
-use Colibri\Cache\Memcache;
+use Colibri\Cache\Cache;
 use Colibri\Config\Config;
 use Colibri\Database\Concrete\MySQL;
 use Colibri\Http\NotFoundException;
@@ -27,7 +27,7 @@ try {
             $time = microtime(true) - $time;
             echo '<div style=/*font-size:' . (10 + round($time * 10)) . 'px>Время генерации страницы: <b>' . $time . '</b></div>';
             echo 'количество запросов: <b>' . MySQL::$queriesCount . '</b><br>';
-            echo 'количество запросов к Memcache: <b>' . Memcache::getQueriesCount() . '</b><br>';
+            echo 'количество запросов к Cache-у: <b>' . Cache::getQueriesCount() . '</b><br>';
             echo '</div>';
             echo MySQL::$strQueries;
             echo '</pre>';

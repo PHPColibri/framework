@@ -1,7 +1,7 @@
 <?php
 namespace Colibri\Database;
 
-use Colibri\Cache\Memcache;
+use Colibri\Cache\Cache;
 
 /**
  * Abstract class for Db.
@@ -20,7 +20,7 @@ abstract class AbstractDb implements DbInterface
     /**
      * @var bool
      */
-    public static $useMemcacheForMetadata = false;
+    public static $useCacheForMetadata = false;
 
     /**
      * @var array
@@ -36,13 +36,13 @@ abstract class AbstractDb implements DbInterface
      * @return array
      *
      * @throws \Colibri\Database\Exception\SqlException
-     * @throws \InvalidArgumentException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function &getColumnsMetadata($tableName)
     {
         if ( ! isset(self::$columnsMetadata[$tableName])) {
-            self::$columnsMetadata[$tableName] = (static::$useMemcacheForMetadata
-                ? Memcache::remember($this->database . '.' . $tableName . '.meta', function () use ($tableName) {
+            self::$columnsMetadata[$tableName] = (static::$useCacheForMetadata
+                ? Cache::remember($this->database . '.' . $tableName . '.meta', function () use ($tableName) {
                     /* @noinspection PhpUnhandledExceptionInspection */
                     return $this->retrieveColumnsMetadata($tableName);
                 })
@@ -97,7 +97,7 @@ abstract class AbstractDb implements DbInterface
      * @return string
      *
      * @throws \Colibri\Database\Exception\SqlException
-     * @throws \InvalidArgumentException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function getFieldType(string $table, string $column): string
     {

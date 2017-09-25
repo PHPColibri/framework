@@ -2,6 +2,7 @@
 namespace Colibri\Application\Engine;
 
 use Colibri\Base\PropertyAccess;
+use Colibri\Cache\Cache;
 use Colibri\Config\Config;
 use Colibri\Database\AbstractDb;
 use Colibri\Database\Concrete\MySQL;
@@ -17,6 +18,7 @@ abstract class Base extends PropertyAccess implements EngineInterface
      * Base constructor.
      *
      * @throws \Colibri\Database\DbException
+     * @throws \InvalidArgumentException
      */
     public function __construct()
     {
@@ -30,12 +32,13 @@ abstract class Base extends PropertyAccess implements EngineInterface
             }
         }
 
-        AbstractDb::$useMemcacheForMetadata =
+        AbstractDb::$useCacheForMetadata =
             $config['useCache'];
 
         MySQL::$monitorQueries = $config['debug'];
 
         Db::setConfig(Config::get('database'));
+        Cache::setConfig(Config::getOrEmpty('cache'));
 
         $this->initialize();
     }

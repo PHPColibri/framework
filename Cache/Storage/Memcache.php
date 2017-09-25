@@ -39,7 +39,7 @@ class Memcache extends AbstractStorage implements StorageInterface
     }
 
     /**
-     * @param string|array $key     for data
+     * @param string|array $key for data
      * @param mixed|null   $default
      *
      * @return bool|mixed returns false if failed OR cached data
@@ -113,12 +113,11 @@ class Memcache extends AbstractStorage implements StorageInterface
      * @param iterable $keys    a list of keys that can obtained in a single operation
      * @param mixed    $default default value to return for keys that do not exist
      *
-     * @return iterable A list of key => value pairs. Cache keys that do not exist or are stale will have $default as
-     *                  value.
+     * @return iterable A list of key => value pairs.
+     *                  Cache keys that do not exist or are stale will have $default as value.
      *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     *                                                   MUST be thrown if $keys is neither an array nor a Traversable,
-     *                                                   or if any of the $keys are not a legal value
+     * @throws \Colibri\Cache\Storage\Exception\InvalidArgumentException if $keys is neither an array nor a Traversable,
+     *                                                                   or if any of the $keys are not a legal value
      */
     public function getMultiple($keys, $default = null)
     {
@@ -169,9 +168,8 @@ class Memcache extends AbstractStorage implements StorageInterface
      *
      * @return bool True if the items were successfully removed. False if there was an error.
      *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     *                                                   MUST be thrown if $keys is neither an array nor a Traversable,
-     *                                                   or if any of the $keys are not a legal value
+     * @throws \Colibri\Cache\Storage\Exception\InvalidArgumentException if $keys is neither an array nor a Traversable,
+     *                                                                   or if any of the $keys are not a legal value
      */
     public function deleteMultiple($keys)
     {
@@ -195,7 +193,7 @@ class Memcache extends AbstractStorage implements StorageInterface
      *
      * @return bool
      *
-     * @throws \Psr\SimpleCache\InvalidArgumentException if the $key string is not a legal value
+     * @throws \Colibri\Cache\Storage\Exception\InvalidArgumentException if the $key string is not a legal value
      */
     public function has($key)
     {

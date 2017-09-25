@@ -3,6 +3,7 @@ namespace Colibri\Cache;
 
 use Colibri\Cache\Storage\Memcache;
 use Colibri\Pattern\Helper;
+use Colibri\Util\Arr;
 
 /**
  * Cache drivers wrapper.
@@ -12,7 +13,16 @@ class Cache extends Helper implements CacheInterface
     /**
      * @var array
      */
-    private static $config = [];
+    private static $config = [
+        'default-storage' => 'memcache',
+        'default-ttl'     => 300,
+        'storage'         => [
+            'memcache' => [
+                'driver' => 'memcache',
+                'config' => [],
+            ],
+        ]
+    ];
     /**
      * @var array|Storage\StorageInterface[]
      */
@@ -23,6 +33,14 @@ class Cache extends Helper implements CacheInterface
     private static $driver = [
         'memcache' => Memcache::class,
     ];
+
+    /**
+     * @param array $config
+     */
+    public static function setConfig(array $config)
+    {
+        self::$config = Arr::overwrite(self::$config, $config);
+    }
 
     /**
      * @return int count of queries to Memcache statistics
@@ -83,6 +101,8 @@ class Cache extends Helper implements CacheInterface
      * @param int|null $expire           seconds
      *
      * @return mixed returns cached data
+     *
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public static function remember(string $key, \Closure $getValueCallback, int $expire = null)
     {
