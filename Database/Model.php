@@ -43,23 +43,23 @@ abstract class Model
     protected $objects = [];
 
     /**
-     * @param int|array $id_or_row
+     * @param int|array $idOrRow
      *
      * @throws DbException
      * @throws \Exception
      */
-    public function __construct($id_or_row = null)
+    public function __construct($idOrRow = null)
     {
         $metadata           = static::db()->getColumnsMetadata(static::$tableName);
         $this->fields       = &$metadata['fields'];
         $this->fieldTypes   = &$metadata['fieldTypes'];
         $this->fieldLengths = &$metadata['fieldLengths'];
 
-        if ($id_or_row !== null) {
-            if (is_array($id_or_row)) {
-                $this->fillProperties($id_or_row);
+        if ($idOrRow !== null) {
+            if (is_array($idOrRow)) {
+                $this->fillProperties($idOrRow);
             } else {
-                $this->load($id_or_row);
+                $this->load($idOrRow);
             }
         }
     }
@@ -89,20 +89,20 @@ abstract class Model
     }
 
     /**
-     * @param mixed|array $id_or_where
+     * @param mixed|array $idOrWhere
      *
      * @return static
      *
      * @throws DbException
      * @throws \Exception
      */
-    public static function find($id_or_where)
+    public static function find($idOrWhere)
     {
-        return (new static())->load($id_or_where);
+        return (new static())->load($idOrWhere);
     }
 
     /**
-     * @param mixed|array $id_or_where
+     * @param mixed|array $idOrWhere
      *
      * @return static
      *
@@ -110,9 +110,9 @@ abstract class Model
      * @throws NotFoundException
      * @throws \Exception
      */
-    public static function get($id_or_where)
+    public static function get($idOrWhere)
     {
-        $dbObject = static::find($id_or_where);
+        $dbObject = static::find($idOrWhere);
         if ( ! $dbObject) {
             throw new NotFoundException('Model not found');
         }
@@ -422,19 +422,19 @@ abstract class Model
     }
 
     /**
-     * @param mixed|array $id_or_where
+     * @param mixed|array $idOrWhere
      *
      * @throws DbException
      * @throws \Exception
      */
-    public function delete($id_or_where = null)
+    public function delete($idOrWhere = null)
     {
-        if ($id_or_where !== null) {
-            if (is_array($id_or_where)) {
-                $this->where = $id_or_where;
+        if ($idOrWhere !== null) {
+            if (is_array($idOrWhere)) {
+                $this->where = $idOrWhere;
             } else {
                 $this->where                     = null;
-                $this->{static::$PKFieldName[0]} = $id_or_where;
+                $this->{static::$PKFieldName[0]} = $idOrWhere;
             }
         }
 
@@ -479,21 +479,21 @@ abstract class Model
     }
 
     /**
-     * @param mixed|array $id_or_where
+     * @param mixed|array $idOrWhere
      *
      * @return $this|null
      *
      * @throws DbException
      * @throws \Exception
      */
-    public function load($id_or_where = null)
+    public function load($idOrWhere = null)
     {
-        if ($id_or_where !== null) {
-            if (is_array($id_or_where)) {
-                $this->where = $id_or_where;
+        if ($idOrWhere !== null) {
+            if (is_array($idOrWhere)) {
+                $this->where = $idOrWhere;
             } else {
                 $this->where                     = null;
-                $this->{static::$PKFieldName[0]} = $id_or_where;
+                $this->{static::$PKFieldName[0]} = $idOrWhere;
             }
         }
 
