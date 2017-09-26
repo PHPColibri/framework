@@ -21,7 +21,6 @@ class CacheTest extends TestCase
     protected function setUp()
     {
         $this->storageMock = \Mockery::mock(StorageInterface::class);
-        $this->inject(Cache::class, ['storage' => ['memcache' => $this->storageMock]]);
     }
 
     /**
@@ -35,6 +34,8 @@ class CacheTest extends TestCase
      */
     public function testStorageMethodCalled(string $method, array $args, array $receiveArgs, $return, $expected)
     {
+        $this->inject(Cache::class, ['storage' => ['memcache' => $this->storageMock]]);
+
         /** @noinspection PhpMethodParametersCountMismatchInspection */
         $this->storageMock
             ->shouldReceive($method)
