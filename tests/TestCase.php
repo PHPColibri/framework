@@ -1,6 +1,7 @@
 <?php
 namespace Colibri\tests;
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase as PhpUnitTestCase;
 use ReflectionClass;
 
@@ -9,6 +10,8 @@ use ReflectionClass;
  */
 class TestCase extends PhpUnitTestCase
 {
+    use MockeryPHPUnitIntegration;
+
     /**
      * Sets a protected property on a given object via reflection.
      *
