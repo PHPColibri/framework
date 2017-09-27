@@ -4,9 +4,7 @@ namespace Colibri\tests\Pattern\sample;
 use Colibri\Pattern\Singleton;
 
 /**
- * Class SomeSingleton
- *
- * @package Colibri\tests\Pattern\sample
+ * Class SomeSingleton.
  */
 class SomeSingleton extends Singleton
 {

@@ -3,7 +3,6 @@ namespace Colibri\tests\Pattern\sample;
 
 use Colibri\Pattern\Helper;
 
-/** */
 class SomeHelper extends Helper
 {
     /**

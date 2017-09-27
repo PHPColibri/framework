@@ -5,7 +5,7 @@ use Colibri\tests\Pattern\sample\SomeHelper;
 use Colibri\tests\TestCase;
 
 /**
- * Tests for Class HelperTest
+ * Tests for Class HelperTest.
  *
  * @coversDefaultClass \Colibri\Pattern\Helper
  */

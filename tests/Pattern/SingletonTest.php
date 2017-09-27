@@ -5,7 +5,7 @@ use Colibri\tests\Pattern\sample\SomeSingleton;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for Singleton class
+ * Test for Singleton class.
  *
  * @coversDefaultClass \Colibri\Pattern\Singleton
  */
@@ -25,7 +25,7 @@ class SingletonTest extends TestCase
     public function testCantClone()
     {
         $instance = SomeSingleton::getInstance();
-        /** @noinspection PhpExpressionResultUnusedInspection */
+        /* @noinspection PhpExpressionResultUnusedInspection */
         clone $instance;
     }
 
