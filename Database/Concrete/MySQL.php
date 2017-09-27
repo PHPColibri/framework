@@ -23,8 +23,6 @@ class MySQL extends AbstractDb
     public static $strQueries = '';
     /** @var int */
     public static $queriesCount = 0;
-    /** @var int */
-    public static $cachedQueriesCount = 0;
 
     /**
      * Конструктор
