@@ -7,12 +7,12 @@ namespace Colibri\Base;
  * Реализует интерфейс для доступа к элементам при обращении к классу как к массиву
  * А также добавляет функции доступа к свойствам, реализованные в PropertyAccess
  */
-abstract class DynamicCollection extends PropertyAccess implements DynamicCollectionInterface
+abstract class DynamicCollection implements DynamicCollectionInterface
 {
     /**
      * @var array
      */
-    protected $_items = null;
+    protected $items = null;
 
     /**
      * @return void
@@ -28,11 +28,11 @@ abstract class DynamicCollection extends PropertyAccess implements DynamicCollec
      */
     public function offsetExists($offset)
     {
-        if ($this->_items === null) {
+        if ($this->items === null) {
             $this->fillItems();
         }
 
-        return isset($this->_items[$offset]);
+        return isset($this->items[$offset]);
     }
 
     /**
@@ -42,11 +42,11 @@ abstract class DynamicCollection extends PropertyAccess implements DynamicCollec
      */
     public function offsetGet($offset)
     {
-        if ($this->_items === null) {
+        if ($this->items === null) {
             $this->fillItems();
         }
 
-        return $this->_items[$offset];
+        return $this->items[$offset];
     }
 
     /**
@@ -57,11 +57,11 @@ abstract class DynamicCollection extends PropertyAccess implements DynamicCollec
      */
     public function offsetSet($offset, $data)
     {
-        if ($this->_items === null) {
+        if ($this->items === null) {
             $this->fillItems();
         }
 
-        return $this->_items[$offset] = $data;
+        return $this->items[$offset] = $data;
     }
 
     /**
@@ -69,10 +69,10 @@ abstract class DynamicCollection extends PropertyAccess implements DynamicCollec
      */
     public function offsetUnset($offset)
     {
-        if ($this->_items === null) {
+        if ($this->items === null) {
             $this->fillItems();
         }
-        unset($this->_items[$offset]);
+        unset($this->items[$offset]);
     }
 
     //// Iterator implementation
@@ -82,10 +82,10 @@ abstract class DynamicCollection extends PropertyAccess implements DynamicCollec
      */
     public function rewind()
     {
-        if ($this->_items === null) {
+        if ($this->items === null) {
             $this->fillItems();
         }
-        reset($this->_items);
+        reset($this->items);
     }
 
     /**
@@ -93,11 +93,11 @@ abstract class DynamicCollection extends PropertyAccess implements DynamicCollec
      */
     public function current()
     {
-        if ($this->_items === null) {
+        if ($this->items === null) {
             $this->fillItems();
         }
 
-        return current($this->_items);
+        return current($this->items);
     }
 
     /**
@@ -105,11 +105,11 @@ abstract class DynamicCollection extends PropertyAccess implements DynamicCollec
      */
     public function key()
     {
-        if ($this->_items === null) {
+        if ($this->items === null) {
             $this->fillItems();
         }
 
-        return key($this->_items);
+        return key($this->items);
     }
 
     /**
@@ -117,11 +117,11 @@ abstract class DynamicCollection extends PropertyAccess implements DynamicCollec
      */
     public function next()
     {
-        if ($this->_items === null) {
+        if ($this->items === null) {
             $this->fillItems();
         }
 
-        return next($this->_items);
+        return next($this->items);
     }
 
     /**
@@ -129,7 +129,7 @@ abstract class DynamicCollection extends PropertyAccess implements DynamicCollec
      */
     public function valid()
     {
-        if ($this->_items === null) {
+        if ($this->items === null) {
             $this->fillItems();
         }
 
@@ -143,11 +143,11 @@ abstract class DynamicCollection extends PropertyAccess implements DynamicCollec
      */
     public function count()
     {
-        if ($this->_items === null) {
+        if ($this->items === null) {
             $this->fillItems();
         }
 
-        return count($this->_items);
+        return count($this->items);
     }
 
     //// Additional methods
@@ -157,7 +157,7 @@ abstract class DynamicCollection extends PropertyAccess implements DynamicCollec
      */
     public function toArray()
     {
-        if ($this->_items === null) {
+        if ($this->items === null) {
             $this->fillItems();
         }
 
@@ -169,13 +169,13 @@ abstract class DynamicCollection extends PropertyAccess implements DynamicCollec
      */
     public function toDblArray()
     {
-        if ($this->_items === null) {
+        if ($this->items === null) {
             $this->fillItems();
         }
         $retArr = [];
-        $count  = count($this->_items);
+        $count  = count($this->items);
         for ($i = 0; $i < $count; $i++) {
-            $retArr[] = get_object_vars($this->_items[$i]);
+            $retArr[] = get_object_vars($this->items[$i]);
         }
 
         return $retArr;

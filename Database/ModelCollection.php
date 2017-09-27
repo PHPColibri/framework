@@ -12,9 +12,8 @@ use Colibri\Util\Str;
  * Класс основан на DynamicCollection, по сему свои элементы подгружает
  * только тогда, когда идёт первое обращение к элементу коллекции.
  *
- * @property string                          $selFromDbAllQuery
- * @property mixed                           $parentID
- * @property \Colibri\Database\Model[]|array $_items
+ * @property string $selFromDbAllQuery
+ * @property mixed  $parentID
  */
 abstract class ModelCollection extends DynamicCollection implements DynamicCollectionInterface
 {
@@ -94,7 +93,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
             case 'parentID':
                 return $this->FKValue[0] = $propertyValue;
             default:
-                return parent::__set($propertyName, $propertyValue);
+                throw new \UnexpectedValueException('property ' . $propertyName . ' not defined in class ' . get_class($this));
         }
     }
 
@@ -108,12 +107,12 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      */
     final protected function shiftLeftFromPos($position)
     {
-        $cnt = count($this->_items);
+        $cnt = count($this->items);
         if ($position < 1 || $position >= $cnt) {
             throw new \OutOfBoundsException('position to shift from must be in range 1..Length-1');
         }
         for ($i = $position; $i < $cnt; $i++) {
-            $this->_items[$i - 1] = $this->_items[$i];
+            $this->items[$i - 1] = $this->items[$i];
         }
     }
 
@@ -122,7 +121,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      */
     protected function addItem(Database\Model &$object)
     {
-        $this->_items[] = $object;
+        $this->items[] = $object;
     }
 
     /**
@@ -138,11 +137,11 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
         if ($pos == -1) {
             return false;
         }
-        $item = $this->_items[$pos];
-        if ($pos != count($this->_items) - 1) {
+        $item = $this->items[$pos];
+        if ($pos != count($this->items) - 1) {
             $this->shiftLeftFromPos($pos + 1);
         }
-        array_pop($this->_items);
+        array_pop($this->items);
 
         return $item;
     }
@@ -152,7 +151,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      */
     protected function clearItems()
     {
-        $this->_items = [];
+        $this->items = [];
     }
 
     /**
@@ -236,7 +235,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
     }
 
     /**
-     * @param array  $clauses
+     * @param array  $clauses clauses like ['age >' => 18]
      * @param string $type    one of 'and'|'or'
      *
      * @return string
@@ -303,7 +302,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
         }
 
         if ($this->order_by !== null) {
-            $query .= ' ORDER BY ';
+            $query    .= ' ORDER BY ';
             $strOrder = '';
             foreach ($this->order_by as $name => $value) {
                 $strOrder .= ', `' . $name . '` ' . $value;
@@ -424,7 +423,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
 
     /**
      * @param int $pageNumber     0..N
-     * @param int $recordsPerPage
+     * @param int $recordsPerPage count of records for one page
      *
      * @return ModelCollection|$this|Model[]
      */
@@ -451,7 +450,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      */
     public function add(Database\Model &$object)
     {
-        if ($this->_items === null) {
+        if ($this->items === null) {
             if ( ! $this->fillItems()) {
                 return false;
             }
@@ -475,7 +474,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      */
     public function remove($itemID)
     {
-        if ($this->_items === null) {
+        if ($this->items === null) {
             if ( ! $this->fillItems()) {
                 return false;
             }
@@ -556,7 +555,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
     {
         $cnt = count($this);
         for ($i = 0; $i < $cnt; $i++) {
-            if ($this->_items[$i]->id == $itemID) {
+            if ($this->items[$i]->id == $itemID) {
                 return $i;
             }
         }
@@ -585,7 +584,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      */
     public function &getItemByID($id)
     {
-        if ( ! $count = count($this->_items)) {
+        if ( ! $count = count($this->items)) {
             return false;
         }
         /** @var \Colibri\Database\Model $itemClass */
@@ -593,8 +592,8 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
         /** @noinspection PhpUndefinedVariableInspection */
         $PKfn = $itemClass::$PKFieldName[0];
         for ($i = 0; $i < $count; $i++) {
-            if (isset($this->_items[$i]->$PKfn) && $this->_items[$i]->$PKfn == $id) {
-                return $this->_items[$i];
+            if (isset($this->items[$i]->$PKfn) && $this->items[$i]->$PKfn == $id) {
+                return $this->items[$i];
             }
         }
 
