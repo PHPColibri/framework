@@ -302,7 +302,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
         }
 
         if ($this->order_by !== null) {
-            $query    .= ' ORDER BY ';
+            $query .= ' ORDER BY ';
             $strOrder = '';
             foreach ($this->order_by as $name => $value) {
                 $strOrder .= ', `' . $name . '` ' . $value;
