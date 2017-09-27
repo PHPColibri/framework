@@ -9,8 +9,9 @@ abstract class Helper
 {
     /**
      * Close public access to constructor.
+     * @codeCoverageIgnore
      */
-    private function __construct()
+    final private function __construct()
     {
     }
 }
