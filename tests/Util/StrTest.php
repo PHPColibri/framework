@@ -378,4 +378,54 @@ class StrTest extends TestCase
             ['Colibri the best', ''],
         ];
     }
+
+    /**
+     * @covers ::firstPart
+     * @dataProvider firstPartProvider
+     *
+     * @param $sourceString
+     * @param $delimiter
+     * @param $expectedString
+     */
+    public function testFirstPart($sourceString, $delimiter, $expectedString)
+    {
+        self::assertEquals($expectedString, Str::firstPart($sourceString, $delimiter));
+    }
+
+    /**
+     * @return array
+     */
+    public function firstPartProvider()
+    {
+        return [
+            ['So much tests',     ' ', 'So'],
+            ['aaa',               'a', ''],
+            ['1daw2-sadf-sdfasd', '-', '1daw2'],
+        ];
+    }
+
+    /**
+     * @covers ::lastPart
+     * @dataProvider lastPartProvider
+     *
+     * @param $sourceString
+     * @param $delimiter
+     * @param $expectedString
+     */
+    public function testLastPart($sourceString, $delimiter, $expectedString)
+    {
+        self::assertEquals($expectedString, Str::lastPart($sourceString, $delimiter));
+    }
+
+    /**
+     * @return array
+     */
+    public function lastPartProvider()
+    {
+        return [
+            ['So much tests',     ' ', 'tests'],
+            ['aaa',               'a', ''],
+            ['1daw2-sadf-sdfasd', '-', 'sdfasd'],
+        ];
+    }
 }
