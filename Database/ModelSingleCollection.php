@@ -9,44 +9,48 @@ use Colibri\Database;
 class ModelSingleCollection extends ModelCollection
 {
     /**
-     * @param string $propertyName
-     *
-     * @return bool|mixed|string
+     * @return string
      *
      * @throws \Colibri\Database\DbException
-     * @throws \RuntimeException
+     * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     * @throws \UnexpectedValueException
      */
-    public function __get($propertyName)
+    protected function selFromDbAllQuery(): string
     {
-        switch ($propertyName) {
-            case 'parentID':
-                return $this->FKValue[0];
-            case 'selFromDbAllQuery':
-                $query = Query::select()->from(static::$tableName);
-                if ($this->FKValue[1] !== null) {
-                    $query->where([$this->FKName[1] => $this->FKValue[1]]);
-                }
-                if ($this->FKValue[0] !== null) {
-                    $query->where([$this->FKName[0] => $this->FKValue[0]]);
-                }
-
-                $strQuery = $query->build(static::db());
-
-                $strQuery = $this->rebuildQueryForCustomLoad($strQuery);
-                if ($strQuery === false) {
-                    throw new \RuntimeException('can\'t rebuild query \'' . $propertyName . '\' for custom load in ' . __METHOD__ . ' [line: ' . __LINE__ . ']. possible: getFieldsAndTypes() failed (check for sql errors) or incorrect wherePlan() format');
-                }
-
-                return $strQuery;
-            case 'delFromDbAllQuery':
-                return Query::delete()
-                    ->from(static::$tableName)
-                    ->where([$this->FKName[0] => $this->FKValue[0]])
-                    ->build(static::db());
-            default:
-                return parent::__get($propertyName);
+        $query = Query::select()->from(static::$tableName);
+        if ($this->FKValue[1] !== null) {
+            $query->where([$this->FKName[1] => $this->FKValue[1]]);
         }
+        if ($this->FKValue[0] !== null) {
+            $query->where([$this->FKName[0] => $this->FKValue[0]]);
+        }
+
+        $strQuery = $query->build(static::db());
+
+        $strQuery = $this->rebuildQueryForCustomLoad($strQuery);
+        if ($strQuery === false) {
+            throw new \RuntimeException('can\'t rebuild query \'selFromDbAllQuery\' for custom load. possible: getFieldsAndTypes() failed (check for sql errors) or incorrect wherePlan() format');
+        }
+
+        return $strQuery;
+    }
+
+    /**
+     * @return string
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
+     */
+    protected function delFromDbAllQuery(): string
+    {
+        return Query::delete()
+            ->from(static::$tableName)
+            ->where([$this->FKName[0] => $this->FKValue[0]])
+            ->build(static::db());
     }
 
     // with DataBase

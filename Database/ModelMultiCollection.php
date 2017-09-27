@@ -6,10 +6,6 @@ use Colibri\Util\Arr;
 
 /**
  * ObjectMultiCollection.
- *
- * @property-read string $addToDbQuery
- * @property-read string $delFromDbQuery
- * @property-read string $delFromDbAllQuery
  */
 class ModelMultiCollection extends ModelCollection
 {
@@ -37,9 +33,39 @@ class ModelMultiCollection extends ModelCollection
     }
 
     /**
-     * @param string $propertyName
+     * @return string
      *
-     * @return mixed
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
+     */
+    protected function addToDbQuery(): string
+    {
+        return Query::insert()->into($this->fkTableName)->set([
+            $this->FKName[0] => $this->FKValue[0],
+            $this->FKName[1] => $this->FKValue[1],
+        ])->build(static::db());
+    }
+
+    /**
+     * @return string
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
+     */
+    protected function delFromDbQuery(): string
+    {
+        return Query::delete()->from($this->fkTableName)->where([
+            $this->FKName[0] => $this->FKValue[0],
+            $this->FKName[1] => $this->FKValue[1],
+        ])->build(static::db());
+    }
+
+    /**
+     * @return string
      *
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
@@ -47,50 +73,43 @@ class ModelMultiCollection extends ModelCollection
      * @throws \RuntimeException
      * @throws \UnexpectedValueException
      */
-    public function __get($propertyName)
+    protected function selFromDbAllQuery(): string
     {
-        switch ($propertyName) {
-            case 'parentID':
-                return $this->FKValue[0];
-            case 'addToDbQuery':
-                return Query::insert()->into($this->fkTableName)->set([
-                    $this->FKName[0] => $this->FKValue[0],
-                    $this->FKName[1] => $this->FKValue[1],
-                ])->build(static::db());
-            case 'delFromDbQuery':
-                return Query::delete()->from($this->fkTableName)->where([
-                    $this->FKName[0] => $this->FKValue[0],
-                    $this->FKName[1] => $this->FKValue[1],
-                ])->build(static::db());
-            case 'selFromDbAllQuery':
+        $strQuery = $this->FKValue[0] !== null
+            ? Query::select(['*'], $this->intermediateFields)
+                ->from(static::$tableName)
+                ->join($this->fkTableName, $this->FKName[1], 'id', Query\JoinType::INNER)
+                ->where([
+                    'j1.' . $this->FKName[0] => $this->FKValue[0],
+                ])
+                ->build(static::db())
+            : Query::select(['*'], $this->intermediateFields)
+                ->from(static::$tableName)
+                ->build(static::db())
+        ;
 
-                $strQuery = $this->FKValue[0] !== null
-                    ? Query::select(['*'], $this->intermediateFields)
-                        ->from(static::$tableName)
-                        ->join($this->fkTableName, $this->FKName[1], 'id', Query\JoinType::INNER)
-                        ->where([
-                            'j1.' . $this->FKName[0] => $this->FKValue[0],
-                        ])
-                        ->build(static::db())
-                    : Query::select(['*'], $this->intermediateFields)
-                        ->from(static::$tableName)
-                        ->build(static::db())
-                ;
-
-                $strQuery = $this->rebuildQueryForCustomLoad($strQuery);
-                if ($strQuery === false) {
-                    throw new \RuntimeException('can\'t rebuild query \'' . $propertyName . '\' for custom load in ' . __METHOD__ . ' [line: ' . __LINE__ . ']. possible: getFieldsAndTypes() failed (check for sql errors) or incorrect wherePlan() format');
-                }
-
-                return $strQuery;
-            case 'delFromDbAllQuery':
-                return Query::delete()
-                    ->from($this->fkTableName)
-                    ->where([$this->FKName[0] => $this->FKValue[0]])
-                    ->build(static::db());
-            default:
-                return parent::__get($propertyName);
+        $strQuery = $this->rebuildQueryForCustomLoad($strQuery);
+        if ($strQuery === false) {
+            throw new \RuntimeException('can\'t rebuild query \'selFromDbAllQuery\' for custom load in ' . __METHOD__ . ' [line: ' . __LINE__ . ']. possible: getFieldsAndTypes() failed (check for sql errors) or incorrect wherePlan() format');
         }
+
+        return $strQuery;
+    }
+
+    /**
+     * @return string
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
+     */
+    protected function delFromDbAllQuery(): string
+    {
+        return Query::delete()
+            ->from($this->fkTableName)
+            ->where([$this->FKName[0] => $this->FKValue[0]])
+            ->build(static::db());
     }
 
     // with Items
@@ -125,12 +144,14 @@ class ModelMultiCollection extends ModelCollection
      *
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
      */
     protected function addToDb(Database\Model &$object)
     {
         $this->FKValue[1] = $object->id;
 
-        return $this->doQuery($this->addToDbQuery);
+        return $this->doQuery($this->addToDbQuery());
     }
 
     /**
@@ -140,27 +161,14 @@ class ModelMultiCollection extends ModelCollection
      *
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
      */
     protected function delFromDb($id)
     {
         $this->FKValue[1] = $id;
 
-        return $this->doQuery($this->delFromDbQuery);
-    }
-
-    /**
-     * @return array|bool
-     *
-     * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
-     */
-    protected function selFromDbAll()
-    {
-        if ( ! ($this->doQuery($this->selFromDbAllQuery))) {
-            return false;
-        }
-
-        return $this->db()->fetchAllRows();
+        return $this->doQuery($this->delFromDbQuery());
     }
 
     /**
@@ -168,11 +176,11 @@ class ModelMultiCollection extends ModelCollection
      *
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
      */
     protected function delFromDbAll()
     {
-        return $this->doQuery($this->delFromDbAllQuery);
+        return $this->doQuery($this->delFromDbAllQuery());
     }
-
-    ///////////////////////////////////////////////////////////////////////////
 }
