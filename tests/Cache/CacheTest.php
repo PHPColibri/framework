@@ -7,14 +7,14 @@ use Colibri\tests\TestCase;
 use Mockery\MockInterface;
 
 /**
- * Cache service Tests
+ * Cache service Tests.
  *
  * @coversDefaultClass \Colibri\Cache\Cache
  */
 class CacheTest extends TestCase
 {
     /**
-     * @var MockInterface   erStorageInterface
+     * @var MockInterface erStorageInterface
      */
     private $storageMock;
 
@@ -36,7 +36,7 @@ class CacheTest extends TestCase
     {
         $this->inject(Cache::class, ['storage' => ['memcache' => $this->storageMock]]);
 
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
+        /* @noinspection PhpMethodParametersCountMismatchInspection */
         $this->storageMock
             ->shouldReceive($method)
             ->withArgs($receiveArgs)
@@ -50,7 +50,8 @@ class CacheTest extends TestCase
      */
     public function storageMethodCalled_DataProvider(): array
     {
-        $someClosure = function () {};
+        $someClosure = function () {
+        };
 
         return [
             ['set', ['some.key', 'some.value'], ['some.key', 'some.value', null], true, true],
