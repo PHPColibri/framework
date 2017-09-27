@@ -37,22 +37,6 @@ class ModelSingleCollection extends ModelCollection
         return $strQuery;
     }
 
-    /**
-     * @return string
-     *
-     * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \InvalidArgumentException
-     * @throws \UnexpectedValueException
-     */
-    protected function delFromDbAllQuery(): string
-    {
-        return Query::delete()
-            ->from(static::$tableName)
-            ->where([$this->FKName[0] => $this->FKValue[0]])
-            ->build(static::db());
-    }
-
     // with DataBase
     ///////////////////////////////////////////////////////////////////////////
 

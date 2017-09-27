@@ -93,16 +93,6 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
     abstract protected function selFromDbAllQuery(): string;
 
     /**
-     * @return string
-     *
-     * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \InvalidArgumentException
-     * @throws \UnexpectedValueException
-     */
-    abstract protected function delFromDbAllQuery(): string;
-
-    /**
      * @param string $propertyName
      *
      * @return mixed
@@ -221,13 +211,6 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      */
     abstract protected function delFromDb($id);
 
-    //abstract	protected	function	selFromDbAll();
-
-    /**
-     * @return mixed
-     */
-    abstract protected function delFromDbAll();
-
     /**
      * @return array
      *
@@ -243,6 +226,11 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
 
         return $this->db()->fetchAllRows();
     }
+
+    /**
+     * @return mixed
+     */
+    abstract protected function delFromDbAll();
 
     ///////////////////////////////////////////////////////////////////////////
 
