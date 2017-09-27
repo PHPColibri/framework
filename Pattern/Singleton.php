@@ -20,6 +20,8 @@ abstract class Singleton
 
     /**
      * Close public access.
+     *
+     * @codeCoverageIgnore
      */
     private function __clone()
     {
@@ -29,6 +31,8 @@ abstract class Singleton
 
     /**
      * Close public access/.
+     *
+     * @codeCoverageIgnore
      */
     private function __wakeup()
     {
