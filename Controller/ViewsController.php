@@ -80,6 +80,8 @@ abstract class ViewsController extends Base
 
     /**
      * Compile template. Prepare ::$response.
+     *
+     * @throws \Exception
      */
     public function tearDown()
     {
