@@ -231,7 +231,7 @@ abstract class Model
                 continue;
             }
 
-            $type = isset($this->fieldTypes[$propName]) ? $this->fieldTypes[$propName] : null;
+            $type            = isset($this->fieldTypes[$propName]) ? $this->fieldTypes[$propName] : null;
             $this->$propName = $this->cast($type, $propValue);
         }
     }
