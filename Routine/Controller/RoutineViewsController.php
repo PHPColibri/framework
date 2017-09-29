@@ -42,6 +42,12 @@ abstract class RoutineViewsController extends ViewsController
 
     /**
      * Action for list entities.
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     * @throws \UnexpectedValueException
      */
     public function defaultView()
     {
@@ -111,42 +117,29 @@ abstract class RoutineViewsController extends ViewsController
      */
     protected function prepareEditorTpl($id = null)
     {
+        $mode = $id === null ? 'create' : 'edit';
         /** @var \Colibri\Database\Model $item */
         $item = new $this->itemClass();
 
-        if ($_POST) { // if must save any changes
-            // do validation
-            $post = new Validation($_POST);
-            $this->validate($post, $id);
-            if ($post->valid()) {
-                if ($this->dbChange($item, $id)) { // save changes
-                    Redirect::to('/' . $this->division . '/' . $this->module);
-                }
-            }
-
-            $errors                         = $this->template->vars['errors'] ?? [];
-            $this->template->vars['errors'] = array_merge($errors, $post->errors);
+        // if must save any changes
+        if ($_POST) {
+            $this->save($id,$item);
+            return;
         }
 
-        if ($id === null) { // create mode
-            $tplPath = sprintf(MODULE_TEMPLATES, $this->module . '/' . $this->division);
-            $tplName = $tplPath . 'edit.php';
-            $this->template->load($tplName);
-        } else { // edit mode
+        $this->loadTemplate($mode);
+
+        if ($mode == 'edit') {
             $item->load($id);
         }
 
         $this->initItem($item, $id);
 
         if ($_POST) { // if post data not valid ($_POST && isset($this->template->vars['errors']))
-            foreach ($_POST as $key => $value) { // for fill form fields with previous values (entered by user)
-                if (isset($item->$key)) {
-                    $item->$key = $value;
-                }
-            }
+            $this->fillWithUserValues($item);
         }
 
-        $this->template->vars['mode']            = $id === null ? 'create' : 'edit';
+        $this->template->vars['mode']            = $mode;
         $this->template->vars[$this->itemTplVar] = $item;
     }
 
@@ -244,5 +237,56 @@ abstract class RoutineViewsController extends ViewsController
             'Location: ' .
             (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/' . $this->division . '/' . $this->module)
         );
+    }
+
+    /**
+     * @param $item
+     */
+    private function fillWithUserValues($item)
+    {
+        foreach ($_POST as $key => $value) { // for fill form fields with previous values (entered by user)
+            if (isset($item->$key)) {
+                $item->$key = $value;
+            }
+        }
+    }
+
+    /**
+     * @param string $mode
+     *
+     * @throws \Exception
+     */
+    protected function loadTemplate(string $mode)
+    {
+        if ($mode == 'create') { // create mode
+            $tplPath = sprintf(MODULE_TEMPLATES, $this->module . '/' . $this->division);
+            $tplName = $tplPath . 'edit.php';
+            $this->template->load($tplName);
+        }
+    }
+
+    /**
+     * @param $id
+     * @param $item
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \Exception
+     * @throws \InvalidArgumentException
+     */
+    private function save($id, $item)
+    {
+        // do validation
+        $post = new Validation($_POST);
+        $this->validate($post, $id);
+        if ($post->valid()) {
+            if ($this->dbChange($item, $id)) { // save changes
+                Redirect::to('/' . $this->division . '/' . $this->module);
+                return;
+            }
+        }
+
+        $errors                         = $this->template->vars['errors'] ?? [];
+        $this->template->vars['errors'] = array_merge($errors, $post->errors);
     }
 }
