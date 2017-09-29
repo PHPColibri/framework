@@ -123,7 +123,8 @@ abstract class RoutineViewsController extends ViewsController
 
         // if must save any changes
         if ($_POST) {
-            $this->save($id,$item);
+            $this->save($id, $item);
+
             return;
         }
 
@@ -282,6 +283,7 @@ abstract class RoutineViewsController extends ViewsController
         if ($post->valid()) {
             if ($this->dbChange($item, $id)) { // save changes
                 Redirect::to('/' . $this->division . '/' . $this->module);
+
                 return;
             }
         }
