@@ -22,6 +22,7 @@ class ModelMultiCollection extends ModelCollection
      * @param mixed $parentID
      *
      * @throws \Colibri\Database\DbException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function __construct($parentID = null)
     {
@@ -30,6 +31,14 @@ class ModelMultiCollection extends ModelCollection
         $metadata                 = static::db()->getColumnsMetadata($this->fkTableName);
         $this->fkTableFields      = &$metadata['fields'];
         $this->intermediateFields = array_diff($this->fkTableFields, $this->FKName);
+    }
+
+    /**
+     * @return \Colibri\Database\Query
+     */
+    protected function query(): Query
+    {
+        return Query::select(['*'], $this->intermediateFields);
     }
 
     /**
@@ -75,25 +84,18 @@ class ModelMultiCollection extends ModelCollection
      */
     protected function selFromDbAllQuery(): string
     {
-        $strQuery = $this->FKValue[0] !== null
-            ? Query::select(['*'], $this->intermediateFields)
+        $query = $this->FKValue[0] !== null
+            ? $this->getQuery()
                 ->from(static::$tableName)
                 ->join($this->fkTableName, $this->FKName[1], 'id', Query\JoinType::INNER)
                 ->where([
                     'j1.' . $this->FKName[0] => $this->FKValue[0],
                 ])
-                ->build(static::db())
-            : Query::select(['*'], $this->intermediateFields)
+            : $this->getQuery()
                 ->from(static::$tableName)
-                ->build(static::db())
         ;
 
-        $strQuery = $this->rebuildQueryForCustomLoad($strQuery);
-        if ($strQuery === false) {
-            throw new \RuntimeException('can\'t rebuild query \'selFromDbAllQuery\' for custom load in ' . __METHOD__ . ' [line: ' . __LINE__ . ']. possible: getFieldsAndTypes() failed (check for sql errors) or incorrect wherePlan() format');
-        }
-
-        return $strQuery;
+        return $query->build(static::db());
     }
 
     /**

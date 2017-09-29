@@ -9,6 +9,14 @@ use Colibri\Database;
 class ModelSingleCollection extends ModelCollection
 {
     /**
+     * @return \Colibri\Database\Query
+     */
+    protected function query(): Query
+    {
+        return Query::select();
+    }
+
+    /**
      * @return string
      *
      * @throws \Colibri\Database\DbException
@@ -19,7 +27,7 @@ class ModelSingleCollection extends ModelCollection
      */
     protected function selFromDbAllQuery(): string
     {
-        $query = Query::select()->from(static::$tableName);
+        $query = $this->getQuery()->from(static::$tableName);
         if ($this->FKValue[1] !== null) {
             $query->where([$this->FKName[1] => $this->FKValue[1]]);
         }
@@ -27,14 +35,7 @@ class ModelSingleCollection extends ModelCollection
             $query->where([$this->FKName[0] => $this->FKValue[0]]);
         }
 
-        $strQuery = $query->build(static::db());
-
-        $strQuery = $this->rebuildQueryForCustomLoad($strQuery);
-        if ($strQuery === false) {
-            throw new \RuntimeException('can\'t rebuild query \'selFromDbAllQuery\' for custom load. possible: getFieldsAndTypes() failed (check for sql errors) or incorrect wherePlan() format');
-        }
-
-        return $strQuery;
+        return $query->build(static::db());
     }
 
     // with DataBase

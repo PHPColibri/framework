@@ -310,7 +310,7 @@ class Query
     {
         $this->db = $db;
 
-        $sql = $this->type;
+        $sql = $this->type . ($this->limit ? ' sql_calc_found_rows' : '');
 
         switch ($this->type) {
             case Query\Type::INSERT:

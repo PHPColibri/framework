@@ -45,8 +45,10 @@ abstract class Model
     /**
      * @param int|array $idOrRow
      *
-     * @throws DbException
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
      * @throws \Exception
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function __construct($idOrRow = null)
     {

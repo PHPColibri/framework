@@ -182,6 +182,9 @@ interface DbInterface
      * @param string $tableName
      *
      * @return array
+     *
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function &getColumnsMetadata($tableName);
 

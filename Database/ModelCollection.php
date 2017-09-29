@@ -4,7 +4,6 @@ namespace Colibri\Database;
 use Colibri\Base\DynamicCollection;
 use Colibri\Base\DynamicCollectionInterface;
 use Colibri\Database;
-use Colibri\Util\Str;
 
 /**
  * Абстрактный класс ModelCollection.
@@ -31,13 +30,11 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
     /** @var array */
     protected $itemFieldTypes = [];
 
-    /** @var array */
-    protected $where = null;
-    /** @var array */
-    protected $order_by = null;
-    /** @var array */
-    protected $limit = null;
+    /** @var Query */
+    private $query = null;
 
+    /** @var bool */
+    private $pagedQuery = false;
     /** @var int */
     public $recordsPerPage = 20;
     /** @var int */
@@ -47,11 +44,29 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
 
     /**
      * @param mixed $parentID
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function __construct($parentID = null)
     {
         $this->parentID = $parentID;
+        $this->getFieldsAndTypes();
     }
+
+    /**
+     * @return Query
+     */
+    protected function getQuery(): Query
+    {
+        return $this->query ?? $this->query = $this->query();
+    }
+
+    /**
+     * @return \Colibri\Database\Query
+     */
+    abstract protected function query(): Query;
 
     /**
      * DynamicCollectionInterface ::fillItems() implementation.
@@ -149,7 +164,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
     /**
      * @param \Colibri\Database\Model $object
      */
-    protected function addItem(Database\Model &$object)
+    protected function addItem(Model &$object)
     {
         $this->items[] = $object;
     }
@@ -223,8 +238,19 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
     protected function selFromDbAll()
     {
         $this->doQuery($this->selFromDbAllQuery());
+        $selectedRows = $this->db()->fetchAllRows();
 
-        return $this->db()->fetchAllRows();
+        $this->query = null;
+
+        // TODO [alek13]: bring it out
+        if ($this->pagedQuery) {
+            $this->doQuery('SELECT FOUND_ROWS()');
+            $row                = $this->db()->fetchRow();
+            $this->recordsCount = $row[0];
+            $this->pagesCount   = ceil($this->recordsCount / $this->recordsPerPage);
+        }
+
+        return $selectedRows;
     }
 
     /**
@@ -250,9 +276,10 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
     }
 
     /**
-     * @return array
      *
      * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     protected function getFieldsAndTypes()
     {
@@ -261,124 +288,9 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
             $this->itemFields     = &$metadata['fields'];
             $this->itemFieldTypes = &$metadata['fieldTypes'];
         }
-
-        return ['fields' => &$this->itemFields, 'types' => &$this->itemFieldTypes];
-    }
-
-    /**
-     * @param array  $clauses clauses like ['age >' => 18]
-     * @param string $type    one of 'and'|'or'
-     *
-     * @return string
-     *
-     * @throws \Colibri\Database\DbException
-     */
-    protected function buildWhere(array &$clauses, $type)
-    {
-        $whereParts = [];
-        foreach ($clauses as $clause) {
-            $name  = $clause[0];
-            $value = $clause[1];
-            if (is_array($value) && ($name == 'and' || $name == 'or')) {
-                $whereParts[] = $this->buildWhere($value, $name);
-            } else {
-                if ( ! is_array($name = explode(' ', $name, 2))) {
-                    $name = [$name];
-                }
-                if ( ! isset($name[1])) {
-                    $name[1] = $value === null ? 'is' : '=';
-                }
-
-                $whereParts[] = '`' . $name[0] . '` ' . $name[1] . ' ' . $this->db()->prepareValue($value, $this->itemFieldTypes[$name[0]]);
-            }
-        }
-
-        return '(' . implode(' ' . $type . ' ', $whereParts) . ')';
-    }
-
-    /**
-     * @param string $query
-     *
-     * @return bool|string
-     *
-     * @throws \Colibri\Database\DbException
-     */
-    protected function rebuildQueryForCustomLoad($query)
-    {
-        if ($this->getFieldsAndTypes() === false) {
-            return false;
-        }
-
-        if ($this->where !== null) {
-            $where = $this->where;
-            if (count($where) !== 1) {
-                return false;
-            }
-            if (isset($where['and'])) {
-                $type    = 'and';
-                $clauses = $where['and'];
-            } else {
-                if (isset($where['or'])) {
-                    $type    = 'or';
-                    $clauses = $where['or'];
-                } else {
-                    return false;
-                }
-            }
-
-            $query = rtrim(trim($query), ';');
-            $query .= (Str::contains($query, ' where ') ? ' and ' : ' where ') . $this->buildWhere($clauses, $type);
-
-            $this->where = null;
-        }
-
-        if ($this->order_by !== null) {
-            $query .= ' ORDER BY ';
-            $strOrder = '';
-            foreach ($this->order_by as $name => $value) {
-                $strOrder .= ', `' . $name . '` ' . $value;
-            }
-            $query .= substr($strOrder, 2);
-        }
-
-        if ($this->limit !== null) {
-            $query = str_ireplace('SELECT ', 'SELECT SQL_CALC_FOUND_ROWS ', $query);
-            $query .= ' LIMIT ' . implode(',', $this->limit);
-            //$this->limit=null; // its sets to <null> in load()
-        }
-
-        return $query;
     }
 
     ///////////////////////////////////////////////////////////////////////////
-
-    ///////////////////////////////////////////////////////////////////////////
-    // for where() function additional functions.
-
-    /**
-     * @param array  $where
-     * @param string $type  one of 'and'|'or'
-     *
-     * @return array
-     *
-     * @throws \InvalidArgumentException
-     */
-    private function buildClauses(array $where, $type = 'and')
-    {
-        if ( ! in_array($type, ['and', 'or'])) {
-            throw new \InvalidArgumentException('where-type must be `and` or `or`');
-        }
-        $whereClauses = [];
-        foreach ($where as $name => $value) {
-            $whereClauses[] = [$name, $value];
-        }
-
-        return [$type => $whereClauses];
-    }
-
-    // public user functions
-    ///////////////////////////////////////////////////////////////////////////
-    /// additional function for custom load() /////////////////////////////////
 
     /**
      * @param array  $where array('field [op]' => value, ...)
@@ -390,22 +302,9 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      */
     final public function where(array $where, $type = 'and')
     {
-        $where = $this->buildClauses($where, $type);
-        if ($this->where === null) {
-            $this->where = $where;
+        $this->getQuery()->where($where, $type);
 
-            return $this;
-        }
-
-        if (isset($this->where[$type])) {
-            $this->where[$type] = array_merge($this->where[$type], $where[$type]);
-        } else {
-            $this->where = $type == 'or'
-                ? ['and' => array_merge($this->where['and'], [['or', $where['or']]])]
-                : ['and' => array_merge($where['and'], [['or', $this->where['or']]])];
-        }
-
-        return $this; //->whereClauses($where);
+        return $this;
     }
 
     /**
@@ -415,56 +314,48 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      */
     final public function wherePlan(array $plan)
     {
-        $this->where = $plan;
+        $this->getQuery()->wherePlan($plan);
 
         return $this;
     }
 
     /**
-     * @param array $order_by array('field1'=>'orientation','field2'=>'orientation'), 'fieldN' - name of field,
+     * @param array $orderBy  array('field1'=>'orientation','field2'=>'orientation'), 'fieldN' - name of field,
      *                        'orientation' - ascending or descending abbreviation ('asc' or 'desc')
      *
      * @return ModelCollection|$this|Model[]
      */
-    final public function orderBy(array $order_by)
+    final public function orderBy(array $orderBy)
     {
-        $this->order_by = $order_by;
+        $this->getQuery()->orderBy($orderBy);
 
         return $this;
     }
 
     /**
-     * @param int $offset_or_count
+     * @param int $offsetOrCount
      * @param int $count
      *
      * @return ModelCollection|$this|Model[]
      */
-    final public function limit($offset_or_count, $count = null)
+    final public function limit($offsetOrCount, $count = null)
     {
-        if ($count === null) {
-            $this->limit['offset'] = 0;
-            $this->limit['count']  = (int)$offset_or_count;
-        } else {
-            $this->limit['offset'] = (int)$offset_or_count;
-            $this->limit['count']  = (int)$count;
-        }
+        $this->getQuery()->limit($offsetOrCount, $count);
 
         return $this;
     }
 
     /**
      * @param int $pageNumber     0..N
-     * @param int $recordsPerPage count of records for one page
+     * @param int $recordsPerPage
      *
      * @return ModelCollection|$this|Model[]
      */
     final public function page($pageNumber, $recordsPerPage = null)
     {
-        if ($recordsPerPage !== null) {
-            $this->recordsPerPage = (int)$recordsPerPage;
-        }
-        $this->limit['offset'] = ((int)$pageNumber) * $this->recordsPerPage;
-        $this->limit['count']  = $this->recordsPerPage;
+        $recordsPerPage = $recordsPerPage ?? $this->recordsPerPage;
+
+        $this->getQuery()->limit(((int)$pageNumber) * $recordsPerPage, $recordsPerPage);
 
         return $this;
     }
@@ -557,15 +448,6 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
         }
         if ( ! is_array($rows = $this->selFromDbAll())) {
             return false;
-        }
-
-        if ($this->limit !== null) {
-            // TODO [alek13]: bring out into Database\MySQL
-            $this->doQuery('SELECT FOUND_ROWS()');
-            $row                = $this->db()->fetchRow();
-            $this->recordsCount = $row[0];
-            $this->pagesCount   = ceil($this->recordsCount / $this->recordsPerPage);
-            $this->limit        = null;
         }
 
         if ( ! $this->fillItems($rows)) {

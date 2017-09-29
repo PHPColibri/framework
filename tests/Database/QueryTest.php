@@ -113,15 +113,16 @@ class QueryTest extends TestCase
         $twoMonthsAgoString = '\'' . $twoMonthsAgo->format('Y-m-d H:i:s') . '\'';
 
         $this
-            ->mockPreparedValues('0', '0', $twoMonthsAgoString)
+            ->mockPreparedValues(18, 0, $twoMonthsAgoString, '\'banned\'')
             ->assertQueryIs(
-                "select t.* from users t where (t.`status` > 0 and t.`gender` = 0 and t.`createdAt` > $twoMonthsAgoString);",
+                "select t.* from users t where (t.`age` > 18 and t.`gender` = 0 and t.`createdAt` > $twoMonthsAgoString and t.`status` != 'banned');",
                 Query::select(['*'])
                     ->from('users')
                     ->where([
-                        'status >'    => 0,
+                        'age >'       => 18,
                         'gender'      => 0,
                         'createdAt >' => $twoMonthsAgo,
+                        'status !='   => 'banned'
                     ])
             )
         ;
@@ -153,11 +154,11 @@ class QueryTest extends TestCase
     {
         $this
             ->assertQueryIs(
-                'select t.* from users t order by `registered` asc limit 0, 10;',
+                'select sql_calc_found_rows t.* from users t order by `registered` asc limit 0, 10;',
                 Query::select()->from('users')->orderBy(['registered' => 'asc'])->limit(10)
             )
             ->assertQueryIs(
-                'select t.* from users t order by `registered` desc limit 2110, 10;',
+                'select sql_calc_found_rows t.* from users t order by `registered` desc limit 2110, 10;',
                 Query::select()->from('users')->orderBy(['registered' => 'desc'])->limit(2110, 10)
             )
         ;
