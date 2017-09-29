@@ -297,18 +297,16 @@ class MySQL extends AbstractDb
      * Собирает шаблон запроса, подставляя значения из переданных в метод агргументов.
      * Compile query template with passed into method arguments.
      *
-     * @param string $tpl
+     * @param string $template
+     * @param array  $arguments
      *
      * @return string
      */
-    public static function getQueryTemplate($tpl/*, ...*/)
+    public static function getQueryTemplate($template, ...$arguments)
     {
-        $argList = func_get_args();
-        $argNum  = func_num_args();
-
-        $strQuery = $tpl;
-        for ($i = $argNum - 1; $i > 0; $i--) {
-            $strQuery = str_replace('%' . $i, $argList[$i], $strQuery);
+        $strQuery = $template;
+        foreach ($arguments as $i => &$argument) {
+            $strQuery = str_replace('%' . $i, $argument, $strQuery);
         }
 
         return $strQuery;
@@ -318,16 +316,16 @@ class MySQL extends AbstractDb
      * Выполняет запрос, собранный из указанного шаблона, подставив значения из переданных в метод агргументов.
      * Executes query template compiles with passed into method arguments.
      *
-     * @param string $tpl
+     * @param string $template
+     * @param array  $arguments
      *
      * @return bool
      *
      * @throws \Colibri\Database\Exception\SqlException
      */
-    public function queryTemplate($tpl/*, ...*/)
+    public function queryTemplate($template, ...$arguments)
     {
-        $argList  = func_get_args();
-        $strQuery = call_user_func_array(['self', 'getQueryTemplate'], $argList);
+        $strQuery = self::getQueryTemplate($template, $arguments);
 
         return $this->query($strQuery);
     }
