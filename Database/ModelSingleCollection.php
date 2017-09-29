@@ -43,30 +43,25 @@ class ModelSingleCollection extends ModelCollection
 
     /**
      * @param \Colibri\Database\Model $id
-     *
-     * @return bool
      */
     protected function addToDb(Database\Model &$id)
     {
-        return true;
+        return;
     }
 
     /**
      * @param mixed $id
-     *
-     * @return bool
      */
     protected function delFromDb($id)
     {
-        return true;
+        return;
     }
 
     /**
-     * @return bool
      */
     protected function delFromDbAll()
     {
-        return true;
+        return;
     }
 
     ///////////////////////////////////////////////////////////////////////////

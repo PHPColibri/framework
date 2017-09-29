@@ -221,8 +221,6 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
 
     /**
      * @param mixed $id
-     *
-     * @return mixed
      */
     abstract protected function delFromDb($id);
 
@@ -254,7 +252,10 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
     }
 
     /**
-     * @return mixed
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
      */
     abstract protected function delFromDbAll();
 
@@ -263,16 +264,12 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
     /**
      * @param string $query
      *
-     * @return bool
-     *
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      */
     protected function doQuery($query)
     {
         $this->db()->query($query);
-
-        return true;
     }
 
     /**
@@ -379,9 +376,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
                 return false;
             }
         }
-        if ( ! $this->addToDb($object)) {
-            return false;
-        }
+        $this->addToDb($object);
         $this->addItem($object);
 
         return true;
@@ -406,27 +401,22 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
                 return false;
             }
         }
-        if ( ! $this->delFromDb($itemID)) {
-            return false;
-        }
-        if (($item = $this->delItem($itemID)) === false) {
-            return false;
-        }
 
-        return $item;
+        $this->delFromDb($itemID);
+
+        return $this->delItem($itemID);
     }
 
     /**
-     * @return bool
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
      */
     public function clear()
     {
-        if ( ! $this->delFromDbAll()) {
-            return false;
-        }
+        $this->delFromDbAll();
         $this->clearItems();
-
-        return true;
     }
 
     /**

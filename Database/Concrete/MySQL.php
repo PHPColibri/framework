@@ -246,8 +246,6 @@ class MySQL extends AbstractDb
      *
      * @param string $query
      *
-     * @return bool
-     *
      * @throws SqlException
      *
      * @global int   $time
@@ -270,8 +268,6 @@ class MySQL extends AbstractDb
             self::$strQueries .= '  Script time: ' . round($curScriptTime, 8) . "\n";
             self::$strQueries .= '  Query  time: ' . round($queryExecTime, 8) . "\n";
         }
-
-        return true;
     }
 
     /**
@@ -319,15 +315,13 @@ class MySQL extends AbstractDb
      * @param string $template
      * @param array  $arguments
      *
-     * @return bool
-     *
      * @throws \Colibri\Database\Exception\SqlException
      */
     public function queryTemplate($template, ...$arguments)
     {
         $strQuery = self::getQueryTemplate($template, $arguments);
 
-        return $this->query($strQuery);
+        $this->query($strQuery);
     }
 
     /**
@@ -360,39 +354,33 @@ class MySQL extends AbstractDb
      * Открывает транзакцию.
      * Starts database transaction.
      *
-     * @return bool
-     *
      * @throws \Colibri\Database\Exception\SqlException
      */
     public function transactionStart()
     {
-        return $this->query('START TRANSACTION;');
+        $this->query('START TRANSACTION;');
     }
 
     /**
      * Откатывает транзакцию.
      * Rolls back database transaction.
      *
-     * @return bool
-     *
      * @throws \Colibri\Database\Exception\SqlException
      */
     public function transactionRollback()
     {
-        return $this->query('ROLLBACK;');
+        $this->query('ROLLBACK;');
     }
 
     /**
      * "Комитит" транзакцию в БД.
      * Commits database transaction.
      *
-     * @return bool
-     *
      * @throws \Colibri\Database\Exception\SqlException
      */
     public function transactionCommit()
     {
-        return $this->query('COMMIT;');
+        $this->query('COMMIT;');
     }
 
     /**
@@ -419,23 +407,13 @@ class MySQL extends AbstractDb
      *
      * @param array $queries
      *
-     * @return bool
-     *
      * @throws \Colibri\Database\Exception\SqlException
      */
     public function commit(array $queries)
     {
-        if ( ! $this->transactionStart()) {
-            return false;
-        }
-        if ( ! $this->queries($queries, true)) {
-            return false;
-        }
-        if ( ! $this->transactionCommit()) {
-            return false;
-        }
-
-        return true;
+        $this->transactionStart();
+        $this->queries($queries, true);
+        $this->transactionCommit();
     }
 
     /**

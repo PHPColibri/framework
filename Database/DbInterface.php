@@ -63,8 +63,6 @@ interface DbInterface
      *
      * @param string $query Строка запроса
      *
-     * @return bool
-     *
      * @throws SqlException
      */
     public function query($query);
@@ -134,7 +132,7 @@ interface DbInterface
      * Открывает транзакцию.
      * Starts database transaction.
      *
-     * @return bool
+     * @throws \Colibri\Database\Exception\SqlException
      */
     public function transactionStart();
 
@@ -142,7 +140,7 @@ interface DbInterface
      * Откатывает транзакцию.
      * Rolls back database transaction.
      *
-     * @return bool
+     * @throws \Colibri\Database\Exception\SqlException
      */
     public function transactionRollback();
 
@@ -150,7 +148,7 @@ interface DbInterface
      * "Комитит" транзакцию в БД.
      * Commits database transaction.
      *
-     * @return bool
+     * @throws \Colibri\Database\Exception\SqlException
      */
     public function transactionCommit();
 
@@ -161,7 +159,7 @@ interface DbInterface
      * @param array $queries        запросы, которые нужно выполнить. queries to execute.
      * @param bool  $rollbackOnFail нужно ли откатывать транзакцию.   if you need to roll back transaction.
      *
-     * @return bool
+     * @throws \Colibri\Database\Exception\SqlException
      */
     public function queries(array $queries, $rollbackOnFail = false);
 
@@ -171,7 +169,7 @@ interface DbInterface
      *
      * @param array $queries
      *
-     * @return bool
+     * @throws \Colibri\Database\Exception\SqlException
      */
     public function commit(array $queries);
 

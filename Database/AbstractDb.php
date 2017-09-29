@@ -72,19 +72,19 @@ abstract class AbstractDb implements DbInterface
      * @param array $queries        запросы, которые нужно выполнить. queries to execute.
      * @param bool  $rollbackOnFail нужно ли откатывать транзакцию.   if you need to roll back transaction.
      *
-     * @return bool
-     *
      * @throws \Colibri\Database\Exception\SqlException
      */
     public function queries(array $queries, $rollbackOnFail = false)
     {
-        foreach ($queries as &$query) {
-            if ( ! $this->query($query . ';')) {
-                return $rollbackOnFail ? $this->transactionRollback() && false : false;
+        /** @var Exception\SqlException|\Exception $e */
+        try {
+            foreach ($queries as &$query) {
+                $this->query($query . ';');
             }
+        } catch (\Exception $e) {
+            $rollbackOnFail && $this->transactionRollback();
+            throw $e;
         }
-
-        return true;
     }
 
     /**

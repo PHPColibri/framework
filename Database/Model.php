@@ -586,22 +586,16 @@ abstract class Model
     /**
      * @param array $arrQueries
      *
-     * @return bool
-     *
      * @throws DbException
      * @throws \Exception
      */
     protected function doQueries(array $arrQueries)
     {
         static::db()->queries($arrQueries);
-
-        return true;
     }
 
     /**
      * @param array $queries
-     *
-     * @return bool
      *
      * @throws DbException
      * @throws \Exception
@@ -609,8 +603,6 @@ abstract class Model
     protected function doTransaction(array $queries)
     {
         static::db()->commit($queries);
-
-        return true;
     }
 
     /**

@@ -142,8 +142,6 @@ class ModelMultiCollection extends ModelCollection
     /**
      * @param \Colibri\Database\Model $object
      *
-     * @return bool
-     *
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
@@ -152,14 +150,11 @@ class ModelMultiCollection extends ModelCollection
     protected function addToDb(Database\Model &$object)
     {
         $this->FKValue[1] = $object->id;
-
-        return $this->doQuery($this->addToDbQuery());
+        $this->doQuery($this->addToDbQuery());
     }
 
     /**
      * @param int $id
-     *
-     * @return bool
      *
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
@@ -169,12 +164,10 @@ class ModelMultiCollection extends ModelCollection
     protected function delFromDb($id)
     {
         $this->FKValue[1] = $id;
-
-        return $this->doQuery($this->delFromDbQuery());
+        $this->doQuery($this->delFromDbQuery());
     }
 
     /**
-     * @return bool
      *
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
@@ -183,6 +176,6 @@ class ModelMultiCollection extends ModelCollection
      */
     protected function delFromDbAll()
     {
-        return $this->doQuery($this->delFromDbAllQuery());
+        $this->doQuery($this->delFromDbAllQuery());
     }
 }
