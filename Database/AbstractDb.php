@@ -76,7 +76,7 @@ abstract class AbstractDb implements DbInterface
      */
     public function queries(array $queries, $rollbackOnFail = false)
     {
-        /** @var Exception\SqlException|\Exception $e */
+        /* @var Exception\SqlException|\Exception $e */
         try {
             foreach ($queries as &$query) {
                 $this->query($query . ';');

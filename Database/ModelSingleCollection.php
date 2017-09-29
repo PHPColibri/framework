@@ -46,7 +46,6 @@ class ModelSingleCollection extends ModelCollection
      */
     protected function addToDb(Database\Model &$id)
     {
-        return;
     }
 
     /**
@@ -54,14 +53,10 @@ class ModelSingleCollection extends ModelCollection
      */
     protected function delFromDb($id)
     {
-        return;
     }
 
-    /**
-     */
     protected function delFromDbAll()
     {
-        return;
     }
 
     ///////////////////////////////////////////////////////////////////////////

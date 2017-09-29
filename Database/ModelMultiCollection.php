@@ -168,7 +168,6 @@ class ModelMultiCollection extends ModelCollection
     }
 
     /**
-     *
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
