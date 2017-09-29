@@ -232,25 +232,32 @@ abstract class Model
             }
 
             $type = isset($this->fieldTypes[$propName]) ? $this->fieldTypes[$propName] : null;
-            switch ($type) {
-                case 'int':
-                case 'integer':
-                case 'tinyint':
-                case 'smallint':
-                case 'mediumint':
-                case 'bigint':
-                    $this->$propName = (int)$propValue;
-                    break;
-                case 'bit':
-                    $this->$propName = (bool)$propValue;
-                    break;
-                case 'timestamp':
-                    $this->$propName = new Carbon($propValue);
-                    break;
-                default:
-                    $this->$propName = $propValue;
-                    break;
-            }
+            $this->$propName = $this->cast($type, $propValue);
+        }
+    }
+
+    /**
+     * @param $type
+     * @param $value
+     *
+     * @return bool|\Carbon\Carbon|int|string
+     */
+    protected function cast($type, $value)
+    {
+        switch ($type) {
+            case 'int':
+            case 'integer':
+            case 'tinyint':
+            case 'smallint':
+            case 'mediumint':
+            case 'bigint':
+                return (int)$value;
+            case 'bit':
+                return (bool)$value;
+            case 'timestamp':
+                return new Carbon($value);
+            default:
+                return $value;
         }
     }
 
