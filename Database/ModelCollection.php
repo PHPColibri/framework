@@ -276,7 +276,6 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
     }
 
     /**
-     *
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      * @throws \Psr\SimpleCache\InvalidArgumentException
@@ -320,8 +319,8 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
     }
 
     /**
-     * @param array $orderBy  array('field1'=>'orientation','field2'=>'orientation'), 'fieldN' - name of field,
-     *                        'orientation' - ascending or descending abbreviation ('asc' or 'desc')
+     * @param array $orderBy array('field1'=>'orientation','field2'=>'orientation'), 'fieldN' - name of field,
+     *                       'orientation' - ascending or descending abbreviation ('asc' or 'desc')
      *
      * @return ModelCollection|$this|Model[]
      */

@@ -122,7 +122,7 @@ class QueryTest extends TestCase
                         'age >'       => 18,
                         'gender'      => 0,
                         'createdAt >' => $twoMonthsAgo,
-                        'status !='   => 'banned'
+                        'status !='   => 'banned',
                     ])
             )
         ;
