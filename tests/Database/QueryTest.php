@@ -3,9 +3,9 @@ namespace Colibri\tests\Database;
 
 use Colibri\Database\DbInterface;
 use Colibri\Database\Query;
+use Colibri\tests\TestCase;
 use Mockery;
 use Mockery\MockInterface;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Class QueryTest.
@@ -18,14 +18,6 @@ class QueryTest extends TestCase
     protected function setUp()
     {
         $this->dbMock = Mockery::mock(DbInterface::class);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    protected function tearDown()
-    {
-        Mockery::close();
     }
 
     /**
