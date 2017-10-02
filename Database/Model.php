@@ -441,7 +441,7 @@ abstract class Model
     public function create(array $attributes = null)
     {
         $this->doQuery($this->createQuery($attributes));
-        $this->{static::$PKFieldName[0]} = self::db()->lastInsertId();
+        $this->{static::$PKFieldName[0]} = static::db()->lastInsertId();
         if ($attributes) {
             $this->fillProperties($attributes);
         }
@@ -560,11 +560,11 @@ abstract class Model
     {
         $this->doQuery($query);
 
-        if (self::db()->getNumRows() == 0) {
+        if (static::db()->getNumRows() == 0) {
             return null;
         }
 
-        $result = self::db()->fetchArray();
+        $result = static::db()->fetchArray();
         $this->fillProperties($result);
 
         return $this;
