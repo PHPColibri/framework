@@ -126,16 +126,6 @@ abstract class ViewsController extends Base
 
         Layout::filename('backbone' . $this->divisionPostfix . '.php');
 
-        // TODO: bring out into application config ??
-        Layout::addJsText(
-            'var VND=\'' . VND . '\';' . "\n" .
-            'var MOD=\'' . MOD . '\';' . "\n" .
-            'var IMG=\'' . RES_IMG . '\';' . "\n" .
-            'var JS =\'' . RES_JS . '\';' . "\n" .
-            'var CSS=\'' . RES_CSS . '\';' . "\n" .
-            'var SWF=\'' . RES_SWF . '\';' . "\n" .
-            'var PTO=\'' . RES_IMG_PTO . '\';'
-        );
         Layout::addJsMgr('backbone' . ($this->_division === '' ? '' : '_' . $this->_division));
         Layout::addCss('backbone' . $this->divisionPostfix . '.css');
 
