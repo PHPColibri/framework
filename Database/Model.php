@@ -23,13 +23,6 @@ abstract class Model
     /** @var array */
     protected $where = null;
 
-    /** @var array */
-    protected $fields = [];
-    /** @var array */
-    protected $fieldTypes = [];
-    /** @var array */
-    public $fieldLengths = [];
-
     /** @var string */
     protected static $connectionName = 'default';
 
@@ -52,11 +45,6 @@ abstract class Model
      */
     public function __construct($idOrRow = null)
     {
-        $metadata           = static::db()->getColumnsMetadata(static::$tableName);
-        $this->fields       = &$metadata['fields'];
-        $this->fieldTypes   = &$metadata['fieldTypes'];
-        $this->fieldLengths = &$metadata['fieldLengths'];
-
         if ($idOrRow !== null) {
             if (is_array($idOrRow)) {
                 $this->fillProperties($idOrRow);
@@ -97,6 +85,7 @@ abstract class Model
      *
      * @throws DbException
      * @throws \Exception
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public static function find($idOrWhere)
     {
@@ -111,6 +100,7 @@ abstract class Model
      * @throws DbException
      * @throws NotFoundException
      * @throws \Exception
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public static function get($idOrWhere)
     {
@@ -124,11 +114,16 @@ abstract class Model
 
     /**
      * @return array
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function getFieldsNames(): array
     {
+        $fields         = static::db()->getColumnsMetadata(static::getTableName())['fields'];
         $classVars      = array_keys(get_class_vars(get_class($this)));
-        $selectedFields = array_intersect($classVars, $this->fields);
+        $selectedFields = array_intersect($classVars, $fields);
 
         return $selectedFields;
     }
@@ -163,6 +158,10 @@ abstract class Model
 
     /**
      * @return array
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     protected function getFieldsValues(): array
     {
@@ -222,6 +221,10 @@ abstract class Model
     /**
      * @param array $row
      * @param bool  $cast
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
      */
     protected function fillProperties(array $row, $cast = true)
     {
@@ -231,7 +234,7 @@ abstract class Model
                 continue;
             }
 
-            $type            = isset($this->fieldTypes[$propName]) ? $this->fieldTypes[$propName] : null;
+            $type            = static::db()->getFieldType(static::getTableName(), $propName);
             $this->$propName = $this->cast($type, $propValue);
         }
     }
@@ -264,7 +267,10 @@ abstract class Model
     /**
      * @return \Colibri\Database\Query
      *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     protected function loadQuery(): Query
     {
@@ -277,6 +283,10 @@ abstract class Model
      * @param array|null $attributes
      *
      * @return \Colibri\Database\Query
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     protected function createQuery(array $attributes = null): Query
     {
@@ -289,7 +299,10 @@ abstract class Model
      *
      * @return \Colibri\Database\Query
      *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     protected function saveQuery(array $attributes = null): Query
     {
@@ -325,10 +338,14 @@ abstract class Model
      * @param $propName
      *
      * @return bool
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     protected function hasColumn($propName): bool
     {
-        return in_array($propName, $this->fields);
+        return in_array($propName, static::db()->getColumnsMetadata(static::getTableName())['fields']);
     }
 
     /**
@@ -402,6 +419,7 @@ abstract class Model
      * @return bool
      *
      * @throws \Exception
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     protected static function recordExists(array $where)
     {
@@ -418,6 +436,7 @@ abstract class Model
      * @throws DbException
      * @throws SqlException
      * @throws \Exception
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function create(array $attributes = null)
     {
@@ -455,6 +474,7 @@ abstract class Model
      *
      * @throws DbException
      * @throws \Exception
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function save(array $attributes = null)
     {
@@ -470,6 +490,7 @@ abstract class Model
      *
      * @throws DbException
      * @throws \Exception
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public static function saveNew(array $values)
     {
@@ -481,6 +502,7 @@ abstract class Model
      *
      * @throws \Colibri\Database\DbException
      * @throws \Exception
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function reload()
     {
@@ -492,8 +514,11 @@ abstract class Model
      *
      * @return $this|null
      *
-     * @throws DbException
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
      * @throws \Exception
+     * @throws \InvalidArgumentException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function load($idOrWhere = null)
     {
@@ -516,6 +541,7 @@ abstract class Model
      *
      * @throws DbException
      * @throws \Exception
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public static function getById($id)
     {
@@ -546,6 +572,10 @@ abstract class Model
 
     /**
      * @param array $row
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
      */
     public function initialize(array $row)
     {
@@ -554,6 +584,10 @@ abstract class Model
 
     /**
      * @return array
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function toArray()
     {
@@ -569,6 +603,10 @@ abstract class Model
 
     /**
      * @return string
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function toJson()
     {
