@@ -216,10 +216,9 @@ class Str extends Helper
      */
     public static function snake($str, $delimiter = '_')
     {
-        if ( ! ctype_upper($str)) {
-            $str = strtolower(preg_replace('/(.)(?=[A-Z])/', '$1' . $delimiter, $str));
-            $str = preg_replace('/\s+/', '', $str);
-        }
+        $str = preg_replace('/([A-Z ])/', ' $1', $str);
+        $str = preg_replace('/\s+/', $delimiter, trim($str));
+        $str = strtolower($str);
 
         return $str;
     }

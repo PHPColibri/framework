@@ -148,10 +148,11 @@ class StrTest extends TestCase
      *
      * @param string $stringSnakeCase
      * @param string $expectedString
+     * @param string $delimiter
      */
-    public function testSnake($stringSnakeCase, $expectedString)
+    public function testSnake($stringSnakeCase, $expectedString, $delimiter = '_')
     {
-        self::assertEquals($expectedString, Str::snake($stringSnakeCase));
+        self::assertEquals($expectedString, Str::snake($stringSnakeCase, $delimiter));
     }
 
     /**
@@ -163,7 +164,11 @@ class StrTest extends TestCase
             ['camelCase', 'camel_case'],
             ['snake_case', 'snake_case'],
             ['camelCAse1', 'camel_c_ase1'],
+            ['PHPProfi', 'p_h_p_profi'],
             ['string', 'string'],
+            ['spaced words string', 'spaced_words_string'],
+            ['spaced words string', 'spaced!words!string', '!'],
+            ['Spaced Words String', 'spaced_words_string',],
         ];
     }
 
