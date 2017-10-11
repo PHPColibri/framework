@@ -437,6 +437,33 @@ class StrTest extends TestCase
     }
 
     /**
+     * @covers ::word
+     * @dataProvider wordProvider
+     *
+     * @param string       $source
+     * @param int          $i
+     * @param mixed        $default
+     * @param string|mixed $expected
+     */
+    public function testWord(string $source, int $i, $default, $expected)
+    {
+        self::assertEquals($expected, Str::word($source, $i, $default));
+    }
+
+    /**
+     * @return array
+     */
+    public function wordProvider(): array
+    {
+        return [
+            ['hello world',         0, null,         'hello'],
+            ['some spaced string',  1, null,         'spaced'],
+            ['use default default', 3, null,         null],
+            ['use my default',      3, 'my-default', 'my-default'],
+        ];
+    }
+
+    /**
      * @covers ::hasDigits
      * @dataProvider hasDigitsProvider
      *
