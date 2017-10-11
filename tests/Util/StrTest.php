@@ -435,4 +435,28 @@ class StrTest extends TestCase
             ['1daw2-sadf-sdfasd', '-', 'sdfasd'],
         ];
     }
+
+    /**
+     * @covers ::hasDigits
+     * @dataProvider hasDigitsProvider
+     *
+     * @param string $source
+     * @param bool   $expected
+     */
+    public function testHasDigits(string $source, bool $expected)
+    {
+        self::assertEquals($expected, Str::hasDigits($source));
+    }
+
+    /**
+     * @return array
+     */
+    public function hasDigitsProvider(): array
+    {
+        return [
+            ['some string', false],
+            ['some string 2', true],
+            ['some2string', true],
+        ];
+    }
 }
