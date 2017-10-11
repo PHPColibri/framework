@@ -190,11 +190,12 @@ class StrTest extends TestCase
     public function camelProvider()
     {
         return [
-            ['camel_case', 'camelCase'],
-            ['camel-case', 'camelCase'],
+            ['snake_case', 'snakeCase'],
+            ['slug-style', 'slugStyle'],
             ['camelCase', 'camelCase'],
-            ['camel_c_ase1', 'camelCAse1'],
-            ['camel-c-ase1', 'camelCAse1'],
+            ['spaced string', 'spacedString'],
+            ['snake_c_ase1', 'snakeCAse1'],
+            ['slug-s-tyle1', 'slugSTyle1'],
             ['string', 'string'],
         ];
     }
@@ -217,10 +218,11 @@ class StrTest extends TestCase
     public function studlyProvider()
     {
         return [
-            ['camel_case', 'CamelCase'],
-            ['camel-case', 'CamelCase'],
+            ['snake_case', 'SnakeCase'],
+            ['slug-style', 'SlugStyle'],
             ['camelCase', 'CamelCase'],
             ['camel_c_ase1', 'CamelCAse1'],
+            ['spaced string', 'SpacedString'],
             ['string', 'String'],
         ];
     }
