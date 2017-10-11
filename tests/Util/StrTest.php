@@ -168,7 +168,7 @@ class StrTest extends TestCase
             ['string', 'string'],
             ['spaced words string', 'spaced_words_string'],
             ['spaced words string', 'spaced!words!string', '!'],
-            ['Spaced Words String', 'spaced_words_string',],
+            ['Spaced Words String', 'spaced_words_string'],
         ];
     }
 
