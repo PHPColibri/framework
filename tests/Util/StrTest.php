@@ -437,6 +437,34 @@ class StrTest extends TestCase
     }
 
     /**
+     * @covers ::part
+     * @dataProvider partProvider
+     *
+     * @param string       $source
+     * @param int          $i
+     * @param string       $delimiter
+     * @param mixed        $default
+     * @param string|mixed $expected
+     */
+    public function testPart(string $source, int $i, string $delimiter, $default, $expected)
+    {
+        self::assertEquals($expected, Str::part($source, $i, $delimiter, $default));
+    }
+
+    /**
+     * @return array
+     */
+    public function partProvider(): array
+    {
+        return [
+            ['snake_case', 0, '_', null, 'snake'],
+            ['some spaced string', 1, ' ', null, 'spaced'],
+            ['slug-style-string', 2, '-', null, 'string'],
+            ['use-default-default', 3, '-', null, null],
+        ];
+    }
+
+    /**
      * @covers ::word
      * @dataProvider wordProvider
      *
