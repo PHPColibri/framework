@@ -12,6 +12,25 @@ use PHPUnit\Framework\TestCase;
 class ArrTest extends TestCase
 {
     /**
+     * @param mixed              $key
+     * @param array|\ArrayAccess $array
+     * @param string             $message
+     *
+     * @throws \PHPUnit\Framework\Exception
+     */
+    public static function assertArrayHasKey($key, $array, $message = '')
+    {
+        $nestedKeys = explode('.', $key);
+        $a          = &$array;
+        foreach ($nestedKeys as $k) {
+            parent::assertArrayHasKey($k, $a, $message);
+            $a = &$a[$k];
+        }
+    }
+
+    // ----------------------------------------------------------------------------
+
+    /**
      * @return array
      */
     public function overwriteDataProvider()
@@ -44,6 +63,8 @@ class ArrTest extends TestCase
         self::assertEquals($expectedResult, $result);
     }
 
+    // ----------------------------------
+
     /**
      * @return array
      */
@@ -75,6 +96,51 @@ class ArrTest extends TestCase
         $value = Arr::get($array, $key);
         self::assertEquals($expectedValue, $value);
     }
+
+    // ----------------------------------
+
+    /**
+     * @return array
+     */
+    public function setDataProvider()
+    {
+        return [
+            ['key1', 'new value1'],
+            ['key2', 'value2'],
+            ['nested.n1', 777],
+            ['nested.n2', 'new nested value 2'],
+            ['k1.k11', 'value_1.1'],
+            ['k1.k12.k121', 121],
+        ];
+    }
+
+    /**
+     * @dataProvider setDataProvider
+     * @covers       \Colibri\Util\Arr::set
+     *
+     * @param string $key
+     * @param mixed  $value
+     *
+     * @throws \PHPUnit\Framework\Exception
+     */
+    public function testSet($key, $value)
+    {
+        static $array = [
+            'key1'   => 'value1',
+            'nested' => [
+                'n1' => 123,
+                'n2' => 'nested value 2',
+            ],
+        ];
+
+        $result = Arr::set($array, $key, $value);
+
+        self::assertArrayHasKey($key, $result);
+        self::assertEquals($value, Arr::get($result, $key));
+        self::assertEquals($value, Arr::get($array, $key));
+    }
+
+    // ----------------------------------
 
     /**
      * @return array

@@ -30,7 +30,7 @@ class Arr extends Helper
      *
      * @return mixed
      */
-    public static function get(array $array, $dottedKey = null, $default = null)
+    public static function get(array $array, string $dottedKey = null, $default = null)
     {
         if ($dottedKey === null) {
             return $array;
@@ -58,16 +58,25 @@ class Arr extends Helper
      *
      * @return mixed
      */
-    public static function &set(&$array, $dottedKey, $value)
+    public static function &set(array &$array, string $dottedKey, $value)
     {
         if ($dottedKey === null) {
             return $array = $value;
         }
 
-        $k = explode('.', $dottedKey, 2);
+        if (isset($array[$dottedKey])) {
+            $array[$dottedKey] = $value;
 
-        $array[$k[0]] = isset($k[1])
-            ? self::set($array[$k[0]], $k[1], $value)
+            return $array;
+        }
+
+        $keyParts = explode('.', $dottedKey, 2);
+        if ( ! isset($array[$keyParts[0]])) {
+            $array[$keyParts[0]] = [];
+        }
+
+        $array[$keyParts[0]] = count($keyParts) === 2
+            ? self::set($array[$keyParts[0]], $keyParts[1], $value)
             : $value;
 
         return $array;
@@ -81,7 +90,7 @@ class Arr extends Helper
      *
      * @return mixed|null returns removed value or null if key not found
      */
-    public static function remove(array &$array, $dottedKey)
+    public static function remove(array &$array, string $dottedKey)
     {
         if (isset($array[$dottedKey])) {
             $value = $array[$dottedKey];
