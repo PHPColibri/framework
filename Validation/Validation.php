@@ -376,6 +376,7 @@ class Validation extends PropertyAccess
     }
 
     /** @noinspection PhpDocRedundantThrowsInspection */
+
     /**
      * Validates the data scope.
      *
@@ -386,7 +387,7 @@ class Validation extends PropertyAccess
     public function validate()
     {
         $this->ifNotValid(function (array $errors) {
-            /** @noinspection PhpUnhandledExceptionInspection */
+            /* @noinspection PhpUnhandledExceptionInspection */
             throw new ValidationException($errors);
         });
 
