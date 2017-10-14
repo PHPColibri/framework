@@ -38,7 +38,10 @@ class ModelMultiCollection extends ModelCollection
      */
     protected function query(): Query
     {
-        return Query::select(['*'], $this->intermediateFields);
+        return $this->intermediateFields
+            ? Query::select(['*'], $this->intermediateFields)
+            : Query::select(['*'])
+        ;
     }
 
     /**
