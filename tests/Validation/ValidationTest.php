@@ -1,6 +1,7 @@
 <?php
 namespace Colibri\tests\Validation;
 
+use Colibri\Util\RegExp;
 use Colibri\Util\Str;
 use Colibri\Validation\Validation;
 use Colibri\Validation\ValidationException;
@@ -129,6 +130,7 @@ class ValidationTest extends TestCase
         $validation
             ->minLength('name', 6)
             ->minLength('not-exists', 2)
+            ->minLength(['lastName', 'email'], 2)
         ;
         static::assertEquals(0, count($validation->errors));
 
@@ -157,6 +159,7 @@ class ValidationTest extends TestCase
         $validation
             ->maxLength('lastName', 6)
             ->maxLength('not-exists', 2)
+            ->maxLength(['name', 'email'], 1000)
         ;
         static::assertEquals(0, count($validation->errors));
 
@@ -181,8 +184,9 @@ class ValidationTest extends TestCase
     public function testRegex(Validation $validation)
     {
         $validation
-            ->regex('lastName', '/[а-яё]+/')
+            ->regex('email', RegExp::IS_EMAIL)
             ->regex('not-exists', '/[а-яё]+/')
+            ->regex(['name', 'lastName'], '/[а-яё]+/')
         ;
         static::assertEquals(0, count($validation->errors));
 
@@ -209,6 +213,7 @@ class ValidationTest extends TestCase
         $validation
             ->isIntGt0('id')
             ->isIntGt0('not-exists')
+            ->isIntGt0(['id', 'not-exists'])
         ;
         static::assertEquals(0, count($validation->errors));
 
@@ -242,6 +247,8 @@ class ValidationTest extends TestCase
             ->extendScope(['json' => '{"some":11,"valid":"json"}'])
             ->isJSON('json')
             ->isJSON('not-exists')
+            ->extendScope(['json2' => '{"some":11,"valid":"json"}'])
+            ->isJSON(['json', 'json2', 'no-field'])
         ;
         static::assertEquals(0, count($validation->errors));
 
@@ -268,9 +275,10 @@ class ValidationTest extends TestCase
     public function testIsEmail(Validation $validation)
     {
         $validation
-            ->extendScope(['email' => 'some-valid.email@domain.ru'])
             ->isEmail('email')
             ->isEmail('not-exists')
+            ->extendScope(['email2' => 'some-valid.email@domain.ru'])
+            ->isEmail(['email', 'email2'])
         ;
         static::assertEquals(0, count($validation->errors));
 
@@ -331,7 +339,8 @@ class ValidationTest extends TestCase
             ->is(function ($value) {
                 return Str::contains($value, '[cut]');
             }, 'message', 'field \'message\' must contains "[cut]" bb tag')
-            ->is('self::theFalse', 'not-exists', 'something wrong')
+            ->is([ValidationTest::class, 'theTrue'], 'not-exists', 'something wrong')
+            ->is([ValidationTest::class, 'theTrue'], ['name', 'email'], 'something wrong')
         ;
         static::assertEquals(0, count($validation->errors));
 
@@ -362,7 +371,8 @@ class ValidationTest extends TestCase
         $validation
             ->extendScope(['login' => 'vpopov'])
             ->isNot('\Colibri\Util\Str::isEmail', 'login', 'field \'login\' must not be a mail')
-            ->isNot('self::theFalse', 'not-exists', 'something wrong')
+            ->isNot([ValidationTest::class, 'theFalse'], 'not-exists', 'something wrong')
+            ->isNot([ValidationTest::class, 'theFalse'], ['login', 'email', 'not-exists'], 'something wrong')
         ;
         static::assertEquals(0, count($validation->errors));
 
@@ -383,7 +393,15 @@ class ValidationTest extends TestCase
     /**
      * @return bool false
      */
-    protected static function theFalse()
+    public static function theTrue()
+    {
+        return true;
+    }
+
+    /**
+     * @return bool false
+     */
+    public static function theFalse()
     {
         return false;
     }

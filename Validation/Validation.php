@@ -312,9 +312,9 @@ class Validation extends PropertyAccess
     /**
      * 'Is' validation rule. Custom rule specified by $checkFunc(). Checks that data NOT satisfies to rule.
      *
-     * @param callable $checkFunc
-     * @param string   $key
-     * @param string   $message
+     * @param callable     $checkFunc
+     * @param string|array $key
+     * @param string       $message
      *
      * @return $this
      */
