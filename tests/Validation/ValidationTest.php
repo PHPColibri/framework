@@ -339,8 +339,8 @@ class ValidationTest extends TestCase
             ->is(function ($value) {
                 return Str::contains($value, '[cut]');
             }, 'message', 'field \'message\' must contains "[cut]" bb tag')
-            ->is([ValidationTest::class, 'theTrue'], 'not-exists', 'something wrong')
-            ->is([ValidationTest::class, 'theTrue'], ['name', 'email'], 'something wrong')
+            ->is([self::class, 'theTrue'], 'not-exists', 'something wrong')
+            ->is([self::class, 'theTrue'], ['name', 'email'], 'something wrong')
         ;
         static::assertEquals(0, count($validation->errors));
 
@@ -371,8 +371,8 @@ class ValidationTest extends TestCase
         $validation
             ->extendScope(['login' => 'vpopov'])
             ->isNot('\Colibri\Util\Str::isEmail', 'login', 'field \'login\' must not be a mail')
-            ->isNot([ValidationTest::class, 'theFalse'], 'not-exists', 'something wrong')
-            ->isNot([ValidationTest::class, 'theFalse'], ['login', 'email', 'not-exists'], 'something wrong')
+            ->isNot([self::class, 'theFalse'], 'not-exists', 'something wrong')
+            ->isNot([self::class, 'theFalse'], ['login', 'email', 'not-exists'], 'something wrong')
         ;
         static::assertEquals(0, count($validation->errors));
 
