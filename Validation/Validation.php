@@ -375,16 +375,18 @@ class Validation extends PropertyAccess
         return $this;
     }
 
+    /** @noinspection PhpDocRedundantThrowsInspection */
     /**
      * Validates the data scope.
      *
-     * @throws ValidationException
-     *
      * @return $this
+     *
+     * @throws ValidationException
      */
     public function validate()
     {
         $this->ifNotValid(function (array $errors) {
+            /** @noinspection PhpUnhandledExceptionInspection */
             throw new ValidationException($errors);
         });
 
