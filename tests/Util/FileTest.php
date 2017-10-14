@@ -1,17 +1,22 @@
 <?php
-namespace Colibri\Tests\Util;
+namespace Colibri\tests\Util;
 
+use Colibri\tests\TestCase;
 use Colibri\Util\File;
-use PHPUnit\Framework\TestCase;
 
+/**
+ * Tests for File util.
+ */
 class FileTest extends TestCase
 {
     /**
-     * @covers       \Colibri\Util\File::getMimeType
+     * @covers \Colibri\Util\File::getMimeType
+     *
+     * @throws \Exception
      */
     public function testGetMimeType()
     {
         $mimeType = File::getMimeType(__DIR__ . '/FileTest.php');
-        $this->assertEquals('text/x-php', $mimeType);
+        static::assertEquals('text/x-php', $mimeType);
     }
 }
