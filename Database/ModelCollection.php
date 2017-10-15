@@ -337,6 +337,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
     final public function limit($offsetOrCount, $count = null)
     {
         $this->getQuery()->limit($offsetOrCount, $count);
+        $this->pagedQuery = true;
 
         return $this;
     }
@@ -352,6 +353,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
         $recordsPerPage = $recordsPerPage ?? $this->recordsPerPage;
 
         $this->getQuery()->limit(((int)$pageNumber) * $recordsPerPage, $recordsPerPage);
+        $this->pagedQuery = true;
 
         return $this;
     }
