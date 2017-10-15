@@ -185,7 +185,7 @@ class QueryTest extends TestCase
         $this
             ->mockPreparedValues(3)
             ->assertQueryIs(
-                'delete from users t where (t.`id` = 3);',
+                'delete from t using users t where (t.`id` = 3);',
                 Query::delete()
                     ->from('users')
                     ->where(['id' => 3])

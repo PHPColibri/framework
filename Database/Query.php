@@ -365,9 +365,10 @@ class Query
      */
     private function buildFrom(): string
     {
+        $using = $this->type === Query\Type::DELETE ? 't using ' : '';
         $alias = $this->type !== Query\Type::INSERT ? ' t' : '';
 
-        return ' from ' . $this->table . $alias . $this->buildJoins();
+        return ' from ' . $using . $this->table . $alias . $this->buildJoins();
     }
 
     /**
