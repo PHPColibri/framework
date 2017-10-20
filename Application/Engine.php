@@ -6,6 +6,7 @@ use Colibri\Controller\MethodsController;
 use Colibri\Controller\ViewsController;
 use Colibri\Http;
 use Colibri\Log\Log;
+use Colibri\Util\Arr;
 use Colibri\Util\Str;
 use LogicException;
 
@@ -87,12 +88,12 @@ class Engine extends Engine\Base
     protected function initialize()
     {
         $appConfig = Config::get('application');
+        define('DEBUG', Arr::get($appConfig, 'debug', false));
+        self::setUpErrorHandling();
         mb_internal_encoding($appConfig['encoding']);
         date_default_timezone_set($appConfig['timezone']);
         setlocale(LC_TIME, $appConfig['locale']);
         umask($appConfig['umask']);
-        define('DEBUG', $appConfig['debug']);
-        self::setUpErrorHandling();
 
         $this->_domainPrefix = $this->getDomainPrefix();
 
@@ -319,11 +320,11 @@ class Engine extends Engine\Base
     }
 
     /**
-     * @param \Throwable|\Exception $exc
+     * @param \Throwable $exc
      *
      * @throws \InvalidArgumentException
      */
-    public static function exceptionHandler($exc)
+    public static function exceptionHandler(\Throwable $exc)
     {
         $message = $exc->__toString();
         if (DEBUG) {

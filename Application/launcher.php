@@ -52,7 +52,7 @@ try {
     }
     header('HTTP/1.1 404 Not Found');
     include HTTPERRORS . '404.php';
-} catch (\Exception $exc) {
+} catch (\Throwable $exc) {
     if (Config::application('debug')) {
         $error = Html::e($exc);
     }
