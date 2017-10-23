@@ -371,7 +371,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      * @throws \RuntimeException
      * @throws \UnexpectedValueException
      */
-    public function add(Database\Model &$object)
+    public function add(Database\Model $object)
     {
         if ($this->items === null) {
             if ( ! $this->fillItems()) {
