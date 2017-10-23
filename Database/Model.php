@@ -12,6 +12,8 @@ use Colibri\Database\Exception\SqlException;
  */
 abstract class Model
 {
+    const    NEW_OBJECT = -1;
+
     /** @var string */
     protected static $tableName = 'tableName_not_set';
     /** @var array */
@@ -51,6 +53,8 @@ abstract class Model
             } else {
                 $this->load($idOrRow);
             }
+        } else {
+            $this->{static::$PKFieldName[0]} = self::NEW_OBJECT;
         }
     }
 
