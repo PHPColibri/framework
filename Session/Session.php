@@ -35,6 +35,14 @@ class Session extends Helper
     }
 
     /**
+     * Returns session ID.
+     */
+    public static function id(): string
+    {
+        return self::$storage->id();
+    }
+
+    /**
      * Retrieve the value from session.
      *
      * @param string $dottedKey

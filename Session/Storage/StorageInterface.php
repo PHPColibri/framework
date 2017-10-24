@@ -12,6 +12,11 @@ interface StorageInterface
     public static function getInstance();
 
     /**
+     * @return string
+     */
+    public function id(): string;
+
+    /**
      * @param string $dottedKey
      *
      * @return bool

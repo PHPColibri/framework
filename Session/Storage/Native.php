@@ -23,6 +23,14 @@ class Native extends Singleton implements StorageInterface
     }
 
     /**
+     * @return string
+     */
+    public function id(): string
+    {
+        return session_id();
+    }
+
+    /**
      * @param string $dottedKey
      *
      * @return bool
