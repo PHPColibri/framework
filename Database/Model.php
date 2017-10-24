@@ -482,7 +482,9 @@ abstract class Model
      */
     public function save(array $attributes = null)
     {
-        $this->fillProperties($attributes, false);
+        if ($attributes !== null) {
+            $this->fillProperties($attributes, false);
+        }
 
         $this->doQuery($this->saveQuery($attributes));
     }
