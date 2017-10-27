@@ -17,3 +17,5 @@ PHP Framework
 Contributing
 ------------
 Любая помощь [приветствуется](/contributing.md)
+
+Slack: https://slofile.com/slack/php-colibri
