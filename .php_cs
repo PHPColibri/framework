@@ -1,5 +1,6 @@
 <?php
 
+/** @noinspection PhpUnhandledExceptionInspection */
 return PhpCsFixer\Config::create()
     ->setFinder(
         PhpCsFixer\Finder::create()->in(__DIR__)
@@ -39,6 +40,7 @@ return PhpCsFixer\Config::create()
         'pre_increment'                         => false,
         'psr4'                                  => true,
         'single_blank_line_before_namespace'    => false,
+        'yoda_style'                            => false,
 
 
         // Risky под вопросом:
