@@ -106,13 +106,11 @@ class Image
                 if ($width > $height) {
                     $x = ($width - $height) / 2;
                     $y = 0;
-                    $w =
-                    $h = $height;
+                    $w = $h = $height;
                 } else {
                     $x = 0;
                     $y = ($height - $width) / 2;
-                    $w =
-                    $h = $width;
+                    $w = $h = $width;
                 }
 
                 return [

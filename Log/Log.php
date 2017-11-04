@@ -112,7 +112,7 @@ class Log extends Helper
      */
     private static function loadFromConfig()
     {
-        static::$config           = Arr::overwrite(
+        static::$config = Arr::overwrite(
             static::$defaultConfig,
             Config::getOrEmpty('log')
         );

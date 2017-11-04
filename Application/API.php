@@ -76,6 +76,7 @@ class API
     }
 
     /** @noinspection PhpDocMissingThrowsInspection */
+
     /**
      * @param string $division
      * @param string $module
@@ -90,10 +91,10 @@ class API
     public static function callModuleMethodCached($division, $module, $method, ...$params)
     {
         if (Config::application('useCache') && ! DEBUG) {
-            $key      = self::getCacheKeyForCall(func_get_args());
+            $key = self::getCacheKeyForCall(func_get_args());
             /** @noinspection PhpUnhandledExceptionInspection */
             $retValue = Cache::remember($key, function () use ($division, $module, $method, $params) {
-                /** @noinspection PhpUnhandledExceptionInspection */
+                /* @noinspection PhpUnhandledExceptionInspection */
                 return self::callModuleMethod($division, $module, $method, ...$params);
             });
         } else {
@@ -104,6 +105,7 @@ class API
     }
 
     /** @noinspection PhpDocMissingThrowsInspection */
+
     /**
      * @param string $division
      * @param string $module
@@ -118,10 +120,10 @@ class API
     public static function getModuleViewCached($division, $module, $method, ...$params)
     {
         if (Config::application('useCache') && ! DEBUG) {
-            $key      = self::getCacheKeyForCall(func_get_args());
+            $key = self::getCacheKeyForCall(func_get_args());
             /** @noinspection PhpUnhandledExceptionInspection */
             $retValue = Cache::remember($key, function () use ($division, $module, $method, $params) {
-                /** @noinspection PhpUnhandledExceptionInspection */
+                /* @noinspection PhpUnhandledExceptionInspection */
                 return self::getModuleView($division, $module, $method, ...$params);
             });
         } else {

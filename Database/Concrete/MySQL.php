@@ -57,7 +57,7 @@ class MySQL extends AbstractDb
         if (self::$monitorQueries) {
             self::$strQueries .= "Before @mysqli_connect\n";
             global $time;
-            $curTime          = microtime(true) - $time;
+            $curTime = microtime(true) - $time;
             self::$strQueries .= sprintf('%f', $curTime) . "\n";
         }
 
@@ -74,7 +74,7 @@ class MySQL extends AbstractDb
             throw new DbException('can\'t connect to database: ' . $this->connect->error, $this->connect->errno);
         }
 
-        /** @PhpUnhandledExceptionInspection */
+        /* @PhpUnhandledExceptionInspection */
         $this->query("SET CHARACTER SET 'utf8'"/*, $encoding*/);
     }
 
@@ -254,7 +254,7 @@ class MySQL extends AbstractDb
     public function query($query)
     {
         if (self::$monitorQueries) {
-            $queryStartTime   = microtime(true);
+            $queryStartTime = microtime(true);
             self::$strQueries .= $query . "\n";
         }
 
@@ -265,7 +265,7 @@ class MySQL extends AbstractDb
             $queryEndTime  = microtime(true);
             $curScriptTime = $queryEndTime - $time;
             /** @var int $queryStartTime */
-            $queryExecTime    = $queryEndTime - $queryStartTime;
+            $queryExecTime = $queryEndTime - $queryStartTime;
             self::$strQueries .= '  Script time: ' . round($curScriptTime, 8) . "\n";
             self::$strQueries .= '  Query  time: ' . round($queryExecTime, 8) . "\n";
         }
@@ -479,6 +479,7 @@ class MySQL extends AbstractDb
     }
 
     /** @noinspection PhpDocMissingThrowsInspection */
+
     /**
      * Возвращает информацию о полях таблицы.
      * Returns table columns info.
@@ -489,7 +490,7 @@ class MySQL extends AbstractDb
      */
     protected function &retrieveColumnsMetadata($tableName)
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
+        /* @noinspection PhpUnhandledExceptionInspection */
         $this->query('SHOW COLUMNS FROM ' . $tableName);
         $result = $this->fetchAllRows();
 
