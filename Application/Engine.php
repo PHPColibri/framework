@@ -246,8 +246,7 @@ class Engine extends Engine\Base
     {
         $this->loadModule($division, $module, $type);
 
-        $className =
-            ucfirst($module) . ucfirst($division) . ($type == CallType::VIEW ? 'Views' : 'Methods') . 'Controller';
+        $className = ucfirst($module) . ucfirst($division) . ($type == CallType::VIEW ? 'Views' : 'Methods') . 'Controller';
         if ( ! class_exists($className)) {
             throw new Exception\NotFoundException("Class '$className' does not exists.");
         }
