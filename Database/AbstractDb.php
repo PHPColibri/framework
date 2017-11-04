@@ -28,6 +28,7 @@ abstract class AbstractDb implements DbInterface
     private static $columnsMetadata = [];
 
     /** @noinspection PhpDocMissingThrowsInspection */
+
     /**
      * Кеширует и возвращает информацию о полях таблицы.
      * Caches and returns table columns info.
@@ -39,7 +40,7 @@ abstract class AbstractDb implements DbInterface
     public function &getColumnsMetadata($tableName)
     {
         if ( ! isset(self::$columnsMetadata[$tableName])) {
-            /** @noinspection PhpUnhandledExceptionInspection */
+            /* @noinspection PhpUnhandledExceptionInspection */
             self::$columnsMetadata[$tableName] = (static::$useCacheForMetadata
                 ? $this->retrieveColumnsCachedMetadata($tableName)
                 : $this->retrieveColumnsMetadata($tableName)
@@ -82,6 +83,7 @@ abstract class AbstractDb implements DbInterface
     }
 
     /** @noinspection PhpDocMissingThrowsInspection */
+
     /**
      * Возвращает тип поля таблицы.
      * Returns table column type.
@@ -93,11 +95,12 @@ abstract class AbstractDb implements DbInterface
      */
     public function getFieldType(string $table, string $column): string
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
+        /* @noinspection PhpUnhandledExceptionInspection */
         return $this->getColumnsMetadata($table)['fieldTypes'][$column];
     }
 
     /** @noinspection PhpDocMissingThrowsInspection */
+
     /**
      * @param $tableName
      *
@@ -107,7 +110,7 @@ abstract class AbstractDb implements DbInterface
     {
         $key = $this->database . '.' . $tableName . '.meta';
 
-        /** @noinspection PhpUnhandledExceptionInspection */
+        /* @noinspection PhpUnhandledExceptionInspection */
         return Cache::remember($key, function () use ($tableName) {
             return $this->retrieveColumnsMetadata($tableName);
         });

@@ -438,8 +438,7 @@ class Query
     {
         $clausesParts = [];
         foreach ($clauses as $clause) {
-            $clausesParts[] =
-                self::clauseIsNested($clause)
+            $clausesParts[] = self::clauseIsNested($clause)
                     ? $this->buildClauses(...$clause)
                     : $this->buildClause(...$clause);
         }
