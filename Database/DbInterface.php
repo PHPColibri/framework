@@ -180,9 +180,6 @@ interface DbInterface
      * @param string $tableName
      *
      * @return array
-     *
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function &getColumnsMetadata($tableName);
 
@@ -216,9 +213,6 @@ interface DbInterface
      * @param string $column
      *
      * @return string
-     *
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \InvalidArgumentException
      */
     public function getFieldType(string $table, string $column): string;
 }

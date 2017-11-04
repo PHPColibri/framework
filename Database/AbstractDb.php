@@ -27,6 +27,7 @@ abstract class AbstractDb implements DbInterface
      */
     private static $columnsMetadata = [];
 
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Кеширует и возвращает информацию о полях таблицы.
      * Caches and returns table columns info.
@@ -34,18 +35,13 @@ abstract class AbstractDb implements DbInterface
      * @param string $tableName
      *
      * @return array
-     *
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function &getColumnsMetadata($tableName)
     {
         if ( ! isset(self::$columnsMetadata[$tableName])) {
+            /** @noinspection PhpUnhandledExceptionInspection */
             self::$columnsMetadata[$tableName] = (static::$useCacheForMetadata
-                ? Cache::remember($this->database . '.' . $tableName . '.meta', function () use ($tableName) {
-                    /* @noinspection PhpUnhandledExceptionInspection */
-                    return $this->retrieveColumnsMetadata($tableName);
-                })
+                ? $this->retrieveColumnsCachedMetadata($tableName)
                 : $this->retrieveColumnsMetadata($tableName)
             );
         }
@@ -60,8 +56,6 @@ abstract class AbstractDb implements DbInterface
      * @param string $tableName
      *
      * @return array
-     *
-     * @throws \Colibri\Database\Exception\SqlException
      */
     abstract protected function &retrieveColumnsMetadata($tableName);
 
@@ -87,6 +81,7 @@ abstract class AbstractDb implements DbInterface
         }
     }
 
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Возвращает тип поля таблицы.
      * Returns table column type.
@@ -95,12 +90,26 @@ abstract class AbstractDb implements DbInterface
      * @param string $column
      *
      * @return string
-     *
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function getFieldType(string $table, string $column): string
     {
+        /** @noinspection PhpUnhandledExceptionInspection */
         return $this->getColumnsMetadata($table)['fieldTypes'][$column];
+    }
+
+    /** @noinspection PhpDocMissingThrowsInspection */
+    /**
+     * @param $tableName
+     *
+     * @return mixed
+     */
+    private function retrieveColumnsCachedMetadata($tableName): mixed
+    {
+        $key = $this->database . '.' . $tableName . '.meta';
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        return Cache::remember($key, function () use ($tableName) {
+            return $this->retrieveColumnsMetadata($tableName);
+        });
     }
 }

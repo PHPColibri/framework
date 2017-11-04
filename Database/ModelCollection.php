@@ -46,8 +46,6 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      * @param mixed $parentID
      *
      * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function __construct($parentID = null)
     {
@@ -78,7 +76,6 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
-     * @throws \RuntimeException
      * @throws \UnexpectedValueException
      */
     public function fillItems(array &$rows = null)
@@ -100,9 +97,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      * @return string
      *
      * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
-     * @throws \RuntimeException
      * @throws \UnexpectedValueException
      */
     abstract protected function selFromDbAllQuery(): string;
@@ -130,7 +125,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      *
      * @return mixed
      *
-     * @throws \RuntimeException
+     * @throws \UnexpectedValueException
      */
     public function __set($propertyName, $propertyValue)
     {
@@ -230,7 +225,6 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
-     * @throws \RuntimeException
      * @throws \UnexpectedValueException
      */
     protected function selFromDbAll()
@@ -254,8 +248,6 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
     /**
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
-     * @throws \InvalidArgumentException
-     * @throws \UnexpectedValueException
      */
     abstract protected function delFromDbAll();
 
@@ -274,8 +266,6 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
 
     /**
      * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     protected function getFieldsAndTypes()
     {
@@ -368,7 +358,6 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
-     * @throws \RuntimeException
      * @throws \UnexpectedValueException
      */
     public function add(Database\Model $object)
@@ -393,7 +382,6 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
      * @throws \OutOfBoundsException
-     * @throws \RuntimeException
      * @throws \UnexpectedValueException
      */
     public function remove($itemID)
@@ -412,8 +400,6 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
     /**
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
-     * @throws \InvalidArgumentException
-     * @throws \UnexpectedValueException
      */
     public function clear()
     {
@@ -429,7 +415,6 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
-     * @throws \RuntimeException
      * @throws \UnexpectedValueException
      */
     public function load($parentID = null)
@@ -454,7 +439,6 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
-     * @throws \RuntimeException
      * @throws \UnexpectedValueException
      */
     public function reload()
@@ -584,7 +568,6 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
-     * @throws \RuntimeException
      * @throws \UnexpectedValueException
      */
     public function get()

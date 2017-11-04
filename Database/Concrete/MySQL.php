@@ -74,6 +74,7 @@ class MySQL extends AbstractDb
             throw new DbException('can\'t connect to database: ' . $this->connect->error, $this->connect->errno);
         }
 
+        /** @PhpUnhandledExceptionInspection */
         $this->query("SET CHARACTER SET 'utf8'"/*, $encoding*/);
     }
 
@@ -246,7 +247,7 @@ class MySQL extends AbstractDb
      *
      * @param string $query
      *
-     * @throws SqlException
+     * @throws \Colibri\Database\Exception\SqlException
      *
      * @global int   $time
      */
@@ -332,7 +333,7 @@ class MySQL extends AbstractDb
      *
      * @return bool|\mysqli_result
      *
-     * @throws SqlException
+     * @throws \Colibri\Database\Exception\SqlException
      */
     private function &dbQuery($query)
     {
@@ -477,6 +478,7 @@ class MySQL extends AbstractDb
         return $value;
     }
 
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Возвращает информацию о полях таблицы.
      * Returns table columns info.
@@ -484,12 +486,10 @@ class MySQL extends AbstractDb
      * @param string $tableName
      *
      * @return array
-     *
-     * @throws DbException
-     * @throws SqlException
      */
     protected function &retrieveColumnsMetadata($tableName)
     {
+        /** @noinspection PhpUnhandledExceptionInspection */
         $this->query('SHOW COLUMNS FROM ' . $tableName);
         $result = $this->fetchAllRows();
 

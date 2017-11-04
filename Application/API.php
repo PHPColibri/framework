@@ -75,6 +75,7 @@ class API
         return md5($keyStr);
     }
 
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * @param string $division
      * @param string $module
@@ -85,13 +86,14 @@ class API
      *
      * @throws \Colibri\Application\Exception\NotFoundException
      * @throws \LogicException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public static function callModuleMethodCached($division, $module, $method, ...$params)
     {
         if (Config::application('useCache') && ! DEBUG) {
             $key      = self::getCacheKeyForCall(func_get_args());
+            /** @noinspection PhpUnhandledExceptionInspection */
             $retValue = Cache::remember($key, function () use ($division, $module, $method, $params) {
+                /** @noinspection PhpUnhandledExceptionInspection */
                 return self::callModuleMethod($division, $module, $method, ...$params);
             });
         } else {
@@ -101,6 +103,7 @@ class API
         return $retValue;
     }
 
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * @param string $division
      * @param string $module
@@ -111,13 +114,14 @@ class API
      *
      * @throws \Colibri\Application\Exception\NotFoundException
      * @throws \LogicException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public static function getModuleViewCached($division, $module, $method, ...$params)
     {
         if (Config::application('useCache') && ! DEBUG) {
             $key      = self::getCacheKeyForCall(func_get_args());
+            /** @noinspection PhpUnhandledExceptionInspection */
             $retValue = Cache::remember($key, function () use ($division, $module, $method, $params) {
+                /** @noinspection PhpUnhandledExceptionInspection */
                 return self::getModuleView($division, $module, $method, ...$params);
             });
         } else {

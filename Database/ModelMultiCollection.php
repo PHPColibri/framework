@@ -22,7 +22,6 @@ class ModelMultiCollection extends ModelCollection
      * @param mixed $parentID
      *
      * @throws \Colibri\Database\DbException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function __construct($parentID = null)
     {
@@ -48,8 +47,6 @@ class ModelMultiCollection extends ModelCollection
      * @return string
      *
      * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \InvalidArgumentException
      * @throws \UnexpectedValueException
      */
     protected function addToDbQuery(): string
@@ -64,7 +61,6 @@ class ModelMultiCollection extends ModelCollection
      * @return string
      *
      * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
      * @throws \UnexpectedValueException
      */
@@ -80,9 +76,7 @@ class ModelMultiCollection extends ModelCollection
      * @return string
      *
      * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
-     * @throws \RuntimeException
      * @throws \UnexpectedValueException
      */
     protected function selFromDbAllQuery(): string
@@ -105,7 +99,6 @@ class ModelMultiCollection extends ModelCollection
      * @return string
      *
      * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
      * @throws \UnexpectedValueException
      */
@@ -147,7 +140,6 @@ class ModelMultiCollection extends ModelCollection
      *
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
-     * @throws \InvalidArgumentException
      * @throws \UnexpectedValueException
      */
     protected function addToDb(Database\Model &$object)

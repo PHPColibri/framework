@@ -302,8 +302,6 @@ class Query
      *
      * @return string
      *
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \InvalidArgumentException
      * @throws \UnexpectedValueException
      */
     public function build(DbInterface $db): string
@@ -402,8 +400,6 @@ class Query
     /**
      * @return string
      *
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \InvalidArgumentException
      * @throws \UnexpectedValueException
      */
     private function buildWhere(): string
@@ -437,9 +433,6 @@ class Query
      * @param array  $clauses
      *
      * @return string
-     *
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \InvalidArgumentException
      */
     private function buildClauses(string $logicOp, array $clauses): string
     {
@@ -461,9 +454,6 @@ class Query
      * @param string $alias
      *
      * @return string
-     *
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \InvalidArgumentException
      */
     private function buildClause(string $name, $value, string $operator, string $alias = null): string
     {
@@ -512,9 +502,6 @@ class Query
 
     /**
      * @return string
-     *
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \InvalidArgumentException
      */
     private function buildSet(): string
     {

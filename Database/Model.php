@@ -3,7 +3,6 @@ namespace Colibri\Database;
 
 use Carbon\Carbon;
 use Colibri\Database\Exception\NotFoundException;
-use Colibri\Database\Exception\SqlException;
 
 /**
  * Абстрактный класс объекта базы данных.
@@ -42,8 +41,8 @@ abstract class Model
      *
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
-     * @throws \Exception
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
      */
     public function __construct($idOrRow = null)
     {
@@ -87,9 +86,10 @@ abstract class Model
      *
      * @return static
      *
-     * @throws DbException
-     * @throws \Exception
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
      */
     public static function find($idOrWhere)
     {
@@ -101,10 +101,11 @@ abstract class Model
      *
      * @return static
      *
-     * @throws DbException
-     * @throws NotFoundException
-     * @throws \Exception
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\NotFoundException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
      */
     public static function get($idOrWhere)
     {
@@ -120,8 +121,6 @@ abstract class Model
      * @return array
      *
      * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function getFieldsNames(): array
     {
@@ -164,8 +163,6 @@ abstract class Model
      * @return array
      *
      * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     protected function getFieldsValues(): array
     {
@@ -227,8 +224,6 @@ abstract class Model
      * @param bool  $cast
      *
      * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \InvalidArgumentException
      */
     protected function fillProperties(array $row, $cast = true)
     {
@@ -272,9 +267,7 @@ abstract class Model
      * @return \Colibri\Database\Query
      *
      * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     protected function loadQuery(): Query
     {
@@ -289,8 +282,6 @@ abstract class Model
      * @return \Colibri\Database\Query
      *
      * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     protected function createQuery(array $attributes = null): Query
     {
@@ -304,9 +295,7 @@ abstract class Model
      * @return \Colibri\Database\Query
      *
      * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     protected function saveQuery(array $attributes = null): Query
     {
@@ -344,8 +333,6 @@ abstract class Model
      * @return bool
      *
      * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     protected function hasColumn($propName): bool
     {
@@ -357,7 +344,7 @@ abstract class Model
      *
      * @return ModelCollection|ModelMultiCollection|ModelSingleCollection|Model
      *
-     * @throws \Exception
+     * @throws \DomainException
      */
     public function __get($propertyName)
     {
@@ -367,7 +354,7 @@ abstract class Model
         if (isset($this->objects[$propertyName])) {
             return $this->getRelated($propertyName, $this->objects);
         }
-        throw new \Exception('свойство $' . $propertyName . ' в классе ' . get_class($this) . ' не определено или не является public.');
+        throw new \DomainException('свойство $' . $propertyName . ' в классе ' . get_class($this) . ' не определено или не является public.');
     }
 
     /**
@@ -394,7 +381,7 @@ abstract class Model
      *
      * @return mixed
      *
-     * @throws \Exception
+     * @throws \DomainException
      */
     public function __set($propertyName, $propertyValue)
     {
@@ -402,7 +389,7 @@ abstract class Model
             return $this->$propertyName = $propertyValue;
         }
 
-        throw new \Exception('свойство $' . $propertyName . ' в классе ' . get_class($this) . ' не определено или не является public.');
+        throw new \DomainException('свойство $' . $propertyName . ' в классе ' . get_class($this) . ' не определено или не является public.');
     }
 
     /**
@@ -422,8 +409,10 @@ abstract class Model
      *
      * @return bool
      *
-     * @throws \Exception
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
      */
     protected static function recordExists(array $where)
     {
@@ -437,10 +426,9 @@ abstract class Model
      *
      * @return $this
      *
-     * @throws DbException
-     * @throws SqlException
-     * @throws \Exception
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \UnexpectedValueException
      */
     public function create(array $attributes = null)
     {
@@ -456,8 +444,10 @@ abstract class Model
     /**
      * @param mixed|array $idOrWhere
      *
-     * @throws DbException
-     * @throws \Exception
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
      */
     public function delete($idOrWhere = null)
     {
@@ -476,9 +466,10 @@ abstract class Model
     /**
      * @param array $attributes
      *
-     * @throws DbException
-     * @throws \Exception
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
      */
     public function save(array $attributes = null)
     {
@@ -494,9 +485,9 @@ abstract class Model
      *
      * @return static
      *
-     * @throws DbException
-     * @throws \Exception
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \UnexpectedValueException
      */
     public static function saveNew(array $values)
     {
@@ -507,8 +498,9 @@ abstract class Model
      * @return $this|null
      *
      * @throws \Colibri\Database\DbException
-     * @throws \Exception
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
      */
     public function reload()
     {
@@ -522,9 +514,8 @@ abstract class Model
      *
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
-     * @throws \Exception
      * @throws \InvalidArgumentException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \UnexpectedValueException
      */
     public function load($idOrWhere = null)
     {
@@ -545,9 +536,11 @@ abstract class Model
      *
      * @return static
      *
-     * @throws DbException
-     * @throws \Exception
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\NotFoundException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
      */
     public static function getById($id)
     {
@@ -559,8 +552,9 @@ abstract class Model
      *
      * @return $this|null
      *
-     * @throws DbException
-     * @throws \Exception
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \UnexpectedValueException
      */
     protected function loadByQuery($query)
     {
@@ -580,8 +574,6 @@ abstract class Model
      * @param array $row
      *
      * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \InvalidArgumentException
      */
     public function initialize(array $row)
     {
@@ -592,8 +584,6 @@ abstract class Model
      * @return array
      *
      * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function toArray()
     {
@@ -611,8 +601,6 @@ abstract class Model
      * @return string
      *
      * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function toJson()
     {
@@ -622,9 +610,9 @@ abstract class Model
     /**
      * @param Query $query
      *
-     * @throws DbException
-     * @throws SqlException
-     * @throws \Exception
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \UnexpectedValueException
      */
     protected function doQuery(Query $query)
     {

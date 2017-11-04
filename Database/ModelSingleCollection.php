@@ -20,9 +20,7 @@ class ModelSingleCollection extends ModelCollection
      * @return string
      *
      * @throws \Colibri\Database\DbException
-     * @throws \Colibri\Database\Exception\SqlException
      * @throws \InvalidArgumentException
-     * @throws \RuntimeException
      * @throws \UnexpectedValueException
      */
     protected function selFromDbAllQuery(): string
