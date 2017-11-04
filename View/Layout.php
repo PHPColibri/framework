@@ -41,14 +41,8 @@ class Layout extends Helper
     {
         static::filename($filename);
 
-        static::$description   =
-        static::$keywords      =
-        static::$title         =
-        static::$jsTextOnReady = '';
-        static::$css           =
-        static::$js            =
-        static::$jsText        =
-        static::$jsMgr         = [];
+        static::$description = static::$keywords = static::$title = static::$jsTextOnReady = '';
+        static::$css         = static::$js         = static::$jsText         = static::$jsMgr         = [];
     }
 
     /**
@@ -227,7 +221,7 @@ class Layout extends Helper
             'description' => static::eWrap(static::$description, "<meta name='description' content='%s'/>\n"),
             'css'         => static::concatWrapped(static::$css,
                 '<link   type="text/css" rel="stylesheet" href="%s"/>' . "\n"),
-            'javascript'  => static::concatWrapped(static::$js,
+            'javascript' => static::concatWrapped(static::$js,
                 '<script type="text/javascript" src="%s"></script>' . "\n"),
         ];
 
