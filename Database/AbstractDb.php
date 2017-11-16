@@ -103,7 +103,7 @@ abstract class AbstractDb implements DbInterface
      *
      * @return mixed
      */
-    private function retrieveColumnsCachedMetadata($tableName): mixed
+    private function retrieveColumnsCachedMetadata($tableName)
     {
         $key = $this->database . '.' . $tableName . '.meta';
 
