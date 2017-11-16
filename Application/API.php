@@ -76,6 +76,7 @@ class API
     }
 
     /** @noinspection PhpDocMissingThrowsInspection */
+
     /**
      * @param string $division
      * @param string $module
@@ -93,7 +94,7 @@ class API
             $key      = self::getCacheKeyForCall(func_get_args());
             /** @noinspection PhpUnhandledExceptionInspection */
             $retValue = Cache::remember($key, function () use ($division, $module, $method, $params) {
-                /** @noinspection PhpUnhandledExceptionInspection */
+                /* @noinspection PhpUnhandledExceptionInspection */
                 return self::callModuleMethod($division, $module, $method, ...$params);
             });
         } else {
@@ -104,6 +105,7 @@ class API
     }
 
     /** @noinspection PhpDocMissingThrowsInspection */
+
     /**
      * @param string $division
      * @param string $module
@@ -121,7 +123,7 @@ class API
             $key      = self::getCacheKeyForCall(func_get_args());
             /** @noinspection PhpUnhandledExceptionInspection */
             $retValue = Cache::remember($key, function () use ($division, $module, $method, $params) {
-                /** @noinspection PhpUnhandledExceptionInspection */
+                /* @noinspection PhpUnhandledExceptionInspection */
                 return self::getModuleView($division, $module, $method, ...$params);
             });
         } else {
