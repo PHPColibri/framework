@@ -166,7 +166,7 @@ class Layout extends Helper
      */
     public static function og(string $property, string $value = null)
     {
-        return $value !== null ? static::$openGraph[$property] = $value : static::$openGraph[$property];
+        return $value !== null ? static::$openGraph[$property] = $value : (static::$openGraph[$property] ?? null);
     }
 
     /**
