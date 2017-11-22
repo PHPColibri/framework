@@ -34,7 +34,6 @@ class Layout extends Helper
     /** @var array */
     protected static $jsMgr = [];
 
-
     /**
      * Cleans up all layout variables & resets filename if specified.
      *
@@ -265,13 +264,14 @@ class Layout extends Helper
 
     /**
      * Assemble OpenGraph properties into html meta tags.
+     *
      * @return string
      */
     protected static function assembleOpenGraph()
     {
         $meta = [];
         foreach (static::$openGraph as $key => $value) {
-            $meta [] = "<meta property='og:$key' content='" . Html::e($value) . "' />";
+            $meta[] = "<meta property='og:$key' content='" . Html::e($value) . "' />";
         }
 
         return implode("\n\t", $meta) . "\n";
