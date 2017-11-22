@@ -22,6 +22,8 @@ class Layout extends Helper
     /** @var string */
     protected static $title = '';
     /** @var array */
+    protected static $openGraph = [];
+    /** @var array */
     protected static $css = [];
     /** @var array */
     protected static $js = [];
@@ -31,6 +33,7 @@ class Layout extends Helper
     protected static $jsTextOnReady = '';
     /** @var array */
     protected static $jsMgr = [];
+
 
     /**
      * Cleans up all layout variables & resets filename if specified.
@@ -155,6 +158,19 @@ class Layout extends Helper
     }
 
     /**
+     * Sets or gets layout OpenGraph property.
+     *
+     * @param string $property
+     * @param string $value
+     *
+     * @return string
+     */
+    public static function og(string $property, string $value = null)
+    {
+        return $value !== null ? static::$openGraph[$property] = $value : static::$openGraph[$property];
+    }
+
+    /**
      * Deletes specified css filename.
      *
      * @param string $cssFilename
@@ -225,10 +241,11 @@ class Layout extends Helper
             'keywords'    => static::eWrap(static::$keywords, "<meta name='keywords' content='%s' />\n"),
             'title'       => static::eWrap(static::$title, "<title>%s</title>\n"),
             'description' => static::eWrap(static::$description, "<meta name='description' content='%s'/>\n"),
+            'opengraph'   => static::assembleOpenGraph(),
             'css'         => static::concatWrapped(static::$css,
-                '<link   type="text/css" rel="stylesheet" href="%s"/>' . "\n"),
+                '<link   type="text/css" rel="stylesheet" href="%s"/>' . "\n\t"),
             'javascript'  => static::concatWrapped(static::$js,
-                '<script type="text/javascript" src="%s"></script>' . "\n"),
+                '<script type="text/javascript" src="%s"></script>' . "\n\t"),
         ];
 
         // make js init code for all js managers
@@ -244,6 +261,20 @@ class Layout extends Helper
             static::concatWrapped(static::$jsText, "<script type=\"text/javascript\">%s</script>\n");
 
         return $layoutTplVars;
+    }
+
+    /**
+     * Assemble OpenGraph properties into html meta tags.
+     * @return string
+     */
+    protected static function assembleOpenGraph()
+    {
+        $meta = [];
+        foreach (static::$openGraph as $key => $value) {
+            $meta [] = "<meta property='og:$key' content='" . Html::e($value) . "' />";
+        }
+
+        return implode("\n\t", $meta) . "\n";
     }
 
     /**
