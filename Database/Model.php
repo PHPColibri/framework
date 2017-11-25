@@ -142,7 +142,7 @@ abstract class Model
     /**
      * @return string
      */
-    final public function getTableName()
+    final public static function getTableName()
     {
         return static::$tableName;
     }
