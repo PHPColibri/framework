@@ -2,7 +2,7 @@
 namespace Colibri\Database\Query;
 
 /**
- * Class Aggregation
+ * Class Aggregation.
  */
 class Aggregation
 {

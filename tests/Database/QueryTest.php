@@ -99,7 +99,7 @@ class QueryTest extends TestCase
     {
         $this
             ->assertQueryIs(
-                "select t.* from users t",
+                'select t.* from users t',
                 Query::select(['*'])->from('users')
             );
     }
