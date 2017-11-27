@@ -6,7 +6,7 @@ use Colibri\Util\Enum;
 class Type extends Enum
 {
     const COUNT = 'count';
-    const MAX = 'max';
-    const MIN = 'min';
-    const AVG = 'avg';
+    const MAX   = 'max';
+    const MIN   = 'min';
+    const AVG   = 'avg';
 }

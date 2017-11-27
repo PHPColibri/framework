@@ -410,7 +410,7 @@ class Query
     {
         $parts = [];
         foreach ($columns as $column) {
-            $parts [] = $column instanceof Query\Aggregation
+            $parts[] = $column instanceof Query\Aggregation
                 ? $column->setTableAlias($alias)
                 : $alias . '.' . $column;
         }
