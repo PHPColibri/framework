@@ -29,6 +29,8 @@ class Query
     /** @var array */
     protected $orderBy = null;
     /** @var array */
+    protected $groupBy = null;
+    /** @var array */
     protected $limit = null;
 
     /**
@@ -99,6 +101,18 @@ class Query
     public static function delete()
     {
         return new static(Query\Type::DELETE);
+    }
+
+    /**
+     * @param \Colibri\Database\DbInterface $db
+     *
+     * @return $this
+     */
+    public function forDb(DbInterface $db)
+    {
+        $this->db = $db;
+
+        return $this;
     }
 
     /**
@@ -178,13 +192,13 @@ class Query
     }
 
     /**
-     * @param string $tableName
+     * @param string|Query $tableName
      *
      * @return $this
      */
-    public function from(string $tableName)
+    public function from($tableName)
     {
-        $this->table = $tableName;
+        $this->table = is_string($tableName) ? $tableName : "($tableName)";
 
         return $this;
     }
@@ -279,6 +293,18 @@ class Query
     }
 
     /**
+     * @param array $groupBy
+     *
+     * @return $this
+     */
+    final public function groupBy(array $groupBy): self
+    {
+        $this->groupBy = $groupBy;
+
+        return $this;
+    }
+
+    /**
      * @param int $offsetOrCount
      * @param int $count
      *
@@ -322,6 +348,7 @@ class Query
                     $this->buildFrom() .
                     $this->buildWhere() .
                     $this->buildOrderBy() .
+                    $this->buildGroupBy() .
                     $this->buildLimit();
                 break;
             case Query\Type::UPDATE:
@@ -339,7 +366,22 @@ class Query
                 throw new \UnexpectedValueException('Unexpected value of property $type');
         }
 
-        return $sql . ';';
+        return $sql;
+    }
+
+    /**
+     * @return string
+     *
+     * @throws \UnexpectedValueException
+     * @throws \LogicException
+     */
+    public function __toString()
+    {
+        if ($this->db === null) {
+            throw new \LogicException('Can`t build query: Database not set. Use ::forDb() method before.');
+        }
+
+        return $this->build($this->db);
     }
 
     // private build-functions:
@@ -352,10 +394,28 @@ class Query
     {
         $columnsGroups = [];
         foreach ($this->columns as $alias => $columns) {
-            $columnsGroups[] = $alias . '.' . implode(", $alias.", $columns);
+            $columnsGroups[] = $this->buildColumnsGroup($alias, $columns);
         }
 
         return ' ' . implode(', ', $columnsGroups);
+    }
+
+    /**
+     * @param $alias
+     * @param $columns
+     *
+     * @return string
+     */
+    private function buildColumnsGroup(string $alias, array $columns): string
+    {
+        $parts = [];
+        foreach ($columns as $column) {
+            $parts [] = $column instanceof Query\Aggregation
+                ? $column->setTableAlias($alias)
+                : $alias . '.' . $column;
+        }
+
+        return implode(', ', $parts);
     }
 
     /**
@@ -482,6 +542,18 @@ class Query
         }
 
         return ' order by ' . implode(', ', $orderSQLs);
+    }
+
+    /**
+     * @return string
+     */
+    private function buildGroupBy(): string
+    {
+        if ($this->groupBy === null) {
+            return '';
+        }
+
+        return ' group by `' . implode('`, `', $this->groupBy) . '`';
     }
 
     /**

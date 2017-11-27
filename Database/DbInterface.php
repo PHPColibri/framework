@@ -63,9 +63,11 @@ interface DbInterface
      *
      * @param string $query Строка запроса
      *
+     * @return \Colibri\Database\DbInterface
+     *
      * @throws SqlException
      */
-    public function query($query);
+    public function query($query): self;
 
     /**
      * Returns count of retrieved rows in query result.
