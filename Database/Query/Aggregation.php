@@ -14,8 +14,8 @@ class Aggregation
     private $column;
     /** @var string */
     private $alias;
-    /** @var string */
-    private $distinct;
+    /** @var bool */
+    private $distinct = false;
 
     /**
      * Aggregation constructor.
