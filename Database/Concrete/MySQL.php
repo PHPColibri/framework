@@ -3,6 +3,7 @@ namespace Colibri\Database\Concrete;
 
 use Colibri\Database\AbstractDb;
 use Colibri\Database\DbException;
+use Colibri\Database\DbInterface;
 use Colibri\Database\Exception\SqlException;
 
 /**
@@ -247,11 +248,13 @@ class MySQL extends AbstractDb
      *
      * @param string $query
      *
+     * @return \Colibri\Database\DbInterface
+     *
      * @throws \Colibri\Database\Exception\SqlException
      *
      * @global int   $time
      */
-    public function query($query)
+    public function query($query): DbInterface
     {
         if (self::$monitorQueries) {
             $queryStartTime   = microtime(true);
@@ -269,6 +272,8 @@ class MySQL extends AbstractDb
             self::$strQueries .= '  Script time: ' . round($curScriptTime, 8) . "\n";
             self::$strQueries .= '  Query  time: ' . round($queryExecTime, 8) . "\n";
         }
+
+        return $this;
     }
 
     /**
