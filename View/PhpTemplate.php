@@ -75,9 +75,7 @@ class PhpTemplate
      */
     public function compile()
     {
-        foreach ($this->vars as $key => $value) {
-            $$key = $value;
-        }
+        extract($this->vars);
 
         ob_start();
         /** @noinspection PhpIncludeInspection */
