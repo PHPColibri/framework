@@ -28,7 +28,7 @@ class Str extends Helper
      *
      * @return string
      *
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     public static function random($type = 'alnum', $length = 8)
     {
@@ -44,7 +44,7 @@ class Str extends Helper
             case 'guid':
                 return self::generateGUID();
             default:
-                throw new \Exception('unknown random type');
+                throw new \InvalidArgumentException('unknown random type');
         }
     }
 
@@ -53,7 +53,7 @@ class Str extends Helper
      *
      * @return string
      *
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     private static function getPoolForRandom(string $type): string
     {
@@ -65,7 +65,7 @@ class Str extends Helper
             case 'nozero':
                 return '123456789';
             default:
-                throw new \Exception('unknown random type');
+                throw new \InvalidArgumentException('unknown random type');
         }
     }
 

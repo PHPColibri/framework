@@ -68,7 +68,7 @@ class StrTest extends TestCase
 
     /**
      * @covers ::random
-     * @expectedException \Exception
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage unknown random type
      */
     public function testRandomInvalidTypeException()
@@ -85,7 +85,7 @@ class StrTest extends TestCase
      * @param int    $length
      * @param string $regexp
      *
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\Exception
      */
     public function testRandom($type, $length, $regexp)
@@ -121,7 +121,8 @@ class StrTest extends TestCase
      * @param string $type
      * @param int    $expectedLength
      *
-     * @throws \Exception
+     * @throws \InvalidArgumentException
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testRandomDefaultLength($type, $expectedLength)
     {
@@ -149,6 +150,8 @@ class StrTest extends TestCase
      * @param string $stringSnakeCase
      * @param string $expectedString
      * @param string $delimiter
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testSnake($stringSnakeCase, $expectedString, $delimiter = '_')
     {
@@ -178,6 +181,8 @@ class StrTest extends TestCase
      *
      * @param string $stringCamelCase
      * @param string $expectedString
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testCamel($stringCamelCase, $expectedString)
     {
@@ -206,6 +211,8 @@ class StrTest extends TestCase
      *
      * @param string $stringCamelCase
      * @param string $expectedString
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testStudly($stringCamelCase, $expectedString)
     {
@@ -393,6 +400,8 @@ class StrTest extends TestCase
      * @param $sourceString
      * @param $delimiter
      * @param $expectedString
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testFirstPart($sourceString, $delimiter, $expectedString)
     {
@@ -418,6 +427,8 @@ class StrTest extends TestCase
      * @param $sourceString
      * @param $delimiter
      * @param $expectedString
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testLastPart($sourceString, $delimiter, $expectedString)
     {
@@ -445,6 +456,8 @@ class StrTest extends TestCase
      * @param string       $delimiter
      * @param mixed        $default
      * @param string|mixed $expected
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testPart(string $source, int $i, string $delimiter, $default, $expected)
     {
@@ -472,6 +485,8 @@ class StrTest extends TestCase
      * @param int          $i
      * @param mixed        $default
      * @param string|mixed $expected
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testWord(string $source, int $i, $default, $expected)
     {
@@ -497,6 +512,8 @@ class StrTest extends TestCase
      *
      * @param string $source
      * @param bool   $expected
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testHasDigits(string $source, bool $expected)
     {
