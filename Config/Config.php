@@ -15,6 +15,7 @@ class Config extends Helper
      * @var array in-memory cache
      */
     protected static $allLoadedConfigs = [];
+
     /**
      * @var string path to directory with config files
      */

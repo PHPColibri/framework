@@ -12,6 +12,7 @@ class Db extends Helper
      * @var array
      */
     private static $config = [];
+
     /**
      * @var array<IDb>
      */

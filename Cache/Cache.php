@@ -23,10 +23,12 @@ class Cache extends Helper implements CacheInterface
             ],
         ],
     ];
+
     /**
      * @var array|Storage\StorageInterface[]
      */
     private static $storage = [];
+
     /**
      * @var array
      */

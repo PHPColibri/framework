@@ -9,7 +9,10 @@ use Colibri\Util\Enum;
 class JoinType extends Enum
 {
     const INNER = 'inner';
+
     const LEFT  = 'left';
+
     const RIGHT = 'right';
+
     const CROSS = 'cross';
 }
