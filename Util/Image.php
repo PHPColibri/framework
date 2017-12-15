@@ -10,6 +10,7 @@ class Image
      * Type of resize.
      */
     const RESIZE_FILLED = 'filled';
+
     /**
      * Type of resize.
      */
