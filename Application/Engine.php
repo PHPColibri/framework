@@ -74,10 +74,10 @@ class Engine extends Engine\Base
      */
     private static function setUpErrorHandling()
     {
-        error_reporting(0xffff);
+        error_reporting(-1);
         ini_set('display_errors', DEBUG);
-        set_error_handler('\Colibri\Application\Engine::errorHandler', 0xffff);
-        set_exception_handler('\Colibri\Application\Engine::exceptionHandler');
+        set_error_handler([static::class, 'errorHandler'], -1);
+        set_exception_handler([static::class, 'exceptionHandler']);
     }
 
     /**
