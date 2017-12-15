@@ -14,10 +14,12 @@ class Session extends Helper
      * @var array flashed between http calls variables
      */
     private static $flashedVars = [];
+
     /**
      * @var StorageInterface storage driver
      */
     private static $storage = null;
+
     /**
      * @var string|StorageInterface class name (Native::class, ...)
      */

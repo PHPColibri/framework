@@ -24,22 +24,27 @@ class Engine extends Engine\Base
      * @var ViewsController|MethodsController
      */
     protected $_responser = null;
+
     /**
      * @var string
      */
     protected $_domainPrefix = null;
+
     /**
      * @var string
      */
     private $_division = null;
+
     /**
      * @var string
      */
     private $_module = null;
+
     /**
      * @var string
      */
     private $_method = null;
+
     /**
      * @var array
      */
@@ -49,6 +54,7 @@ class Engine extends Engine\Base
      * @var bool
      */
     protected $_showProfilerInfoOnDebug = true;
+
     /**
      * @var bool
      */

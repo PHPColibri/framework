@@ -17,6 +17,7 @@ class Log extends Helper
         'folder' => '/var/log/colibri',
         'prefix' => 'colibri',
     ];
+
     /**
      * @var array real laded config
      */
