@@ -55,21 +55,6 @@ class Engine extends Engine\Base
     protected $_showAppDevToolsOnDebug = true;
 
     /**
-     * @param $file
-     *
-     * @return bool|string
-     */
-    private static function removeExtension($file)
-    {
-        $dotPos = strpos($file, '.');
-        if ($dotPos !== false) {
-            $file = substr($file, 0, $dotPos);
-        }
-
-        return $file;
-    }
-
-    /**
      * @return void
      */
     private static function setUpErrorHandling()
@@ -155,7 +140,6 @@ class Engine extends Engine\Base
      */
     protected function parseRequestedFile($file)
     {
-        $file = self::removeExtension($file);
         $file = ltrim($file, '/');
 
         $moduleConfig = Config::application('module');
