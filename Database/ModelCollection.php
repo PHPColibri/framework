@@ -17,16 +17,22 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
 {
     /** @var string */
     protected static $tableName = 'tableName_not_set';
+
     /** @var string */
     protected $itemClass = 'itemClass_not_set';
+
     /** @var array */
     protected $FKName = ['_id', '_id'];
+
     /** @var array */
     protected $FKValue = [null, null];
+
     /** @var mixed */
     protected $_parentID;
+
     /** @var array */
     protected $itemFields = [];
+
     /** @var array */
     protected $itemFieldTypes = [];
 
@@ -35,10 +41,13 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
 
     /** @var bool */
     private $pagedQuery = false;
+
     /** @var int */
     public $recordsPerPage = 20;
+
     /** @var int */
     public $recordsCount = null;
+
     /** @var int */
     public $pagesCount = null;
 

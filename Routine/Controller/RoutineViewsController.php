@@ -17,14 +17,17 @@ abstract class RoutineViewsController extends ViewsController
      * @var string class name of CRUD entity
      */
     protected $itemClass = null;
+
     /**
      * @var string name of variable in template, that represents one entity (used in edit.php template)
      */
     protected $itemTplVar = null;
+
     /**
      * @var string class name of Collection of entities
      */
     protected $listClass = null;
+
     /**
      * @var string name of variable in template, that represents list(Collection) of entities
      *             (used in defaultView.php template)
@@ -35,6 +38,7 @@ abstract class RoutineViewsController extends ViewsController
      * @var bool
      */
     protected $pagedList = false;
+
     /**
      * @var int
      */

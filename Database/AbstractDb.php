@@ -10,10 +10,13 @@ abstract class AbstractDb implements DbInterface
 {
     /** @var string */
     protected $host;
+
     /** @var string */
     protected $login;
+
     /** @var string */
     protected $pass;
+
     /** @var string */
     protected $database;
 
