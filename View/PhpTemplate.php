@@ -10,6 +10,7 @@ class PhpTemplate
      * @var string path/name of template
      */
     protected $filename = null;
+
     /**
      * @var array variables of template for compile
      */

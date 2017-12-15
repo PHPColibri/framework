@@ -19,18 +19,22 @@ abstract class ViewsController extends Base
      * @var PhpTemplate
      */
     protected $template = null;
+
     /**
      * @var bool tells to core to use template or not
      */
     protected $useTemplate = true;
+
     /**
      * @var bool
      */
     protected $useBackbone = true;
+
     /**
      * @var bool
      */
     protected $_showProfilerInfoOnDebug = true;
+
     /**
      * @var bool
      */
@@ -40,10 +44,12 @@ abstract class ViewsController extends Base
      * @var string
      */
     private $divisionPath = null;
+
     /**
      * @var string
      */
     private $divisionPrefix = null;
+
     /**
      * @var string
      */

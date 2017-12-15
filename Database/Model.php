@@ -15,6 +15,7 @@ abstract class Model
 
     /** @var string */
     protected static $tableName = 'tableName_not_set';
+
     /** @var array */
     protected static $PKFieldName = ['id'];
 
@@ -31,6 +32,7 @@ abstract class Model
      * @var array
      */
     protected $collections = [];
+
     /**
      * @var array
      */

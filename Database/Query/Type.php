@@ -9,7 +9,10 @@ use Colibri\Util\Enum;
 class Type extends Enum
 {
     const INSERT = 'insert';
+
     const SELECT = 'select';
+
     const UPDATE = 'update';
+
     const DELETE = 'delete';
 }

@@ -15,22 +15,31 @@ class Layout extends Helper
     protected static $filename = null;
 
     // Variables that injected into layout:
+
     /** @var string */
     protected static $description = '';
+
     /** @var string */
     protected static $keywords = '';
+
     /** @var string */
     protected static $title = '';
+
     /** @var array */
     protected static $openGraph = [];
+
     /** @var array */
     protected static $css = [];
+
     /** @var array */
     protected static $js = [];
+
     /** @var array */
     protected static $jsText = [];
+
     /** @var string */
     protected static $jsTextOnReady = '';
+
     /** @var array */
     protected static $jsMgr = [];
 
