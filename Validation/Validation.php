@@ -14,18 +14,25 @@ class Validation extends PropertyAccess
 {
     /** @var string */
     public static $requiredMessage = 'поле \'%s\' является обязательным для заполнения.';
+
     /** @var string */
     public static $minLengthMessage = 'поле \'%s\' должно быть не меньше %d символов.';
+
     /** @var string */
     public static $maxLengthMessage = 'поле \'%s\' не должно быть больше %d символов.';
+
     /** @var string */
     public static $regexMessage = 'поле \'%s\' не удовлетворяет условию.';
+
     /** @var string */
     public static $isIntGt0Message = 'поле \'%s\' должно быть целым числом больше 0.';
+
     /** @var string */
     public static $isJSONMessage = 'поле \'%s\' должно быть строкой в формате JSON.';
+
     /** @var string */
     public static $isEmailMessage = 'поле \'%s\' должно содержать существующий почтовый ящик.';
+
     /** @var string */
     public static $isEqualMessage = 'поля \'%s\' должны быть одинаковыми.';
 
@@ -33,6 +40,7 @@ class Validation extends PropertyAccess
      * @var array occurred validation errors
      */
     protected $_errors = [];
+
     /**
      * @var array scope of data to validate
      */
