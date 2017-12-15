@@ -9,5 +9,6 @@ use Colibri\Util\Enum;
 class LogicOp extends Enum
 {
     const AND = 'and';
+
     const OR  = 'or';
 }
