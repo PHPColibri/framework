@@ -8,12 +8,16 @@ class Aggregation
 {
     /** @var string */
     private $type;
+
     /** @var string */
     private $tableAlias;
+
     /** @var string */
     private $column;
+
     /** @var string */
     private $alias;
+
     /** @var bool */
     private $distinct = false;
 

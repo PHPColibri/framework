@@ -13,15 +13,19 @@ class MySQL extends AbstractDb
 {
     /** @var \mysqli */
     private $connect;
+
     /** @var \mysqli_result */
     private $result;
+
     /** @var bool */
     private $persistent = false;
 
     /** @var bool */
     public static $monitorQueries = false;
+
     /** @var string */
     public static $strQueries = '';
+
     /** @var int */
     public static $queriesCount = 0;
 
