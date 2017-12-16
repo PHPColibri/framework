@@ -17,14 +17,17 @@ abstract class Base extends PropertyAccess
      * @var string
      */
     protected $_response = null;
+
     /**
      * @var string
      */
     protected $_division = null;
+
     /**
      * @var string
      */
     protected $_module = null;
+
     /**
      * @var string
      */

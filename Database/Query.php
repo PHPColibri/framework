@@ -10,26 +10,34 @@ class Query
 {
     /** @var \Colibri\Database\DbInterface */
     private $db;
+
     /** @var string */
     protected $type = null;
+
     /** @var string */
     private $joinCurrentAlias = 'j1';
 
     /** @var array */
     protected $columns = null;
+
     /** @var string */
     protected $table = null;
+
     /** @var array */
     protected $joins = [];
+
     /** @var array */
     protected $values = null;
 
     /** @var array */
     protected $where = null;
+
     /** @var array */
     protected $orderBy = null;
+
     /** @var array */
     protected $groupBy = null;
+
     /** @var array */
     protected $limit = null;
 
