@@ -3,6 +3,7 @@ language: php
 php:
     - 7.0
     - 7.1
+    - 7.2
     - nightly
 
 script: vendor/bin/phpunit
@@ -14,3 +15,7 @@ before_script:
 cache:
   directories:
     - $HOME/.composer/cache
+
+notifications:
+  slack:
+    secure: E09kmkE2gqz9BYgAJl3n19vL1bZ4nk0NIbphh2OrGr6Zn7XcebN0XKLbzucB/gQ29Zfe0ky7Il/uIh1Msj+9uxv+/wpgB5qQ78C5CnSUlRKwi/1TH0JgCPO1IyvNsDYlZHuw1mvKpuvmXzWpW2wL0l+gEIRrbBfY6rzoJyXPe+o=
