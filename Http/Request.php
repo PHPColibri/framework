@@ -30,6 +30,6 @@ class Request extends Helper
      */
     public static function is($uri)
     {
-        return $_SERVER['PATH_INFO'] == $uri;
+        return $_SERVER['REQUEST_URI'] === $uri;
     }
 }
