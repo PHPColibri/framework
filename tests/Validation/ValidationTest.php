@@ -72,6 +72,7 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     *
      * @throws \PHPUnit\Framework\Exception
      */
     public function testExtendScope(Validation $validation)
@@ -100,6 +101,7 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      */
@@ -133,6 +135,7 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      */
@@ -164,6 +167,7 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      */
@@ -193,6 +197,7 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      */
@@ -222,6 +227,7 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      */
@@ -257,6 +263,7 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      */
@@ -290,6 +297,7 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      */
@@ -322,6 +330,7 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      */
@@ -354,6 +363,7 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      */
@@ -390,6 +400,7 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      */
@@ -440,6 +451,7 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      */
@@ -462,6 +474,7 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      */
@@ -492,6 +505,7 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      */

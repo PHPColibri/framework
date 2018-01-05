@@ -19,6 +19,7 @@ class TestCase extends PhpUnitTestCase
      * @param array         $propertyValues assoc array with property name as key and setting value as value
      *
      * @return void
+     *
      * @throws \ReflectionException
      */
     protected function inject($objectOrClass, array $propertyValues)
