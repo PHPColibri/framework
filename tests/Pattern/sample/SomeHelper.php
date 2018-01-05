@@ -18,7 +18,7 @@ class SomeHelper extends Helper
      */
     public static function tryGetInstanceSelf()
     {
-        /** @noinspection Annotator */
+        /* @noinspection Annotator */
         return new self();
     }
 }

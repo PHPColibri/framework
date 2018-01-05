@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 class DbTest extends TestCase
 {
     /**
-     *
      * @throws \Colibri\Database\DbException
      * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\Exception
@@ -19,7 +18,7 @@ class DbTest extends TestCase
         Config::setBaseDir(__DIR__ . '/sample/config');
 
         $this->expectException('Colibri\Database\DbException');
-        /** @noinspection PhpUndefinedMethodInspection */
+        /* @noinspection PhpUndefinedMethodInspection */
         Db::setConfig(Config::database());
     }
 
