@@ -15,6 +15,9 @@ class ValidationTest extends TestCase
     /**
      * @param array                          $expected
      * @param \Colibri\Validation\Validation $validation
+     *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     private function assertScopeEquals(array $expected, Validation $validation)
     {
@@ -27,6 +30,9 @@ class ValidationTest extends TestCase
 
     /**
      * @covers \Colibri\Validation\Validation::setScope
+     *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testSetScope()
     {
@@ -66,6 +72,7 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     * @throws \PHPUnit\Framework\Exception
      */
     public function testExtendScope(Validation $validation)
     {
@@ -93,6 +100,8 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testRequired(Validation $validation)
     {
@@ -124,6 +133,8 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testMinLength(Validation $validation)
     {
@@ -153,6 +164,8 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testMaxLength(Validation $validation)
     {
@@ -180,6 +193,8 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testRegex(Validation $validation)
     {
@@ -207,6 +222,8 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testIsIntGt0(Validation $validation)
     {
@@ -240,6 +257,8 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testIsJSON(Validation $validation)
     {
@@ -271,6 +290,8 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testIsEmail(Validation $validation)
     {
@@ -301,6 +322,8 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testIsEqual(Validation $validation)
     {
@@ -331,6 +354,8 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testIs(Validation $validation)
     {
@@ -365,6 +390,8 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testIsNot(Validation $validation)
     {
@@ -413,6 +440,8 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testAddError(Validation $validation)
     {
@@ -433,6 +462,8 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testValid(Validation $validation)
     {
@@ -461,6 +492,8 @@ class ValidationTest extends TestCase
      * @param Validation $validation
      *
      * @return \Colibri\Validation\Validation
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testIfNotValid(Validation $validation)
     {
@@ -499,6 +532,8 @@ class ValidationTest extends TestCase
      *
      * @throws \Colibri\Validation\ValidationException
      * @throws \PHPUnit\Framework\AssertionFailedError
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testValidate(Validation $validation)
     {

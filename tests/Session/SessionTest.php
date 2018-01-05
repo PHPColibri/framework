@@ -4,7 +4,7 @@ namespace Colibri\tests\Session;
 use Colibri\Session\Session;
 use Colibri\Session\Storage\StorageInterface;
 use Colibri\tests\TestCase;
-use PHPUnit_Framework_MockObject_Invocation_Object;
+use PHPUnit\Framework\MockObject\Invocation\ObjectInvocation;
 use PHPUnit_Framework_MockObject_MockObject;
 
 /**
@@ -20,9 +20,9 @@ class SessionTest extends TestCase
     private $storageMock;
 
     /**
-     * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit_Framework_MockObject_RuntimeException
+     * @throws \PHPUnit\Framework\MockObject\RuntimeException
+     * @throws \ReflectionException
      */
     protected function setUp()
     {
@@ -50,7 +50,9 @@ class SessionTest extends TestCase
      * @param string $variable
      * @param mixed  $value
      *
-     * @throws \PHPUnit_Framework_MockObject_RuntimeException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \PHPUnit\Framework\MockObject\RuntimeException
      */
     public function testGet($variable, $value)
     {
@@ -61,9 +63,9 @@ class SessionTest extends TestCase
         ;
 
         self::assertEquals($value, Session::get($variable));
-        /** @var PHPUnit_Framework_MockObject_Invocation_Object $invocation */
+        /** @var ObjectInvocation $invocation */
         $invocation = $spy->getInvocations()[0];
-        self::assertEquals($variable, $invocation->parameters[0]);
+        self::assertEquals($variable, $invocation->getParameters()[0]);
     }
 
     /**

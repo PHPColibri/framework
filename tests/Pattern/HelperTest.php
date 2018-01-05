@@ -18,6 +18,7 @@ class HelperTest extends TestCase
      */
     public function testCantNew()
     {
+        /** @noinspection Annotator */
         new SomeHelper();
     }
 

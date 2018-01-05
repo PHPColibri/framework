@@ -15,6 +15,9 @@ class HtmlTest extends TestCase
      *
      * @param string $string
      * @param string $expected
+     *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testE($string, $expected)
     {

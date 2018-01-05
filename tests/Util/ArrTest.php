@@ -56,6 +56,9 @@ class ArrTest extends TestCase
      * @param array $original
      * @param array $overwriteWith
      * @param array $expectedResult
+     *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testOverwrite(array $original, array $overwriteWith, array $expectedResult)
     {
@@ -82,6 +85,9 @@ class ArrTest extends TestCase
      *
      * @param string $key
      * @param mixed  $expectedValue
+     *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testGet($key, $expectedValue)
     {
@@ -167,6 +173,9 @@ class ArrTest extends TestCase
      * @param array $array
      * @param mixed $value
      * @param bool  $expected
+     *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testContains($array, $value, $expected)
     {

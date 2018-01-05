@@ -16,6 +16,7 @@ class SingletonTest extends TestCase
      */
     public function testCantNew()
     {
+        /** @noinspection Annotator */
         new SomeSingleton();
     }
 

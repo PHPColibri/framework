@@ -31,6 +31,10 @@ class CacheTest extends TestCase
      * @param array  $receiveArgs
      * @param mixed  $return
      * @param mixed  $expected
+     *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \ReflectionException
      */
     public function testStorageMethodCalled(string $method, array $args, array $receiveArgs, $return, $expected)
     {

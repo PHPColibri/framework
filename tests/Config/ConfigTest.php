@@ -36,6 +36,8 @@ class ConfigTest extends TestCase
      * @depends testSetBaseDir
      *
      * @throws \InvalidArgumentException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testGetBaseDir()
     {
@@ -99,6 +101,9 @@ class ConfigTest extends TestCase
     /**
      * @covers  \Colibri\Config\Config::__callStatic
      * @depends testSetBaseDir
+     *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function test__callStatic()
     {

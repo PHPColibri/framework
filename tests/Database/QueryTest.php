@@ -45,8 +45,9 @@ class QueryTest extends TestCase
      *
      * @return $this
      *
-     * @throws \UnexpectedValueException
+     * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \UnexpectedValueException
      */
     private function assertQueryIs(string $expected, Query $query)
     {
@@ -69,8 +70,10 @@ class QueryTest extends TestCase
     }
 
     /**
-     * @throws \UnexpectedValueException
+     * @throws \InvalidArgumentException
+     * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \UnexpectedValueException
      */
     public function testInsert()
     {
@@ -92,6 +95,8 @@ class QueryTest extends TestCase
     }
 
     /**
+     * @throws \InvalidArgumentException
+     * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \UnexpectedValueException
      */
@@ -105,6 +110,7 @@ class QueryTest extends TestCase
     }
 
     /**
+     * @throws \Exception
      * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \UnexpectedValueException
@@ -147,6 +153,8 @@ class QueryTest extends TestCase
     }
 
     /**
+     * @throws \InvalidArgumentException
+     * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \UnexpectedValueException
      */
@@ -162,6 +170,8 @@ class QueryTest extends TestCase
     }
 
     /**
+     * @throws \InvalidArgumentException
+     * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \UnexpectedValueException
      */
@@ -180,6 +190,8 @@ class QueryTest extends TestCase
     }
 
     /**
+     * @throws \InvalidArgumentException
+     * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \UnexpectedValueException
      */
@@ -193,6 +205,8 @@ class QueryTest extends TestCase
     }
 
     /**
+     * @throws \InvalidArgumentException
+     * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \UnexpectedValueException
      */
@@ -206,6 +220,8 @@ class QueryTest extends TestCase
     }
 
     /**
+     * @throws \InvalidArgumentException
+     * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \UnexpectedValueException
      */
@@ -233,6 +249,7 @@ class QueryTest extends TestCase
 
     /**
      * @throws \InvalidArgumentException
+     * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \UnexpectedValueException
      */
@@ -251,6 +268,7 @@ class QueryTest extends TestCase
 
     /**
      * @throws \InvalidArgumentException
+     * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \UnexpectedValueException
      */

@@ -22,6 +22,8 @@ class LocalConfigTest extends TestCase
      * @covers \Colibri\Config\LocalConfig::getBaseDir
      *
      * @throws \InvalidArgumentException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
      */
     public function testGetBaseDir()
     {
