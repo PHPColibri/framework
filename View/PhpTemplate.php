@@ -18,7 +18,7 @@ class PhpTemplate
     /**
      * @param string $filename имя файла
      *
-     * @throws \Exception file does not exists
+     * @throws \LogicException file does not exists
      */
     public function __construct($filename = null)
     {
@@ -50,7 +50,7 @@ class PhpTemplate
      *
      * @return $this
      *
-     * @throws \Exception filename not set or file does not exists
+     * @throws \LogicException filename not set or file does not exists
      */
     public function load($filename = null)
     {
@@ -58,10 +58,10 @@ class PhpTemplate
             $filename = $this->filename;
         }
         if ($filename === null) {
-            throw new \Exception('Can`t load template: property \'filename\' not set.');
+            throw new \LogicException('Can`t load template: property \'filename\' not set.');
         }
         if ( ! file_exists($filename)) {
-            throw new \Exception("file '$filename' does not exists.");
+            throw new \LogicException("file '$filename' does not exists.");
         }
         $this->filename = $filename;
 
