@@ -44,42 +44,31 @@ class ModelMultiCollection extends ModelCollection
     }
 
     /**
-     * @return string
-     *
-     * @throws \Colibri\Database\DbException
-     * @throws \UnexpectedValueException
+     * @return Query
      */
-    protected function addToDbQuery(): string
+    protected function addToDbQuery(): Query
     {
         return Query::insert()->into($this->fkTableName)->set([
             $this->FKName[0] => $this->FKValue[0],
             $this->FKName[1] => $this->FKValue[1],
-        ])->build(static::db());
+        ]);
     }
 
     /**
-     * @return string
-     *
-     * @throws \Colibri\Database\DbException
-     * @throws \InvalidArgumentException
-     * @throws \UnexpectedValueException
+     * @return Query
      */
-    protected function delFromDbQuery(): string
+    protected function delFromDbQuery(): Query
     {
         return Query::delete()->from($this->fkTableName)->where([
             $this->FKName[0] => $this->FKValue[0],
             $this->FKName[1] => $this->FKValue[1],
-        ])->build(static::db());
+        ]);
     }
 
     /**
-     * @return string
-     *
-     * @throws \Colibri\Database\DbException
-     * @throws \InvalidArgumentException
-     * @throws \UnexpectedValueException
+     * @return Query
      */
-    protected function selFromDbAllQuery(): string
+    protected function selFromDbAllQuery(): Query
     {
         $query = $this->FKValue[0] !== null
             ? $this->getQuery()
@@ -92,22 +81,17 @@ class ModelMultiCollection extends ModelCollection
                 ->from(static::$tableName)
         ;
 
-        return $query->build(static::db());
+        return $query;
     }
 
     /**
-     * @return string
-     *
-     * @throws \Colibri\Database\DbException
-     * @throws \InvalidArgumentException
-     * @throws \UnexpectedValueException
+     * @return Query
      */
-    protected function delFromDbAllQuery(): string
+    protected function delFromDbAllQuery(): Query
     {
         return Query::delete()
             ->from($this->fkTableName)
-            ->where([$this->FKName[0] => $this->FKValue[0]])
-            ->build(static::db());
+            ->where([$this->FKName[0] => $this->FKValue[0]]);
     }
 
     // with Items

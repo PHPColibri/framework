@@ -17,13 +17,9 @@ class ModelSingleCollection extends ModelCollection
     }
 
     /**
-     * @return string
-     *
-     * @throws \Colibri\Database\DbException
-     * @throws \InvalidArgumentException
-     * @throws \UnexpectedValueException
+     * @return Query
      */
-    protected function selFromDbAllQuery(): string
+    protected function selFromDbAllQuery(): Query
     {
         $query = $this->getQuery()->from(static::$tableName);
         if ($this->FKValue[1] !== null) {
@@ -33,7 +29,7 @@ class ModelSingleCollection extends ModelCollection
             $query->where([$this->FKName[0] => $this->FKValue[0]]);
         }
 
-        return $query->build(static::db());
+        return $query;
     }
 
     // with DataBase

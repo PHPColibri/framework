@@ -94,13 +94,13 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
     }
 
     /**
-     * @return string
+     * @return Query
      *
      * @throws \Colibri\Database\DbException
      * @throws \InvalidArgumentException
      * @throws \UnexpectedValueException
      */
-    abstract protected function selFromDbAllQuery(): string;
+    abstract protected function selFromDbAllQuery(): Query;
 
     /**
      * @param string $propertyName
@@ -236,8 +236,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
 
         // TODO [alek13]: bring it out
         if ($this->pagedQuery) {
-            $this->doQuery('SELECT FOUND_ROWS()');
-            $row                = $this->db()->fetchRow();
+            $row                = static::db()->query('SELECT FOUND_ROWS()')->fetchRow();
             $this->recordsCount = $row[0];
             $this->pagesCount   = ceil($this->recordsCount / $this->recordsPerPage);
         }
@@ -254,14 +253,15 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
     ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * @param string $query
+     * @param Query $query
      *
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
+     * @throws \UnexpectedValueException
      */
-    protected function doQuery($query)
+    protected function doQuery(Query $query)
     {
-        $this->db()->query($query);
+        static::db()->query($query->build(static::db()));
     }
 
     /**
@@ -551,6 +551,8 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      * @param string $keyField
      *
      * @return static|ModelCollection|Model[]|array
+     *
+     * @throws \Colibri\Database\DbException
      */
     public static function &all($fieldName = null, $keyField = null)
     {
