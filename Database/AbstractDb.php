@@ -6,7 +6,7 @@ use Colibri\Cache\Cache;
 /**
  * Abstract class for Db.
  */
-abstract class AbstractDb implements DbInterface
+abstract class AbstractDb implements AbstractDb\DriverInterface
 {
     /** @var string */
     protected $host;

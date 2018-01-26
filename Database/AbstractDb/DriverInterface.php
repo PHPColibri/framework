@@ -1,12 +1,12 @@
 <?php
-namespace Colibri\Database;
+namespace Colibri\Database\AbstractDb;
 
 use Colibri\Database\Exception\SqlException;
 
 /**
  * IDb Интерфейс класса для работы с базами данных.
  */
-interface DbInterface
+interface DriverInterface
 {
     /**
      * Конструктор
@@ -63,7 +63,7 @@ interface DbInterface
      *
      * @param string $query Строка запроса
      *
-     * @return \Colibri\Database\DbInterface
+     * @return \Colibri\Database\AbstractDb\DriverInterface
      *
      * @throws SqlException
      */

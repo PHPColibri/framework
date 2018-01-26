@@ -2,8 +2,8 @@
 namespace Colibri\Database\Concrete;
 
 use Colibri\Database\AbstractDb;
+use Colibri\Database\AbstractDb\DriverInterface;
 use Colibri\Database\DbException;
-use Colibri\Database\DbInterface;
 use Colibri\Database\Exception\SqlException;
 
 /**
@@ -248,13 +248,13 @@ class MySQL extends AbstractDb
      *
      * @param string $query
      *
-     * @return \Colibri\Database\DbInterface
+     * @return \Colibri\Database\AbstractDb\DriverInterface
      *
      * @throws \Colibri\Database\Exception\SqlException
      *
      * @global int   $time
      */
-    public function query($query): DbInterface
+    public function query($query): DriverInterface
     {
         if (self::$monitorQueries) {
             $queryStartTime   = microtime(true);

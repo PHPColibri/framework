@@ -8,7 +8,7 @@ use Colibri\Database\Query\LogicOp;
  */
 class Query
 {
-    /** @var \Colibri\Database\DbInterface */
+    /** @var \Colibri\Database\AbstractDb\DriverInterface */
     private $db;
     /** @var string */
     protected $type = null;
@@ -104,11 +104,11 @@ class Query
     }
 
     /**
-     * @param \Colibri\Database\DbInterface $db
+     * @param \Colibri\Database\AbstractDb\DriverInterface $db
      *
      * @return $this
      */
-    public function forDb(DbInterface $db)
+    public function forDb(AbstractDb\DriverInterface $db)
     {
         $this->db = $db;
 
@@ -324,13 +324,13 @@ class Query
     }
 
     /**
-     * @param \Colibri\Database\DbInterface $db
+     * @param \Colibri\Database\AbstractDb\DriverInterface $db
      *
      * @return string
      *
      * @throws \UnexpectedValueException
      */
-    public function build(DbInterface $db): string
+    public function build(AbstractDb\DriverInterface $db): string
     {
         $this->db = $db;
 
@@ -585,4 +585,9 @@ class Query
 
         return ' set ' . implode(', ', $assignments);
     }
+
+//    public function walk(callable $handler)
+//    {
+//        $this->db->query()
+//    }
 }

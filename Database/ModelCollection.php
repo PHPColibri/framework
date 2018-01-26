@@ -532,7 +532,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
     }
 
     /**
-     * @return \Colibri\Database\DbInterface
+     * @return \Colibri\Database\AbstractDb\DriverInterface
      *
      * @throws \Colibri\Database\DbException
      */
@@ -580,4 +580,9 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
 
         return $this;
     }
+
+//    public function walk(callable $handler)
+//    {
+//        $this->selFromDbAllQuery()->forDb(static::db())->walk($handler);
+//    }
 }

@@ -1,7 +1,7 @@
 <?php
 namespace Colibri\tests\Database;
 
-use Colibri\Database\DbInterface;
+use Colibri\Database\AbstractDb\DriverInterface;
 use Colibri\Database\Query;
 use Colibri\Database\Query\Aggregation as Agg;
 use Colibri\tests\TestCase;
@@ -13,12 +13,12 @@ use Mockery\MockInterface;
  */
 class QueryTest extends TestCase
 {
-    /** @var MockInterface|DbInterface */
+    /** @var MockInterface|DriverInterface */
     private $dbMock;
 
     protected function setUp()
     {
-        $this->dbMock = Mockery::mock(DbInterface::class);
+        $this->dbMock = Mockery::mock(DriverInterface::class);
     }
 
     /**

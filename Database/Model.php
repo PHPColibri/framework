@@ -148,7 +148,7 @@ abstract class Model
     }
 
     /**
-     * @return DbInterface
+     * @return AbstractDb\DriverInterface
      *
      * @throws DbException
      */

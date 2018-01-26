@@ -50,7 +50,7 @@ class Db extends Helper
      *
      * @param string $name connection name defined in config
      *
-     * @return DbInterface
+     * @return AbstractDb\DriverInterface
      *
      * @throws DbException
      */
@@ -69,7 +69,7 @@ class Db extends Helper
      *
      * @param string $name
      *
-     * @return DbInterface Объект базы данных
+     * @return AbstractDb\DriverInterface Объект базы данных
      *
      * @throws DbException
      */
