@@ -7,7 +7,6 @@ use Colibri\tests\Database\QueryTestCase;
 
 class QueryTest extends QueryTestCase
 {
-
     protected function setUp()
     {
         parent::setUp();

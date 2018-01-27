@@ -415,7 +415,6 @@ class Query
         return $this->build($this->db);
     }
 
-
 //    public function walk(callable $handler)
 //    {
 //        $this->db->query()
