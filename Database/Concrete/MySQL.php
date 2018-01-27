@@ -1,7 +1,7 @@
 <?php
 namespace Colibri\Database\Concrete;
 
-use Colibri\Database\AbstractDb;
+use Colibri\Database\AbstractDb\Driver;
 use Colibri\Database\AbstractDb\DriverInterface;
 use Colibri\Database\DbException;
 use Colibri\Database\Exception\SqlException;
@@ -9,7 +9,7 @@ use Colibri\Database\Exception\SqlException;
 /**
  * Класс для работы с MySQL.
  */
-class MySQL extends AbstractDb
+class MySQL extends Driver
 {
     /** @var \mysqli */
     private $connect;

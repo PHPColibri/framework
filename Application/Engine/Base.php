@@ -4,7 +4,7 @@ namespace Colibri\Application\Engine;
 use Colibri\Base\PropertyAccess;
 use Colibri\Cache\Cache;
 use Colibri\Config\Config;
-use Colibri\Database\AbstractDb;
+use Colibri\Database\AbstractDb\Driver;
 use Colibri\Database\Concrete\MySQL;
 use Colibri\Database\Db;
 use Colibri\Session\Session;
@@ -32,7 +32,7 @@ abstract class Base extends PropertyAccess implements EngineInterface
             }
         }
 
-        AbstractDb::$useCacheForMetadata =
+        Driver::$useCacheForMetadata =
             $config['useCache'];
 
         MySQL::$monitorQueries = $config['debug'];

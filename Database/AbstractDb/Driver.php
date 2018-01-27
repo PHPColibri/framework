@@ -1,12 +1,13 @@
 <?php
-namespace Colibri\Database;
+namespace Colibri\Database\AbstractDb;
 
 use Colibri\Cache\Cache;
+use Colibri\Database\Exception\SqlException;
 
 /**
  * Abstract class for Db.
  */
-abstract class AbstractDb implements AbstractDb\DriverInterface
+abstract class Driver implements DriverInterface
 {
     /** @var string */
     protected $host;
@@ -71,7 +72,7 @@ abstract class AbstractDb implements AbstractDb\DriverInterface
      */
     public function queries(array $queries, $rollbackOnFail = false)
     {
-        /* @var Exception\SqlException|\Exception $e */
+        /* @var SqlException|\Exception $e */
         try {
             foreach ($queries as &$query) {
                 $this->query($query . ';');
