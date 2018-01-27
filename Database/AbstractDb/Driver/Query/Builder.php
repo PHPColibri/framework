@@ -26,7 +26,6 @@ abstract class Builder
         $this->db = $db;
     }
 
-
     /**
      * @param \Colibri\Database\Query $query
      *
@@ -292,5 +291,4 @@ abstract class Builder
 
         return ' set ' . implode(', ', $assignments);
     }
-
 }

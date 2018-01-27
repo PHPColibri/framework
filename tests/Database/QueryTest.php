@@ -15,7 +15,8 @@ class QueryTest extends QueryTestCase
         parent::setUp();
         $this->dbMock
             ->shouldReceive('getQueryBuilder')
-            ->andReturn(new class($this->dbMock) extends Builder {});
+            ->andReturn(new class($this->dbMock) extends Builder {
+            });
     }
 
     /**
