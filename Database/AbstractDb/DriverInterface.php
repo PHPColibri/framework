@@ -217,4 +217,9 @@ interface DriverInterface
      * @return string
      */
     public function getFieldType(string $table, string $column): string;
+
+    /**
+     * @return \Colibri\Database\AbstractDb\Driver\Query\Builder
+     */
+    public function getQueryBuilder(): Driver\Query\Builder;
 }

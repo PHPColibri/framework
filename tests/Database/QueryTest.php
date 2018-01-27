@@ -1,24 +1,21 @@
 <?php
 namespace Colibri\tests\Database;
 
-use Colibri\Database\AbstractDb\DriverInterface;
+use Colibri\Database\AbstractDb\Driver\Query\Builder;
 use Colibri\Database\Query;
 use Colibri\Database\Query\Aggregation as Agg;
-use Colibri\tests\TestCase;
-use Mockery;
-use Mockery\MockInterface;
 
 /**
  * Class QueryTest.
  */
-class QueryTest extends TestCase
+class QueryTest extends QueryTestCase
 {
-    /** @var MockInterface|DriverInterface */
-    private $dbMock;
-
     protected function setUp()
     {
-        $this->dbMock = Mockery::mock(DriverInterface::class);
+        parent::setUp();
+        $this->dbMock
+            ->shouldReceive('getQueryBuilder')
+            ->andReturn(new class($this->dbMock) extends Builder {});
     }
 
     /**
@@ -35,26 +32,6 @@ class QueryTest extends TestCase
             ->andReturnValues($values);
         $this->dbMock
             ->shouldReceive('getFieldType');
-
-        return $this;
-    }
-
-    /**
-     * @param string                  $expected
-     * @param \Colibri\Database\Query $query
-     *
-     * @return $this
-     *
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \UnexpectedValueException
-     */
-    private function assertQueryIs(string $expected, Query $query)
-    {
-        static::assertEquals(
-            $expected,
-            $query->build($this->dbMock)
-        );
 
         return $this;
     }
@@ -179,11 +156,11 @@ class QueryTest extends TestCase
     {
         $this
             ->assertQueryIs(
-                'select sql_calc_found_rows t.* from users t order by `registered` asc limit 0, 10',
+                'select t.* from users t order by `registered` asc limit 0, 10',
                 Query::select()->from('users')->orderBy(['registered' => 'asc'])->limit(10)
             )
             ->assertQueryIs(
-                'select sql_calc_found_rows t.* from users t order by `registered` desc limit 2110, 10',
+                'select t.* from users t order by `registered` desc limit 2110, 10',
                 Query::select()->from('users')->orderBy(['registered' => 'desc'])->limit(2110, 10)
             )
         ;

@@ -116,4 +116,18 @@ abstract class Driver implements DriverInterface
             return $this->retrieveColumnsMetadata($tableName);
         });
     }
+
+    /**
+     * @return \Colibri\Database\AbstractDb\Driver\Query\Builder
+     */
+    public function getQueryBuilder(): Driver\Query\Builder
+    {
+        static $builder;
+
+        $class = static::class . '\Query\Builder';
+
+        return $builder === null
+            ? $builder = new $class($this)
+            : $builder;
+    }
 }
