@@ -3,7 +3,7 @@
 use Colibri\Application\Engine as ApplicationEngine;
 use Colibri\Cache\Cache;
 use Colibri\Config\Config;
-use Colibri\Database\Concrete\MySQL;
+use Colibri\Database\AbstractDb\Driver\Connection;
 use Colibri\Http\NotFoundException;
 use Colibri\Log\Log;
 use Colibri\Util\Html;
@@ -26,10 +26,10 @@ try {
             echo 'memory usage: <b>' . memory_get_peak_usage() . '</b>';
             $time = microtime(true) - $time;
             echo '<div style=/*font-size:' . (10 + round($time * 10)) . 'px>Время генерации страницы: <b>' . $time . '</b></div>';
-            echo 'количество запросов: <b>' . MySQL::$queriesCount . '</b><br>';
+            echo 'количество запросов: <b>' . Connection::$queriesCount . '</b><br>';
             echo 'количество запросов к Cache-у: <b>' . Cache::getQueriesCount() . '</b><br>';
             echo '</div>';
-            echo MySQL::$strQueries;
+            echo Connection::$strQueries;
             echo '</pre>';
         }
         if ($mEngine->showAppDevToolsOnDebug) {

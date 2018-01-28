@@ -1,6 +1,7 @@
 <?php
 namespace Colibri\Database\AbstractDb;
 
+use Colibri\Database\AbstractDb\Driver\ConnectionInterface;
 use Colibri\Database\Exception\SqlException;
 
 /**
@@ -20,34 +21,12 @@ interface DriverInterface
     public function __construct($host, $login, $pass, $database, $persistent = false);
 
     /**
-     * Открывает соединение с базой данных.
-     * Opens connection to database.
-     */
-    public function open();
-
-    /**
-     * Проверка открыт ли коннект к базе.
-     * Checks that connection is opened (alive).
-     *
-     * @return bool
-     */
-    public function opened();
-
-    /**
-     * Закрывает соединения.
-     * Closes the connection.
-     *
-     * @return bool TRUE on success
-     */
-    public function close();
-
-    /**
      * Получение переменной соединения.
      * Gets the connection.
      *
-     * @return mixed
+     * @return ConnectionInterface
      */
-    public function getConnect();
+    public function getConnection(): ConnectionInterface;
 
     /**
      * Выборка значения одного поля из указанной строки.

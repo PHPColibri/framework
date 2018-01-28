@@ -11,19 +11,10 @@ use Colibri\Database\Exception\SqlException;
  */
 class MySQL extends Driver
 {
-    /** @var \mysqli */
-    private $connect;
+    /** @var \Colibri\Database\Concrete\MySQL\Connection */
+    protected $connection;
     /** @var \mysqli_result */
-    private $result;
-    /** @var bool */
-    private $persistent = false;
-
-    /** @var bool */
-    public static $monitorQueries = false;
-    /** @var string */
-    public static $strQueries = '';
-    /** @var int */
-    public static $queriesCount = 0;
+    protected $result;
 
     /**
      * Конструктор
@@ -38,93 +29,8 @@ class MySQL extends Driver
      */
     public function __construct($host, $login, $pass, $database, $persistent = false)
     {
-        $this->host       = $host;
-        $this->login      = $login;
-        $this->pass       = $pass;
         $this->database   = $database;
-        $this->persistent = $persistent;
-
-        $this->open();
-    }
-
-    /**
-     * Открывает соединение с базой данных.
-     * Opens connection to database.
-     *
-     * @throws \Colibri\Database\DbException
-     */
-    public function open(/*$encoding = 'utf8'*/)
-    {
-        if (self::$monitorQueries) {
-            self::$strQueries .= "Before @mysqli_connect\n";
-            global $time;
-            $curTime          = microtime(true) - $time;
-            self::$strQueries .= sprintf('%f', $curTime) . "\n";
-        }
-
-        try {
-            $this->connect = new \mysqli($this->persistent ? 'p:' : '' . $this->host, $this->login, $this->pass);
-        } catch (\Exception $exception) {
-            throw new DbException('can\'t connect to database: ' . $exception->getMessage(), $exception->getCode(), $exception);
-        }
-        if ( ! $this->connect) {
-            throw new DbException('can\'t connect to database: ' . $this->connect->connect_error, $this->connect->connect_errno);
-        }
-
-        if ($this->connect->select_db($this->database) === false) {
-            throw new DbException('can\'t connect to database: ' . $this->connect->error, $this->connect->errno);
-        }
-
-        /* @PhpUnhandledExceptionInspection */
-        $this->query("SET CHARACTER SET 'utf8'"/*, $encoding*/);
-    }
-
-    /**
-     * Проверка открыт ли коннект к базе.
-     * Checks that connection is opened (alive).
-     *
-     * @return bool
-     */
-    public function opened()
-    {
-        return $this->connect->ping();
-    }
-
-    /**
-     * Closes the connection.
-     *
-     * @return bool
-     *
-     * @throws \Colibri\Database\DbException
-     */
-    public function close()
-    {
-        if ( ! $this->connect->close()) {
-            throw new DbException('can\'t close database connection: ' . $this->connect->error, $this->connect->errno);
-        }
-
-        return true;
-    }
-
-    /**
-     * If instance somehow was stored in session for example, we need to reopen connection.
-     *
-     * @throws \Colibri\Database\DbException
-     */
-    public function __wakeup()
-    {
-        $this->open();
-    }
-
-    /**
-     * Получение переменной соединения.
-     * Gets the connection.
-     *
-     * @return \mysqli
-     */
-    public function getConnect()
-    {
-        return $this->connect;
+        $this->connection = new MySQL\Connection($host, $login, $pass, $database, $persistent = false);
     }
 
     /**
@@ -146,7 +52,7 @@ class MySQL extends Driver
      */
     public function getAffectedRows()
     {
-        return $this->connect->affected_rows;
+        return $this->connection->getAffectedRows();
     }
 
     /**
@@ -171,7 +77,7 @@ class MySQL extends Driver
      */
     public function lastInsertId()
     {
-        return $this->connect->insert_id;
+        return $this->connection->lastInsertId();
     }
 
     /**
@@ -256,22 +162,7 @@ class MySQL extends Driver
      */
     public function query($query): DriverInterface
     {
-        if (self::$monitorQueries) {
-            $queryStartTime   = microtime(true);
-            self::$strQueries .= $query . "\n";
-        }
-
-        $this->result = $this->dbQuery($query);
-
-        if (self::$monitorQueries) {
-            global $time;
-            $queryEndTime  = microtime(true);
-            $curScriptTime = $queryEndTime - $time;
-            /** @var int $queryStartTime */
-            $queryExecTime    = $queryEndTime - $queryStartTime;
-            self::$strQueries .= '  Script time: ' . round($curScriptTime, 8) . "\n";
-            self::$strQueries .= '  Query  time: ' . round($queryExecTime, 8) . "\n";
-        }
+        $this->result = $this->connection->query($query);
 
         return $this;
     }
@@ -328,32 +219,6 @@ class MySQL extends Driver
         $strQuery = self::getQueryTemplate($template, $arguments);
 
         $this->query($strQuery);
-    }
-
-    /**
-     * Выполняет переданный запрос.
-     * Executes given query.
-     *
-     * @param string $query
-     *
-     * @return bool|\mysqli_result
-     *
-     * @throws \Colibri\Database\Exception\SqlException
-     */
-    private function &dbQuery($query)
-    {
-        if (self::$monitorQueries) {
-            self::$queriesCount++;
-        }
-        $result = $this->connect->query($query);
-        if ($result === false) {
-            throw new SqlException(
-                'SQL-error [' . $this->connect->errno . ']: ' . $this->connect->error . "\nSQL-query: $query",
-                $this->connect->errno
-            );
-        }
-
-        return $result;
     }
 
     /**
@@ -455,7 +320,7 @@ class MySQL extends Driver
                         ?
                         '\'' . $value->format('Y-m-d H:i:s') . '\''
                         :
-                        '\'' . $this->connect->escape_string($value) . '\''
+                        '\'' . $this->connection->escape($value) . '\''
                     );
                 break;
 
@@ -477,7 +342,7 @@ class MySQL extends Driver
                 break;
 
             default:
-                $value = '\'' . $this->connect->escape_string($value) . '\'';
+                $value = '\'' . $this->connection->escape($value) . '\'';
         }
 
         return $value;

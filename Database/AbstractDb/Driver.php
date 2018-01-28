@@ -2,6 +2,7 @@
 namespace Colibri\Database\AbstractDb;
 
 use Colibri\Cache\Cache;
+use Colibri\Database\AbstractDb\Driver\ConnectionInterface;
 use Colibri\Database\Exception\SqlException;
 
 /**
@@ -10,18 +11,27 @@ use Colibri\Database\Exception\SqlException;
 abstract class Driver implements DriverInterface
 {
     /** @var string */
-    protected $host;
-    /** @var string */
-    protected $login;
-    /** @var string */
-    protected $pass;
-    /** @var string */
     protected $database;
+    /** @var \Colibri\Database\Concrete\MySQL\Connection */
+    protected $connection;
+    /** @var mixed */
+    protected $result;
 
     /**
      * @var bool
      */
     public static $useCacheForMetadata = false;
+
+    /**
+     * Получение переменной соединения.
+     * Gets the connection.
+     *
+     * @return \Colibri\Database\AbstractDb\Driver\ConnectionInterface
+     */
+    public function getConnection(): ConnectionInterface
+    {
+        return $this->connection;
+    }
 
     /**
      * @var array
