@@ -1,11 +1,11 @@
 <?php
 namespace Colibri\Database\Concrete\MySQL;
 
-use Colibri\Database\AbstractDb\Driver\Connection as AbstractConnection;
+use Colibri\Database\AbstractDb\Driver;
 use Colibri\Database\DbException;
 use Colibri\Database\Exception\SqlException;
 
-class Connection extends AbstractConnection
+class Connection extends Driver\Connection
 {
     /** @var \mysqli */
     private $connect;
@@ -98,11 +98,11 @@ class Connection extends AbstractConnection
      *
      * @param string $query
      *
-     * @return bool|\mysqli_result
+     * @return bool|Driver\Query\ResultInterface
      *
      * @throws \Colibri\Database\Exception\SqlException
      */
-    protected function sendQuery(string $query)
+    protected function sendQuery(string $query)//: Driver\Query\ResultInterface
     {
         if (self::$monitorQueries) {
             self::$queriesCount++;
@@ -115,7 +115,7 @@ class Connection extends AbstractConnection
             );
         }
 
-        return $result;
+        return $result === true ? $result : new Query\Result($result);
     }
 
     // ------------------------------------------------------------------------------------

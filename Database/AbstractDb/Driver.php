@@ -1,8 +1,6 @@
 <?php
 namespace Colibri\Database\AbstractDb;
 
-use Colibri\Cache\Cache;
-use Colibri\Database\AbstractDb\Driver\ConnectionInterface;
 use Colibri\Database\Exception\SqlException;
 
 /**
@@ -10,17 +8,18 @@ use Colibri\Database\Exception\SqlException;
  */
 abstract class Driver implements DriverInterface
 {
-    /** @var string */
-    protected $database;
-    /** @var \Colibri\Database\Concrete\MySQL\Connection */
+    /** @var \Colibri\Database\AbstractDb\Driver\ConnectionInterface */
     protected $connection;
-    /** @var mixed */
-    protected $result;
 
     /**
-     * @var bool
+     * Конструктор
+     *
+     * @param \Colibri\Database\AbstractDb\Driver\ConnectionInterface $connection
      */
-    public static $useCacheForMetadata = false;
+    public function __construct(Driver\ConnectionInterface $connection)
+    {
+        $this->connection = $connection;
+    }
 
     /**
      * Получение переменной соединения.
@@ -28,48 +27,10 @@ abstract class Driver implements DriverInterface
      *
      * @return \Colibri\Database\AbstractDb\Driver\ConnectionInterface
      */
-    public function getConnection(): ConnectionInterface
+    public function getConnection(): Driver\ConnectionInterface
     {
         return $this->connection;
     }
-
-    /**
-     * @var array
-     */
-    private static $columnsMetadata = [];
-
-    /** @noinspection PhpDocMissingThrowsInspection */
-
-    /**
-     * Кеширует и возвращает информацию о полях таблицы.
-     * Caches and returns table columns info.
-     *
-     * @param string $tableName
-     *
-     * @return array
-     */
-    public function &getColumnsMetadata($tableName)
-    {
-        if ( ! isset(self::$columnsMetadata[$tableName])) {
-            /* @noinspection PhpUnhandledExceptionInspection */
-            self::$columnsMetadata[$tableName] = (static::$useCacheForMetadata
-                ? $this->retrieveColumnsCachedMetadata($tableName)
-                : $this->retrieveColumnsMetadata($tableName)
-            );
-        }
-
-        return self::$columnsMetadata[$tableName];
-    }
-
-    /**
-     * Возвращает информацию о полях таблицы.
-     * Returns table columns info.
-     *
-     * @param string $tableName
-     *
-     * @return array
-     */
-    abstract protected function &retrieveColumnsMetadata($tableName);
 
     /**
      * Выполняет несколько запросов.
@@ -93,40 +54,6 @@ abstract class Driver implements DriverInterface
         }
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection */
-
-    /**
-     * Возвращает тип поля таблицы.
-     * Returns table column type.
-     *
-     * @param string $table
-     * @param string $column
-     *
-     * @return string
-     */
-    public function getFieldType(string $table, string $column): string
-    {
-        /* @noinspection PhpUnhandledExceptionInspection */
-        return $this->getColumnsMetadata($table)['fieldTypes'][$column];
-    }
-
-    /** @noinspection PhpDocMissingThrowsInspection */
-
-    /**
-     * @param $tableName
-     *
-     * @return mixed
-     */
-    private function retrieveColumnsCachedMetadata($tableName)
-    {
-        $key = $this->database . '.' . $tableName . '.meta';
-
-        /* @noinspection PhpUnhandledExceptionInspection */
-        return Cache::remember($key, function () use ($tableName) {
-            return $this->retrieveColumnsMetadata($tableName);
-        });
-    }
-
     /**
      * @return \Colibri\Database\AbstractDb\Driver\Query\Builder
      */
@@ -137,7 +64,15 @@ abstract class Driver implements DriverInterface
         $class = static::class . '\Query\Builder';
 
         return $builder === null
-            ? $builder = new $class($this)
+            ? $builder = new $class($this->connection)
             : $builder;
+    }
+
+    /**
+     * @return \Colibri\Database\AbstractDb\Driver\Connection\Metadata
+     */
+    public function metadata(): Driver\Connection\MetadataInterface
+    {
+        return $this->connection->metadata();
     }
 }

@@ -31,15 +31,28 @@ interface ConnectionInterface
      *
      * @param string $query
      *
-     * @return mixed
+     * @return bool|Query\ResultInterface
      *
      * @throws \Colibri\Database\Exception\SqlException
      */
-    public function query(string $query);
+    public function query(string $query);//: Query\ResultInterface;
 
     /**
      * Запускается при десериализации. Обычно требуется переподключение к базе.
      * Executes on unserialize. Usually reconnect needed.
      */
     public function __wakeup();
+
+    /**
+     * @param string $value
+     *
+     * @return string
+     *
+     */
+    public function escape(string $value): string;
+
+    /**
+     * @return \Colibri\Database\AbstractDb\Driver\Connection\Metadata
+     */
+    public function metadata(): Connection\MetadataInterface;
 }

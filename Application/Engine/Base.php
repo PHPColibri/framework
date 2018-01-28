@@ -31,7 +31,7 @@ abstract class Base extends PropertyAccess implements EngineInterface
             }
         }
 
-        Driver::$useCacheForMetadata =
+        Driver\Connection\Metadata::$useCacheForMetadata =
             $config['useCache'];
 
         Driver\Connection::$monitorQueries = $config['debug'];

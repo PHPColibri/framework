@@ -13,26 +13,33 @@ class QueryTest extends QueryTestCase
     protected function setUp()
     {
         parent::setUp();
+
+        $connection   = $this->connectionMock;
         $this->dbMock
             ->shouldReceive('getQueryBuilder')
-            ->andReturn(new class($this->dbMock) extends Builder {
-            });
+            ->andReturn(new class($connection) extends Builder
+            {
+            })
+        ;
     }
 
     /**
-     * @param array $values
+     * @param array $escapedValues
+     * @param array $types
      *
      * @return $this
      */
-    private function mockPreparedValues(...$values)
+    private function mockEscapes(array $escapedValues, array $types)
     {
-        /** @var \Mockery\Expectation $expectation */
-        $expectation = $this->dbMock
-            ->shouldReceive('prepareValue');
-        $expectation
-            ->andReturnValues($values);
-        $this->dbMock
-            ->shouldReceive('getFieldType');
+        $this->metadataMock
+            ->shouldReceive('getFieldType')
+            ->andReturn(...$types)
+        ;
+
+        $this->connectionMock
+            ->shouldReceive('escape')
+            ->andReturn(...$escapedValues)
+        ;
 
         return $this;
     }
@@ -55,7 +62,7 @@ class QueryTest extends QueryTestCase
      */
     public function testInsert()
     {
-        $this->mockPreparedValues('\'alek13\'', '\'alek13\'', 1);
+        $this->mockEscapes(['alek13', 'alek13'], ['varchar', 'varchar', 'int']);
 
         $insertQuery = Query::insert()->into('users')
             ->set([
@@ -99,9 +106,9 @@ class QueryTest extends QueryTestCase
         $twoMonthsAgoString = '\'' . $twoMonthsAgo->format('Y-m-d H:i:s') . '\'';
 
         $this
-            ->mockPreparedValues(
-                18, 0, $twoMonthsAgoString, '\'banned\'',
-                18, 0, $twoMonthsAgoString, '\'banned\''
+            ->mockEscapes(
+                ['banned', 'banned'],
+                ['int', 'int', 'timestamp', 'varchar', 'int', 'int', 'timestamp', 'varchar']
             )
             ->assertQueryIs(
                 "select t.* from users t where (t.`age` > 18 and t.`gender` = 0 and t.`createdAt` > $twoMonthsAgoString and t.`status` != 'banned')",
@@ -234,7 +241,10 @@ class QueryTest extends QueryTestCase
     public function testUpdate()
     {
         $this
-            ->mockPreparedValues(2, 0, '\'alek13\'', 0)
+            ->mockEscapes(
+                ['alek13'],
+                ['int', 'int', 'varchar', 'int']
+            )
             ->assertQueryIs(
                 'update users t set t.`status` = 2, t.`gender` = 0, t.`email` = \'alek13\' where (t.`gender` = 0)',
                 Query::update('users')
@@ -253,7 +263,7 @@ class QueryTest extends QueryTestCase
     public function testDelete()
     {
         $this
-            ->mockPreparedValues(3)
+            ->mockEscapes([], ['int'])
             ->assertQueryIs(
                 'delete from t using users t where (t.`id` = 3)',
                 Query::delete()

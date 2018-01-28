@@ -124,7 +124,7 @@ abstract class Model
      */
     public function getFieldsNames(): array
     {
-        $fields         = static::db()->getColumnsMetadata(static::getTableName())['fields'];
+        $fields         = static::db()->metadata()->getColumnsMetadata(static::getTableName())['fields'];
         $classVars      = array_keys(get_class_vars(get_class($this)));
         $selectedFields = array_intersect($classVars, $fields);
 
@@ -233,7 +233,7 @@ abstract class Model
                 continue;
             }
 
-            $type            = static::db()->getFieldType(static::getTableName(), $propName);
+            $type            = static::db()->metadata()->getFieldType(static::getTableName(), $propName);
             $this->$propName = $this->cast($type, $propValue);
         }
     }
@@ -336,7 +336,7 @@ abstract class Model
      */
     protected function hasColumn($propName): bool
     {
-        return in_array($propName, static::db()->getColumnsMetadata(static::getTableName())['fields']);
+        return in_array($propName, static::db()->metadata()->getColumnsMetadata(static::getTableName())['fields']);
     }
 
     /**
@@ -558,14 +558,13 @@ abstract class Model
      */
     protected function loadByQuery($query)
     {
-        $this->doQuery($query);
+        $result = $this->doQuery($query);
 
-        if (static::db()->getNumRows() == 0) {
+        if ($result->getNumRows() == 0) {
             return null;
         }
 
-        $result = static::db()->fetchArray();
-        $this->fillProperties($result);
+        $this->fillProperties($result->fetchArray());
 
         return $this;
     }
@@ -610,6 +609,8 @@ abstract class Model
     /**
      * @param Query $query
      *
+     * @return bool|\Colibri\Database\AbstractDb\Driver\Query\ResultInterface
+     *
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      * @throws \UnexpectedValueException
@@ -617,9 +618,11 @@ abstract class Model
     protected function doQuery(Query $query)
     {
         $db = static::db();
-        $db->query($query->build($db));
+        $result = $db->query($query->build($db));
 
         $this->cleanUpQueryVars();
+
+        return $result;
     }
 
     /**

@@ -27,7 +27,7 @@ class ModelMultiCollection extends ModelCollection
     {
         parent::__construct($parentID);
 
-        $metadata                 = static::db()->getColumnsMetadata($this->fkTableName);
+        $metadata                 = static::db()->metadata()->getColumnsMetadata($this->fkTableName);
         $this->fkTableFields      = &$metadata['fields'];
         $this->intermediateFields = array_diff($this->fkTableFields, $this->FKName);
     }

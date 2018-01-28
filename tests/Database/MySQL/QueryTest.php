@@ -12,7 +12,7 @@ class QueryTest extends QueryTestCase
         parent::setUp();
         $this->dbMock
             ->shouldReceive('getQueryBuilder')
-            ->andReturn(new Concrete\MySQL\Query\Builder($this->dbMock));
+            ->andReturn(new Concrete\MySQL\Query\Builder($this->connectionMock));
     }
 
     /**

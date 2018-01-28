@@ -38,7 +38,9 @@ class Db extends Helper
         }
         $default = &$connection['default'];
         if ( ! is_string($default) || empty($connection[$default])) {
-            throw new DbException('parameter `default` must be string and contain contains name of default connection. So given section `' . $default . '` must present in database config');
+            throw new DbException('parameter `default` must be string and contain contains name of default connection. So given section `' .
+                $default .
+                '` must present in database config');
         }
 
         return self::$config = $config;
@@ -79,13 +81,13 @@ class Db extends Helper
 
         switch ($config['type']) {
             case Type::MYSQL:
-                return new Concrete\MySQL(
+                return new Concrete\MySQL(new Concrete\MySQL\Connection(
                     $config['host'],
                     $config['user'],
                     $config['password'],
                     $config['database'],
                     $config['persistent']
-                );
+                ));
             case Type::POSTGRESQL:
             default:
                 throw new DbException("can`t create database: this db type (${config['type']}) not supported");

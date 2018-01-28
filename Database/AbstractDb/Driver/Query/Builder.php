@@ -1,29 +1,92 @@
 <?php
 namespace Colibri\Database\AbstractDb\Driver\Query;
 
-use Colibri\Database\AbstractDb;
+use Colibri\Database\AbstractDb\Driver;
 use Colibri\Database\Query;
 use Colibri\Database\Query\LogicOp;
 
 abstract class Builder
 {
+    const DATETIME_FORMAT = 'Y-m-d H:i:s';
+
     /**
      * @var Query
      */
     protected $query;
     /**
-     * @var \Colibri\Database\AbstractDb\DriverInterface
+     * @var \Colibri\Database\AbstractDb\Driver\ConnectionInterface
      */
-    protected $db;
+    protected $connection;
 
     /**
      * Builder constructor.
      *
-     * @param AbstractDb\DriverInterface $db
+     * @param Driver\ConnectionInterface $connection
      */
-    public function __construct(AbstractDb\DriverInterface $db)
+    public function __construct(Driver\ConnectionInterface $connection)
     {
-        $this->db = $db;
+        $this->connection = $connection;
+    }
+
+    /**
+     * Подготавливает значение для вставки в строку запроса.
+     * Prepares value for insert into query string.
+     *
+     * @param mixed  $value
+     * @param string $type
+     *
+     * @return float|int|string
+     */
+    public function prepareValue(&$value, $type)
+    {
+        if ($value === null) {
+            return $value = 'NULL';
+        }
+
+        if (is_array($value)) {
+            foreach ($value as &$v) {
+                $this->prepareValue($v, $type);
+            }
+
+            return '(' . implode(', ', $value) . ')';
+        }
+
+        switch (strtolower($type)) {
+            case 'timestamp':
+                $value = is_int($value)
+                    ?
+                    '\'' . date(static::DATETIME_FORMAT, $value) . '\''
+                    :
+                    ($value instanceof \DateTime
+                        ?
+                        '\'' . $value->format(static::DATETIME_FORMAT) . '\''
+                        :
+                        '\'' . $this->connection->escape($value) . '\''
+                    );
+                break;
+
+            case 'bit':
+                $value = (int)intval($value);
+                break;
+
+            case 'dec':
+            case 'decimal':
+            case 'tinyint':
+            case 'smallint':
+            case 'bigint':
+            case 'int':
+                $value = (int)intval($value);
+                break;
+            case 'double':
+            case 'float':
+                $value = (float)floatval($value);
+                break;
+
+            default:
+                $value = '\'' . $this->connection->escape($value) . '\'';
+        }
+
+        return $value;
     }
 
     /**
@@ -228,7 +291,7 @@ abstract class Builder
             : $this->query->getJoins()[$alias]['table'];
 
         $sqlName  = $alias !== null ? "$alias.`$name`" : "`$name`";
-        $sqlValue = $this->db->prepareValue($value, $this->db->getFieldType($table, $name));
+        $sqlValue = $this->prepareValue($value, $this->connection->metadata()->getFieldType($table, $name));
 
         return "$sqlName $operator $sqlValue";
     }
@@ -286,7 +349,8 @@ abstract class Builder
         $assignments = [];
         foreach ($this->query->getValues() as $column => $value) {
             $alias         = $this->query->getType() !== Query\Type::INSERT ? $value['alias'] : null;
-            $assignments[] = $this->buildClause($column, $value, '=', $alias);
+            $name          = $this->query->getType() !== Query\Type::INSERT ? $value['column'] : $column;
+            $assignments[] = $this->buildClause($name, $value['value'], '=', $alias);
         }
 
         return ' set ' . implode(', ', $assignments);

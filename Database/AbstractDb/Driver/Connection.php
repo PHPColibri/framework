@@ -12,6 +12,9 @@ abstract class Connection implements ConnectionInterface
     /** @var string */
     protected $database;
 
+    /** @var \Colibri\Database\AbstractDb\Driver\Connection\Metadata */
+    protected $metadata;
+
     /** @var bool */
     public static $monitorQueries = false;
     /** @var string */
@@ -64,13 +67,13 @@ abstract class Connection implements ConnectionInterface
      *
      * @param string $query
      *
-     * @return mixed
+     * @return bool|\Colibri\Database\AbstractDb\Driver\Query\ResultInterface
      *
      * @throws \Colibri\Database\Exception\SqlException
      *
      * @global int   $time
      */
-    public function query(string $query)
+    public function query(string $query)//: Query\ResultInterface
     {
         if (self::$monitorQueries) {
             $queryStartTime   = microtime(true);
@@ -95,9 +98,22 @@ abstract class Connection implements ConnectionInterface
     /**
      * @param string $query
      *
-     * @return mixed
+     * @return bool|Query\ResultInterface
      *
      * @throws \Colibri\Database\Exception\SqlException
      */
-    abstract protected function sendQuery(string $query);
+    abstract protected function sendQuery(string $query);//: Query\ResultInterface;
+
+    /**
+     * @return \Colibri\Database\AbstractDb\Driver\Connection\Metadata
+     */
+    public function metadata(): Connection\MetadataInterface
+    {
+        /** @var Connection\Metadata $class */
+        $class = static::class . '\Metadata';
+
+        return $this->metadata === null
+            ? $this->metadata = new $class($this, $this->database . '@' . $this->host)
+            : $this->metadata;
+    }
 }

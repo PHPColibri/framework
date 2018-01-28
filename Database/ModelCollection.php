@@ -229,8 +229,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      */
     protected function selFromDbAll()
     {
-        $this->doQuery($this->selFromDbAllQuery());
-        $selectedRows = $this->db()->fetchAllRows();
+        $selectedRows = $this->doQuery($this->selFromDbAllQuery())->fetchAllRows();
 
         $this->query = null;
 
@@ -255,13 +254,15 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
     /**
      * @param Query $query
      *
+     * @return bool|\Colibri\Database\AbstractDb\Driver\Query\ResultInterface
+     *
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      * @throws \UnexpectedValueException
      */
     protected function doQuery(Query $query)
     {
-        static::db()->query($query->build(static::db()));
+        return static::db()->query($query->build(static::db()));
     }
 
     /**
@@ -270,7 +271,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
     protected function getFieldsAndTypes()
     {
         if (empty($this->itemFields)) {
-            $metadata             = $this->db()->getColumnsMetadata(static::$tableName);
+            $metadata             = $this->db()->metadata()->getColumnsMetadata(static::$tableName);
             $this->itemFields     = &$metadata['fields'];
             $this->itemFieldTypes = &$metadata['fieldTypes'];
         }
