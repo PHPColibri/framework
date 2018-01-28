@@ -119,6 +119,7 @@ class Connection extends AbstractConnection
     }
 
     // ------------------------------------------------------------------------------------
+
     /**
      * Идентификатор последней добавленной записи.
      * Returns the auto generated ID of last insert query.
