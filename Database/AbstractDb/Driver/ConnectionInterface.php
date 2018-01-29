@@ -35,7 +35,7 @@ interface ConnectionInterface
      *
      * @throws \Colibri\Database\Exception\SqlException
      */
-    public function query(string $query);//: Query\ResultInterface;
+    public function query(string $query);
 
     /**
      * Запускается при десериализации. Обычно требуется переподключение к базе.

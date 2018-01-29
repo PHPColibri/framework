@@ -73,7 +73,7 @@ abstract class Connection implements ConnectionInterface
      *
      * @global int   $time
      */
-    public function query(string $query)//: Query\ResultInterface
+    public function query(string $query)
     {
         if (self::$monitorQueries) {
             $queryStartTime   = microtime(true);
@@ -102,7 +102,7 @@ abstract class Connection implements ConnectionInterface
      *
      * @throws \Colibri\Database\Exception\SqlException
      */
-    abstract protected function sendQuery(string $query);//: Query\ResultInterface;
+    abstract protected function sendQuery(string $query);
 
     /**
      * @return \Colibri\Database\AbstractDb\Driver\Connection\Metadata

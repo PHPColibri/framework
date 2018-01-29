@@ -43,7 +43,7 @@ abstract class Driver implements DriverInterface
      * @throws \Colibri\Database\Exception\SqlException
      * @global int   $time
      */
-    public function query($query)//: Driver\Query\ResultInterface
+    public function query($query)
     {
         return $this->connection->query($query);
     }

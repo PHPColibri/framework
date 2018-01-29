@@ -102,7 +102,7 @@ class Connection extends Driver\Connection
      *
      * @throws \Colibri\Database\Exception\SqlException
      */
-    protected function sendQuery(string $query)//: Driver\Query\ResultInterface
+    protected function sendQuery(string $query)
     {
         if (self::$monitorQueries) {
             self::$queriesCount++;

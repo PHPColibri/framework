@@ -34,7 +34,7 @@ interface DriverInterface
      *
      * @throws SqlException
      */
-    public function query($query);//: Driver\Query\ResultInterface;
+    public function query($query);
 
     /**
      * Идентификатор последней добавленной записи.
