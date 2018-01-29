@@ -35,22 +35,6 @@ class MySQL extends Driver
     }
 
     /**
-     * Выполняет запрос к базе данных.
-     * Executes given query.
-     *
-     * @param string $query
-     *
-     * @return bool|\Colibri\Database\AbstractDb\Driver\Query\ResultInterface
-     *
-     * @throws \Colibri\Database\Exception\SqlException
-     * @global int   $time
-     */
-    public function query($query)//: Driver\Query\ResultInterface
-    {
-        return $this->connection->query($query);
-    }
-
-    /**
      * Соьирает шаблон запроса, подставляя значения из $arguments.
      * Compile query template with specified $arguments array.
      *

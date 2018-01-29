@@ -33,6 +33,22 @@ abstract class Driver implements DriverInterface
     }
 
     /**
+     * Выполняет запрос к базе данных.
+     * Executes given query.
+     *
+     * @param string $query
+     *
+     * @return bool|\Colibri\Database\AbstractDb\Driver\Query\ResultInterface
+     *
+     * @throws \Colibri\Database\Exception\SqlException
+     * @global int   $time
+     */
+    public function query($query)//: Driver\Query\ResultInterface
+    {
+        return $this->connection->query($query);
+    }
+
+    /**
      * Выполняет несколько запросов.
      * Executes a number of $queries.
      *
