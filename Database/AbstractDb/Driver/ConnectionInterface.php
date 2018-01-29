@@ -47,7 +47,6 @@ interface ConnectionInterface
      * @param string $value
      *
      * @return string
-     *
      */
     public function escape(string $value): string;
 

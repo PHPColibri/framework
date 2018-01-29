@@ -9,7 +9,7 @@ use Colibri\Database\Exception\SqlException;
  */
 class MySQL extends Driver
 {
-    /** @var \Colibri\Database\Concrete\MySQL\Connection $connection*/
+    /** @var \Colibri\Database\Concrete\MySQL\Connection $connection */
     protected $connection;
 
     /**

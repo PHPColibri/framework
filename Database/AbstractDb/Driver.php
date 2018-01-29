@@ -41,6 +41,7 @@ abstract class Driver implements DriverInterface
      * @return bool|\Colibri\Database\AbstractDb\Driver\Query\ResultInterface
      *
      * @throws \Colibri\Database\Exception\SqlException
+     *
      * @global int   $time
      */
     public function query($query)

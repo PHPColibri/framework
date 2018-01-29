@@ -17,8 +17,7 @@ class QueryTest extends QueryTestCase
         $connection   = $this->connectionMock;
         $this->dbMock
             ->shouldReceive('getQueryBuilder')
-            ->andReturn(new class($connection) extends Builder
-            {
+            ->andReturn(new class($connection) extends Builder {
             })
         ;
     }

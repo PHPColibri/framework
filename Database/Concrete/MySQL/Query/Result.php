@@ -1,7 +1,7 @@
 <?php
 namespace Colibri\Database\Concrete\MySQL\Query;
 
-use \Colibri\Database\AbstractDb\Driver\Query;
+use Colibri\Database\AbstractDb\Driver\Query;
 
 class Result extends Query\Result
 {

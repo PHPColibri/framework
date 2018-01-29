@@ -5,7 +5,6 @@ use Colibri\Database\AbstractDb\Driver\Connection\Metadata as AbstractMetadata;
 
 class Metadata extends AbstractMetadata
 {
-
     /** @noinspection PhpDocMissingThrowsInspection */
 
     /**
