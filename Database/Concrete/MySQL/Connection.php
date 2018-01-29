@@ -8,7 +8,7 @@ use Colibri\Database\Exception\SqlException;
 class Connection extends Driver\Connection
 {
     /** @var \mysqli */
-    private $connect;
+    private $link;
     /** @var bool */
     private $persistent = false;
 
@@ -41,7 +41,7 @@ class Connection extends Driver\Connection
      */
     public function opened()
     {
-        return $this->connect->ping();
+        return $this->link->ping();
     }
 
     /**
@@ -53,8 +53,8 @@ class Connection extends Driver\Connection
      */
     public function close()
     {
-        if ( ! $this->connect->close()) {
-            throw new DbException('can\'t close database connection: ' . $this->connect->error, $this->connect->errno);
+        if ( ! $this->link->close()) {
+            throw new DbException('can\'t close database connection: ' . $this->link->error, $this->link->errno);
         }
 
         return true;
@@ -76,16 +76,16 @@ class Connection extends Driver\Connection
     protected function connect()
     {
         try {
-            $this->connect = new \mysqli($this->persistent ? 'p:' : '' . $this->host, $this->login, $this->pass);
+            $this->link = new \mysqli($this->persistent ? 'p:' : '' . $this->host, $this->login, $this->pass);
         } catch (\Exception $exception) {
             throw new DbException('can\'t connect to database: ' . $exception->getMessage(), $exception->getCode(), $exception);
         }
-        if ( ! $this->connect) {
-            throw new DbException('can\'t connect to database: ' . $this->connect->connect_error, $this->connect->connect_errno);
+        if ( ! $this->link) {
+            throw new DbException('can\'t connect to database: ' . $this->link->connect_error, $this->link->connect_errno);
         }
 
-        if ($this->connect->select_db($this->database) === false) {
-            throw new DbException('can\'t connect to database: ' . $this->connect->error, $this->connect->errno);
+        if ($this->link->select_db($this->database) === false) {
+            throw new DbException('can\'t connect to database: ' . $this->link->error, $this->link->errno);
         }
 
         /* @PhpUnhandledExceptionInspection */
@@ -107,11 +107,11 @@ class Connection extends Driver\Connection
         if (self::$monitorQueries) {
             self::$queriesCount++;
         }
-        $result = $this->connect->query($query);
+        $result = $this->link->query($query);
         if ($result === false) {
             throw new SqlException(
-                'SQL-error [' . $this->connect->errno . ']: ' . $this->connect->error . "\nSQL-query: $query",
-                $this->connect->errno
+                'SQL-error [' . $this->link->errno . ']: ' . $this->link->error . "\nSQL-query: $query",
+                $this->link->errno
             );
         }
 
@@ -128,7 +128,7 @@ class Connection extends Driver\Connection
      */
     public function lastInsertId()
     {
-        return $this->connect->insert_id;
+        return $this->link->insert_id;
     }
 
     /**
@@ -139,7 +139,7 @@ class Connection extends Driver\Connection
      */
     public function getAffectedRows()
     {
-        return $this->connect->affected_rows;
+        return $this->link->affected_rows;
     }
 
     /**
@@ -149,6 +149,6 @@ class Connection extends Driver\Connection
      */
     public function escape(string $value): string
     {
-        return $this->connect->escape_string($value);
+        return $this->link->escape_string($value);
     }
 }
