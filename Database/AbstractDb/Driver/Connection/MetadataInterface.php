@@ -3,7 +3,6 @@ namespace Colibri\Database\AbstractDb\Driver\Connection;
 
 interface MetadataInterface
 {
-
     /**
      * Возвращает тип поля таблицы.
      * Returns table column type.
