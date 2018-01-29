@@ -2,6 +2,7 @@
 namespace Colibri\Database\AbstractDb;
 
 use Colibri\Database\Exception\SqlException;
+use Colibri\Database\Query;
 
 /**
  * Abstract class for Db.
@@ -36,17 +37,16 @@ abstract class Driver implements DriverInterface
      * Выполняет запрос к базе данных.
      * Executes given query.
      *
-     * @param string $query
+     * @param Query $query
      *
      * @return bool|\Colibri\Database\AbstractDb\Driver\Query\ResultInterface
      *
      * @throws \Colibri\Database\Exception\SqlException
-     *
-     * @global int   $time
+     * @throws \UnexpectedValueException
      */
-    public function query($query)
+    public function query(Query $query)
     {
-        return $this->connection->query($query);
+        return $this->connection->query($query->build($this));
     }
 
     /**

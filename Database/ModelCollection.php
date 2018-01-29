@@ -262,7 +262,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      */
     protected function doQuery(Query $query)
     {
-        return static::db()->query($query->build(static::db()));
+        return static::db()->query($query);
     }
 
     /**

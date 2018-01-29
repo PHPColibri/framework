@@ -3,6 +3,7 @@ namespace Colibri\Database\AbstractDb;
 
 use Colibri\Database\AbstractDb\Driver\ConnectionInterface;
 use Colibri\Database\Exception\SqlException;
+use Colibri\Database\Query;
 
 /**
  * IDb Интерфейс класса для работы с базами данных.
@@ -28,13 +29,14 @@ interface DriverInterface
      * Выполняет запрос к базе данных.
      * Executes given query.
      *
-     * @param string $query Строка запроса
+     * @param Query $query Строка запроса
      *
      * @return bool|\Colibri\Database\AbstractDb\Driver\Query\ResultInterface
      *
      * @throws SqlException
+     * @throws \UnexpectedValueException
      */
-    public function query($query);
+    public function query(Query $query);
 
     /**
      * Идентификатор последней добавленной записи.

@@ -617,8 +617,7 @@ abstract class Model
      */
     protected function doQuery(Query $query)
     {
-        $db     = static::db();
-        $result = $db->query($query->build($db));
+        $result = static::db()->query($query);
 
         $this->cleanUpQueryVars();
 
