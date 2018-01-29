@@ -235,7 +235,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
 
         // TODO [alek13]: bring it out
         if ($this->pagedQuery) {
-            $row                = static::db()->query('SELECT FOUND_ROWS()')->fetch();
+            $row                = static::db()->getConnection()->query('SELECT FOUND_ROWS()')->fetch();
             $this->recordsCount = reset($row);
             $this->pagesCount   = ceil($this->recordsCount / $this->recordsPerPage);
         }

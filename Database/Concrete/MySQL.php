@@ -85,7 +85,7 @@ class MySQL extends Driver
     {
         $strQuery = self::getQueryTemplate($template, $arguments);
 
-        $this->query($strQuery);
+        $this->connection->query($strQuery);
     }
 
     /**
@@ -96,7 +96,7 @@ class MySQL extends Driver
      */
     public function transactionStart()
     {
-        $this->query('START TRANSACTION;');
+        $this->connection->query('START TRANSACTION;');
     }
 
     /**
@@ -107,7 +107,7 @@ class MySQL extends Driver
      */
     public function transactionRollback()
     {
-        $this->query('ROLLBACK;');
+        $this->connection->query('ROLLBACK;');
     }
 
     /**
@@ -118,7 +118,7 @@ class MySQL extends Driver
      */
     public function transactionCommit()
     {
-        $this->query('COMMIT;');
+        $this->connection->query('COMMIT;');
     }
 
     /**
@@ -134,7 +134,7 @@ class MySQL extends Driver
      */
     public function getTableFKs($tableName)
     {
-        return $this
+        return $this->connection
             ->query('SELECT * FROM `KEY_COLUMN_USAGE` WHERE `TABLE_NAME` = \'' . $tableName . '\' AND `REFERENCED_COLUMN_NAME` IS NOT NULL')
             ->fetchAll();
     }

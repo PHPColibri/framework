@@ -62,7 +62,7 @@ abstract class Driver implements DriverInterface
         /* @var SqlException|\Exception $e */
         try {
             foreach ($queries as &$query) {
-                $this->query($query . ';');
+                $this->connection->query($query . ';');
             }
         } catch (\Exception $e) {
             $rollbackOnFail && $this->transactionRollback();
