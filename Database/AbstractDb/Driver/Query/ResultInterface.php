@@ -12,14 +12,6 @@ interface ResultInterface
     public function getNumRows();
 
     /**
-     * Выборка значения одного поля из указанной строки.
-     *
-     * @param int $row   Строка таблицы
-     * @param int $field Столбец таблицы
-     */
-    public function getResult($row = 0, $field = 0);
-
-    /**
      * Достаёт все строки из результата запроса в массив указанного вида(асоциативный,нумеровынный,оба).
      * Fetch all rows from query result as specified(assoc,num,both) array.
      *

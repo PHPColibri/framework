@@ -25,20 +25,6 @@ class Result extends Query\Result
     }
 
     /**
-     * @param int $row
-     * @param int $field
-     *
-     * @return object
-     */
-    public function getResult($row = 0, $field = 0)
-    {
-        $this->result->data_seek($row);
-        $this->result->field_seek($field);
-
-        return $this->result->fetch_field();
-    }
-
-    /**
      * Достаёт очередную стоку из результата запроса в виде массива указанниго типа.
      * Fetch row from query result as an associative array, a numeric array, or both.
      *
