@@ -19,7 +19,7 @@ interface ResultInterface
      *
      * @return array
      */
-    public function fetchAllRows($param = MYSQLI_ASSOC);
+    public function fetchAll($param = MYSQLI_ASSOC);
 
     /**
      * Достаёт очередную стоку из результата запроса в виде массива указанниго типа.
@@ -30,21 +30,5 @@ interface ResultInterface
      *
      * @return array
      */
-    public function fetchArray($param = MYSQLI_ASSOC);
-
-    /**
-     * Достаёт очередную стоку из результата запроса в виде нумерованного массива.
-     * Fetch row from query result as an enumerated array.
-     *
-     * @return array
-     */
-    public function fetchRow();
-
-    /**
-     * Достаёт очередную стоку из результата запроса в виде асоциативного массива (ключи - названия колонок).
-     * Fetch row from query result as an associative array.
-     *
-     * @return array
-     */
-    public function fetchAssoc();
+    public function fetch($param = MYSQLI_ASSOC);
 }

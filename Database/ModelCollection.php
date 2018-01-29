@@ -229,14 +229,14 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      */
     protected function selFromDbAll()
     {
-        $selectedRows = $this->doQuery($this->selFromDbAllQuery())->fetchAllRows();
+        $selectedRows = $this->doQuery($this->selFromDbAllQuery())->fetchAll();
 
         $this->query = null;
 
         // TODO [alek13]: bring it out
         if ($this->pagedQuery) {
-            $row                = static::db()->query('SELECT FOUND_ROWS()')->fetchRow();
-            $this->recordsCount = $row[0];
+            $row                = static::db()->query('SELECT FOUND_ROWS()')->fetch();
+            $this->recordsCount = reset($row);
             $this->pagesCount   = ceil($this->recordsCount / $this->recordsPerPage);
         }
 

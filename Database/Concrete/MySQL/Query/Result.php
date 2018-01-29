@@ -33,43 +33,8 @@ class Result extends Query\Result
      *
      * @return array
      */
-    public function fetchArray($param = MYSQLI_ASSOC)
+    public function fetch($param = MYSQLI_ASSOC)
     {
         return $this->result->fetch_array($param);
-    }
-
-    /**
-     * Достаёт очередную стоку из результата запроса в виде нумерованного массива.
-     * Fetch row from query result as an enumerated array.
-     *
-     * @return array
-     */
-    public function fetchRow()
-    {
-        return $this->result->fetch_row();
-    }
-
-    /**
-     * Достаёт очередную стоку из результата запроса в виде асоциативного массива (ключи - названия колонок).
-     * Fetch row from query result as an associative array.
-     *
-     * @return array
-     */
-    public function fetchAssoc()
-    {
-        return $this->result->fetch_assoc();
-    }
-
-    /**
-     * Достаёт последнюю строку из результата запроса в виде нумерованного массива.
-     * Fetch last rows from query result as an enumerated array.
-     *
-     * @return array
-     */
-    public function fetchLastRow()
-    {
-        $this->result->data_seek($this->getNumRows() - 1);
-
-        return $this->result->fetch_row();
     }
 }

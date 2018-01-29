@@ -564,7 +564,7 @@ abstract class Model
             return null;
         }
 
-        $this->fillProperties($result->fetchArray());
+        $this->fillProperties($result->fetch());
 
         return $this;
     }

@@ -15,10 +15,10 @@ abstract class Result implements ResultInterface
      *
      * @return array
      */
-    public function &fetchAllRows($param = MYSQLI_ASSOC)
+    public function &fetchAll($param = MYSQLI_ASSOC)
     {
         $return = [];
-        while ($row = $this->fetchArray($param)) {
+        while ($row = $this->fetch($param)) {
             $return[] = $row;
         }
 

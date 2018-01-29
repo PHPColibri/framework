@@ -20,7 +20,7 @@ class Metadata extends AbstractMetadata
     {
         /* @noinspection PhpUnhandledExceptionInspection */
         $result = $this->connection->query('SHOW COLUMNS FROM ' . $tableName);
-        $result = $result->fetchAllRows();
+        $result = $result->fetchAll();
 
         $fields       = [];
         $fieldTypes   = [];
