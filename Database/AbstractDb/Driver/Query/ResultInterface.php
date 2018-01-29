@@ -15,11 +15,11 @@ interface ResultInterface
      * Достаёт все строки из результата запроса в массив указанного вида(асоциативный,нумеровынный,оба).
      * Fetch all rows from query result as specified(assoc,num,both) array.
      *
-     * @param int $param
+     * @param int $method
      *
      * @return array
      */
-    public function fetchAll($param = MYSQLI_ASSOC);
+    public function fetchAll($method = MYSQLI_ASSOC);
 
     /**
      * Достаёт очередную стоку из результата запроса в виде массива указанниго типа.
@@ -31,4 +31,15 @@ interface ResultInterface
      * @return array
      */
     public function fetch($param = MYSQLI_ASSOC);
+
+    /**
+     * Возвращает итерируемый `Generator` для дальнейшего простого использования в `foreach`.
+     * Returns iterable `Generator` for further easy use in `foreach`.
+     *
+     * @param int $fetchMethod Fetch type. Модификатор тива возвращаемого значения.
+     *                         Возможные параметры: MYSQLI_NUM | MYSQLI_ASSOC | MYSQLI_BOTH
+     *
+     * @return \Generator
+     */
+    public function cursor($fetchMethod = MYSQLI_ASSOC): \Generator;
 }
