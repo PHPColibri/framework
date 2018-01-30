@@ -11,7 +11,7 @@ use Colibri\Database;
  * Класс основан на DynamicCollection, по сему свои элементы подгружает
  * только тогда, когда идёт первое обращение к элементу коллекции.
  *
- * @property mixed  $parentID
+ * @property mixed $parentID
  */
 abstract class ModelCollection extends DynamicCollection implements DynamicCollectionInterface
 {
@@ -582,8 +582,20 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
         return $this;
     }
 
-//    public function walk(callable $handler)
-//    {
-//        $this->selFromDbAllQuery()->forDb(static::db())->walk($handler);
-//    }
+    /**
+     * @param callable $handler
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \UnexpectedValueException
+     */
+    public function walk(callable $handler)
+    {
+        $cursor = static::db()->query($this->selFromDbAllQuery())->cursor();
+        foreach ($cursor as $row) {
+            if ($handler($this->instantiateItem($row)) === false) {
+                break;
+            }
+        }
+    }
 }
