@@ -292,4 +292,14 @@ class Str extends Helper
     {
         return strpbrk($str, '0123456789') !== false;
     }
+
+    /**
+     * Cuts specified $cut substrings from a given $str
+     * @param string $str
+     * @param string $cut
+     */
+    public static function cut(string $str, string $cut)
+    {
+        return str_replace($cut, '', $str);
+    }
 }
