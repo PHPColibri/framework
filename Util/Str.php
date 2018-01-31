@@ -294,11 +294,14 @@ class Str extends Helper
     }
 
     /**
-     * Cuts specified $cut substrings from a given $str
+     * Cuts specified $cut substrings from a given $str.
+     *
      * @param string $str
      * @param string $cut
+     *
+     * @return string
      */
-    public static function cut(string $str, string $cut)
+    public static function cut(string $str, string $cut): string
     {
         return str_replace($cut, '', $str);
     }
