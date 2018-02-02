@@ -49,7 +49,7 @@ abstract class RoutineViewsController extends ViewsController
      * @throws \RuntimeException
      * @throws \UnexpectedValueException
      */
-    public function defaultView()
+    public function index()
     {
         /** @var \Colibri\Database\ModelCollection $items */
         $items = new $this->listClass();
