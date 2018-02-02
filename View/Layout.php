@@ -37,7 +37,6 @@ class Layout extends Helper
     /** @var array */
     protected static $userVars = [];
 
-
     /**
      * Cleans up all layout variables & resets filename if specified.
      *
