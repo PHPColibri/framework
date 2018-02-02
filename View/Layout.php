@@ -34,6 +34,10 @@ class Layout extends Helper
     /** @var array */
     protected static $jsMgr = [];
 
+    /** @var array */
+    protected static $userVars = [];
+
+
     /**
      * Cleans up all layout variables & resets filename if specified.
      *
@@ -63,6 +67,15 @@ class Layout extends Helper
     public static function filename($value = null)
     {
         return $value !== null ? static::$filename = $value : static::$filename;
+    }
+
+    /**
+     * @param string $name
+     * @param string $value
+     */
+    public static function set(string $name, string $value)
+    {
+        static::$userVars[$name] = $value;
     }
 
     /**
@@ -259,7 +272,7 @@ class Layout extends Helper
         $layoutTplVars['javascript'] .=
             static::concatWrapped(static::$jsText, "<script type=\"text/javascript\">%s</script>\n");
 
-        return $layoutTplVars;
+        return $layoutTplVars + static::$userVars;
     }
 
     /**
