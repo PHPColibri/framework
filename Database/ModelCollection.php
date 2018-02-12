@@ -147,7 +147,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      */
     final protected function shiftLeftFromPos($position)
     {
-        $cnt = count($this->items);
+        $cnt = parent::count();
         if ($position < 1 || $position >= $cnt) {
             throw new \OutOfBoundsException('position to shift from must be in range 1..Length-1');
         }
@@ -472,7 +472,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      */
     public function indexOf($itemID)
     {
-        $cnt = count($this);
+        $cnt = parent::count();
         for ($i = 0; $i < $cnt; $i++) {
             if ($this->items[$i]->id == $itemID) {
                 return $i;
@@ -503,7 +503,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      */
     public function &getItemByID($id)
     {
-        if ( ! $count = count($this->items)) {
+        if ( ! $count = parent::count()) {
             return false;
         }
         /** @var \Colibri\Database\Model $itemClass */
