@@ -173,7 +173,7 @@ class Query
     public function count(string $column = '*', string $as = null)
     {
         $this->columns = [
-            '' => [Query\Aggregation::count($column, $as)]
+            '' => [Query\Aggregation::count($column, $as)],
         ];
 
         return $this;
