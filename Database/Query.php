@@ -165,6 +165,21 @@ class Query
     ///////////////////////////////////////////////////////////////////////////
 
     /**
+     * @param string      $column
+     * @param string|null $as
+     *
+     * @return $this
+     */
+    public function count(string $column = '*', string $as = null)
+    {
+        $this->columns = [
+            '' => [Query\Aggregation::count($column, $as)]
+        ];
+
+        return $this;
+    }
+
+    /**
      * @param string $tableName
      *
      * @return $this

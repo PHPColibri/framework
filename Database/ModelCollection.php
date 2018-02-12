@@ -277,6 +277,24 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
         }
     }
 
+    /**
+     * @return int
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \UnexpectedValueException
+     */
+    public function count()
+    {
+        return $this->items !== null
+            ? parent::count()
+            : (int)current(
+                static::db()->query(
+                    (clone $this->selFromDbAllQuery())->count()
+                )->fetch()
+            );
+    }
+
     ///////////////////////////////////////////////////////////////////////////
 
     /**
