@@ -53,8 +53,7 @@ abstract class RoutineViewsController extends ViewsController
     {
         /** @var \Colibri\Database\ModelCollection $items */
         $items = new $this->listClass();
-        $this->applyListFilters($items);
-        $items->load();
+        $this->applyListFilters($items)->load();
 
         $this->template->vars[$this->listTplVar] = $items;
         if ($this->pagedList) {
@@ -72,12 +71,14 @@ abstract class RoutineViewsController extends ViewsController
      * Apply additional criteria to list query.
      *
      * @param \Colibri\Database\ModelCollection $items
+     *
+     * @return \Colibri\Database\Model[]|\Colibri\Database\ModelCollection
      */
     protected function applyListFilters(ModelCollection $items)
     {
-        if ($this->pagedList) {
-            $items->page(isset($_GET['page']) ? $_GET['page'] : 0, $this->recordsPerPage);
-        }
+        return $this->pagedList
+            ? $items->page(isset($_GET['page']) ? $_GET['page'] : 0, $this->recordsPerPage)
+            : $items;
     }
 
     /**
