@@ -53,7 +53,8 @@ abstract class RoutineViewsController extends ViewsController
     {
         /** @var \Colibri\Database\ModelCollection $items */
         $items = new $this->listClass();
-        $this->applyListFilters($items)->load();
+        $this->applyListFilters($items);
+        $items->load();
 
         $this->template->vars[$this->listTplVar] = $items;
         if ($this->pagedList) {
