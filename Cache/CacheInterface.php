@@ -46,4 +46,10 @@ interface CacheInterface
      * @return mixed returns cached data
      */
     public static function remember(string $key, \Closure $getValueCallback, int $expire = null);
+
+    /**
+     * Аннулирует все записи в кеше.
+     * Clears all cached values.
+     */
+    public static function flush();
 }

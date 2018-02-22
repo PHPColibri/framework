@@ -147,4 +147,13 @@ class Cache extends Helper implements CacheInterface
 
         return new static::$driver[$driver]($config);
     }
+
+    /**
+     * Аннулирует все записи в кеше.
+     * Clears all cached values.
+     */
+    public static function flush()
+    {
+        static::storage()->flash();
+    }
 }

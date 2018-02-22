@@ -211,4 +211,13 @@ class Memcache extends AbstractStorage implements StorageInterface
             throw new InvalidArgumentException('Key can`t contains any whitespace chars: spaces, tabs, new-line...');
         }
     }
+
+    /**
+     * Аннулирует все записи в кеше.
+     * Clears all cached values.
+     */
+    public function flash()
+    {
+        $this->memcache->flush();
+    }
 }
