@@ -82,7 +82,7 @@ class Mail
     protected static function view(string $name, array $vars): string
     {
         static $path = null;
-        $path = $path ?? (
+        $path        = $path ?? (
                 self::$config['views'] ?? realpath(dirname(__DIR__ . '/../../../application/') . 'templates/mail')
             );
 
