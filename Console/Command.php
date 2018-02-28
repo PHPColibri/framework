@@ -19,7 +19,6 @@ abstract class Command extends SymfonyCommand
     /** @var \Symfony\Component\Console\Style\SymfonyStyle */
     protected $io;
 
-
     protected function configure()
     {
         return $this
@@ -181,7 +180,7 @@ abstract class Command extends SymfonyCommand
     }
 
     /**
-     * Just outputs green `[ OK ]\n`
+     * Just outputs green `[ OK ]\n`.
      *
      * @return $this
      */
@@ -193,7 +192,7 @@ abstract class Command extends SymfonyCommand
     }
 
     /**
-     * Just outputs yellow `[SKIP]\n`
+     * Just outputs yellow `[SKIP]\n`.
      *
      * @return $this
      */
@@ -205,7 +204,7 @@ abstract class Command extends SymfonyCommand
     }
 
     /**
-     * Just outputs red `[FAIL]\n`
+     * Just outputs red `[FAIL]\n`.
      *
      * @return $this
      */
