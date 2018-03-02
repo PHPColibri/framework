@@ -149,13 +149,31 @@ abstract class Command extends SymfonyCommand
     }
 
     /**
-     * @param string $name
+     * Returns the option value for a given option name.
      *
-     * @return $this
+     * @param string $name The option name
+     *
+     * @return mixed The option value
+     *
+     * @throws InvalidArgumentException When option given doesn't exist
      */
     protected function option(string $name)
     {
         return $this->input->getOption($name);
+    }
+
+    /**
+     * Returns the argument value for a given argument name.
+     *
+     * @param string $name The argument name
+     *
+     * @return mixed The argument value
+     *
+     * @throws InvalidArgumentException When argument given doesn't exist
+     */
+    protected function argument(string $name)
+    {
+        return $this->input->getArgument($name);
     }
 
     /**
