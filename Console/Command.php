@@ -3,6 +3,7 @@ namespace Colibri\Console;
 
 use Colibri\Util\Str;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -155,7 +156,7 @@ abstract class Command extends SymfonyCommand
      *
      * @return mixed The option value
      *
-     * @throws InvalidArgumentException When option given doesn't exist
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException When option given doesn't exist
      */
     protected function option(string $name)
     {
@@ -169,7 +170,7 @@ abstract class Command extends SymfonyCommand
      *
      * @return mixed The argument value
      *
-     * @throws InvalidArgumentException When argument given doesn't exist
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException When argument given doesn't exist
      */
     protected function argument(string $name)
     {
@@ -268,6 +269,23 @@ abstract class Command extends SymfonyCommand
     protected function ln()
     {
         $this->output->writeln('');
+
+        return $this;
+    }
+
+    /**
+     * @param array $headers
+     * @param array $rows
+     *
+     * @return \Colibri\Console\Command
+     */
+    protected function table(array $headers, array $rows)
+    {
+        (new Table($this->output))
+            ->setHeaders($headers)
+            ->setRows($rows)
+            ->render()
+        ;
 
         return $this;
     }
