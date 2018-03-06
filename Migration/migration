@@ -1,0 +1,28 @@
+#!/usr/bin/env php
+<?php
+/** @noinspection PhpIncludeInspection */
+require getcwd() . '/vendor/autoload.php';
+
+use Colibri\Migration\Console\Application;
+use Colibri\Migration\Console\Command;
+use Colibri\Config\Config;
+use Colibri\Database\Db;
+
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpUndefinedMethodInspection */
+Db::setConfig(Config::database());
+
+
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @noinspection PhpUndefinedMethodInspection */
+exit(
+    (new Application('Colibri Migration Tool'))
+        ->setConfig(Config::migration())
+        ->addCommands([
+            new Command\ListCommand(),
+            new Command\Table(),
+            new Command\Create(),
+            new Command\Run(),
+        ])
+        ->run()
+);
