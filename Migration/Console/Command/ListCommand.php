@@ -26,7 +26,7 @@ class ListCommand extends Command
     {
         $rows = [];
         foreach ($this->migrations() as $migration) {
-            $rows [] = [
+            $rows[] = [
                 $migration->migrated() ? "<info>$migration->hash</info>" : "<comment>$migration->hash</comment>",
                 $migration->name,
                 $migration->createdAt,

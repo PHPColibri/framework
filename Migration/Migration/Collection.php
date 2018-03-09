@@ -11,7 +11,7 @@ class Collection extends DynamicCollection
     private $folder;
     private $namespace;
     private $thatNotMigrated = false;
-    private $onlyOne = false;
+    private $onlyOne         = false;
     private $withHash;
 
     /**

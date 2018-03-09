@@ -8,8 +8,6 @@ use Carbon\Carbon;
 /** @var string|bool $query */
 /** @var string $upQuery */
 /** @var string $downQuery */
-
-
 echo "<?php\n"
 ?>
 namespace <?= $namespace ?>;
