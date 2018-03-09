@@ -114,6 +114,13 @@ abstract class Command extends SymfonyCommand
         return $this;
     }
 
+    protected function error(string $string)
+    {
+        $this->io->error($string);
+
+        return $this;
+    }
+
     /**
      * @param string $string
      *
@@ -208,6 +215,22 @@ abstract class Command extends SymfonyCommand
         $this->output->writeln('[ <info>OK</info> ]');
 
         return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function ✔()
+    {
+        return $this->info('✔');
+    }
+
+    /**
+     * @return $this
+     */
+    protected function ✖()
+    {
+        return $this->error('✖');
     }
 
     /**
