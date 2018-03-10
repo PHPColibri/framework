@@ -31,7 +31,7 @@ class Table extends Command
                 hash varchar(32) primary key not null,
                 migratedAt timestamp default now() not null
             )',
-            'alter table migrations comment = \'This table automatically created by & for Colibri Migration Tool\';'
+            'alter table migrations comment = \'This table automatically created by & for Colibri Migration Tool\';',
         ]);
 
         $this->infoLn('Table `migrations` successfully created.');

@@ -34,7 +34,6 @@ final class Model
     public static function fromClass(string $class): self
     {
         /** @var \Colibri\Migration\Migration $class */
-
         $migration             = new self($class);
         $migration->hash       = $class::hash();
         $migration->name       = $class::name();
@@ -61,7 +60,6 @@ final class Model
     }
 
     /**
-     *
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Database\Exception\SqlException
      * @throws \UnexpectedValueException
@@ -70,7 +68,7 @@ final class Model
     {
         $this->class::up();
         Db::connection()->query(Query::insert()->into('migrations')->set([
-            'hash' => $this->hash
+            'hash' => $this->hash,
         ]));
     }
 }

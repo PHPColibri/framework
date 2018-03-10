@@ -45,7 +45,7 @@ abstract class Migration extends Helper
     final public static function migratedAt()
     {
         $row = Db::connection()->query(Query::select()->from('migrations')->where([
-            'hash' => static::hash()
+            'hash' => static::hash(),
         ]))->fetch();
 
         return $row !== null

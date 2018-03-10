@@ -9,7 +9,6 @@ use Symfony\Component\Console\Input\InputOption;
 
 class Create extends Command
 {
-
     /**
      * @return \Colibri\Console\Command
      */

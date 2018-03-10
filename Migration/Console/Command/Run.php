@@ -26,7 +26,7 @@ class Run extends Command
     {
         $migrations = $this->migrations()
             ->thatNotMigrated()
-            ->one(! $this->option('all'))
+            ->one( ! $this->option('all'))
             ->withHash($this->argument('hash'))
         ;
 
