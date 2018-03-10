@@ -18,8 +18,7 @@ class Create extends Command
 
         return $this
             ->setDescription('Creates migration')
-            ->setHelp(/** @lang text */
-                '
+            ->setHelp('
 Creates migration class by provided <info>name</info>.
 
 <options=bold>Example:</>
