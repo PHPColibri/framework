@@ -91,6 +91,29 @@ class Validation extends PropertyAccess
     }
 
     /**
+     * @param string       $method
+     * @param string|array $key
+     * @param string       $message
+     * @param callable     $check
+     *
+     * @return $this
+     */
+    private function check(string $method, $key, string $message = null, callable $check)
+    {
+        if (is_array($key)) {
+            foreach ($key as $name) {
+                $this->$method($name, $message);
+            }
+        } else {
+            if (isset($this->scope[$key]) && ! $check($key)) {
+                $this->_errors[$key] = sprintf($message !== null ? $message : self::${$method . 'Message'}, $key);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * 'Required' validation rule. Checks if specified by $key data exists in scope.
      *
      * @param string|array $key
@@ -195,17 +218,9 @@ class Validation extends PropertyAccess
      */
     public function isIntGt0($key, $message = null)
     {
-        if (is_array($key)) {
-            foreach ($key as $name) {
-                $this->isIntGt0($name, $message);
-            }
-        } else {
-            if (isset($this->scope[$key]) && ! (Str::isInt($this->scope[$key]) && ((int)$this->scope[$key]) > 0)) {
-                $this->_errors[$key] = sprintf($message !== null ? $message : self::$isIntGt0Message, $key);
-            }
-        }
-
-        return $this;
+        return $this->check(__FUNCTION__, $key, $message, function ($key) {
+            return Str::isInt($this->scope[$key]) && ((int)$this->scope[$key]) > 0;
+        });
     }
 
     /**
@@ -218,17 +233,9 @@ class Validation extends PropertyAccess
      */
     public function isJSON($key, $message = null)
     {
-        if (is_array($key)) {
-            foreach ($key as $name) {
-                $this->isJSON($name, $message);
-            }
-        } else {
-            if (isset($this->scope[$key]) && ! Str::isJSON($this->scope[$key])) {
-                $this->_errors[$key] = sprintf($message !== null ? $message : self::$isJSONMessage, $key);
-            }
-        }
-
-        return $this;
+        return $this->check(__FUNCTION__, $key, $message, function ($key) {
+            return Str::isJSON($this->scope[$key]);
+        });
     }
 
     /**
@@ -241,17 +248,9 @@ class Validation extends PropertyAccess
      */
     public function isEmail($key, $message = null)
     {
-        if (is_array($key)) {
-            foreach ($key as $name) {
-                $this->isEmail($name, $message);
-            }
-        } else {
-            if (isset($this->scope[$key]) && ! Str::isEmail($this->scope[$key])) {
-                $this->_errors[$key] = sprintf($message !== null ? $message : self::$isEmailMessage, $key);
-            }
-        }
-
-        return $this;
+        return $this->check(__FUNCTION__, $key, $message, function ($key) {
+            return Str::isEmail($this->scope[$key]);
+        });
     }
 
     /**
