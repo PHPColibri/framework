@@ -33,7 +33,7 @@ final class Model
      */
     public static function fromClass(string $class): self
     {
-        /** @var \Colibri\Migration\Migration $class */
+        /** @var \Colibri\Migration\Migration|string $class */
         $migration             = new self($class);
         $migration->hash       = $class::hash();
         $migration->name       = $class::name();
@@ -42,14 +42,6 @@ final class Model
 
         return $migration;
     }
-
-//    /**
-//     * @return string
-//     */
-//    public function getClass(): string
-//    {
-//        return $this->class;
-//    }
 
     /**
      * @return bool
