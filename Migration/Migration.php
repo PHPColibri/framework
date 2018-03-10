@@ -16,7 +16,7 @@ abstract class Migration extends Helper
      */
     final public static function hash(): string
     {
-        return md5(self::name());
+        return md5(static::class);
     }
 
     /**
