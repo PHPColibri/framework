@@ -3,6 +3,7 @@ namespace Colibri\Migration\Migration;
 
 use Colibri\Base\DynamicCollection;
 use Colibri\Migration\Model;
+use Colibri\Util\Arr;
 use Colibri\Util\Directory;
 use Colibri\Util\Str;
 
@@ -11,8 +12,10 @@ class Collection extends DynamicCollection
     private $folder;
     private $namespace;
     private $thatNotMigrated = false;
+    private $onlyMigrated    = false;
     private $onlyOne         = false;
     private $withHash;
+    private $last;
 
     /**
      * Collection constructor.
@@ -45,6 +48,9 @@ class Collection extends DynamicCollection
             if ($this->thatNotMigrated && $model->migrated()) {
                 continue;
             }
+            if ($this->onlyMigrated && ! $model->migrated()) {
+                continue;
+            }
             $migrations[] = $model;
         }
 
@@ -52,7 +58,11 @@ class Collection extends DynamicCollection
 
         $this->items = $this->onlyOne
             ? count($migrations) ? [$migrations[0]] : []
-            : $migrations;
+            : ($this->last === null
+                ? $migrations
+                : Arr::last($migrations, $this->last)
+            )
+        ;
     }
 
     /**
@@ -66,6 +76,16 @@ class Collection extends DynamicCollection
     }
 
     /**
+     * @return \Colibri\Migration\Migration\Collection|Model[]
+     */
+    public function onlyMigrated()
+    {
+        $this->onlyMigrated = true;
+
+        return $this;
+    }
+
+    /**
      * @param bool $one
      *
      * @return \Colibri\Migration\Migration\Collection|Model[]
@@ -73,6 +93,18 @@ class Collection extends DynamicCollection
     public function one($one = true)
     {
         $this->onlyOne = $one;
+
+        return $this;
+    }
+
+    /**
+     * @param int $count
+     *
+     * @return \Colibri\Migration\Migration\Collection|Model[]
+     */
+    public function last(int $count)
+    {
+        $this->last = $count;
 
         return $this;
     }

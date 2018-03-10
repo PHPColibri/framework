@@ -23,6 +23,7 @@ exit(
             new Command\Table(),
             new Command\Create(),
             new Command\Run(),
+            new Command\Rollback(),
         ])
         ->run()
 );

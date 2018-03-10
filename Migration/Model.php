@@ -63,4 +63,17 @@ final class Model
             'hash' => $this->hash,
         ]));
     }
+
+    /**
+     * @throws \Colibri\Database\DbException
+     * @throws \Colibri\Database\Exception\SqlException
+     * @throws \UnexpectedValueException
+     */
+    public function rollback()
+    {
+        $this->class::down();
+        Db::connection()->query(Query::delete()->from('migrations')->where([
+            'hash' => $this->hash,
+        ]));
+    }
 }
