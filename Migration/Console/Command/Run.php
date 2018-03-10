@@ -13,7 +13,8 @@ class Run extends Command
     protected function definition(): ColibriCommand
     {
         return $this
-            ->setDescription('Run migration(s).')
+            ->setAliases(['up', 'migrate'])
+            ->setDescription('Run migration(s)')
             ->addArgument('hash', InputArgument::OPTIONAL, 'hash of the migration that will be run')
             ->addOption('all', 'a', InputOption::VALUE_NONE, 'run all migrations')
             ;
