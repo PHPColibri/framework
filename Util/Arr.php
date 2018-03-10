@@ -127,8 +127,19 @@ class Arr extends Helper
      *
      * @return bool
      */
-    public static function contains(array $array, $value)
+    public static function contains(array $array, $value): bool
     {
         return in_array($value, $array);
+    }
+
+    /**
+     * @param array $array
+     * @param int   $count
+     *
+     * @return array
+     */
+    public static function last(array $array, int $count = 1): array
+    {
+        return array_slice($array, -$count);
     }
 }

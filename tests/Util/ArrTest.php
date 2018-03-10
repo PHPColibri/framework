@@ -181,4 +181,40 @@ class ArrTest extends TestCase
     {
         self::assertEquals($expected, Arr::contains($array, $value));
     }
+
+    // ----------------------------------
+
+    /**
+     * @return array
+     */
+    public function lastDataProvider(): array
+    {
+        return [
+            [[111, 222, 333], 1, [333]],
+            [[111, 222, 333], 2, [222, 333]],
+            [[true, true, false], 1, [false]],
+            [[false, false, true], 1, [true]],
+            [['aaa', 'bbb', 'ccc'], 2, ['bbb', 'ccc']],
+            [['aaa', 'bbb', 'ccc'], 1, ['ccc']],
+            [[.012, '', .013], 1, [.013]],
+            [[.012, '', .013], 2, ['', .013]],
+            [[.012, '', .013], 3, [.012, '', .013]],
+        ];
+    }
+
+    /**
+     * @dataProvider lastDataProvider
+     * @covers ::last()
+     *
+     * @param array $array
+     * @param int   $count
+     * @param array $expected
+     *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     */
+    public function testLast(array $array, int $count, array $expected)
+    {
+        self::assertEquals($expected, Arr::last($array, $count));
+    }
 }
