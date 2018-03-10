@@ -72,10 +72,14 @@ abstract class ViewsController extends Base
      * Sets template variables.
      *
      * @param array $variables
+     *
+     * @return \Colibri\Controller\ViewsController
      */
     protected function view(array $variables)
     {
         $this->template->setVars($variables);
+
+        return $this;
     }
 
     /**
