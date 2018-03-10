@@ -28,7 +28,7 @@ interface ResultInterface
      * @param int $param Модификатор тива возвращаемого значения
      *                   Возможные параметры: MYSQLI_NUM | MYSQLI_ASSOC | MYSQLI_BOTH
      *
-     * @return array
+     * @return array|null
      */
     public function fetch($param = MYSQLI_ASSOC);
 
