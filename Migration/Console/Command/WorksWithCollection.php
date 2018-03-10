@@ -5,6 +5,8 @@ use Colibri\Migration\Migration;
 
 trait WorksWithCollection
 {
+    abstract protected function config(string $option);
+
     /**
      * @return Migration\Collection|\Colibri\Migration\Model[]
      */
