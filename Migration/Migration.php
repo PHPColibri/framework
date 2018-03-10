@@ -24,7 +24,7 @@ abstract class Migration extends Helper
      */
     final public static function name(): string
     {
-        return Str::snake(Str::lastPart(static::class, '\\'), ' ');
+        return Str::snake(Str::studly(Str::lastPart(static::class, '\\')), ' ');
     }
 
     /**
