@@ -73,9 +73,19 @@ abstract class ViewsController extends Base
      *
      * @param array $variables
      */
-    public function view(array $variables)
+    protected function view(array $variables)
     {
         $this->template->setVars($variables);
+    }
+
+    /**
+     * @return $this
+     */
+    protected function withoutLayout()
+    {
+        $this->useBackbone = false;
+
+        return $this;
     }
 
     /**
