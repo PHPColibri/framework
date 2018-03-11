@@ -60,9 +60,10 @@ class Engine extends Engine\Base
     private static function setUpErrorHandling()
     {
         error_reporting(-1);
-        ini_set('display_errors', DEBUG);
+        ini_set('display_errors', false);
         set_error_handler([static::class, 'errorHandler'], -1);
         set_exception_handler([static::class, 'exceptionHandler']);
+        register_shutdown_function([static::class, 'shutDownHandler']);
     }
 
     /**
@@ -291,16 +292,16 @@ class Engine extends Engine\Base
     }
 
     /**
-     * @param $code
-     * @param $message
-     * @param $file
-     * @param $line
+     * @param int    $severity
+     * @param string $message
+     * @param string $file
+     * @param int    $line
      *
-     * @throws \Exception
+     * @throws \ErrorException
      */
-    public static function errorHandler($code, $message, $file, $line)
+    public static function errorHandler(int $severity, string $message, string $file, int $line)
     {
-        throw new \Exception("php error [$code]: '$message' in $file:$line");
+        throw new \ErrorException($message, 0, $severity, $file, $line);
     }
 
     /**
@@ -319,5 +320,19 @@ class Engine extends Engine\Base
         include HTTPERRORS . '500.php';
 
         Log::add($message, 'core.module');
+    }
+
+    /**
+     *
+     */
+    public static function shutDownHandler()
+    {
+        if ($error = error_get_last() === null) {
+            return;
+        }
+
+        self::exceptionHandler(
+            new \ErrorException($error['message'], 0, $error['type'], $error['file'], $error['line'])
+        );
     }
 }
