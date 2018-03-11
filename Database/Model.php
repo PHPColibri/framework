@@ -27,14 +27,10 @@ abstract class Model
     /** @var string */
     protected static $connectionName = 'default';
 
-    /**
-     * @var array
-     */
-    protected $collections = [];
-    /**
-     * @var array
-     */
-    protected $objects = [];
+    /** @var array */
+    protected static $relations = [];
+    /** @var array */
+    protected $related = [];
 
     /**
      * @param int|array $idOrRow
@@ -340,39 +336,37 @@ abstract class Model
     }
 
     /**
-     * @param string $propertyName
+     * @param string $property
      *
      * @return ModelCollection|ModelMultiCollection|ModelSingleCollection|Model
      *
      * @throws \DomainException
      */
-    public function __get($propertyName)
+    public function __get($property)
     {
-        if (isset($this->collections[$propertyName])) {
-            return $this->getRelated($propertyName, $this->collections);
+        if (isset(static::$relations[$property])) {
+            return $this->getRelated($property);
         }
-        if (isset($this->objects[$propertyName])) {
-            return $this->getRelated($propertyName, $this->objects);
-        }
-        throw new \DomainException('свойство $' . $propertyName . ' в классе ' . get_class($this) . ' не определено или не является public.');
+
+        throw new \DomainException('свойство $' . $property . ' в классе ' . get_class($this) . ' не определено или не является public.');
     }
 
     /**
      * @param string $name
-     * @param array  $relationsDefinition
      *
      * @return Model|ModelCollection|ModelSingleCollection|ModelMultiCollection
      */
-    private function getRelated($name, &$relationsDefinition)
+    private function getRelated($name)
     {
-        $container          = &$relationsDefinition[$name];
-        $relatedObject      = &$container[1];
-        $relatedObjectClass = $container[0];
-        $objectFKName       = isset($container[2]) ? $container[2] : static::$PKFieldName[0];
+        $relation = &static::$relations[$name];
+        $class    = $relation[0];
+        $FKName   = isset($relation[1]) ? $relation[1] : static::$PKFieldName[0];
 
-        return $relatedObject === null
-            ? $relatedObject = new $relatedObjectClass($this->$objectFKName)
-            : $relatedObject;
+        $related = &$this->related[$name];
+
+        return $related === null
+            ? $related = new $class($this->$FKName)
+            : $related;
     }
 
     /**
