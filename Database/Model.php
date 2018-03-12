@@ -619,28 +619,6 @@ abstract class Model
     }
 
     /**
-     * @param array $arrQueries
-     *
-     * @throws DbException
-     * @throws \Exception
-     */
-    protected function doQueries(array $arrQueries)
-    {
-        static::db()->queries($arrQueries);
-    }
-
-    /**
-     * @param array $queries
-     *
-     * @throws DbException
-     * @throws \Exception
-     */
-    protected function doTransaction(array $queries)
-    {
-        static::db()->commit($queries);
-    }
-
-    /**
      * bring out into Query class.
      */
     private function cleanUpQueryVars()
