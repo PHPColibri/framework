@@ -85,7 +85,7 @@ class Handler
         header("HTTP/1.1 $code $text");
 
         $file = $code . '.php';
-        $path = __DIR__ . '/../../../../../application/templates/';
+        $path = __DIR__ . '/../../../../../application/templates/error/';
         /** @noinspection PhpIncludeInspection */
         include file_exists($path . $file) ? $path . $file : __DIR__ . '/views/' . $file;
     }
