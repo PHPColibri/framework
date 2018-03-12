@@ -8,6 +8,7 @@ use Colibri\Util\Html;
 class Handler
 {
     /**
+     * Registers error handling functions.
      */
     public static function register()
     {
@@ -17,6 +18,8 @@ class Handler
     }
 
     /**
+     * Error handler. Just throws \ErrorException.
+     *
      * @param int    $severity
      * @param string $message
      * @param string $file
@@ -30,6 +33,8 @@ class Handler
     }
 
     /**
+     * Exception handler. Shows error & log it.
+     *
      * @param \Throwable $throwable
      */
     public static function exceptionHandler(\Throwable $throwable)
@@ -40,7 +45,7 @@ class Handler
     }
 
     /**
-     *
+     * Shutdown handler for Fatal. Uses ::exceptionHandler().
      */
     public static function shutdownHandler()
     {
@@ -54,6 +59,8 @@ class Handler
     }
 
     /**
+     * Displays an error.
+     *
      * @param \Throwable $throwable
      * @param int        $code
      * @param string     $text
