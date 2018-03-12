@@ -8,6 +8,15 @@ use Colibri\Util\Html;
 class Handler
 {
     /**
+     */
+    public static function register()
+    {
+        set_error_handler([Handler::class, 'errorHandler'], -1);
+        set_exception_handler([Handler::class, 'exceptionHandler']);
+        register_shutdown_function([Handler::class, 'shutdownHandler']);
+    }
+
+    /**
      * @param int    $severity
      * @param string $message
      * @param string $file

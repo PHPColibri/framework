@@ -61,10 +61,8 @@ class Engine extends Engine\Base
     private static function setUpErrorHandling()
     {
         error_reporting(-1);
-        ini_set('display_errors', false);
-        set_error_handler([Handler::class, 'errorHandler'], -1);
-        set_exception_handler([Handler::class, 'exceptionHandler']);
-        register_shutdown_function([Handler::class, 'shutdownHandler']);
+        ini_set('display_errors', DEBUG);
+        Error\Handler::register();
     }
 
     /**
@@ -75,7 +73,7 @@ class Engine extends Engine\Base
     protected function initialize()
     {
         $appConfig = Config::get('application');
-        define('DEBUG', Arr::get($appConfig, 'debug', false));
+        define('DEBUG', (bool)Arr::get($appConfig, 'debug', false));
         self::setUpErrorHandling();
         mb_internal_encoding($appConfig['encoding']);
         date_default_timezone_set($appConfig['timezone']);
