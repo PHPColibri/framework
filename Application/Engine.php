@@ -1,12 +1,10 @@
 <?php
 namespace Colibri\Application;
 
-use Colibri\Application\Error\Handler;
 use Colibri\Config\Config;
 use Colibri\Controller\MethodsController;
 use Colibri\Controller\ViewsController;
 use Colibri\Http;
-use Colibri\Log\Log;
 use Colibri\Util\Arr;
 use Colibri\Util\Str;
 use LogicException;
