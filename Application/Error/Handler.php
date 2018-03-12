@@ -12,9 +12,9 @@ class Handler
      */
     public static function register()
     {
-        set_error_handler([Handler::class, 'errorHandler'], -1);
-        set_exception_handler([Handler::class, 'exceptionHandler']);
-        register_shutdown_function([Handler::class, 'shutdownHandler']);
+        set_error_handler([static::class, 'errorHandler'], -1);
+        set_exception_handler([static::class, 'exceptionHandler']);
+        register_shutdown_function([static::class, 'shutdownHandler']);
     }
 
     /**
@@ -49,7 +49,7 @@ class Handler
      */
     public static function shutdownHandler()
     {
-        if (!($error = error_get_last())) {
+        if ( ! ($error = error_get_last())) {
             return;
         }
 
@@ -75,7 +75,7 @@ class Handler
         header("HTTP/1.1 $code $text");
 
         $file = $code . '.php';
-        $path = __DIR__ . "/../../../../../application/templates/";
+        $path = __DIR__ . '/../../../../../application/templates/';
         /** @noinspection PhpIncludeInspection */
         include file_exists($path . $file) ? $path . $file : __DIR__ . '/views/' . $file;
     }
