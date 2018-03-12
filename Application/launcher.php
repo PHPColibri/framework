@@ -1,12 +1,11 @@
 <?php
 
 use Colibri\Application\Engine as ApplicationEngine;
+use Colibri\Application\Error\Handler;
 use Colibri\Cache\Cache;
-use Colibri\Config\Config;
 use Colibri\Database\AbstractDb\Driver\Connection;
 use Colibri\Http\NotFoundException;
 use Colibri\Log\Log;
-use Colibri\Util\Html;
 
 $mEngine = null;
 
@@ -47,18 +46,5 @@ try {
         'core.notFound'
     );
 
-    if (Config::application('debug')) {
-        $error = Html::e($exc);
-    }
-    header('HTTP/1.1 404 Not Found');
-    include HTTPERRORS . '404.php';
-} catch (\Throwable $exc) {
-    if (Config::application('debug')) {
-        $error = Html::e($exc);
-    }
-
-    header('HTTP/1.1 500 Internal Server Error');
-    include HTTPERRORS . '500.php';
-
-    Log::add($exc, 'core.module');
+    Handler::showError($exc, 404, 'Not Found');
 }

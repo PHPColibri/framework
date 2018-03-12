@@ -1,6 +1,7 @@
 <?php
 namespace Colibri\Application;
 
+use Colibri\Application\Error\Handler;
 use Colibri\Config\Config;
 use Colibri\Controller\MethodsController;
 use Colibri\Controller\ViewsController;
@@ -61,9 +62,9 @@ class Engine extends Engine\Base
     {
         error_reporting(-1);
         ini_set('display_errors', false);
-        set_error_handler([static::class, 'errorHandler'], -1);
-        set_exception_handler([static::class, 'exceptionHandler']);
-        register_shutdown_function([static::class, 'shutDownHandler']);
+        set_error_handler([Handler::class, 'errorHandler'], -1);
+        set_exception_handler([Handler::class, 'exceptionHandler']);
+        register_shutdown_function([Handler::class, 'shutdownHandler']);
     }
 
     /**
@@ -289,50 +290,5 @@ class Engine extends Engine\Base
             /** @noinspection PhpIncludeInspection */
             require_once $fileName;
         }
-    }
-
-    /**
-     * @param int    $severity
-     * @param string $message
-     * @param string $file
-     * @param int    $line
-     *
-     * @throws \ErrorException
-     */
-    public static function errorHandler(int $severity, string $message, string $file, int $line)
-    {
-        throw new \ErrorException($message, 0, $severity, $file, $line);
-    }
-
-    /**
-     * @param \Throwable $exc
-     *
-     * @throws \InvalidArgumentException
-     */
-    public static function exceptionHandler(\Throwable $exc)
-    {
-        $message = $exc->__toString();
-        if (DEBUG) {
-            /* @noinspection PhpUnusedLocalVariableInspection variable uses in 500.php */
-            $error = $message;
-        }
-
-        include HTTPERRORS . '500.php';
-
-        Log::add($message, 'core.module');
-    }
-
-    /**
-     *
-     */
-    public static function shutDownHandler()
-    {
-        if ($error = error_get_last() === null) {
-            return;
-        }
-
-        self::exceptionHandler(
-            new \ErrorException($error['message'], 0, $error['type'], $error['file'], $error['line'])
-        );
     }
 }
