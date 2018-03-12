@@ -9,9 +9,19 @@ class Handler
 {
     /**
      * Registers error handling functions.
+     *
+     * @param bool $debug
      */
-    public static function register()
+    public static function register($debug = false)
     {
+        if ($debug && class_exists('\Whoops\Run')) {
+            $whoops = new \Whoops\Run();
+            $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
+            $whoops->register();
+
+            return;
+        }
+
         set_error_handler([static::class, 'errorHandler'], -1);
         set_exception_handler([static::class, 'exceptionHandler']);
         register_shutdown_function([static::class, 'shutdownHandler']);

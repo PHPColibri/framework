@@ -60,7 +60,7 @@ class Engine extends Engine\Base
     {
         error_reporting(-1);
         ini_set('display_errors', DEBUG);
-        Error\Handler::register();
+        Error\Handler::register(DEBUG);
     }
 
     /**

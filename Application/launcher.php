@@ -40,6 +40,9 @@ try {
         }
     }
 } catch (NotFoundException $exc) {
+    if (DEBUG) {
+        throw $exc;
+    }
     Log::warning(
         ' Request: ' . $_SERVER['REQUEST_URI'] .
         ' Referer: ' . (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ''),
