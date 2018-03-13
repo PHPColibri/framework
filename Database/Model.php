@@ -613,16 +613,8 @@ abstract class Model
     {
         $result = static::db()->query($query);
 
-        $this->cleanUpQueryVars();
+        $this->where = null;
 
         return $result;
-    }
-
-    /**
-     * bring out into Query class.
-     */
-    private function cleanUpQueryVars()
-    {
-        $this->where = null;
     }
 }
