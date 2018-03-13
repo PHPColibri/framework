@@ -312,4 +312,17 @@ abstract class Command extends SymfonyCommand
 
         return $this;
     }
+
+    /**
+     * @param string $question
+     * @param bool   $default
+     *
+     * @return bool
+     *
+     * @throws \Symfony\Component\Console\Exception\RuntimeException
+     */
+    protected function confirm(string $question, bool $default = false): bool
+    {
+        return $this->io->confirm($question, $default);
+    }
 }
