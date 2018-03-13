@@ -17,8 +17,8 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
 {
     /** @var string */
     protected static $tableName = 'tableName_not_set';
-    /** @var string */
-    protected $itemClass = 'itemClass_not_set';
+    /** @var string|\Colibri\Database\Model */
+    protected static $itemClass = 'itemClass_not_set';
     /** @var array */
     protected $FKName = ['_id', '_id'];
     /** @var array */
@@ -201,7 +201,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      */
     protected function instantiateItem(array $row)
     {
-        return new $this->itemClass($row);
+        return new static::$itemClass($row);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -271,7 +271,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
     protected function getFieldsAndTypes()
     {
         if (empty($this->itemFields)) {
-            $metadata             = $this->db()->metadata()->getColumnsMetadata(static::$tableName);
+            $metadata             = static::db()->metadata()->getColumnsMetadata(static::$tableName);
             $this->itemFields     = &$metadata['fields'];
             $this->itemFieldTypes = &$metadata['fieldTypes'];
         }
@@ -507,7 +507,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
             return false;
         }
         /** @var \Colibri\Database\Model $itemClass */
-        $itemClass = $this->itemClass;
+        $itemClass = static::$itemClass;
         /** @noinspection PhpUndefinedVariableInspection */
         $PKfn = $itemClass::$PKFieldName[0];
         for ($i = 0; $i < $count; $i++) {
@@ -557,10 +557,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      */
     protected function db()
     {
-        /** @var Model $itemClass */
-        $itemClass = $this->itemClass;
-
-        return $itemClass::db();
+        return static::$itemClass::db();
     }
 
     ///////////////////////////////////////////////////////////////////////////

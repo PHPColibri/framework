@@ -111,7 +111,7 @@ class ModelMultiCollection extends ModelCollection
         $itemAttributes         = Arr::only($row, $this->itemFields);
         $intermediateAttributes = Arr::only($row, $this->intermediateFields);
         /** @var \Colibri\Database\Model $item */
-        $item = new $this->itemClass($itemAttributes);
+        $item = new static::$itemClass($itemAttributes);
 
         return $item->setIntermediate($intermediateAttributes);
     }
