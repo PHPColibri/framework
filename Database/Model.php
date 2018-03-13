@@ -550,7 +550,7 @@ abstract class Model
      * @throws \Colibri\Database\Exception\SqlException
      * @throws \UnexpectedValueException
      */
-    protected function loadByQuery($query)
+    protected function loadByQuery(Query $query)
     {
         $result = $this->doQuery($query);
 
