@@ -564,16 +564,6 @@ abstract class Model
     }
 
     /**
-     * @param array $row
-     *
-     * @throws \Colibri\Database\DbException
-     */
-    public function initialize(array $row)
-    {
-        $this->fillProperties($row);
-    }
-
-    /**
      * @return array
      *
      * @throws \Colibri\Database\DbException
