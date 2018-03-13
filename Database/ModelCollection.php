@@ -555,7 +555,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      *
      * @throws \Colibri\Database\DbException
      */
-    protected function db()
+    protected static function db()
     {
         return static::$itemClass::db();
     }
