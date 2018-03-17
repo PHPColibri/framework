@@ -104,7 +104,7 @@ abstract class ViewsController extends Base
         }
 
         if ($this->template->getFilename() === null) {
-            $tplPath = sprintf(MODULE_TEMPLATES, $this->divisionPath);
+            $tplPath = sprintf(MODULE_VIEWS, $this->divisionPath);
             $tplName = $tplPath . $this->_method . '.php';
             if (file_exists($tplName)) {
                 $this->template->load($tplName);

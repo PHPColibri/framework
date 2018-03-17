@@ -260,7 +260,7 @@ abstract class RoutineViewsController extends ViewsController
     protected function loadTemplate(string $mode)
     {
         if ($mode == 'create') { // create mode
-            $tplPath = sprintf(MODULE_TEMPLATES, $this->module . '/' . $this->division);
+            $tplPath = sprintf(MODULE_VIEWS, $this->module . '/' . $this->division);
             $tplName = $tplPath . 'edit.php';
             $this->template->load($tplName);
         }

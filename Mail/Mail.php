@@ -83,7 +83,7 @@ class Mail
     {
         static $path = null;
         $path        = $path ?? (
-                self::$config['views'] ?? realpath(dirname(__DIR__ . '/../../../application/') . 'templates/mail')
+                self::$config['views'] ?? realpath(dirname(__DIR__ . '/../../../application/') . 'views/mail')
             );
 
         return (new PhpTemplate("$path/$name.php"))

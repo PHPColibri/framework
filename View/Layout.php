@@ -304,7 +304,7 @@ class Layout extends Helper
             throw new \Exception('Layout template file name does not set: use Layout::setFilename().');
         }
 
-        $tpl       = new PhpTemplate(TEMPLATES . static::$filename);
+        $tpl       = new PhpTemplate(VIEWS . static::$filename);
         $tpl->vars = $layoutTplVars;
 
         $compiledHtml = $tpl->compile();
