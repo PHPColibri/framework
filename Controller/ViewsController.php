@@ -26,7 +26,7 @@ abstract class ViewsController extends Base
     /**
      * @var bool
      */
-    protected $useBackbone = true;
+    protected $useLayout = true;
     /**
      * @var bool
      */
@@ -87,7 +87,7 @@ abstract class ViewsController extends Base
      */
     protected function withoutLayout()
     {
-        $this->useBackbone = false;
+        $this->useLayout = false;
 
         return $this;
     }
@@ -111,7 +111,7 @@ abstract class ViewsController extends Base
             }
         }
 
-        if ( ! $this->useBackbone) {
+        if ( ! $this->useLayout) {
             if ($this->template->getFilename() === null) {
                 throw new \Exception('template not loaded.');
             }
@@ -138,10 +138,10 @@ abstract class ViewsController extends Base
             return;
         }
 
-        Layout::filename('backbone' . $this->divisionPostfix . '.php');
+        Layout::filename('layout' . $this->divisionPostfix . '.php');
 
-        Layout::addJsMgr('backbone' . ($this->_division === '' ? '' : '_' . $this->_division));
-        Layout::addCss('backbone' . $this->divisionPostfix . '.css');
+        Layout::addJsMgr('layout' . ($this->_division === '' ? '' : '_' . $this->_division));
+        Layout::addCss('layout' . $this->divisionPostfix . '.css');
 
         $fileBaseName = $this->_module . '_' . $this->_method;
         // add default js manager

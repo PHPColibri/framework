@@ -217,8 +217,6 @@ abstract class RoutineViewsController extends ViewsController
      * @param \Colibri\Validation\Validation $scope $_POST scope for validate
      * @param int|mixed                      $id    if equals null, then create action is called, and otherwise edit
      *                                              action is called
-     *
-     * @return mixed
      */
     abstract protected function validate(Validation $scope, $id = null);
 
