@@ -15,8 +15,6 @@ use Colibri\Database;
  */
 abstract class ModelCollection extends DynamicCollection implements DynamicCollectionInterface
 {
-    /** @var string */
-    protected static $tableName = 'tableName_not_set';
     /** @var string|\Colibri\Database\Model */
     protected static $itemClass = 'itemClass_not_set';
     /** @var array */
@@ -271,7 +269,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
     protected function getFieldsAndTypes()
     {
         if (empty($this->itemFields)) {
-            $metadata             = static::db()->metadata()->getColumnsMetadata(static::$tableName);
+            $metadata             = static::db()->metadata()->getColumnsMetadata(static::$itemClass::getTableName());
             $this->itemFields     = &$metadata['fields'];
             $this->itemFieldTypes = &$metadata['fieldTypes'];
         }

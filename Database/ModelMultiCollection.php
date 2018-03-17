@@ -72,13 +72,13 @@ class ModelMultiCollection extends ModelCollection
     {
         $query = $this->FKValue[0] !== null
             ? $this->getQuery()
-                ->from(static::$tableName)
+                ->from(static::$itemClass::getTableName())
                 ->join($this->fkTableName, $this->FKName[1], 'id', Query\JoinType::INNER)
                 ->where([
                     'j1.' . $this->FKName[0] => $this->FKValue[0],
                 ])
             : $this->getQuery()
-                ->from(static::$tableName)
+                ->from(static::$itemClass::getTableName())
         ;
 
         return $query;

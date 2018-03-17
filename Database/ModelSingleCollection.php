@@ -21,7 +21,7 @@ class ModelSingleCollection extends ModelCollection
      */
     protected function selFromDbAllQuery(): Query
     {
-        $query = $this->getQuery()->from(static::$tableName);
+        $query = $this->getQuery()->from(static::$itemClass::getTableName());
         if ($this->FKValue[1] !== null) {
             $query->where([$this->FKName[1] => $this->FKValue[1]]);
         }
