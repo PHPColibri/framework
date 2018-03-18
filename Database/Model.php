@@ -14,6 +14,8 @@ abstract class Model
     const    NEW_OBJECT = -1;
 
     /** @var string */
+    protected static $connectionName = 'default';
+    /** @var string */
     protected static $tableName = 'tableName_not_set';
     /** @var array */
     protected static $PKFieldName = ['id'];
@@ -23,9 +25,6 @@ abstract class Model
 
     /** @var array */
     protected $where = null;
-
-    /** @var string */
-    protected static $connectionName = 'default';
 
     /** @var array */
     protected static $relations = [];
