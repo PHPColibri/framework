@@ -153,6 +153,14 @@ class API
     }
 
     /**
+     * @param string $message
+     */
+    public static function passNotice(string $message)
+    {
+        Session::flash('app_notice', $message);
+    }
+
+    /**
      * Устанавливает и передаёт ошибки следующему вызванному скрипту
      * (однократно - удаляется в следующем вызванном скрипте).
      *
@@ -187,6 +195,14 @@ class API
             $type . ($key !== null ? '.' . $key : ''),
             $key === null && $default === null ? [] : $default
         );
+    }
+
+    /**
+     * @return string|null
+     */
+    public static function notice()
+    {
+        return self::passed('app_notice');
     }
 
     /**
