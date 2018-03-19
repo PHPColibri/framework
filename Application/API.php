@@ -202,7 +202,7 @@ class API
      */
     public static function notice()
     {
-        return self::passed('app_notice');
+        return Session::get('app_notice');
     }
 
     /**
