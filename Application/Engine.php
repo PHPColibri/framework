@@ -80,7 +80,12 @@ class Engine extends Engine\Base
 
         $this->_domainPrefix = $this->getDomainPrefix();
 
-        new \API($this); // initialize API
+        // initialize API
+        $apiClass = $appConfig['API'] ?? API::class;
+        $api      = new $apiClass($this);
+        if ( ! $api instanceof API) {
+            throw new \DomainException('Application config `API` param must referenced to `' . API::class . '` extention');
+        }
 
         $requestedUri = $this->getRequestedUri();
         /** @noinspection PhpUndefinedMethodInspection */
