@@ -16,6 +16,7 @@ git subtree push -P Mail        cf-mail        master
 git subtree push -P Migration   cf-migration   master
 git subtree push -P Pattern     cf-pattern     master
 git subtree push -P Routine     cf-routine     master
+git subtree push -P Routing     cf-routing     master
 git subtree push -P Session     cf-session     master
 git subtree push -P Util        cf-util        master
 git subtree push -P Validation  cf-validation  master
