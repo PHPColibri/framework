@@ -41,13 +41,14 @@ try {
     }
 } catch (NotFoundException $exc) {
     if (DEBUG) {
+        /** @noinspection PhpUnhandledExceptionInspection */
         throw $exc;
     }
-    Log::warning(
-        ' Request: ' . $_SERVER['REQUEST_URI'] .
-        ' Referer: ' . (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ''),
-        'core.notFound'
-    );
+
+    Log::notFound()->warning('Not Found', [
+        'uri'     => $_SERVER['REQUEST_URI'],
+        'referer' => (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ''),
+    ]);
 
     Handler::showError($exc, 404, 'Not Found');
 }

@@ -14,7 +14,8 @@
         "colibri-fw/config": "dev-master@dev",
         "colibri-fw/pattern": "dev-master@dev",
         "colibri-fw/util": "dev-master@dev",
-        "psr/simple-cache": "^1.0"
+        "colibri-fw/cache": "dev-master@dev",
+        "colibri-fw/log": "dev-master@dev"
     },
     "autoload": {
         "psr-4": {

@@ -51,7 +51,7 @@ class Handler
     {
         self::showError($throwable);
 
-        Log::add($throwable, 'core.module');
+        Log::error((string)$throwable);
     }
 
     /**

@@ -6,6 +6,7 @@ use Colibri\Cache\Cache;
 use Colibri\Config\Config;
 use Colibri\Database\AbstractDb\Driver;
 use Colibri\Database\Db;
+use Colibri\Log\Log;
 use Colibri\Session\Session;
 
 /**
@@ -38,6 +39,7 @@ abstract class Base extends PropertyAccess implements EngineInterface
 
         Db::setConfig(Config::get('database'));
         Cache::setConfig(Config::getOrEmpty('cache'));
+        Log::setConfig(Config::getOrEmpty('log'));
 
         $this->initialize();
     }

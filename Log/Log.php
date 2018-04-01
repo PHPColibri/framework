@@ -1,123 +1,204 @@
 <?php
 namespace Colibri\Log;
 
-use Colibri\Config\Config;
 use Colibri\Pattern\Helper;
-use Colibri\Util\Arr;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 /**
  * Simple Log.
+ *
+ * @method static LoggerInterface notFound()
  */
 class Log extends Helper
 {
     /**
-     * @var array default config values, if no one specified
+     * @var array
      */
-    protected static $defaultConfig = [
-        'folder' => '/var/log/colibri',
-        'prefix' => 'colibri',
+    protected static $config = [
+        'error'    => ['handler' => ['class' => StreamHandler::class,],],
+        'notFound' => ['handler' => ['class' => StreamHandler::class,],],
+        'folder'   => '/var/log/colibri',
+        'prefix'   => 'colibri',
     ];
     /**
-     * @var array real laded config
+     * @var LoggerInterface[]
      */
-    protected static $config = null;
+    protected static $logger = [];
 
     /**
-     * @param string $message       message to log
-     * @param string $who           log name
-     * @param bool   $logServerVars log or not additional info ($_GET, $_POST, $_SESSION, $_COOKIE)
-     *
-     * @return bool
-     *
-     * @throws \InvalidArgumentException if can`t get the real-path of log config file
+     * @param array $config
      */
-    public static function add($message, $who = 'colibri', $logServerVars = false)
+    public static function setConfig(array $config)
     {
-        $ret = "\n" . '### ' . date('d-m-y H:i:s') . ' ### ------------------------------------------------------------------------------------------' . "\n";
-        $ret .= "\n" . $message . "\n";
-        if ($logServerVars) {
-            $ret .= "\$_GET:\n" . var_export($_GET, true);
-            $ret .= "\$_POST:\n" . var_export($_POST, true);
-            if (isset($_SESSION)) {
-                $ret .= "\$_SESSION\n" . var_export($_SESSION, true);
-            }
-            $ret .= "\$_COOKIE\n" . var_export($_COOKIE, true) . "\n";
-        }
-        $ret .= '---------------------------------------------------------------------------------------------------------------- ###' . "\n";
-
-        return self::write2file($ret, $who);
+        self::$config = array_replace_recursive(self::$config, $config);
     }
 
     /**
-     * @param string $message message to log
-     * @param string $who     log name
+     * @param string $name
      *
-     * @return bool TRUE on success, FALSE on fail
-     *
-     * @throws \InvalidArgumentException if can`t get the real-path of log config file
+     * @return \Psr\Log\LoggerInterface
      */
-    public static function warning($message, $who = 'colibri')
+    final protected static function logger($name = 'error'): LoggerInterface
     {
-        $message = '### ' . date('d-m-y H:i:s') . ' ###: ' . $message . "\n";
-
-        return self::write2file($message, $who);
+        return self::$logger[$name] ?? self::$logger[$name] = self::createLogger($name);
     }
 
     /**
-     * @param $message
-     * @param $who
+     * @param string $name
+     * @param array  $arguments
      *
-     * @return bool
-     *
-     * @throws \InvalidArgumentException if can`t get the real-path of log config file
+     * @return \Psr\Log\LoggerInterface
      */
-    private static function write2file($message, $who)
+    final public static function __callStatic(string $name, array $arguments): LoggerInterface
     {
-        if (static::$config === null) {
-            static::loadFromConfig();
-        }
-
-        if ( ! file_exists(self::$config['folder'])) {
-            if ( ! mkdir(self::$config['folder'], 0777, true)) { // 0777 - just default value, which means that need to use umask()
-                return false;
-            }
-        }
-        $filename = self::$config['folder'] . '/' . self::$config['prefix'] . '.' . $who . '.log';
-
-        return self::fwrite($filename, $message);
+        return static::logger($name);
     }
 
     /**
-     * @param string $filename
-     * @param string $str
+     * @param string $name
      *
-     * @return bool
+     * @return \Psr\Log\LoggerInterface
      */
-    private static function fwrite($filename, $str)
+    protected static function createLogger(string $name): LoggerInterface
     {
-        $f = @fopen($filename, 'a+');
-        if ( ! $f) {
-            return false;
-        }
-        fwrite($f, $str);
-        fclose($f);
+        $config       = static::$config;
+        $loggerConfig = $config[$name];
+        $handler      = $loggerConfig['handler']['class'];
+        $params       = $loggerConfig['handler']['params'] ?? [];
 
-        return true;
+        array_unshift($params, "{$config['folder']}/{$config['prefix']}.$name.log");
+
+        return (new Logger($name))->pushHandler(new $handler(...$params));
     }
 
     /**
-     * @return array
+     * System is unusable.
      *
-     * @throws \InvalidArgumentException if can`t get the real-path of log config file
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
      */
-    private static function loadFromConfig()
+    public static function emergency($message, array $context = [])
     {
-        static::$config           = Arr::overwrite(
-            static::$defaultConfig,
-            Config::getOrEmpty('log')
-        );
-        static::$config['folder'] = rtrim(static::$config['folder'], '/\\ ');
+        static::logger()->emergency($message, $context);
+    }
 
-        return static::$config;
+    /**
+     * Action must be taken immediately.
+     *
+     * Example: Entire website down, database unavailable, etc. This should
+     * trigger the SMS alerts and wake you up.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public static function alert($message, array $context = [])
+    {
+        static::logger()->alert($message, $context);
+    }
+
+    /**
+     * Critical conditions.
+     *
+     * Example: Application component unavailable, unexpected exception.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public static function critical($message, array $context = [])
+    {
+        static::logger()->critical($message, $context);
+    }
+
+    /**
+     * Runtime errors that do not require immediate action but should typically
+     * be logged and monitored.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public static function error($message, array $context = [])
+    {
+        static::logger()->error($message, $context);
+    }
+
+    /**
+     * Exceptional occurrences that are not errors.
+     *
+     * Example: Use of deprecated APIs, poor use of an API, undesirable things
+     * that are not necessarily wrong.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public static function warning($message, array $context = [])
+    {
+        static::logger()->warning($message, $context);
+    }
+
+    /**
+     * Normal but significant events.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public static function notice($message, array $context = [])
+    {
+        static::logger()->notice($message, $context);
+    }
+
+    /**
+     * Interesting events.
+     *
+     * Example: User logs in, SQL logs.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public static function info($message, array $context = [])
+    {
+        static::logger()->info($message, $context);
+    }
+
+    /**
+     * Detailed debug information.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public static function debug($message, array $context = [])
+    {
+        static::logger()->debug($message, $context);
+    }
+
+    /**
+     * Logs with an arbitrary level.
+     *
+     * @param string $level one of LogLevel::<CONST>-ants
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public static function log($level, $message, array $context = [])
+    {
+        static::logger()->log($level, $message, $context);
     }
 }
