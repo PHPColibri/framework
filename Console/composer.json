@@ -1,0 +1,23 @@
+{
+    "name": "colibri-fw/console",
+    "description": "Colibri Console component",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander Chibrikin",
+            "email": "alek13.me@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "colibri-fw/util": "dev-master@dev",
+        "symfony/console": "^3.0|^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Colibri\\Console\\": ""
+        }
+    },
+    "minimum-stability": "dev"
+}
