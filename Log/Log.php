@@ -17,8 +17,8 @@ class Log extends Helper
      * @var array
      */
     protected static $config = [
-        'error'    => ['handler' => ['class' => StreamHandler::class,],],
-        'notFound' => ['handler' => ['class' => StreamHandler::class,],],
+        'error'    => ['handler' => ['class' => StreamHandler::class]],
+        'notFound' => ['handler' => ['class' => StreamHandler::class]],
         'folder'   => '/var/log/colibri',
         'prefix'   => 'colibri',
     ];
@@ -191,7 +191,7 @@ class Log extends Helper
     /**
      * Logs with an arbitrary level.
      *
-     * @param string $level one of LogLevel::<CONST>-ants
+     * @param string $level   one of LogLevel::<CONST>-ants
      * @param string $message
      * @param array  $context
      *
