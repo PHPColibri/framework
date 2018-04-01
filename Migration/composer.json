@@ -1,0 +1,29 @@
+{
+    "name": "colibri-fw/migration",
+    "description": "Colibri Migration component",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander Chibrikin",
+            "email": "alek13.me@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "colibri-fw/base": "dev-master@dev",
+        "colibri-fw/config": "dev-master@dev",
+        "colibri-fw/console": "dev-master@dev",
+        "colibri-fw/database": "dev-master@dev",
+        "colibri-fw/pattern": "dev-master@dev",
+        "colibri-fw/util": "dev-master@dev",
+        "colibri-fw/view": "dev-master@dev",
+        "nesbot/carbon": "^1.22"
+    },
+    "autoload": {
+        "psr-4": {
+            "Colibri\\Mail\\": ""
+        }
+    },
+    "minimum-stability": "dev"
+}
