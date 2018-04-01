@@ -1,0 +1,23 @@
+{
+    "name": "colibri-fw/mail",
+    "description": "Colibri Mail component",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander Chibrikin",
+            "email": "alek13.me@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "colibri-fw/view": "dev-master@dev",
+        "swiftmailer/swiftmailer": "^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Colibri\\Mail\\": ""
+        }
+    },
+    "minimum-stability": "dev"
+}
