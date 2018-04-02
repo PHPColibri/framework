@@ -83,13 +83,13 @@ class Engine extends PropertyAccess
     }
 
     /**
-     * @return void
+     * @param bool $debug
      */
-    private static function setUpErrorHandling()
+    private static function setUpErrorHandling($debug = false)
     {
         error_reporting(-1);
-        ini_set('display_errors', DEBUG);
-        Error\Handler::register(DEBUG);
+        ini_set('display_errors', $debug);
+        Error\Handler::register($debug);
     }
 
     /**
@@ -104,7 +104,6 @@ class Engine extends PropertyAccess
         $this->_domainPrefix = $this->getDomainPrefix();
 
         $this->initAPI($appConfig);
-
 
         $requestedUri = $this->getRequestedUri();
         /** @noinspection PhpUndefinedMethodInspection */
@@ -286,8 +285,10 @@ class Engine extends PropertyAccess
     protected function bootstrap(): array
     {
         $appConfig = Config::get('application');
-        define('DEBUG', (bool)Arr::get($appConfig, 'debug', false));
-        self::setUpErrorHandling();
+
+        $debug = (bool)Arr::get($appConfig, 'debug', false);
+        define('DEBUG', $debug);
+        self::setUpErrorHandling($debug);
         mb_internal_encoding($appConfig['encoding']);
         date_default_timezone_set($appConfig['timezone']);
         setlocale(LC_TIME, $appConfig['locale']);
