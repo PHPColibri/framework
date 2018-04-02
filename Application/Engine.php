@@ -19,16 +19,11 @@ use LogicException;
  * Description of CModuleEngine.
  *
  * @property string          $domainPrefix
- * @property ViewsController $responser
  * @property bool            $showProfilerInfoOnDebug
  * @property bool            $showAppDevToolsOnDebug
  */
 class Engine extends PropertyAccess
 {
-    /**
-     * @var ViewsController|MethodsController
-     */
-    protected $_responser = null;
     /**
      * @var string
      */
@@ -221,7 +216,6 @@ class Engine extends PropertyAccess
         $className = self::getClassName($division, $module);
         /** @var ViewsController|MethodsController $responder */
         $responder        = new $className($division, $module, $method);
-        $this->_responser = &$responder;
 
         if ( ! in_array($method, get_class_methods($className))) {
             throw new Exception\NotFoundException("Method '$method' does not contains in class '$className'.");
