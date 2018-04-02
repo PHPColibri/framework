@@ -7,7 +7,7 @@ use Colibri\Util\Arr;
 /**
  * Config.
  *
- * @method static mixed application(string $key, mixed $default = null) gets config value by keys, separated with dot
+ * @method static mixed application(string $key = null, mixed $default = null) gets config value by keys, separated with dot
  */
 class Config extends Helper
 {

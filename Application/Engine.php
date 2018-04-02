@@ -2,15 +2,9 @@
 namespace Colibri\Application;
 
 use Colibri\Base\PropertyAccess;
-use Colibri\Cache\Cache;
 use Colibri\Config\Config;
 use Colibri\Controller\ViewsController;
-use Colibri\Database\AbstractDb\Driver;
-use Colibri\Database\Db;
 use Colibri\Http;
-use Colibri\Log\Log;
-use Colibri\Session\Session;
-use Colibri\Util\Arr;
 use Colibri\Util\Str;
 use LogicException;
 
@@ -56,48 +50,26 @@ class Engine extends PropertyAccess
     /**
      * Base constructor.
      *
-     * @throws \Colibri\Database\DbException
      * @throws \InvalidArgumentException
+     * @throws \Colibri\Database\DbException
      */
     public function __construct()
     {
-        $config = Config::get('application');
-
-        $this->configure($config);
-
-        Session::start();
-
-        if (isset($config['response']['defaultHeaders'])) {
-            foreach ($config['response']['defaultHeaders'] as $header) {
-                header($header);
-            }
-        }
-
         $this->initialize();
-    }
-
-    /**
-     * @param bool $debug
-     */
-    private static function setUpErrorHandling($debug = false)
-    {
-        error_reporting(-1);
-        ini_set('display_errors', $debug);
-        Error\Handler::register($debug);
     }
 
     /**
      * @return void
      *
      * @throws \InvalidArgumentException
+     * @throws \Colibri\Database\DbException
      */
     protected function initialize()
     {
-        $appConfig = $this->bootstrap();
+        Application\Bootstrap::run($this);
 
         $this->_domainPrefix = $this->getDomainPrefix();
 
-        $this->initAPI($appConfig);
 
         $requestedUri = $this->getRequestedUri();
         /** @noinspection PhpUndefinedMethodInspection */
@@ -270,50 +242,5 @@ class Engine extends PropertyAccess
         }
 
         return $className;
-    }
-
-    /**
-     * @return array
-     */
-    protected function bootstrap(): array
-    {
-        $appConfig = Config::get('application');
-
-        $debug = (bool)Arr::get($appConfig, 'debug', false);
-        define('DEBUG', $debug);
-        self::setUpErrorHandling($debug);
-        mb_internal_encoding($appConfig['encoding']);
-        date_default_timezone_set($appConfig['timezone']);
-        setlocale(LC_TIME, $appConfig['locale']);
-        umask($appConfig['umask']);
-
-        return $appConfig;
-    }
-
-    /**
-     * @param $config
-     *
-     * @throws \Colibri\Database\DbException
-     */
-    private function configure($config)
-    {
-        Driver\Connection\Metadata::$useCacheForMetadata = $config['useCache'];
-        Driver\Connection::$monitorQueries               = $config['debug'];
-
-        Db::setConfig(Config::get('database'));
-        Cache::setConfig(Config::getOrEmpty('cache'));
-        Log::setConfig(Config::getOrEmpty('log'));
-    }
-
-    /**
-     * @param array $appConfig
-     */
-    protected function initAPI(array $appConfig)
-    {
-        $apiClass = $appConfig['API'] ?? API::class;
-        $api      = new $apiClass($this);
-        if ( ! $api instanceof API) {
-            throw new \DomainException('Application config `API` param must referenced to `' . API::class . '` extension');
-        }
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Colibri\Application\Error;
+namespace Colibri\Application\Application\Error;
 
 use Colibri\Config\Config;
 use Colibri\Log\Log;

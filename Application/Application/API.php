@@ -1,6 +1,7 @@
 <?php
-namespace Colibri\Application;
+namespace Colibri\Application\Application;
 
+use Colibri\Application\Engine;
 use Colibri\Cache\Cache;
 use Colibri\Config\Config;
 use Colibri\Session\Session;
