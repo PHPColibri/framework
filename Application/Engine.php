@@ -18,9 +18,9 @@ use LogicException;
 /**
  * Description of CModuleEngine.
  *
- * @property string          $domainPrefix
- * @property bool            $showProfilerInfoOnDebug
- * @property bool            $showAppDevToolsOnDebug
+ * @property string $domainPrefix
+ * @property bool   $showProfilerInfoOnDebug
+ * @property bool   $showAppDevToolsOnDebug
  */
 class Engine extends PropertyAccess
 {
@@ -214,8 +214,8 @@ class Engine extends PropertyAccess
         $this->loadModule($division, $module);
 
         $className = self::getClassName($division, $module);
-        /** @var ViewsController|MethodsController $responder */
-        $responder        = new $className($division, $module, $method);
+        /** @var ViewsController $responder */
+        $responder = new $className($division, $module, $method);
 
         if ( ! in_array($method, get_class_methods($className))) {
             throw new Exception\NotFoundException("Method '$method' does not contains in class '$className'.");
@@ -247,10 +247,10 @@ class Engine extends PropertyAccess
 
         if ( ! file_exists($fileName)) {
             throw new Exception\NotFoundException("Can't load module: file '$fileName' does not exists.");
-        } else {
-            /** @noinspection PhpIncludeInspection */
-            require_once $fileName;
         }
+
+        /** @noinspection PhpIncludeInspection */
+        require_once $fileName;
     }
 
     /**
