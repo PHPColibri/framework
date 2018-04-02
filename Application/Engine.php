@@ -233,17 +233,12 @@ class Engine extends Engine\Base
     {
         $this->loadModule($division, $module, $type);
 
-        $className =
-            ucfirst($module) . ucfirst($division) . ($type == CallType::VIEW ? 'Views' : 'Methods') . 'Controller';
-        if ( ! class_exists($className)) {
-            throw new Exception\NotFoundException("Class '$className' does not exists.");
-        }
+        $className = self::getClassName($type, $division, $module);
         /** @var ViewsController|MethodsController $responder */
         $responder        = new $className($division, $module, $method);
         $this->_responser = &$responder;
 
-        $classMethods = get_class_methods($className);
-        if ( ! in_array($method, $classMethods)) {
+        if ( ! in_array($method, get_class_methods($className))) {
             throw new Exception\NotFoundException("Method '$method' does not contains in class '$className'.");
         }
 
@@ -291,5 +286,28 @@ class Engine extends Engine\Base
             /** @noinspection PhpIncludeInspection */
             require_once $fileName;
         }
+    }
+
+    /**
+     * @param $type
+     * @param $division
+     * @param $module
+     *
+     * @return string
+     *
+     */
+    private static function getClassName($type, $division, $module): string
+    {
+        $className =
+            ucfirst($module) .
+            ucfirst($division) .
+            ($type == CallType::VIEW ? 'Views' : 'Methods') .
+            'Controller';
+
+        if ( ! class_exists($className)) {
+            throw new Exception\NotFoundException("Class '$className' does not exists.");
+        }
+
+        return $className;
     }
 }
