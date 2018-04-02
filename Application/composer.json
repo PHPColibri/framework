@@ -11,6 +11,7 @@
     ],
     "require": {
         "php": ">=7.0",
+        "colibri-fw/http": "dev-master@dev",
         "colibri-fw/session": "dev-master@dev",
         "colibri-fw/util": "dev-master@dev"
     },
