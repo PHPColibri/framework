@@ -70,13 +70,7 @@ class Engine extends Engine\Base
      */
     protected function initialize()
     {
-        $appConfig = Config::get('application');
-        define('DEBUG', (bool)Arr::get($appConfig, 'debug', false));
-        self::setUpErrorHandling();
-        mb_internal_encoding($appConfig['encoding']);
-        date_default_timezone_set($appConfig['timezone']);
-        setlocale(LC_TIME, $appConfig['locale']);
-        umask($appConfig['umask']);
+        $appConfig = $this->bootstrap();
 
         $this->_domainPrefix = $this->getDomainPrefix();
 
@@ -259,5 +253,21 @@ class Engine extends Engine\Base
         }
 
         return $className;
+    }
+
+    /**
+     * @return array
+     */
+    protected function bootstrap(): array
+    {
+        $appConfig = Config::get('application');
+        define('DEBUG', (bool)Arr::get($appConfig, 'debug', false));
+        self::setUpErrorHandling();
+        mb_internal_encoding($appConfig['encoding']);
+        date_default_timezone_set($appConfig['timezone']);
+        setlocale(LC_TIME, $appConfig['locale']);
+        umask($appConfig['umask']);
+
+        return $appConfig;
     }
 }

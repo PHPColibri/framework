@@ -24,6 +24,8 @@ abstract class Base extends PropertyAccess implements EngineInterface
     {
         $config = Config::get('application');
 
+        $this->configure($config);
+
         Session::start();
 
         if (isset($config['response']['defaultHeaders'])) {
@@ -32,15 +34,6 @@ abstract class Base extends PropertyAccess implements EngineInterface
             }
         }
 
-        Driver\Connection\Metadata::$useCacheForMetadata =
-            $config['useCache'];
-
-        Driver\Connection::$monitorQueries = $config['debug'];
-
-        Db::setConfig(Config::get('database'));
-        Cache::setConfig(Config::getOrEmpty('cache'));
-        Log::setConfig(Config::getOrEmpty('log'));
-
         $this->initialize();
     }
 
@@ -48,4 +41,19 @@ abstract class Base extends PropertyAccess implements EngineInterface
      * @return void
      */
     abstract protected function initialize();
+
+    /**
+     * @param $config
+     *
+     * @throws \Colibri\Database\DbException
+     */
+    private function configure($config)
+    {
+        Driver\Connection\Metadata::$useCacheForMetadata = $config['useCache'];
+        Driver\Connection::$monitorQueries               = $config['debug'];
+
+        Db::setConfig(Config::get('database'));
+        Cache::setConfig(Config::getOrEmpty('cache'));
+        Log::setConfig(Config::getOrEmpty('log'));
+    }
 }
