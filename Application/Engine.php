@@ -184,12 +184,14 @@ class Engine extends PropertyAccess
         $this->loadModule($division, $module);
 
         $className = self::getClassName($division, $module);
-        /** @var ViewsController $responder */
-        $responder = new $className($division, $module, $method);
-
         if ( ! in_array($method, get_class_methods($className))) {
             throw new Exception\NotFoundException("Method '$method' does not contains in class '$className'.");
         }
+
+        // Invoke controller action:
+
+        /** @var ViewsController $responder */
+        $responder = new $className($division, $module, $method);
 
         call_user_func_array([&$responder, 'setUp'], $params);
         call_user_func_array([&$responder, $method], $params);
