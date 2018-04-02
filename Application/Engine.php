@@ -70,7 +70,6 @@ class Engine extends PropertyAccess
 
         $this->_domainPrefix = $this->getDomainPrefix();
 
-
         $requestedUri = $this->getRequestedUri();
         /** @noinspection PhpUndefinedMethodInspection */
         $routes = Config::routing('rewrite');
