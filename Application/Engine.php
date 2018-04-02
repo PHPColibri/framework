@@ -4,7 +4,6 @@ namespace Colibri\Application;
 use Colibri\Base\PropertyAccess;
 use Colibri\Cache\Cache;
 use Colibri\Config\Config;
-use Colibri\Controller\MethodsController;
 use Colibri\Controller\ViewsController;
 use Colibri\Database\AbstractDb\Driver;
 use Colibri\Database\Db;
