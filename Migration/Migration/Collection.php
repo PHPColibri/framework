@@ -42,13 +42,7 @@ class Collection extends DynamicCollection
         foreach (Directory::iterator($this->folder) as $file) {
             $class = $this->namespace . '\\' . Str::cut($file->getFilename(), '.php');
             $model = Model::fromClass($class);
-            if ($this->withHash !== null && $model->hash !== $this->withHash) {
-                continue;
-            }
-            if ($this->thatNotMigrated && $model->migrated()) {
-                continue;
-            }
-            if ($this->onlyMigrated && ! $model->migrated()) {
+            if ($this->mustBeFiltered($model)) {
                 continue;
             }
             $migrations[] = $model;
@@ -61,8 +55,7 @@ class Collection extends DynamicCollection
             : ($this->last === null
                 ? $migrations
                 : Arr::last($migrations, $this->last)
-            )
-        ;
+            );
     }
 
     /**
@@ -136,5 +129,19 @@ class Collection extends DynamicCollection
         }
 
         return $migrations;
+    }
+
+    /**
+     * @param Model $model
+     *
+     * @return bool
+     */
+    private function mustBeFiltered(Model $model): bool
+    {
+        return
+            ($this->withHash !== null && $model->hash !== $this->withHash) ||
+            ($this->thatNotMigrated && $model->migrated()) ||
+            ($this->onlyMigrated && ! $model->migrated())
+        ;
     }
 }
