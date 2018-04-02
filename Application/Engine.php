@@ -84,7 +84,7 @@ class Engine extends Engine\Base
         $apiClass = $appConfig['API'] ?? API::class;
         $api      = new $apiClass($this);
         if ( ! $api instanceof API) {
-            throw new \DomainException('Application config `API` param must referenced to `' . API::class . '` extention');
+            throw new \DomainException('Application config `API` param must referenced to `' . API::class . '` extension');
         }
 
         $requestedUri = $this->getRequestedUri();
