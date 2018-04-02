@@ -30,9 +30,9 @@ class Log extends Helper
     /**
      * @param array $config
      */
-    public static function setConfig(array $config)
+    final public static function setConfig(array $config)
     {
-        self::$config = array_replace_recursive(self::$config, $config);
+        static::$config = array_replace_recursive(static::$config, $config);
     }
 
     /**
@@ -42,7 +42,7 @@ class Log extends Helper
      */
     final protected static function logger($name = 'error'): LoggerInterface
     {
-        return self::$logger[$name] ?? self::$logger[$name] = self::createLogger($name);
+        return static::$logger[$name] ?? (static::$logger[$name] = static::createLogger($name));
     }
 
     /**
