@@ -1,25 +1,22 @@
 <?php
 
-use Colibri\Application\Engine as ApplicationEngine;
+use Colibri\Application\Application;
 use Colibri\Application\Error\Handler;
 use Colibri\Cache\Cache;
 use Colibri\Database\AbstractDb\Driver\Connection;
 use Colibri\Http\NotFoundException;
 use Colibri\Log\Log;
 
-$mEngine = null;
-
 try {
     $time = microtime(true);
 
-    $mEngine = new ApplicationEngine();
-    $content = $mEngine->generateResponse();
+    $application = new Application();
+    $application->run();
 
-    echo $content;
 
     // TODO [alek13]: bring out
     if (DEBUG) {
-        if ($mEngine->showProfilerInfoOnDebug) {
+        if ($application->showProfilerInfoOnDebug) {
             echo '<pre style="background-color:#333;color:lime;padding:4px;border:solid 1px lime">';
             echo '<div align=center>';
             echo 'memory usage: <b>' . memory_get_peak_usage() . '</b>';
@@ -31,7 +28,7 @@ try {
             echo Connection::$strQueries;
             echo '</pre>';
         }
-        if ($mEngine->showAppDevToolsOnDebug) {
+        if ($application->showAppDevToolsOnDebug) {
             echo '<div style="position:absolute;top:0;right:0;border:solid 1px #678;margin:4px;padding:4px 6px;background-color:#def;opacity:0.6;z-index:10000">';
             echo '<a href=/devtools/sess_destroy>session destroy</a> | ';
             echo '<a href=/devtools/unset_session>unset session</a> | ';
