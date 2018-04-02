@@ -1,10 +1,16 @@
 <?php
 namespace Colibri\Application;
 
+use Colibri\Base\PropertyAccess;
+use Colibri\Cache\Cache;
 use Colibri\Config\Config;
 use Colibri\Controller\MethodsController;
 use Colibri\Controller\ViewsController;
+use Colibri\Database\AbstractDb\Driver;
+use Colibri\Database\Db;
 use Colibri\Http;
+use Colibri\Log\Log;
+use Colibri\Session\Session;
 use Colibri\Util\Arr;
 use Colibri\Util\Str;
 use LogicException;
@@ -17,7 +23,7 @@ use LogicException;
  * @property bool            $showProfilerInfoOnDebug
  * @property bool            $showAppDevToolsOnDebug
  */
-class Engine extends Engine\Base
+class Engine extends PropertyAccess
 {
     /**
      * @var ViewsController|MethodsController
@@ -54,6 +60,29 @@ class Engine extends Engine\Base
     protected $_showAppDevToolsOnDebug = true;
 
     /**
+     * Base constructor.
+     *
+     * @throws \Colibri\Database\DbException
+     * @throws \InvalidArgumentException
+     */
+    public function __construct()
+    {
+        $config = Config::get('application');
+
+        $this->configure($config);
+
+        Session::start();
+
+        if (isset($config['response']['defaultHeaders'])) {
+            foreach ($config['response']['defaultHeaders'] as $header) {
+                header($header);
+            }
+        }
+
+        $this->initialize();
+    }
+
+    /**
      * @return void
      */
     private static function setUpErrorHandling()
@@ -74,12 +103,8 @@ class Engine extends Engine\Base
 
         $this->_domainPrefix = $this->getDomainPrefix();
 
-        // initialize API
-        $apiClass = $appConfig['API'] ?? API::class;
-        $api      = new $apiClass($this);
-        if ( ! $api instanceof API) {
-            throw new \DomainException('Application config `API` param must referenced to `' . API::class . '` extension');
-        }
+        $this->initAPI($appConfig);
+
 
         $requestedUri = $this->getRequestedUri();
         /** @noinspection PhpUndefinedMethodInspection */
@@ -269,5 +294,32 @@ class Engine extends Engine\Base
         umask($appConfig['umask']);
 
         return $appConfig;
+    }
+
+    /**
+     * @param $config
+     *
+     * @throws \Colibri\Database\DbException
+     */
+    private function configure($config)
+    {
+        Driver\Connection\Metadata::$useCacheForMetadata = $config['useCache'];
+        Driver\Connection::$monitorQueries               = $config['debug'];
+
+        Db::setConfig(Config::get('database'));
+        Cache::setConfig(Config::getOrEmpty('cache'));
+        Log::setConfig(Config::getOrEmpty('log'));
+    }
+
+    /**
+     * @param array $appConfig
+     */
+    protected function initAPI(array $appConfig)
+    {
+        $apiClass = $appConfig['API'] ?? API::class;
+        $api      = new $apiClass($this);
+        if ( ! $api instanceof API) {
+            throw new \DomainException('Application config `API` param must referenced to `' . API::class . '` extension');
+        }
     }
 }
