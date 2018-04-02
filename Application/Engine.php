@@ -12,10 +12,10 @@ use LogicException;
 /**
  * Description of CModuleEngine.
  *
- * @property string                            $domainPrefix
- * @property MethodsController|ViewsController $responser
- * @property bool                              $showProfilerInfoOnDebug
- * @property bool                              $showAppDevToolsOnDebug
+ * @property string          $domainPrefix
+ * @property ViewsController $responser
+ * @property bool            $showProfilerInfoOnDebug
+ * @property bool            $showAppDevToolsOnDebug
  */
 class Engine extends Engine\Base
 {
@@ -198,42 +198,9 @@ class Engine extends Engine\Base
      */
     public function getModuleView($division, $module, $method, $params)
     {
-        return $this->callModuleEssence(CallType::VIEW, $division, $module, $method, $params);
-    }
+        $this->loadModule($division, $module);
 
-    /**
-     * @param string $division
-     * @param string $module
-     * @param string $method
-     * @param        $params
-     *
-     * @return string
-     *
-     * @throws \Colibri\Application\Exception\NotFoundException
-     * @throws \LogicException
-     */
-    public function callModuleMethod($division, $module, $method, $params)
-    {
-        return $this->callModuleEssence(CallType::METHOD, $division, $module, $method, $params);
-    }
-
-    /**
-     * @param $type
-     * @param $division
-     * @param $module
-     * @param $method
-     * @param $params
-     *
-     * @return string
-     *
-     * @throws \Colibri\Application\Exception\NotFoundException
-     * @throws \LogicException
-     */
-    private function callModuleEssence($type, $division, $module, $method, $params)
-    {
-        $this->loadModule($division, $module, $type);
-
-        $className = self::getClassName($type, $division, $module);
+        $className = self::getClassName($division, $module);
         /** @var ViewsController|MethodsController $responder */
         $responder        = new $className($division, $module, $method);
         $this->_responser = &$responder;
@@ -243,42 +210,28 @@ class Engine extends Engine\Base
         }
 
         call_user_func_array([&$responder, 'setUp'], $params);
-        $response = call_user_func_array([&$responder, $method], $params);
+        call_user_func_array([&$responder, $method], $params);
         call_user_func_array([&$responder, 'tearDown'], $params);
 
-        if ($type == CallType::VIEW) {
-            $this->_showProfilerInfoOnDebug = $responder->showProfilerInfoOnDebug;
-            $this->_showAppDevToolsOnDebug  = $responder->showAppDevToolsOnDebug;
-        }
+        $this->_showProfilerInfoOnDebug = $responder->showProfilerInfoOnDebug;
+        $this->_showAppDevToolsOnDebug  = $responder->showAppDevToolsOnDebug;
 
-        if ($type == CallType::VIEW) {
-            return $responder->response;
-        }
-
-        return $response;
+        return $responder->response;
     }
 
     /**
      * @param string $division   name of division (as a folder name)
      * @param string $moduleName name of module (as a folder name)
-     * @param int    $type       one of CallType::<const> 'views' or 'methods'
      *
      * @throws Exception\NotFoundException
      * @throws LogicException
      */
-    private function loadModule($division, $moduleName, $type = CallType::VIEW)
+    private function loadModule($division, $moduleName)
     {
         $mPath = $moduleName . '/' . ($division === '' ? 'primary/' : $division . '/');
         $mName = ucfirst($moduleName) . ucfirst($division);
 
-        $fileName = MODULES . $mPath;
-        if ($type == CallType::VIEW) {
-            $fileName .= $mName . 'ViewsController.php';
-        } elseif ($type == CallType::METHOD) {
-            $fileName .= $mName . 'Methods.php';
-        } else {
-            throw new LogicException("Unknown CallType $type");
-        }
+        $fileName = MODULES . $mPath . $mName . 'ViewsController.php';
 
         if ( ! file_exists($fileName)) {
             throw new Exception\NotFoundException("Can't load module: file '$fileName' does not exists.");
@@ -289,20 +242,17 @@ class Engine extends Engine\Base
     }
 
     /**
-     * @param $type
-     * @param $division
-     * @param $module
+     * @param string $division
+     * @param string $module
      *
      * @return string
-     *
      */
-    private static function getClassName($type, $division, $module): string
+    private static function getClassName(string $division, string $module): string
     {
         $className =
             ucfirst($module) .
             ucfirst($division) .
-            ($type == CallType::VIEW ? 'Views' : 'Methods') .
-            'Controller';
+            'ViewsController';
 
         if ( ! class_exists($className)) {
             throw new Exception\NotFoundException("Class '$className' does not exists.");

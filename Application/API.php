@@ -36,22 +36,6 @@ class API
      * @throws \Colibri\Application\Exception\NotFoundException
      * @throws \LogicException
      */
-    public static function callModuleMethod($division, $module, $method, ...$params)
-    {
-        return self::$moduleSystem->callModuleMethod($division, $module, $method, $params);
-    }
-
-    /**
-     * @param string $division
-     * @param string $module
-     * @param string $method
-     * @param array  $params
-     *
-     * @return string
-     *
-     * @throws \Colibri\Application\Exception\NotFoundException
-     * @throws \LogicException
-     */
     public static function getModuleView($division, $module, $method, ...$params)
     {
         return self::$moduleSystem->getModuleView($division, $module, $method, $params);
@@ -88,35 +72,6 @@ class API
      * @throws \Colibri\Application\Exception\NotFoundException
      * @throws \LogicException
      */
-    public static function callModuleMethodCached($division, $module, $method, ...$params)
-    {
-        if (Config::application('useCache') && ! DEBUG) {
-            $key      = self::getCacheKeyForCall(func_get_args());
-            /** @noinspection PhpUnhandledExceptionInspection */
-            $retValue = Cache::remember($key, function () use ($division, $module, $method, $params) {
-                /* @noinspection PhpUnhandledExceptionInspection */
-                return self::callModuleMethod($division, $module, $method, ...$params);
-            });
-        } else {
-            $retValue = self::callModuleMethod($division, $module, $method, ...$params);
-        }
-
-        return $retValue;
-    }
-
-    /** @noinspection PhpDocMissingThrowsInspection */
-
-    /**
-     * @param string $division
-     * @param string $module
-     * @param string $method
-     * @param array  $params
-     *
-     * @return string
-     *
-     * @throws \Colibri\Application\Exception\NotFoundException
-     * @throws \LogicException
-     */
     public static function getModuleViewCached($division, $module, $method, ...$params)
     {
         if (Config::application('useCache') && ! DEBUG) {
@@ -131,16 +86,6 @@ class API
         }
 
         return $retValue;
-    }
-
-    /**
-     * @param string $varName
-     *
-     * @return mixed
-     */
-    public static function getTemplateVar($varName)
-    {
-        return self::$moduleSystem->responser->getTemplate()->vars[$varName];
     }
 
     /**
