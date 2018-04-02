@@ -1,7 +1,7 @@
 <?php
 
 use Colibri\Application\Application;
-use Colibri\Application\Error\Handler;
+use Colibri\Application\Application\Error\Handler;
 use Colibri\Cache\Cache;
 use Colibri\Database\AbstractDb\Driver\Connection;
 use Colibri\Http\NotFoundException;
