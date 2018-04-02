@@ -13,7 +13,6 @@ try {
     $application = new Application();
     $application->run();
 
-
     // TODO [alek13]: bring out
     if (DEBUG) {
         if ($application->showProfilerInfoOnDebug) {

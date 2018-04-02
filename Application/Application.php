@@ -3,7 +3,6 @@ namespace Colibri\Application;
 
 class Application
 {
-
     /**
      * Application constructor.
      */
@@ -12,17 +11,14 @@ class Application
     }
 
     /**
-     *
      * @throws \Colibri\Database\DbException
      * @throws \Colibri\Http\NotFoundException
      */
     public function run()
     {
-        $engine = new Engine();
+        $engine  = new Engine();
         $content = $engine->generateResponse();
 
         echo $content;
     }
-
-
 }
