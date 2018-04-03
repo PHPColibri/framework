@@ -3,7 +3,7 @@ namespace Colibri\Application;
 
 use Colibri\Base\PropertyAccess;
 use Colibri\Config\Config;
-use Colibri\Controller\ViewsController;
+use Colibri\Controller;
 use Colibri\Http;
 use Colibri\Util\Str;
 use LogicException;
@@ -179,7 +179,7 @@ class Engine extends PropertyAccess
      * @throws Exception\NotFoundException
      * @throws LogicException
      */
-    public function getModuleView($division, $module, $method, $params)
+    public function getModuleView(string $division, string $module, string $method, array $params)
     {
         $this->loadModule($division, $module);
 
@@ -188,14 +188,7 @@ class Engine extends PropertyAccess
             throw new Exception\NotFoundException("Method '$method' does not contains in class '$className'.");
         }
 
-        // Invoke controller action:
-
-        /** @var ViewsController $responder */
-        $responder = new $className($division, $module, $method);
-
-        call_user_func_array([&$responder, 'setUp'], $params);
-        call_user_func_array([&$responder, $method], $params);
-        call_user_func_array([&$responder, 'tearDown'], $params);
+        $responder = Controller\Dispatcher::call($division, $module, $className, $method, $params);
 
         $this->_showProfilerInfoOnDebug = $responder->showProfilerInfoOnDebug;
         $this->_showAppDevToolsOnDebug  = $responder->showAppDevToolsOnDebug;
