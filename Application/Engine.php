@@ -1,7 +1,6 @@
 <?php
 namespace Colibri\Application;
 
-use Colibri\Base\PropertyAccess;
 use Colibri\Config\Config;
 use Colibri\Controller;
 use Colibri\Http;
