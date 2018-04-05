@@ -11,16 +11,11 @@ use LogicException;
 /**
  * Description of CModuleEngine.
  *
- * @property string $domainPrefix
  * @property bool   $showProfilerInfoOnDebug
  * @property bool   $showAppDevToolsOnDebug
  */
-class Engine extends PropertyAccess
+class Engine
 {
-    /**
-     * @var string
-     */
-    protected $_domainPrefix = null;
     /**
      * @var string
      */
@@ -68,8 +63,6 @@ class Engine extends PropertyAccess
     {
         Application\Bootstrap::run($this);
 
-        $this->_domainPrefix = $this->getDomainPrefix();
-
         $requestedUri = $this->getRequestedUri();
         /** @noinspection PhpUndefinedMethodInspection */
         $routes = Config::routing('rewrite');
@@ -99,24 +92,6 @@ class Engine extends PropertyAccess
         }
 
         return substr($_SERVER['REQUEST_URI'], 0, $questPos);
-    }
-
-    /**
-     * @return string returns prefix of domain: for "sub.domain.example.com" and const $conf['domain']=="example.com",
-     *                returns "sub.domain"
-     *
-     * @throws \InvalidArgumentException
-     */
-    private function getDomainPrefix()
-    {
-        $appConfig = Config::get('application');
-        $prefix    = str_replace($appConfig['domain'], '', $_SERVER['HTTP_HOST']);
-        $pLen      = strlen($prefix);
-        if ($pLen) {
-            $prefix = substr($prefix, 0, $pLen - 1);
-        }
-
-        return $prefix;
     }
 
     /**

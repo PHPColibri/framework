@@ -4,6 +4,7 @@ namespace Colibri\Application\Application;
 use Colibri\Application\Engine;
 use Colibri\Cache\Cache;
 use Colibri\Config\Config;
+use Colibri\Http\Request;
 use Colibri\Session\Session;
 
 /**
@@ -49,13 +50,17 @@ class API
      */
     private static function getCacheKeyForCall(array $params)
     {
+        static $domainLevel = null;
+
         $params += $_GET;
         $keyStr = '';
         foreach ($params as $param) {
             $keyStr .= serialize($param);
         }
 
-        $keyStr .= self::$moduleSystem->domainPrefix;
+        $keyStr .= Request::domainPrefix(
+            $domainLevel ?? $domainLevel = count(explode('.', Config::application('domain')))
+        );
 
         return md5($keyStr);
     }
@@ -76,7 +81,7 @@ class API
     public static function getModuleViewCached($division, $module, $method, ...$params)
     {
         if (Config::application('useCache') && ! DEBUG) {
-            $key      = self::getCacheKeyForCall(func_get_args());
+            $key = self::getCacheKeyForCall(func_get_args());
             /** @noinspection PhpUnhandledExceptionInspection */
             $retValue = Cache::remember($key, function () use ($division, $module, $method, $params) {
                 /* @noinspection PhpUnhandledExceptionInspection */

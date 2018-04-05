@@ -2,6 +2,7 @@
 namespace Colibri\Http;
 
 use Colibri\Pattern\Helper;
+use Colibri\Util\Arr;
 use Colibri\Util\Str;
 
 /**
@@ -31,5 +32,33 @@ class Request extends Helper
     public static function is($uri)
     {
         return $_SERVER['REQUEST_URI'] === $uri;
+    }
+
+    /**
+     * @param int $mainDomainLevel
+     *
+     * @return null|string
+     */
+    public static function domainPrefix($mainDomainLevel = 2)
+    {
+        static $domainPrefix = null;
+
+        return $domainPrefix ?? $domainPrefix = self::retrieveDomainPrefix($mainDomainLevel);
+    }
+
+    /**
+     * @param int $mainDomainLevel
+     *
+     * @return string
+     */
+    private static function retrieveDomainPrefix(int $mainDomainLevel): string
+    {
+        $host = $_SERVER['HTTP_HOST'];
+        $parts = explode('.', $host);
+        for ($i = 0; $i < $mainDomainLevel; $i++) {
+            array_pop($parts);
+        }
+
+        return implode('.', $parts);
     }
 }
