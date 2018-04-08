@@ -19,6 +19,8 @@ interface StorageInterface extends CacheInterface
      * @param int|null $expire
      *
      * @return mixed returns cached data
+     *
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function remember(string $key, \Closure $getValueCallback, int $expire = null);
 

@@ -48,7 +48,9 @@ class Memcache extends AbstractStorage implements StorageInterface
      */
     public function get($key, $default = null)
     {
-        self::validateKey($key);
+        is_array($key)
+            ? self::validateKeys($key)
+            : self::validateKey($key);
 
         $this->queriesCount++;
 
@@ -124,11 +126,8 @@ class Memcache extends AbstractStorage implements StorageInterface
         if ( ! (is_array($keys) || $keys instanceof \Traversable)) {
             throw new Exception\InvalidArgumentException('Parameter `$keys` must be iterable (array or Traversable).');
         }
-        foreach ($keys as $key) {
-            self::validateKey($key);
-        }
 
-        return array_fill_keys($keys, $default) + $this->get((array)$keys);
+        return array_fill_keys((array)$keys, $default) + $this->get((array)$keys);
     }
 
     /**
@@ -209,6 +208,18 @@ class Memcache extends AbstractStorage implements StorageInterface
     {
         if (preg_match('/\s/', $key)) {
             throw new InvalidArgumentException('Key can`t contains any whitespace chars: spaces, tabs, new-line...');
+        }
+    }
+
+    /**
+     * @param string[] $keys
+     *
+     * @throws \Colibri\Cache\Storage\Exception\InvalidArgumentException
+     */
+    private static function validateKeys(array $keys)
+    {
+        foreach ($keys as $key) {
+            self::validateKey($key);
         }
     }
 

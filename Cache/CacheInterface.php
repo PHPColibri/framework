@@ -44,6 +44,8 @@ interface CacheInterface
      * @param int|null $expire           seconds
      *
      * @return mixed returns cached data
+     *
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public static function remember(string $key, \Closure $getValueCallback, int $expire = null);
 
