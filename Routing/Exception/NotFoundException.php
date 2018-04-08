@@ -1,5 +1,5 @@
 <?php
-namespace Colibri\Application\Exception;
+namespace Colibri\Routing\Exception;
 
 use LogicException;
 

@@ -35,8 +35,7 @@ class API
      *
      * @return string
      *
-     * @throws \Colibri\Application\Exception\NotFoundException
-     * @throws \LogicException
+     * @throws \Colibri\Routing\Exception\NotFoundException
      */
     public static function getModuleView($division, $module, $method, ...$params)
     {
@@ -65,8 +64,6 @@ class API
         return md5($keyStr);
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection */
-
     /**
      * @param string $division
      * @param string $module
@@ -75,16 +72,14 @@ class API
      *
      * @return string
      *
-     * @throws \Colibri\Application\Exception\NotFoundException
-     * @throws \LogicException
+     * @throws \Colibri\Routing\Exception\NotFoundException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public static function getModuleViewCached($division, $module, $method, ...$params)
     {
         if (Config::application('useCache') && ! DEBUG) {
             $key = self::getCacheKeyForCall(func_get_args());
-            /** @noinspection PhpUnhandledExceptionInspection */
             $retValue = Cache::remember($key, function () use ($division, $module, $method, $params) {
-                /* @noinspection PhpUnhandledExceptionInspection */
                 return self::getModuleView($division, $module, $method, ...$params);
             });
         } else {

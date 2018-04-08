@@ -1,37 +1,20 @@
 <?php
 namespace Colibri\Application;
 
-use Colibri\Config\Config;
 use Colibri\Controller;
 use Colibri\Http;
-use Colibri\Util\Str;
+use Colibri\Routing\Exception\NotFoundException;
+use Colibri\Routing\Route;
 use LogicException;
 
 /**
  * Description of CModuleEngine.
  *
- * @property bool   $showProfilerInfoOnDebug
- * @property bool   $showAppDevToolsOnDebug
+ * @property bool $showProfilerInfoOnDebug
+ * @property bool $showAppDevToolsOnDebug
  */
 class Engine
 {
-    /**
-     * @var string
-     */
-    private $_division = null;
-    /**
-     * @var string
-     */
-    private $_module = null;
-    /**
-     * @var string
-     */
-    private $_method = null;
-    /**
-     * @var array
-     */
-    private $_params = [];
-
     /**
      * @var bool
      */
@@ -61,70 +44,6 @@ class Engine
     protected function initialize()
     {
         Application\Bootstrap::run($this);
-
-        $requestedUri = $this->getRequestedUri();
-        /** @noinspection PhpUndefinedMethodInspection */
-        $routes = Config::routing('rewrite');
-        foreach ($routes as $route) {
-            $pattern      = $route['pattern'];
-            $replacement  = $route['replacement'];
-            $requestedUri = preg_replace($pattern, $replacement, $requestedUri);
-
-            if (isset($route['last'])) {
-                break;
-            }
-        }
-
-        $this->parseRequestedFile($requestedUri);
-    }
-
-    /**
-     * @return string returns requested file name with path: for
-     *                "http://example.com/some/dir/somefile.php?arg1=val1&arg2=val2" returns
-     *                "/some/dir/somefile.php"
-     */
-    private function getRequestedUri()
-    {
-        $questPos = strpos($_SERVER['REQUEST_URI'], '?');
-        if ($questPos === false) {
-            return $_SERVER['REQUEST_URI'];
-        }
-
-        return substr($_SERVER['REQUEST_URI'], 0, $questPos);
-    }
-
-    /**
-     * @param string $file requested file name
-     *
-     * @throws \InvalidArgumentException
-     */
-    protected function parseRequestedFile($file)
-    {
-        $file = ltrim($file, '/');
-
-        $moduleConfig = Config::application('module');
-
-        $parts    = explode('/', $file);
-        $partsCnt = count($parts);
-
-        if ($partsCnt > 0 && in_array($parts[0], Config::get('divisions'))) {
-            $this->_division = $parts[0];
-            $parts           = array_slice($parts, 1);
-        } else {
-            $this->_division = '';
-        }
-
-        $this->_module = empty($parts[0])
-            ? $moduleConfig['default']
-            : $parts[0];
-
-        $this->_method = $partsCnt < 2 || empty($parts[1])
-            ? $moduleConfig['defaultViewsControllerAction']
-            : Str::camel($parts[1]);
-
-        if ($partsCnt > 2) {
-            $this->_params = array_slice($parts, 2);
-        }
     }
 
     /**
@@ -136,8 +55,10 @@ class Engine
     public function generateResponse()
     {
         try {
-            return $this->getModuleView($this->_division, $this->_module, $this->_method, $this->_params);
-        } catch (Exception\NotFoundException $exception) {
+            list($division, $module, $method, $params) = Route::resolve();
+
+            return $this->getModuleView($division, $module, $method, $params);
+        } catch (NotFoundException $exception) {
             throw new Http\NotFoundException($exception->getMessage(), $exception->getCode(), $exception);
         }
     }
@@ -150,16 +71,15 @@ class Engine
      *
      * @return string
      *
-     * @throws Exception\NotFoundException
-     * @throws LogicException
+     * @throws NotFoundException
      */
     public function getModuleView(string $division, string $module, string $method, array $params)
     {
-        $this->loadModule($division, $module);
+        self::loadModule($division, $module);
 
         $className = self::getClassName($division, $module);
         if ( ! in_array($method, get_class_methods($className))) {
-            throw new Exception\NotFoundException("Method '$method' does not contains in class '$className'.");
+            throw new NotFoundException("Method '$method' does not contains in class '$className'.");
         }
 
         $responder = Controller\Dispatcher::call($division, $module, $className, $method, $params);
@@ -174,10 +94,9 @@ class Engine
      * @param string $division   name of division (as a folder name)
      * @param string $moduleName name of module (as a folder name)
      *
-     * @throws Exception\NotFoundException
-     * @throws LogicException
+     * @throws NotFoundException
      */
-    private function loadModule($division, $moduleName)
+    private static function loadModule(string $division, string $moduleName)
     {
         $mPath = $moduleName . '/' . ($division === '' ? 'primary/' : $division . '/');
         $mName = ucfirst($moduleName) . ucfirst($division);
@@ -185,7 +104,7 @@ class Engine
         $fileName = MODULES . $mPath . $mName . 'ViewsController.php';
 
         if ( ! file_exists($fileName)) {
-            throw new Exception\NotFoundException("Can't load module: file '$fileName' does not exists.");
+            throw new NotFoundException("Can't load module: file '$fileName' does not exists.");
         }
 
         /** @noinspection PhpIncludeInspection */
@@ -206,7 +125,7 @@ class Engine
             'ViewsController';
 
         if ( ! class_exists($className)) {
-            throw new Exception\NotFoundException("Class '$className' does not exists.");
+            throw new NotFoundException("Class '$className' does not exists.");
         }
 
         return $className;
