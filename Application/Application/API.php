@@ -1,7 +1,7 @@
 <?php
 namespace Colibri\Application\Application;
 
-use Colibri\Application\Engine;
+use Colibri\Application\Application;
 use Colibri\Cache\Cache;
 use Colibri\Config\Config;
 use Colibri\Http\Request;
@@ -13,18 +13,18 @@ use Colibri\Session\Session;
 class API
 {
     /**
-     * @var Engine
+     * @var \Colibri\Application\Application
      */
-    protected static $moduleSystem = null;
+    protected static $application = null;
 
     /**
      * API constructor.
      *
-     * @param \Colibri\Application\Engine $mSystem
+     * @param \Colibri\Application\Application $application
      */
-    public function __construct(Engine &$mSystem)
+    public function __construct(Application &$application)
     {
-        self::$moduleSystem = $mSystem;
+        self::$application = $application;
     }
 
     /**
@@ -39,7 +39,7 @@ class API
      */
     public static function getModuleView($division, $module, $method, ...$params)
     {
-        return self::$moduleSystem->getModuleView($division, $module, $method, $params);
+        return self::$application->getModuleView($division, $module, $method, $params);
     }
 
     /**
