@@ -78,7 +78,7 @@ class API
     public static function getModuleViewCached($division, $module, $method, ...$params)
     {
         if (Config::application('useCache') && ! DEBUG) {
-            $key = self::getCacheKeyForCall(func_get_args());
+            $key      = self::getCacheKeyForCall(func_get_args());
             $retValue = Cache::remember($key, function () use ($division, $module, $method, $params) {
                 return self::getModuleView($division, $module, $method, ...$params);
             });
