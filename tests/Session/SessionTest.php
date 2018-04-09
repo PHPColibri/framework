@@ -33,7 +33,7 @@ class SessionTest extends TestCase
             ->getMock()
         ;
 
-        $this->inject(Session::class, ['storage' => $this->storageMock]);
+        static::inject(Session::class, ['storage' => $this->storageMock]);
     }
 
     protected function tearDown()

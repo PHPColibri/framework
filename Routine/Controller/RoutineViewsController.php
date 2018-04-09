@@ -289,6 +289,6 @@ abstract class RoutineViewsController extends ViewsController
         }
 
         $errors                         = $this->template->vars['errors'] ?? [];
-        $this->template->vars['errors'] = array_merge($errors, $post->errors);
+        $this->template->vars['errors'] = array_merge($errors, $post->errors());
     }
 }

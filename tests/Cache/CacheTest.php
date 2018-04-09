@@ -38,7 +38,7 @@ class CacheTest extends TestCase
      */
     public function testStorageMethodCalled(string $method, array $args, array $receiveArgs, $return, $expected)
     {
-        $this->inject(Cache::class, ['storage' => ['memcache' => $this->storageMock]]);
+        static::inject(Cache::class, ['storage' => ['memcache' => $this->storageMock]]);
 
         /* @noinspection PhpMethodParametersCountMismatchInspection */
         $this->storageMock

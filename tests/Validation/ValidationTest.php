@@ -1,11 +1,11 @@
 <?php
 namespace Colibri\tests\Validation;
 
+use Colibri\tests\TestCase;
 use Colibri\Util\RegExp;
 use Colibri\Util\Str;
 use Colibri\Validation\Validation;
 use Colibri\Validation\ValidationException;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Test Validation.
@@ -26,6 +26,17 @@ class ValidationTest extends TestCase
         $scopeProperty->setAccessible(true);
 
         static::assertEquals($expected, $scopeProperty->getValue($validation));
+    }
+
+    /**
+     * @param \Colibri\Validation\Validation $validation
+     * @param array                          $setErrors
+     *
+     * @throws \ReflectionException
+     */
+    private static function clearErrors(Validation $validation, array $setErrors = [])
+    {
+        static::inject($validation, ['errors' => $setErrors]);
     }
 
     /**
@@ -104,6 +115,7 @@ class ValidationTest extends TestCase
      *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \ReflectionException
      */
     public function testRequired(Validation $validation)
     {
@@ -111,19 +123,19 @@ class ValidationTest extends TestCase
             ->required('name')
             ->required(['lastName', 'email', 'id'])
         ;
-        static::assertEquals(0, count($validation->errors));
+        static::assertEquals(0, count($validation->errors()));
 
         $validation
             ->required('not-exists');
-        static::assertEquals(1, count($validation->errors));
-        static::assertEquals(sprintf(Validation::$requiredMessage, 'not-exists'), $validation->errors['not-exists']);
+        static::assertEquals(1, count($validation->errors()));
+        static::assertEquals(sprintf(Validation::$requiredMessage, 'not-exists'), $validation->errors()['not-exists']);
 
         $validation
             ->required(['name', 'not-exists-2'], 'field %s required');
-        static::assertEquals(2, count($validation->errors));
-        static::assertEquals('field not-exists-2 required', $validation->errors['not-exists-2']);
+        static::assertEquals(2, count($validation->errors()));
+        static::assertEquals('field not-exists-2 required', $validation->errors()['not-exists-2']);
 
-        $validation->errors = [];
+        static::clearErrors($validation);
 
         return $validation;
     }
@@ -138,6 +150,7 @@ class ValidationTest extends TestCase
      *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \ReflectionException
      */
     public function testMinLength(Validation $validation)
     {
@@ -146,16 +159,16 @@ class ValidationTest extends TestCase
             ->minLength('not-exists', 2)
             ->minLength(['lastName', 'email'], 2)
         ;
-        static::assertEquals(0, count($validation->errors));
+        static::assertEquals(0, count($validation->errors()));
 
         $validation
             ->minLength('lastName', 6)
             ->minLength('not-exists', 2)
         ;
-        static::assertEquals(1, count($validation->errors));
-        static::assertEquals(sprintf(Validation::$minLengthMessage, 'lastName', 6), $validation->errors['lastName']);
+        static::assertEquals(1, count($validation->errors()));
+        static::assertEquals(sprintf(Validation::$minLengthMessage, 'lastName', 6), $validation->errors()['lastName']);
 
-        $validation->errors = [];
+        static::clearErrors($validation);
 
         return $validation;
     }
@@ -170,6 +183,7 @@ class ValidationTest extends TestCase
      *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \ReflectionException
      */
     public function testMaxLength(Validation $validation)
     {
@@ -178,14 +192,14 @@ class ValidationTest extends TestCase
             ->maxLength('not-exists', 2)
             ->maxLength(['name', 'email'], 1000)
         ;
-        static::assertEquals(0, count($validation->errors));
+        static::assertEquals(0, count($validation->errors()));
 
         $validation
             ->maxLength('name', 6);
-        static::assertEquals(1, count($validation->errors));
-        static::assertEquals(sprintf(Validation::$maxLengthMessage, 'name', 6), $validation->errors['name']);
+        static::assertEquals(1, count($validation->errors()));
+        static::assertEquals(sprintf(Validation::$maxLengthMessage, 'name', 6), $validation->errors()['name']);
 
-        $validation->errors = [];
+        static::clearErrors($validation);
 
         return $validation;
     }
@@ -200,6 +214,7 @@ class ValidationTest extends TestCase
      *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \ReflectionException
      */
     public function testRegex(Validation $validation)
     {
@@ -208,14 +223,14 @@ class ValidationTest extends TestCase
             ->regex('not-exists', '/[а-яё]+/')
             ->regex(['name', 'lastName'], '/[а-яё]+/')
         ;
-        static::assertEquals(0, count($validation->errors));
+        static::assertEquals(0, count($validation->errors()));
 
         $validation
             ->regex('name', '/[a-z]+/', 'поле \'%s\' должно содержать только латинские буквы.');
-        static::assertEquals(1, count($validation->errors));
-        static::assertEquals('поле \'name\' должно содержать только латинские буквы.', $validation->errors['name']);
+        static::assertEquals(1, count($validation->errors()));
+        static::assertEquals('поле \'name\' должно содержать только латинские буквы.', $validation->errors()['name']);
 
-        $validation->errors = [];
+        static::clearErrors($validation);
 
         return $validation;
     }
@@ -230,6 +245,7 @@ class ValidationTest extends TestCase
      *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \ReflectionException
      */
     public function testIsIntGt0(Validation $validation)
     {
@@ -238,7 +254,7 @@ class ValidationTest extends TestCase
             ->isIntGt0('not-exists')
             ->isIntGt0(['id', 'not-exists'])
         ;
-        static::assertEquals(0, count($validation->errors));
+        static::assertEquals(0, count($validation->errors()));
 
         $validation
             ->extendScope(['negativeInt' => -7, 'zeroInt' => 0])
@@ -246,12 +262,12 @@ class ValidationTest extends TestCase
             ->isIntGt0('negativeInt', 'поле \'%s\' должно быть положительным')
             ->isIntGt0('zeroInt', 'error in field zeroInt')
         ;
-        static::assertEquals(3, count($validation->errors));
-        static::assertEquals(sprintf(Validation::$isIntGt0Message, 'name'), $validation->errors['name']);
-        static::assertEquals('поле \'negativeInt\' должно быть положительным', $validation->errors['negativeInt']);
-        static::assertEquals('error in field zeroInt', $validation->errors['zeroInt']);
+        static::assertEquals(3, count($validation->errors()));
+        static::assertEquals(sprintf(Validation::$isIntGt0Message, 'name'), $validation->errors()['name']);
+        static::assertEquals('поле \'negativeInt\' должно быть положительным', $validation->errors()['negativeInt']);
+        static::assertEquals('error in field zeroInt', $validation->errors()['zeroInt']);
 
-        $validation->errors = [];
+        static::clearErrors($validation);
 
         return $validation;
     }
@@ -266,6 +282,7 @@ class ValidationTest extends TestCase
      *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \ReflectionException
      */
     public function testIsJSON(Validation $validation)
     {
@@ -276,16 +293,16 @@ class ValidationTest extends TestCase
             ->extendScope(['json2' => '{"some":11,"valid":"json"}'])
             ->isJSON(['json', 'json2', 'no-field'])
         ;
-        static::assertEquals(0, count($validation->errors));
+        static::assertEquals(0, count($validation->errors()));
 
         $validation
             ->extendScope(['not-json' => '{"some":11,"valid":"json"'])
             ->isJSON('not-json')
         ;
-        static::assertEquals(1, count($validation->errors));
-        static::assertEquals(sprintf(Validation::$isJSONMessage, 'not-json'), $validation->errors['not-json']);
+        static::assertEquals(1, count($validation->errors()));
+        static::assertEquals(sprintf(Validation::$isJSONMessage, 'not-json'), $validation->errors()['not-json']);
 
-        $validation->errors = [];
+        static::clearErrors($validation);
 
         return $validation;
     }
@@ -300,6 +317,7 @@ class ValidationTest extends TestCase
      *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \ReflectionException
      */
     public function testIsEmail(Validation $validation)
     {
@@ -309,16 +327,16 @@ class ValidationTest extends TestCase
             ->extendScope(['email2' => 'some-valid.email@domain.ru'])
             ->isEmail(['email', 'email2'])
         ;
-        static::assertEquals(0, count($validation->errors));
+        static::assertEquals(0, count($validation->errors()));
 
         $validation
             ->extendScope(['not-email' => 'some-not valid.email@domain.ru'])
             ->isEmail('not-email')
         ;
-        static::assertEquals(1, count($validation->errors));
-        static::assertEquals(sprintf(Validation::$isEmailMessage, 'not-email'), $validation->errors['not-email']);
+        static::assertEquals(1, count($validation->errors()));
+        static::assertEquals(sprintf(Validation::$isEmailMessage, 'not-email'), $validation->errors()['not-email']);
 
-        $validation->errors = [];
+        static::clearErrors($validation);
 
         return $validation;
     }
@@ -333,6 +351,7 @@ class ValidationTest extends TestCase
      *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \ReflectionException
      */
     public function testIsEqual(Validation $validation)
     {
@@ -342,16 +361,16 @@ class ValidationTest extends TestCase
             ->isEqual(['one', 'not-exists'])
             ->isEqual(['not-exists', 'not-exists2'])
         ;
-        static::assertEquals(0, count($validation->errors));
+        static::assertEquals(0, count($validation->errors()));
 
         $validation
             ->extendScope(['one' => 'some-value', 'two' => 'some-another-value'])
             ->isEqual(['one', 'two'])
         ;
-        static::assertEquals(1, count($validation->errors));
-        static::assertEquals(sprintf(Validation::$isEqualMessage, 'one\', \'two'), $validation->errors['two']);
+        static::assertEquals(1, count($validation->errors()));
+        static::assertEquals(sprintf(Validation::$isEqualMessage, 'one\', \'two'), $validation->errors()['two']);
 
-        $validation->errors = [];
+        static::clearErrors($validation);
 
         return $validation;
     }
@@ -366,6 +385,7 @@ class ValidationTest extends TestCase
      *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \ReflectionException
      */
     public function testIs(Validation $validation)
     {
@@ -377,7 +397,7 @@ class ValidationTest extends TestCase
             ->is([self::class, 'theTrue'], 'not-exists', 'something wrong')
             ->is([self::class, 'theTrue'], ['name', 'email'], 'something wrong')
         ;
-        static::assertEquals(0, count($validation->errors));
+        static::assertEquals(0, count($validation->errors()));
 
         $validation
             ->extendScope(['no-cut-message' => 'some text, that does not contains "cut" bb tag'])
@@ -385,10 +405,10 @@ class ValidationTest extends TestCase
                 return Str::contains($value, '[cut]');
             }, 'no-cut-message', 'no [cut] in field \'%s\'')
         ;
-        static::assertEquals(1, count($validation->errors));
-        static::assertEquals('no [cut] in field \'no-cut-message\'', $validation->errors['no-cut-message']);
+        static::assertEquals(1, count($validation->errors()));
+        static::assertEquals('no [cut] in field \'no-cut-message\'', $validation->errors()['no-cut-message']);
 
-        $validation->errors = [];
+        static::clearErrors($validation);
 
         return $validation;
     }
@@ -403,6 +423,7 @@ class ValidationTest extends TestCase
      *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \ReflectionException
      */
     public function testIsNot(Validation $validation)
     {
@@ -412,7 +433,7 @@ class ValidationTest extends TestCase
             ->isNot([self::class, 'theFalse'], 'not-exists', 'something wrong')
             ->isNot([self::class, 'theFalse'], ['login', 'email', 'not-exists'], 'something wrong')
         ;
-        static::assertEquals(0, count($validation->errors));
+        static::assertEquals(0, count($validation->errors()));
 
         $validation
             ->extendScope(['no-cut-message' => 'some text, that does not contains "cut" bb tag'])
@@ -420,10 +441,10 @@ class ValidationTest extends TestCase
                 return ! Str::isEmail($value);
             }, 'login', 'field \'%s\' must be a mail')
         ;
-        static::assertEquals(1, count($validation->errors));
-        static::assertEquals('field \'login\' must be a mail', $validation->errors['login']);
+        static::assertEquals(1, count($validation->errors()));
+        static::assertEquals('field \'login\' must be a mail', $validation->errors()['login']);
 
-        $validation->errors = [];
+        static::clearErrors($validation);
 
         return $validation;
     }
@@ -454,15 +475,16 @@ class ValidationTest extends TestCase
      *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \ReflectionException
      */
     public function testAddError(Validation $validation)
     {
         $validation
             ->addError('additionalError', 'You are not filled anything.');
-        static::assertEquals(1, count($validation->errors));
-        static::assertEquals('You are not filled anything.', $validation->errors['additionalError']);
+        static::assertEquals(1, count($validation->errors()));
+        static::assertEquals('You are not filled anything.', $validation->errors()['additionalError']);
 
-        $validation->errors = [];
+        static::clearErrors($validation);
 
         return $validation;
     }
@@ -508,6 +530,7 @@ class ValidationTest extends TestCase
      *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \ReflectionException
      */
     public function testIfNotValid(Validation $validation)
     {
@@ -519,9 +542,9 @@ class ValidationTest extends TestCase
                 $incomeErrors = $errors;
             });
         static::assertEquals(1, $someActions);
-        static::assertEquals($validation->errors, $incomeErrors);
+        static::assertEquals($validation->errors(), $incomeErrors);
 
-        $validation->errors = [];
+        static::clearErrors($validation);
         $validation
             ->ifNotValid(function (array $errors) use (&$someActions, &$incomeErrors) {
                 $someActions++;
@@ -531,7 +554,7 @@ class ValidationTest extends TestCase
         static::assertNotEquals([], $incomeErrors);
 
         // restore errors for next test method
-        $validation->errors = $incomeErrors;
+        static::clearErrors($validation, $incomeErrors);
 
         return $validation;
     }
@@ -556,7 +579,7 @@ class ValidationTest extends TestCase
             $validation->validate();
             static::fail('no exception was thrown');
         } catch (ValidationException $exception) {
-            static::assertEquals($validation->errors, $exception->getErrors());
+            static::assertEquals($validation->errors(), $exception->getErrors());
             $caught++;
         }
         static::assertEquals(1, $caught);

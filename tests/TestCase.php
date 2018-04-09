@@ -22,7 +22,7 @@ class TestCase extends PhpUnitTestCase
      *
      * @throws \ReflectionException
      */
-    protected function inject($objectOrClass, array $propertyValues)
+    protected static function inject($objectOrClass, array $propertyValues)
     {
         $reflection = new ReflectionClass($objectOrClass);
         foreach ($propertyValues as $property => $value) {

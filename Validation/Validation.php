@@ -1,16 +1,13 @@
 <?php
 namespace Colibri\Validation;
 
-use Colibri\Base\PropertyAccess;
 use Colibri\Util\Arr;
 use Colibri\Util\Str;
 
 /**
  * Organize Validation of your data.
- *
- * @property array $errors array of validation errors.
  */
-class Validation extends PropertyAccess
+class Validation
 {
     /** @var string */
     public static $requiredMessage = 'поле \'%s\' является обязательным для заполнения.';
@@ -32,7 +29,7 @@ class Validation extends PropertyAccess
     /**
      * @var array occurred validation errors
      */
-    protected $_errors = [];
+    protected $errors = [];
     /**
      * @var array scope of data to validate
      */
@@ -73,10 +70,18 @@ class Validation extends PropertyAccess
      */
     public function setScope(array $scope)
     {
-        $this->scope   = $scope;
-        $this->_errors = [];
+        $this->scope  = $scope;
+        $this->errors = [];
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function errors(): array
+    {
+        return $this->errors;
     }
 
     /**
@@ -87,7 +92,7 @@ class Validation extends PropertyAccess
      */
     public function addError($key, $message)
     {
-        $this->_errors[$key] = $message;
+        $this->errors[$key] = $message;
     }
 
     /**
@@ -106,7 +111,7 @@ class Validation extends PropertyAccess
             }
         } else {
             if (isset($this->scope[$key]) && ! $check($key)) {
-                $this->_errors[$key] = sprintf($message !== null ? $message : self::${$method . 'Message'}, $key);
+                $this->errors[$key] = sprintf($message !== null ? $message : self::${$method . 'Message'}, $key);
             }
         }
 
@@ -129,7 +134,7 @@ class Validation extends PropertyAccess
             }
         } else {
             if ( ! (isset($this->scope[$key]) && ! empty($this->scope[$key]))) {
-                $this->_errors[$key] = sprintf($message !== null ? $message : self::$requiredMessage, $key);
+                $this->errors[$key] = sprintf($message !== null ? $message : self::$requiredMessage, $key);
             }
         }
 
@@ -153,7 +158,7 @@ class Validation extends PropertyAccess
             }
         } else {
             if (isset($this->scope[$key]) && mb_strlen($this->scope[$key]) < $minLength) {
-                $this->_errors[$key] = sprintf($message !== null ? $message : self::$minLengthMessage, $key, $minLength);
+                $this->errors[$key] = sprintf($message !== null ? $message : self::$minLengthMessage, $key, $minLength);
             }
         }
 
@@ -177,7 +182,7 @@ class Validation extends PropertyAccess
             }
         } else {
             if (isset($this->scope[$key]) && mb_strlen($this->scope[$key]) > $maxLength) {
-                $this->_errors[$key] = sprintf($message !== null ? $message : self::$maxLengthMessage, $key, $maxLength);
+                $this->errors[$key] = sprintf($message !== null ? $message : self::$maxLengthMessage, $key, $maxLength);
             }
         }
 
@@ -201,7 +206,7 @@ class Validation extends PropertyAccess
             }
         } else {
             if (isset($this->scope[$key]) && ! (bool)preg_match($pattern, $this->scope[$key])) {
-                $this->_errors[$key] = sprintf($message !== null ? $message : self::$regexMessage, $key);
+                $this->errors[$key] = sprintf($message !== null ? $message : self::$regexMessage, $key);
             }
         }
 
@@ -276,8 +281,8 @@ class Validation extends PropertyAccess
 
         foreach ($keys as $key) {
             if (isset($this->scope[$key]) && $this->scope[$key] != $this->scope[$existingKey]) {
-                $keysList            = implode("', '", $keys);
-                $this->_errors[$key] = sprintf($message !== null ? $message : self::$isEqualMessage, $keysList);
+                $keysList           = implode("', '", $keys);
+                $this->errors[$key] = sprintf($message !== null ? $message : self::$isEqualMessage, $keysList);
             }
         }
 
@@ -301,7 +306,7 @@ class Validation extends PropertyAccess
             }
         } else {
             if (isset($this->scope[$key]) && ! call_user_func($checkFunc, $this->scope[$key])) {
-                $this->_errors[$key] = sprintf($message, $key);
+                $this->errors[$key] = sprintf($message, $key);
             }
         }
 
@@ -325,7 +330,7 @@ class Validation extends PropertyAccess
             }
         } else {
             if (isset($this->scope[$key]) && call_user_func($checkFunc, $this->scope[$key])) {
-                $this->_errors[$key] = sprintf($message, $key);
+                $this->errors[$key] = sprintf($message, $key);
             }
         }
 
@@ -339,7 +344,7 @@ class Validation extends PropertyAccess
      */
     public function valid()
     {
-        return ! (bool)count($this->_errors);
+        return ! (bool)count($this->errors);
     }
 
     /**
@@ -368,7 +373,7 @@ class Validation extends PropertyAccess
     public function ifNotValid(\Closure $callback)
     {
         if ( ! $this->valid()) {
-            $callback($this->_errors);
+            $callback($this->errors);
         }
 
         return $this;
