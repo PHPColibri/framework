@@ -145,7 +145,7 @@ class Cache extends Helper implements CacheInterface
         $driver = &$config['driver'];
         $config = &$config['config'];
 
-        return new static::$driver[$driver]($config);
+        return new self::$driver[$driver]($config);
     }
 
     /**
