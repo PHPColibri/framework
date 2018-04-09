@@ -1,6 +1,7 @@
 <?php
 namespace Colibri\Application\Application;
 
+use Colibri\Application\Application;
 use Colibri\Cache\Cache;
 use Colibri\Config\Config;
 use Colibri\Database\AbstractDb\Driver;
@@ -13,11 +14,11 @@ use Colibri\Util\Arr;
 class Bootstrap extends Helper
 {
     /**
-     * @param $app
+     * @param \Colibri\Application\Application $app
      *
      * @throws \Colibri\Database\DbException
      */
-    public static function run($app)
+    public static function run(Application $app)
     {
         $config = Config::getOrEmpty('application');
         $debug  = (bool)Arr::get($config, 'debug', false);
