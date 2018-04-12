@@ -50,12 +50,12 @@ class Application
     {
         self::loadModule($division, $module);
 
-        $className = self::getClassName($division, $module);
-        if ( ! in_array($method, get_class_methods($className))) {
-            throw new NotFoundException("Method '$method' does not contains in class '$className'.");
+        $class = self::getClassName($division, $module);
+        if ( ! method_exists($class, $method)) {
+            throw new NotFoundException("Method '$method' does not contains in class '$class'.");
         }
 
-        $responder = Controller\Dispatcher::call($division, $module, $className, $method, $params);
+        $responder = Controller\Dispatcher::call($division, $module, $class, $method, $params);
 
         $this->showProfilerInfoOnDebug = $responder->showProfilerInfoOnDebug;
         $this->showAppDevToolsOnDebug  = $responder->showAppDevToolsOnDebug;
