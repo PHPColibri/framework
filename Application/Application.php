@@ -24,13 +24,11 @@ class Application
         Application\Bootstrap::run($this);
 
         try {
-
             list($division, $module, $method, $params) = Route::resolve();
 
             echo $this->getModuleView($division, $module, $method, $params);
 
             StupidDebugger::output($time, $this->showProfilerInfoOnDebug, $this->showAppDevToolsOnDebug);
-
         } catch (NotFoundException $exception) {
             throw new Http\NotFoundException($exception->getMessage(), $exception->getCode(), $exception);
         }

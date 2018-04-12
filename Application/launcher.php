@@ -6,11 +6,9 @@ use Colibri\Http\NotFoundException;
 use Colibri\Log\Log;
 
 try {
-
     $application = new Application();
     /** @noinspection PhpUnhandledExceptionInspection */
     $application->run();
-
 } catch (NotFoundException $exc) {
     if (DEBUG) {
         /** @noinspection PhpUnhandledExceptionInspection */
