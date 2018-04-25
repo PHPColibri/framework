@@ -509,10 +509,10 @@ class ValidationTest extends TestCase
             ->minLength(['name', 'not-exists'], 4)
             ->isIntGt0(['id', 'not-exists'])
         ;
-        static::assertEquals(true, $validation->valid());
+        static::assertTrue($validation->valid());
 
         $validation->required('not-exists');
-        static::assertEquals(false, $validation->valid());
+        static::assertFalse($validation->valid());
 
         // not clear errors because in next method (testIfNotValid) we asserting that $validation is not valid
         //no $valida.->err = array();

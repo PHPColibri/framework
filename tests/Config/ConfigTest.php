@@ -108,7 +108,7 @@ class ConfigTest extends TestCase
     public function test__callStatic()
     {
         /* @noinspection PhpUndefinedMethodInspection */
-        static::assertEquals(true, Config::sample('test'));
+        static::assertTrue(Config::sample('test'));
         /* @noinspection PhpUndefinedMethodInspection */
         static::assertEquals('inArrValue', Config::sample('arraySetting.arrSettingKey'));
     }
