@@ -1,5 +1,7 @@
 <?php
 
+require(__DIR__ . '/../../../autoload.php');
+
 use Colibri\Application\Application;
 use Colibri\Application\Application\Error\Handler;
 use Colibri\Http\NotFoundException;
