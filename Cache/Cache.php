@@ -39,7 +39,7 @@ class Cache extends Helper implements CacheInterface
      */
     public static function setConfig(array $config)
     {
-        self::$config = Arr::overwrite(self::$config, $config);
+        self::$config['storage'] = Arr::overwrite(self::$config['storage'], $config);
     }
 
     /**
@@ -127,7 +127,7 @@ class Cache extends Helper implements CacheInterface
      */
     private static function storage(string $name = 'default'): Storage\StorageInterface
     {
-        $name = $name == 'default' ? self::$config['default-storage'] : $name;
+        $name = $name == 'default' ? (self::$config['storage']['default'] ?? self::$config['default-storage']) : $name;
 
         return isset(self::$storage[$name])
             ? self::$storage[$name]
