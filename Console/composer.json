@@ -12,7 +12,7 @@
     "require": {
         "php": ">=7.0",
         "colibri-fw/util": "dev-master@dev",
-        "symfony/console": "^3.0|^4.0"
+        "symfony/console": "^3.4.17 || ^4.1.6 || ^5.0"
     },
     "autoload": {
         "psr-4": {
