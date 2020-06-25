@@ -20,6 +20,9 @@ abstract class Command extends SymfonyCommand
     /** @var \Symfony\Component\Console\Style\SymfonyStyle */
     protected $io;
 
+    /**
+     * @return Command
+     */
     protected function configure()
     {
         return $this
@@ -28,6 +31,11 @@ abstract class Command extends SymfonyCommand
             ;
     }
 
+    /**
+     * Auto-detect command name by class name & namespace.
+     *
+     * @return string
+     */
     protected function detectName()
     {
         $name = Str::cut(static::class, static::COMMAND_NS);
@@ -56,6 +64,11 @@ abstract class Command extends SymfonyCommand
         return $this->go();
     }
 
+    /**
+     * Implement this method with command execution logic.
+     *
+     * @return int Application exit code.
+     */
     abstract protected function go(): int;
 
     /**
@@ -114,6 +127,11 @@ abstract class Command extends SymfonyCommand
         return $this;
     }
 
+    /**
+     * @param string $string
+     *
+     * @return $this
+     */
     protected function error(string $string)
     {
         $this->io->error($string);
@@ -253,6 +271,26 @@ abstract class Command extends SymfonyCommand
     protected function fail()
     {
         $this->output->writeln('[<error>FAIL</error>]');
+
+        return $this;
+    }
+
+    /**
+     * @param callable $callback
+     *
+     * @return $this
+     *
+     * @throws \Throwable
+     */
+    protected function okOrFail(callable $callback)
+    {
+        try {
+            $callback();
+            $this->ok();
+        } catch (\Throwable $exception) {
+            $this->fail();
+            throw $exception;
+        }
 
         return $this;
     }
