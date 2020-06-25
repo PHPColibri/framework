@@ -8,7 +8,7 @@ git subtree push -P Base        cf-base        master
 git subtree push -P Cache       cf-cache       master
 git subtree push -P Config      cf-config      master
 git subtree push -P Console     cf-console     master
-git subtree push -P Controller  cf-controller  master
+git subtree push -P Controller  cf-controller  master   # git push cf-controller `git subtree split -P Controller`:master --force
 git subtree push -P Database    cf-database    master
 git subtree push -P Http        cf-http        master
 git subtree push -P Log         cf-log         master
