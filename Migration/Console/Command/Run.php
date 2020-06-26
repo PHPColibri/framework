@@ -31,7 +31,20 @@ class Run extends Command
             ->withHash($this->argument('hash'))
         ;
 
-        $failed = false;
+        $failed = $this->catchErrors(function () use ($migrations) {
+            $this->runMigrations($migrations);
+        });
+
+        return $failed ? 1 : 0;
+    }
+
+    /**
+     * @param \Colibri\Migration\Migration\Collection $migrations
+     *
+     * @throws \Throwable
+     */
+    protected function runMigrations(\Colibri\Migration\Migration\Collection $migrations)
+    {
         foreach ($migrations as $migration) {
             $this
                 ->write('Running migration ')
@@ -39,18 +52,10 @@ class Run extends Command
                 ->write(' @ ' . $migration->createdAt)
                 ->write(': ')
                 ->outByWidth("<comment>$migration->name</comment>", 60)
+                ->okOrFail(function () use ($migration) {
+                    $migration->run();
+                })
             ;
-
-            try {
-                $migration->run();
-                $this->ok();
-            } catch (\Throwable $exception) {
-                $this->fail();
-                $this->getApplication()->renderException($exception, $this->output);
-                $failed = true;
-            }
         }
-
-        return $failed ? 1 : 0;
     }
 }

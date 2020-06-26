@@ -4,6 +4,8 @@ namespace Colibri\Migration\Console;
 use Colibri\Console\Command as ColibriCommand;
 
 /**
+ * Abstract for Any Migration Command.
+ *
  * @method Application getApplication()
  */
 abstract class Command extends ColibriCommand
