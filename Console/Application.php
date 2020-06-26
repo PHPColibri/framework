@@ -2,6 +2,7 @@
 namespace Colibri\Console;
 
 use Symfony\Component\Console\Application as SymfonyApplication;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class Application extends SymfonyApplication
 {
@@ -38,5 +39,18 @@ class Application extends SymfonyApplication
     public function getHelp()
     {
         return $this->logo . PHP_EOL . parent::getHelp();
+    }
+
+    /**
+     * @param \Throwable      $exception
+     * @param OutputInterface $output
+     */
+    public function renderError(\Throwable $exception, OutputInterface $output)
+    {
+        if (method_exists(get_parent_class($this), 'renderException')) {
+            $this->renderException($exception, $output);
+        } else {
+            $this->renderThrowable($exception, $output);
+        }
     }
 }

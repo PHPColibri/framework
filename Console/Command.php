@@ -9,6 +9,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+/**
+ * @method Application getApplication()
+ */
 abstract class Command extends SymfonyCommand
 {
     const COMMAND_NS = 'Application\Command\\';
@@ -293,6 +296,24 @@ abstract class Command extends SymfonyCommand
         }
 
         return $this;
+    }
+
+    /**
+     * @param callable $callback
+     *
+     * @return bool
+     */
+    protected function catchErrors(callable $callback): bool
+    {
+        $failed = false;
+        try {
+            $callback();
+        } catch (\Throwable $exception) {
+            $this->getApplication()->renderError($exception, $this->output);
+            $failed = true;
+        }
+
+        return $failed;
     }
 
     /**
