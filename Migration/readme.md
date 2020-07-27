@@ -20,10 +20,15 @@ Usage without framework
     
     Config::setBaseDir(__DIR__ . '/configs'); // <-- path to configs folder in your project
     
-    require './vendor/colibri-fw/migration/migration';
+    require './vendor/colibri-fw/migration/bin/migration';
    ```
    and change configs folder to yours one.
    
+ - Make it executable:
+   ```
+    chmod +x ./migration
+   ```
+
    
  - In your configs folder create `database.php` file to configure your connection
    ```php
@@ -54,13 +59,16 @@ Usage without framework
         /**
          * Name of the table where to store executed migrations.
          */
-        'table'  => 'migration',
+        'table'     => 'migration',
     
         /**
          * Folder where all migration classes lives.
          */
-        'folder' => __DIR__ . '/../Covid/Migration',
-    
-        'namespace' => 'Covid\Migration'
+        'folder'    => __DIR__ . '/../App/Migration',    // <-- Change to yours one
+
+        /**
+         * Namespace where all migration classes lives.
+         */
+        'namespace' => 'App\Migration',                  // <-- Change to yours one
     ];
    ```
