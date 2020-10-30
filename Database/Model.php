@@ -14,11 +14,11 @@ abstract class Model
     const    NEW_OBJECT = -1;
 
     /** @var string */
-    protected static $connectionName = 'default';
+    protected static string $connectionName = 'default';
     /** @var string */
-    protected static $tableName = 'tableName_not_set';
+    protected static string $tableName = 'tableName_not_set';
     /** @var array */
-    protected static $PKFieldName = ['id'];
+    protected static array $PKFieldName = ['id'];
 
     /** @var array */
     protected $intermediate;
