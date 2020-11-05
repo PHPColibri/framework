@@ -34,7 +34,7 @@ abstract class PropertyAccess
     {
         $p = '_' . $propName;
         if ( ! property_exists($this, $p)) {
-            throw new \RuntimeException("свойство $p не определено в классе " . get_class($this));
+            throw new \RuntimeException("свойство $p не определено в классе " . static::class);
         }
 
         return $this->$p;
@@ -52,7 +52,7 @@ abstract class PropertyAccess
     {
         $p = '_' . $propName;
         if ( ! property_exists($this, $p)) {
-            throw new \RuntimeException("свойство $p не определено в классе " . get_class($this));
+            throw new \RuntimeException("свойство $p не определено в классе " . static::class);
         }
 
         return $this->$p = $propValue;

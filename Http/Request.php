@@ -36,7 +36,7 @@ class Request extends Helper
     /**
      * @param int $mainDomainLevel
      *
-     * @return null|string
+     * @return string|null
      */
     public static function domainPrefix($mainDomainLevel = 2)
     {

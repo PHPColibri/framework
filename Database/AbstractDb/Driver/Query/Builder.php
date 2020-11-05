@@ -66,7 +66,6 @@ abstract class Builder
                 break;
 
             case 'bit':
-
             case 'dec':
             case 'decimal':
             case 'tinyint':

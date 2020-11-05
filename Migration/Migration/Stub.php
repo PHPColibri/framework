@@ -14,9 +14,9 @@ namespace <?= $namespace ?>;
 
 use Carbon\Carbon;
 use Colibri\Migration\Migration;
-<?php if ($useDb || $query): ?>
+<?php if ($useDb || $query) { ?>
 use Colibri\Database\Db;
-<?php endif; ?>
+<?php } ?>
 
 class <?= $name ?> extends Migration
 {
@@ -27,21 +27,21 @@ class <?= $name ?> extends Migration
 
     public static function up()
     {
-<?php if ($query): ?>
+<?php if ($query) { ?>
         Db::connection()->getConnection()
             ->query('<?= addslashes($upQuery) ?>');
-<?php else: ?>
+<?php } else { ?>
         // TODO: Implement up() method.
-<?php endif; ?>
+<?php } ?>
     }
 
     public static function down()
     {
-<?php if ($query): ?>
+<?php if ($query) { ?>
         Db::connection()->getConnection()
             ->query('<?= addslashes($downQuery) ?>');
-<?php else: ?>
+<?php } else { ?>
         // TODO: Implement down() method.
-<?php endif; ?>
+<?php } ?>
     }
 }

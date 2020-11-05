@@ -310,7 +310,7 @@ class Str extends Helper
      * Replaces all $vars `{key}`s to theirs `values` in a given $str.
      * For example,
      *   `Str::build('{scheme}://{domain}', ['scheme' => 'https', 'domain' => 'phpcolibri.com'])`
-     *   returns `https://phpcolibri.com`
+     *   returns `https://phpcolibri.com`.
      *
      * @param string $str
      * @param array  $vars
@@ -320,11 +320,11 @@ class Str extends Helper
      */
     public static function build(string $str, array $vars, string $tags = '{}'): string
     {
-        $open = $tags[0] ?? '';
+        $open  = $tags[0] ?? '';
         $close = $tags[1] ?? '';
         foreach ($vars as $key => $value) {
             $search = $open . $key . $close;
-            $str = str_replace($search, $value, $str);
+            $str    = str_replace($search, $value, $str);
         }
 
         return $str;
