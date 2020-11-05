@@ -12,13 +12,13 @@ use PHPUnit\Framework\TestCase;
 class ArrTest extends TestCase
 {
     /**
-     * @param mixed              $key
+     * @param int|string         $key
      * @param array|\ArrayAccess $array
      * @param string             $message
      *
      * @throws \PHPUnit\Framework\Exception
      */
-    public static function assertArrayHasKey($key, $array, $message = '')
+    public static function assertArrayHasKey($key, $array, string $message = ''): void
     {
         $nestedKeys = explode('.', $key);
         $a          = &$array;
