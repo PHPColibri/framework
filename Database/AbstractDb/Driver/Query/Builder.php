@@ -66,8 +66,6 @@ abstract class Builder
                 break;
 
             case 'bit':
-                $value = (int)intval($value);
-                break;
 
             case 'dec':
             case 'decimal':
@@ -75,11 +73,11 @@ abstract class Builder
             case 'smallint':
             case 'bigint':
             case 'int':
-                $value = (int)intval($value);
+                $value = (int)$value;
                 break;
             case 'double':
             case 'float':
-                $value = (float)floatval($value);
+                $value = (float)$value;
                 break;
 
             default:
