@@ -7,7 +7,7 @@ use Colibri\Database\Exception\NotFoundException;
 /**
  * Абстрактный класс объекта базы данных.
  *
- * @property         int|string $id
+ * @property int|string $id
  */
 abstract class Model
 {
@@ -120,7 +120,7 @@ abstract class Model
     public function getFieldsNames(): array
     {
         $fields         = static::db()->metadata()->getColumnsMetadata(static::getTableName())['fields'];
-        $classVars      = array_keys(get_class_vars(get_class($this)));
+        $classVars      = array_keys(get_class_vars(static::class));
         $selectedFields = array_intersect($classVars, $fields);
 
         return $selectedFields;
@@ -151,8 +151,6 @@ abstract class Model
     {
         return Db::connection(static::$connectionName);
     }
-
-    /**************************************************************************/
 
     /**
      * @return array
@@ -347,7 +345,7 @@ abstract class Model
             return $this->getRelated($property);
         }
 
-        throw new \DomainException('свойство $' . $property . ' в классе ' . get_class($this) . ' не определено или не является public.');
+        throw new \DomainException('свойство $' . $property . ' в классе ' . static::class . ' не определено или не является public.');
     }
 
     /**
@@ -382,7 +380,7 @@ abstract class Model
             return $this->$propertyName = $propertyValue;
         }
 
-        throw new \DomainException('свойство $' . $propertyName . ' в классе ' . get_class($this) . ' не определено или не является public.');
+        throw new \DomainException('свойство $' . $propertyName . ' в классе ' . static::class . ' не определено или не является public.');
     }
 
     /**

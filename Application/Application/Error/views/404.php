@@ -46,12 +46,12 @@
         <p>
             Страница, которую вы запршиваете, не существует.
         </p>
-        <?php if (defined('DEBUG') && DEBUG && isset($error)): ?>
+        <?php if (defined('DEBUG') && DEBUG && isset($error)) { ?>
             <div class="error">
                 <div>Debug Info:</div>
                 <pre><?= $error ?></pre>
             </div>
-        <?php endif; ?>
+        <?php } ?>
     </div>
 </div>
 </body>

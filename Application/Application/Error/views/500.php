@@ -46,12 +46,12 @@
         <p>
             На сервере произошла ошибка. Приносим свои извинения.
         </p>
-        <?php if (defined('DEBUG') && DEBUG && isset($error)): ?>
+        <?php if (defined('DEBUG') && DEBUG && isset($error)) { ?>
             <div class="error">
                 <div>Debug Info:</div>
                 <pre><?= $error ?></pre>
             </div>
-        <?php endif; ?>
+        <?php } ?>
     </div>
 </div>
 </body>

@@ -31,6 +31,6 @@ abstract class Enum extends Helper
      */
     protected static function getConstList()
     {
-        return (new \ReflectionClass(get_called_class()))->getConstants();
+        return (new \ReflectionClass(static::class))->getConstants();
     }
 }

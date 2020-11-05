@@ -70,7 +70,7 @@ abstract class Command extends SymfonyCommand
     /**
      * Implement this method with command execution logic.
      *
-     * @return int Application exit code.
+     * @return int application exit code
      */
     abstract protected function go(): int;
 

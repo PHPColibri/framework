@@ -113,7 +113,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
             case 'parentID':
                 return $this->FKValue[0];
             default:
-                throw new \UnexpectedValueException('property ' . $propertyName . ' not defined in class ' . get_class($this));
+                throw new \UnexpectedValueException('property ' . $propertyName . ' not defined in class ' . static::class);
         }
     }
 
@@ -131,7 +131,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
             case 'parentID':
                 return $this->FKValue[0] = $propertyValue;
             default:
-                throw new \UnexpectedValueException('property ' . $propertyName . ' not defined in class ' . get_class($this));
+                throw new \UnexpectedValueException('property ' . $propertyName . ' not defined in class ' . static::class);
         }
     }
 
