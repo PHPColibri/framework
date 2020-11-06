@@ -44,7 +44,8 @@ class CacheTest extends TestCase
         $this->storageMock
             ->shouldReceive($method)
             ->withArgs($receiveArgs)
-            ->andReturn($return);
+            ->andReturn($return)
+        ;
 
         self::assertEquals($expected, Cache::$method(...$args));
     }

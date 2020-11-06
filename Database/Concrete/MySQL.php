@@ -136,7 +136,8 @@ class MySQL extends Driver
     {
         return $this->connection
             ->query('SELECT * FROM `KEY_COLUMN_USAGE` WHERE `TABLE_NAME` = \'' . $tableName . '\' AND `REFERENCED_COLUMN_NAME` IS NOT NULL')
-            ->fetchAll();
+            ->fetchAll()
+        ;
     }
 
     /**

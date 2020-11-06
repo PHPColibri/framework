@@ -266,7 +266,8 @@ abstract class Model
     {
         return Query::select($this->getFieldsNames())
             ->from(static::$tableName)
-            ->where($this->where ?? $this->getPKValue());
+            ->where($this->where ?? $this->getPKValue())
+        ;
     }
 
     /**
@@ -279,7 +280,8 @@ abstract class Model
     protected function createQuery(array $attributes = null): Query
     {
         return Query::insert()->into(static::$tableName)
-            ->set($attributes ?? $this->getFieldsValues());
+            ->set($attributes ?? $this->getFieldsValues())
+        ;
     }
 
     /**
@@ -307,7 +309,8 @@ abstract class Model
     {
         return Query::delete()
             ->from(static::$tableName)
-            ->where($this->getPKValue());
+            ->where($this->getPKValue())
+        ;
     }
 
     /**

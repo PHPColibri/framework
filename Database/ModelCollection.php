@@ -489,9 +489,9 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
     {
         if ($this->indexOf($itemID) == -1) {
             return false;
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     /**

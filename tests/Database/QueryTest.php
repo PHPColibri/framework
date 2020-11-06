@@ -90,7 +90,8 @@ class QueryTest extends QueryTestCase
             ->assertQueryIs(
                 'select t.* from users t',
                 Query::select(['*'])->from('users')
-            );
+            )
+        ;
     }
 
     /**
@@ -185,7 +186,8 @@ class QueryTest extends QueryTestCase
             ->assertQueryIs(
                 'select count(t.id) from users t group by `gender`',
                 Query::select([Agg::count('id')])->from('users')->groupBy(['gender'])
-            );
+            )
+        ;
     }
 
     /**
@@ -200,7 +202,8 @@ class QueryTest extends QueryTestCase
             ->assertQueryIs(
                 'select count(distinct t.session_id) from user_clicks t',
                 Query::select([Agg::countDistinct('session_id')])->from('user_clicks')
-            );
+            )
+        ;
     }
 
     /**

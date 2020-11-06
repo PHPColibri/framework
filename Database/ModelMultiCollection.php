@@ -91,7 +91,8 @@ class ModelMultiCollection extends ModelCollection
     {
         return Query::delete()
             ->from($this->fkTableName)
-            ->where([$this->FKName[0] => $this->FKValue[0]]);
+            ->where([$this->FKName[0] => $this->FKValue[0]])
+        ;
     }
 
     // with Items

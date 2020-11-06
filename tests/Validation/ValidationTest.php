@@ -126,12 +126,14 @@ class ValidationTest extends TestCase
         static::assertEquals(0, count($validation->errors()));
 
         $validation
-            ->required('not-exists');
+            ->required('not-exists')
+        ;
         static::assertEquals(1, count($validation->errors()));
         static::assertEquals(sprintf(Validation::$requiredMessage, 'not-exists'), $validation->errors()['not-exists']);
 
         $validation
-            ->required(['name', 'not-exists-2'], 'field %s required');
+            ->required(['name', 'not-exists-2'], 'field %s required')
+        ;
         static::assertEquals(2, count($validation->errors()));
         static::assertEquals('field not-exists-2 required', $validation->errors()['not-exists-2']);
 
@@ -195,7 +197,8 @@ class ValidationTest extends TestCase
         static::assertEquals(0, count($validation->errors()));
 
         $validation
-            ->maxLength('name', 6);
+            ->maxLength('name', 6)
+        ;
         static::assertEquals(1, count($validation->errors()));
         static::assertEquals(sprintf(Validation::$maxLengthMessage, 'name', 6), $validation->errors()['name']);
 
@@ -226,7 +229,8 @@ class ValidationTest extends TestCase
         static::assertEquals(0, count($validation->errors()));
 
         $validation
-            ->regex('name', '/[a-z]+/', 'поле \'%s\' должно содержать только латинские буквы.');
+            ->regex('name', '/[a-z]+/', 'поле \'%s\' должно содержать только латинские буквы.')
+        ;
         static::assertEquals(1, count($validation->errors()));
         static::assertEquals('поле \'name\' должно содержать только латинские буквы.', $validation->errors()['name']);
 
@@ -480,7 +484,8 @@ class ValidationTest extends TestCase
     public function testAddError(Validation $validation)
     {
         $validation
-            ->addError('additionalError', 'You are not filled anything.');
+            ->addError('additionalError', 'You are not filled anything.')
+        ;
         static::assertEquals(1, count($validation->errors()));
         static::assertEquals('You are not filled anything.', $validation->errors()['additionalError']);
 
@@ -540,7 +545,8 @@ class ValidationTest extends TestCase
             ->ifNotValid(function (array $errors) use (&$someActions, &$incomeErrors) {
                 $someActions++;
                 $incomeErrors = $errors;
-            });
+            })
+        ;
         static::assertEquals(1, $someActions);
         static::assertEquals($validation->errors(), $incomeErrors);
 
@@ -549,7 +555,8 @@ class ValidationTest extends TestCase
             ->ifNotValid(function (array $errors) use (&$someActions, &$incomeErrors) {
                 $someActions++;
                 $incomeErrors = $errors;
-            });
+            })
+        ;
         static::assertEquals(1, $someActions);
         static::assertNotEquals([], $incomeErrors);
 

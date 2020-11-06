@@ -13,7 +13,8 @@ class Table extends Command
     protected function definition(): ColibriCommand
     {
         return $this
-            ->setDescription('Creates table to store migrations that was executed already.');
+            ->setDescription('Creates table to store migrations that was executed already.')
+        ;
     }
 
     /**
