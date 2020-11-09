@@ -128,40 +128,70 @@ class Str extends Helper
     /**
      * Checks if string begins with specified part.
      *
-     * @param string $str
-     * @param string $beginsWith
+     * @param string          $str
+     * @param string|string[] $beginsWith
      *
      * @return bool
      */
     public static function beginsWith($str, $beginsWith)
     {
-        return substr($str, 0, strlen($beginsWith)) === $beginsWith;
+        if ( ! is_array($beginsWith)) {
+            return substr($str, 0, strlen($beginsWith)) === $beginsWith;
+        }
+
+        foreach ($beginsWith as $needle) {
+            if (static::beginsWith($str, $needle)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
      * Checks if string ends with specified part.
      *
-     * @param string $str
-     * @param string $endsWith
+     * @param string          $str
+     * @param string|string[] $endsWith
      *
      * @return bool
      */
     public static function endsWith($str, $endsWith)
     {
-        return substr($str, -strlen($endsWith)) === $endsWith;
+        if ( ! is_array($endsWith)) {
+            return substr($str, -strlen($endsWith)) === $endsWith;
+        }
+
+        foreach ($endsWith as $needle) {
+            if (static::endsWith($str, $needle)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
      * Checks if string contains specified $subString.
      *
-     * @param string $str
-     * @param string $subString
+     * @param string          $str
+     * @param string|string[] $subString
      *
      * @return bool
      */
     public static function contains($str, $subString)
     {
-        return strpos($str, $subString) !== false;
+        if ( ! is_array($subString)) {
+            return strpos($str, $subString) !== false;
+        }
+
+        foreach ($subString as $needle) {
+            if (static::contains($str, $needle)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
