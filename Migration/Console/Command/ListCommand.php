@@ -31,8 +31,8 @@ class ListCommand extends Command
                 $migration->name,
                 $migration->createdAt,
                 $migration->migrated()
-                    ? "<info>✔</info> $migration->migratedAt"
-                    : '<comment>✖</comment>',
+                    ? "<info>✓</info> $migration->migratedAt"
+                    : '<comment>✘</comment>',
             ];
         }
         $this->table(['hash', 'name', 'created at', 'migrated at'], $rows);

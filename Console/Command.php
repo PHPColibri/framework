@@ -240,18 +240,36 @@ abstract class Command extends SymfonyCommand
 
     /**
      * @return $this
+     * @deprecated
      */
     protected function ✔()
     {
-        return $this->info('✔');
+        return $this->✓();
     }
 
     /**
      * @return $this
      */
+    protected function ✓()
+    {
+        return $this->info('✓');
+    }
+
+    /**
+     * @return $this
+     * @deprecated
+     */
     protected function ✖()
     {
-        return $this->error('✖');
+        return $this->✘();
+    }
+
+    /**
+     * @return $this
+     */
+    protected function ✘()
+    {
+        return $this->error('✘');
     }
 
     /**
