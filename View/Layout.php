@@ -22,6 +22,8 @@ class Layout extends Helper
     /** @var string */
     protected static $title = '';
     /** @var array */
+    protected static $meta = [];
+    /** @var array */
     protected static $openGraph = [];
     /** @var array */
     protected static $css = [];
@@ -63,7 +65,7 @@ class Layout extends Helper
      *
      * @return string
      */
-    public static function filename($value = null)
+    public static function filename($value = null): ?string
     {
         return $value !== null ? static::$filename = $value : static::$filename;
     }
@@ -83,7 +85,7 @@ class Layout extends Helper
      * @param string $cssFilename
      * @param string $path
      */
-    public static function addCss($cssFilename, $path = RES_CSS)
+    public static function addCss(string $cssFilename, $path = RES_CSS)
     {
         static::$css[] = $path . $cssFilename;
     }
@@ -94,7 +96,7 @@ class Layout extends Helper
      * @param string $jsFilename
      * @param string $path
      */
-    public static function addJs($jsFilename, $path = RES_JS)
+    public static function addJs(string $jsFilename, $path = RES_JS)
     {
         static::$js[] = $path . $jsFilename;
     }
@@ -104,7 +106,7 @@ class Layout extends Helper
      *
      * @param string $jsText
      */
-    public static function addJsText($jsText)
+    public static function addJsText(string $jsText)
     {
         static::$jsText[] = $jsText;
     }
@@ -115,7 +117,7 @@ class Layout extends Helper
      *
      * @param string $jsText
      */
-    public static function addJsTextOnReady($jsText)
+    public static function addJsTextOnReady(string $jsText)
     {
         static::$jsTextOnReady .= $jsText . "\n";
     }
@@ -126,7 +128,7 @@ class Layout extends Helper
      * @param string $jsManagerName
      * @param string $path
      */
-    public static function addJsMgr($jsManagerName, $path = RES_JS)
+    public static function addJsMgr(string $jsManagerName, $path = RES_JS)
     {
         static::addJs($jsManagerName . '_mgr.js', $path);
         static::$jsMgr[] = $jsManagerName;
@@ -139,7 +141,7 @@ class Layout extends Helper
      *
      * @return string
      */
-    public static function keywords($value = null)
+    public static function keywords($value = null): string
     {
         return $value !== null ? static::$keywords = $value : static::$keywords;
     }
@@ -151,7 +153,7 @@ class Layout extends Helper
      *
      * @return string
      */
-    public static function title($value = null)
+    public static function title($value = null): string
     {
         return $value !== null ? static::$title = $value : static::$title;
     }
@@ -163,20 +165,45 @@ class Layout extends Helper
      *
      * @return string
      */
-    public static function description($value = null)
+    public static function description($value = null): string
     {
         return $value !== null ? static::$description = $value : static::$description;
     }
 
     /**
+     * Sets or gets layout meta tag of $name with specified $content.
+     *
+     * @param string      $name
+     * @param string|null $content
+     *
+     * @return mixed|null
+     */
+    protected static function meta(string $name, string $content = null): ?string
+    {
+        return $content !== null ? static::$meta[$name] = $content : (static::$meta[$name] ?? null);
+    }
+
+    /**
+     * Sets or gets layout `meta` tag of `name='robots'` with specified $value.
+     *
+     * @param string|null $value
+     *
+     * @return string|null
+     */
+    public static function robots(string $value = null): ?string
+    {
+        return static::meta('robots', $value);
+    }
+
+    /**
      * Sets or gets layout OpenGraph property.
      *
-     * @param string $property
-     * @param string $value
+     * @param string      $property
+     * @param string|null $value
      *
      * @return string
      */
-    public static function og(string $property, string $value = null)
+    public static function og(string $property, string $value = null): ?string
     {
         return $value !== null ? static::$openGraph[$property] = $value : (static::$openGraph[$property] ?? null);
     }
@@ -187,7 +214,7 @@ class Layout extends Helper
      * @param string $cssFilename
      * @param string $path
      */
-    public static function delCss($cssFilename, $path = RES_CSS)
+    public static function delCss(string $cssFilename, $path = RES_CSS)
     {
         static::$css = array_diff(static::$css, [$path . $cssFilename]);
     }
@@ -201,7 +228,7 @@ class Layout extends Helper
      *
      * @throws \Exception
      */
-    public static function compile($content)
+    public static function compile(string $content): string
     {
         $layoutTplVars = static::assembleTemplateVars($content);
 
@@ -216,7 +243,7 @@ class Layout extends Helper
      *
      * @return string
      */
-    protected static function concatWrapped(array $texts, $template)
+    protected static function concatWrapped(array $texts, string $template): string
     {
         return array_reduce($texts, function ($concatenated, $textItem) use ($template) {
             return $concatenated . sprintf($template, $textItem);
@@ -231,7 +258,7 @@ class Layout extends Helper
      *
      * @return string
      */
-    protected static function eWrap($value, $template)
+    protected static function eWrap(string $value, string $template): string
     {
         return ! empty($value)
             ? sprintf($template, Html::e($value))
@@ -245,13 +272,14 @@ class Layout extends Helper
      *
      * @return array
      */
-    protected static function assembleTemplateVars($content)
+    protected static function assembleTemplateVars(string $content): array
     {
         $layoutTplVars = [
             'content'     => $content,
             'keywords'    => static::eWrap(static::$keywords, "<meta name='keywords' content='%s' />\n"),
             'title'       => static::eWrap(static::$title, "<title>%s</title>\n"),
             'description' => static::eWrap(static::$description, "<meta name='description' content='%s'/>\n"),
+            'meta'        => static::assembleMeta(),
             'opengraph'   => static::assembleOpenGraph(),
             'css'         => static::concatWrapped(static::$css,
                 '<link   type="text/css" rel="stylesheet" href="%s"/>' . "\n\t"),
@@ -275,11 +303,26 @@ class Layout extends Helper
     }
 
     /**
+     * Assemble meta tags.
+     *
+     * @return string
+     */
+    protected static function assembleMeta(): string
+    {
+        $meta = [];
+        foreach (static::$meta as $key => $value) {
+            $meta[] = "<meta name='$key' content='" . Html::e($value) . "' />";
+        }
+
+        return implode("\n\t", $meta) . "\n";
+    }
+
+    /**
      * Assemble OpenGraph properties into html meta tags.
      *
      * @return string
      */
-    protected static function assembleOpenGraph()
+    protected static function assembleOpenGraph(): string
     {
         $meta = [];
         foreach (static::$openGraph as $key => $value) {
@@ -298,10 +341,10 @@ class Layout extends Helper
      *
      * @throws \Exception
      */
-    protected static function compileWith(array $layoutTplVars)
+    protected static function compileWith(array $layoutTplVars): string
     {
         if (static::$filename === null) {
-            throw new \Exception('Layout template file name does not set: use Layout::setFilename().');
+            throw new \Exception('Layout template file name does not set: use Layout::filename().');
         }
 
         $tpl       = new PhpTemplate(VIEWS . static::$filename);
