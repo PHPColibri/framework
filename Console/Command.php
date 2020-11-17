@@ -240,6 +240,7 @@ abstract class Command extends SymfonyCommand
 
     /**
      * @return $this
+     *
      * @deprecated
      */
     protected function ✔()
@@ -257,6 +258,7 @@ abstract class Command extends SymfonyCommand
 
     /**
      * @return $this
+     *
      * @deprecated
      */
     protected function ✖()
