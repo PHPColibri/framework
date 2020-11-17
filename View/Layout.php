@@ -3,6 +3,7 @@ namespace Colibri\View;
 
 use Colibri\Pattern\Helper;
 use Colibri\Util\Html;
+use Colibri\Util\Str;
 
 /**
  * Class Layout.
@@ -21,6 +22,8 @@ class Layout extends Helper
     protected static $keywords = '';
     /** @var string */
     protected static $title = '';
+    /** @var string */
+    protected static $canonical = '';
     /** @var array */
     protected static $meta = [];
     /** @var array */
@@ -171,6 +174,22 @@ class Layout extends Helper
     }
 
     /**
+     * Sets or gets layout page canonical url.
+     *
+     * @param string|null $url
+     *
+     * @return string
+     */
+    public static function canonicalUrl(string $url = null): string
+    {
+        if ($url !== null && ! Str::beginsWith($url, ['http://', 'https://'])) {
+            throw new \InvalidArgumentException('Canonical url have to specified as full url');
+        }
+
+        return $url !== null ? static::$canonical = $url : static::$canonical;
+    }
+
+    /**
      * Sets or gets layout meta tag of $name with specified $content.
      *
      * @param string      $name
@@ -275,15 +294,16 @@ class Layout extends Helper
     protected static function assembleTemplateVars(string $content): array
     {
         $layoutTplVars = [
-            'content'     => $content,
-            'keywords'    => static::eWrap(static::$keywords, "<meta name='keywords' content='%s' />\n"),
-            'title'       => static::eWrap(static::$title, "<title>%s</title>\n"),
-            'description' => static::eWrap(static::$description, "<meta name='description' content='%s'/>\n"),
-            'meta'        => static::assembleMeta(),
-            'opengraph'   => static::assembleOpenGraph(),
-            'css'         => static::concatWrapped(static::$css,
+            'content'       => $content,
+            'keywords'      => static::eWrap(static::$keywords, "<meta name='keywords' content='%s' />\n"),
+            'title'         => static::eWrap(static::$title, "<title>%s</title>\n"),
+            'description'   => static::eWrap(static::$description, "<meta name='description' content='%s'/>\n"),
+            'canonical-url' => static::eWrap(static::$canonical, "<link rel='canonical' href='%s'/>\n"),
+            'meta'          => static::assembleMeta(),
+            'opengraph'     => static::assembleOpenGraph(),
+            'css'           => static::concatWrapped(static::$css,
                 '<link   type="text/css" rel="stylesheet" href="%s"/>' . "\n\t"),
-            'javascript'  => static::concatWrapped(static::$js,
+            'javascript'    => static::concatWrapped(static::$js,
                 '<script type="text/javascript" src="%s"></script>' . "\n\t"),
         ];
 
