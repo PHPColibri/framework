@@ -15,7 +15,7 @@ class Str extends Helper
      *
      * @return bool
      */
-    public static function isEmail($str)
+    public static function isEmail(string $str): bool
     {
         return (bool)preg_match(RegExp::IS_EMAIL, $str);
     }
@@ -30,7 +30,7 @@ class Str extends Helper
      *
      * @throws \InvalidArgumentException
      */
-    public static function random($type = 'alnum', $length = 8)
+    public static function random($type = 'alnum', $length = 8): string
     {
         switch ($type) {
             case 'alnum':
@@ -91,7 +91,7 @@ class Str extends Helper
      *
      * @return string GUID
      */
-    public static function generateGUID()
+    public static function generateGUID(): string
     {
         $guidStr = '';
         for ($i = 1; $i <= 16; $i++) {
@@ -120,7 +120,7 @@ class Str extends Helper
      *
      * @return bool
      */
-    public static function isInt($str)
+    public static function isInt(string $str): bool
     {
         return is_int($str) || $str === (string)(int)$str;
     }
@@ -133,7 +133,7 @@ class Str extends Helper
      *
      * @return bool
      */
-    public static function beginsWith($str, $beginsWith)
+    public static function beginsWith(string $str, $beginsWith): bool
     {
         if ( ! is_array($beginsWith)) {
             return substr($str, 0, strlen($beginsWith)) === $beginsWith;
@@ -156,7 +156,7 @@ class Str extends Helper
      *
      * @return bool
      */
-    public static function endsWith($str, $endsWith)
+    public static function endsWith(string $str, $endsWith): bool
     {
         if ( ! is_array($endsWith)) {
             return substr($str, -strlen($endsWith)) === $endsWith;
@@ -179,7 +179,7 @@ class Str extends Helper
      *
      * @return bool
      */
-    public static function contains($str, $subString)
+    public static function contains(string $str, $subString): bool
     {
         if ( ! is_array($subString)) {
             return strpos($str, $subString) !== false;
@@ -201,7 +201,7 @@ class Str extends Helper
      *
      * @return bool
      */
-    public static function isJSON($str)
+    public static function isJSON(string $str): bool
     {
         return json_decode($str) !== null;
     }
@@ -214,7 +214,7 @@ class Str extends Helper
      *
      * @return string
      */
-    public static function firstPart($str, $delimiter = ' ')
+    public static function firstPart(string $str, $delimiter = ' '): string
     {
         $parts = explode($delimiter, $str);
 
@@ -229,7 +229,7 @@ class Str extends Helper
      *
      * @return string
      */
-    public static function lastPart($str, $delimiter = ' ')
+    public static function lastPart(string $str, $delimiter = ' '): string
     {
         $parts = explode($delimiter, $str);
 
@@ -244,7 +244,7 @@ class Str extends Helper
      *
      * @return string
      */
-    public static function snake($str, $delimiter = '_')
+    public static function snake(string $str, $delimiter = '_'): string
     {
         $str = preg_replace('/([A-Z ])/', ' $1', $str);
         $str = preg_replace('/\s+/', $delimiter, trim($str));
@@ -260,7 +260,7 @@ class Str extends Helper
      *
      * @return string
      */
-    public static function studly($str)
+    public static function studly(string $str): string
     {
         return str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $str)));
     }
@@ -272,7 +272,7 @@ class Str extends Helper
      *
      * @return string
      */
-    public static function camel($str)
+    public static function camel(string $str): string
     {
         return lcfirst(static::studly($str));
     }
@@ -280,14 +280,14 @@ class Str extends Helper
     /**
      * Gets specified $i-th part of string divided by $delimiter, or returns $default.
      *
-     * @param string $str
-     * @param int    $i
-     * @param string $delimiter
-     * @param string $default
+     * @param string      $str
+     * @param int         $i
+     * @param string      $delimiter
+     * @param string|null $default
      *
      * @return string
      */
-    public static function part($str, $i, $delimiter, $default = null)
+    public static function part(string $str, int $i, string $delimiter, string $default = null): ?string
     {
         $parts = explode($delimiter, $str);
 
@@ -300,13 +300,13 @@ class Str extends Helper
      * Gets specified $i-th word of string divided by $delimiter, or returns $default.
      * Same as ::part() with ' '(space) delimiter.
      *
-     * @param      $str
-     * @param      $i
-     * @param null $default
+     * @param string      $str
+     * @param int         $i
+     * @param string|null $default
      *
      * @return string
      */
-    public static function word($str, $i, $default = null)
+    public static function word(string $str, int $i, string $default = null): ?string
     {
         return static::part($str, $i, ' ', $default);
     }
@@ -318,7 +318,7 @@ class Str extends Helper
      *
      * @return bool
      */
-    public static function hasDigits($str)
+    public static function hasDigits(string $str): bool
     {
         return strpbrk($str, '0123456789') !== false;
     }
