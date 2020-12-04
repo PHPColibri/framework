@@ -142,4 +142,16 @@ class Arr extends Helper
     {
         return array_slice($array, -$count);
     }
+
+    /**
+     * Transpose. Flips diagonally.
+     *
+     * @param array $array
+     *
+     * @return array
+     */
+    public static function transpose(array $array): array
+    {
+        return array_map(null, ...$array);
+    }
 }
