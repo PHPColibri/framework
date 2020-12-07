@@ -11,7 +11,7 @@ use Colibri\Database\Exception\NotFoundException;
  */
 abstract class Model
 {
-    const    NEW_OBJECT = -1;
+    const NEW_OBJECT = -1;
 
     /** @var string */
     protected static $connectionName = 'default';
