@@ -14,7 +14,7 @@ class RegExp
 
     /**
      * Returns array of found matches or empty array.
-     * If error occurred, throws RuntimeException with preg_last_error_msg(), preg_last_error()
+     * If error occurred, throws RuntimeException with preg_last_error_msg(), preg_last_error().
      *
      * @param string $pattern
      * @param string $subject
@@ -35,7 +35,7 @@ class RegExp
 
     /**
      * Returns found matches or null.
-     * If error occurred, throws RuntimeException with preg_last_error_msg(), preg_last_error()
+     * If error occurred, throws RuntimeException with preg_last_error_msg(), preg_last_error().
      *
      * @param string $pattern
      * @param string $subject
