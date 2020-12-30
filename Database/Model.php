@@ -247,6 +247,8 @@ abstract class Model
             case 'mediumint':
             case 'bigint':
                 return (int)$value;
+            case 'double':
+                return (float)$value;
             case 'bit':
                 return (bool)$value;
             case 'timestamp':
