@@ -90,7 +90,7 @@ class Db extends Helper
                 ));
             case Type::POSTGRESQL:
             default:
-                throw new DbException("can`t create database: this db type (${config['type']}) not supported");
+                throw new DbException("can`t create database: this db type ({$config['type']}) not supported");
         }
     }
 }
