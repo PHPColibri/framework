@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": ">=7.0",
+        "php": "^7.1|^8.0",
         "ext-mysqlnd": "*",
         "colibri-fw/base": "dev-master@dev",
         "colibri-fw/cache": "dev-master@dev",

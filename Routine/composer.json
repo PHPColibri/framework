@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": ">=7.0",
+        "php": "^7.1|^8.0",
         "colibri-fw/controller": "dev-master@dev",
         "colibri-fw/database": "dev-master@dev",
         "colibri-fw/http": "dev-master@dev",

@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": ">=7.0",
+        "php": "^7.1|^8.0",
         "colibri-fw/view": "dev-master@dev",
         "swiftmailer/swiftmailer": "^6.0"
     },
