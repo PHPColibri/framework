@@ -14,7 +14,6 @@
         "colibri-fw/config": "dev-master@dev",
         "colibri-fw/pattern": "dev-master@dev",
         "colibri-fw/util": "dev-master@dev",
-        "colibri-fw/cache": "dev-master@dev",
         "colibri-fw/log": "dev-master@dev"
     },
     "autoload": {
