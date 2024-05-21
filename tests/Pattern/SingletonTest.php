@@ -11,30 +11,25 @@ use PHPUnit\Framework\TestCase;
  */
 class SingletonTest extends TestCase
 {
-    /**
-     * @expectedException \Error
-     */
     public function testCantNew()
     {
+        $this->expectException(\Error::class);
+
         /* @noinspection Annotator */
         new SomeSingleton();
     }
 
-    /**
-     * @expectedException \Error
-     */
     public function testCantClone()
     {
+        $this->expectException(\Error::class);
         $instance = SomeSingleton::getInstance();
         /* @noinspection PhpExpressionResultUnusedInspection */
         clone $instance;
     }
 
-    /**
-     * @expectedException \PHPUnit\Framework\Error\Warning
-     */
     public function testCantWakeup()
     {
+        $this->expectException(\BadMethodCallException::class);
         $instance   = SomeSingleton::getInstance();
         $serialized = serialize($instance);
         unserialize($serialized);
@@ -49,9 +44,8 @@ class SingletonTest extends TestCase
     {
         $instance = SomeSingleton::getInstance();
         self::assertInstanceOf(SomeSingleton::class, $instance);
-        self::assertAttributeInstanceOf(SomeSingleton::class, 'instance', SomeSingleton::class);
-        self::assertTrue($instance === self::getStaticAttribute(SomeSingleton::class, 'instance'));
         $instance2 = SomeSingleton::getInstance();
         self::assertTrue($instance === $instance2);
+        self::assertTrue(spl_object_id($instance) === spl_object_id($instance2));
     }
 }

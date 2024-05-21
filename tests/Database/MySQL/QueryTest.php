@@ -7,7 +7,7 @@ use Colibri\tests\Database\QueryTestCase;
 
 class QueryTest extends QueryTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->dbMock

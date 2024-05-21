@@ -12,29 +12,24 @@ use Colibri\tests\TestCase;
 class HelperTest extends TestCase
 {
     /**
-     * @expectedException \Error
-     *
      * @covers ::__construct
      */
     public function testCantNew()
     {
+        $this->expectException(\Error::class);
         /* @noinspection Annotator */
         new SomeHelper();
     }
 
-    /**
-     * @expectedException \Error
-     */
     public function testCantNewStaticInsideTheClass()
     {
+        $this->expectException(\Error::class);
         SomeHelper::tryGetInstanceStatic();
     }
 
-    /**
-     * @expectedException \Error
-     */
     public function testCantNewSelfInsideTheClass()
     {
+        $this->expectException(\Error::class);
         SomeHelper::tryGetInstanceSelf();
     }
 }

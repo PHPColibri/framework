@@ -27,15 +27,14 @@ abstract class Singleton
     {
     }
 
-    /** @noinspection PhpUnusedPrivateMethodInspection */
-
     /**
      * Close public access/.
      *
      * @codeCoverageIgnore
      */
-    private function __wakeup()
+    public function __wakeup()
     {
+        throw new \BadMethodCallException('The class `' . static::class . '` is Singleton and can\'t be `__wakeup()`');
     }
 
     /**

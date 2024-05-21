@@ -18,7 +18,7 @@ class CacheTest extends TestCase
      */
     private $storageMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storageMock = \Mockery::mock(StorageInterface::class);
     }
@@ -40,7 +40,6 @@ class CacheTest extends TestCase
     {
         static::inject(Cache::class, ['storage' => ['memcache' => $this->storageMock]]);
 
-        /* @noinspection PhpMethodParametersCountMismatchInspection */
         $this->storageMock
             ->shouldReceive($method)
             ->withArgs($receiveArgs)

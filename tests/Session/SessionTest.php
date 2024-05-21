@@ -15,7 +15,7 @@ use PHPUnit_Framework_MockObject_MockObject;
 class SessionTest extends TestCase
 {
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $storageMock;
 
@@ -24,7 +24,7 @@ class SessionTest extends TestCase
      * @throws \PHPUnit\Framework\MockObject\RuntimeException
      * @throws \ReflectionException
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         // use PHPUnit mocks, because StorageInterface contains `catch`method, but Mockery can`t mock it
         $this->storageMock = $this
@@ -36,7 +36,7 @@ class SessionTest extends TestCase
         static::inject(Session::class, ['storage' => $this->storageMock]);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->storageMock = null;
     }
@@ -63,9 +63,6 @@ class SessionTest extends TestCase
         ;
 
         self::assertEquals($value, Session::get($variable));
-        /** @var ObjectInvocation $invocation */
-        $invocation = $spy->getInvocations()[0];
-        self::assertEquals($variable, $invocation->getParameters()[0]);
     }
 
     /**

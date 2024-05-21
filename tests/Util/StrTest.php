@@ -68,11 +68,12 @@ class StrTest extends TestCase
 
     /**
      * @covers ::random
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage unknown random type
+     *
      */
     public function testRandomInvalidTypeException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("unknown random type");
         /* @noinspection PhpUnhandledExceptionInspection */
         Str::random('invalid_type');
     }

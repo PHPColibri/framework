@@ -13,7 +13,7 @@ class LocalConfigTest extends TestCase
     /**
      * @throws \InvalidArgumentException
      */
-    public function setUp()
+    public function setUp(): void
     {
         Config::setBaseDir(__DIR__ . '/sample');
     }

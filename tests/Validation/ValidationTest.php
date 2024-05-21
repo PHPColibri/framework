@@ -71,7 +71,7 @@ class ValidationTest extends TestCase
         $validation = Validation::forScope($scope);
 
         static::assertInstanceOf(Validation::class, $validation);
-        static::attributeEqualTo('scope', $scope);
+        $this->assertScopeEquals($scope, $validation);
 
         return $validation;
     }

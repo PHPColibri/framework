@@ -18,7 +18,7 @@ class QueryTestCase extends TestCase
     /** @var MockInterface|MetadataInterface */
     protected $metadataMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->metadataMock = Mockery::mock(MetadataInterface::class);
 

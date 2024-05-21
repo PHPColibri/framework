@@ -10,7 +10,7 @@ use Colibri\Database\Query\Aggregation as Agg;
  */
 class QueryTest extends QueryTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -45,11 +45,9 @@ class QueryTest extends QueryTestCase
 
     // -------------------------------------------------------------------------------------
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testInvalidTypeConstructor()
     {
+        $this->expectException(\InvalidArgumentException::class);
         new Query('qwerty');
     }
 

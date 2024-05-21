@@ -11,10 +11,10 @@ class ConfigTest extends TestCase
 {
     /**
      * @covers \Colibri\Config\Config::setBaseDir
-     * @expectedException \InvalidArgumentException
      */
     public function testSetInvalidBaseDir()
     {
+        $this->expectException(\InvalidArgumentException::class);
         /* @noinspection PhpUnhandledExceptionInspection */
         Config::setBaseDir('/a/b/c');
     }
@@ -28,7 +28,10 @@ class ConfigTest extends TestCase
     public function testSetBaseDir()
     {
         Config::setBaseDir(__DIR__ . '/sample');
-        static::assertAttributeEquals(realpath(__DIR__ . '/sample'), 'baseDir', 'Colibri\Config\Config');
+        static::assertEquals(
+            realpath(__DIR__ . '/sample'),
+            (new \ReflectionProperty(Config::class, 'baseDir'))->getValue()
+        );
     }
 
     /**
