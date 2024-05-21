@@ -1,6 +1,8 @@
 <?php
 namespace Colibri\Base;
 
+use ReturnTypeWillChange;
+
 /**
  * class DynamicCollection.
  *
@@ -26,7 +28,7 @@ abstract class DynamicCollection implements DynamicCollectionInterface
      *
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         if ($this->items === null) {
             $this->fillItems();
@@ -40,6 +42,7 @@ abstract class DynamicCollection implements DynamicCollectionInterface
      *
      * @return mixed
      */
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         if ($this->items === null) {
@@ -55,6 +58,7 @@ abstract class DynamicCollection implements DynamicCollectionInterface
      *
      * @return mixed
      */
+    #[ReturnTypeWillChange]
     public function offsetSet($offset, $data)
     {
         if ($this->items === null) {
@@ -67,7 +71,7 @@ abstract class DynamicCollection implements DynamicCollectionInterface
     /**
      * @param mixed $offset
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         if ($this->items === null) {
             $this->fillItems();
@@ -80,7 +84,7 @@ abstract class DynamicCollection implements DynamicCollectionInterface
     /**
      * @return void
      */
-    public function rewind()
+    public function rewind(): void
     {
         if ($this->items === null) {
             $this->fillItems();
@@ -91,6 +95,7 @@ abstract class DynamicCollection implements DynamicCollectionInterface
     /**
      * @return mixed
      */
+    #[ReturnTypeWillChange]
     public function current()
     {
         if ($this->items === null) {
@@ -103,6 +108,7 @@ abstract class DynamicCollection implements DynamicCollectionInterface
     /**
      * @return mixed
      */
+    #[ReturnTypeWillChange]
     public function key()
     {
         if ($this->items === null) {
@@ -115,6 +121,7 @@ abstract class DynamicCollection implements DynamicCollectionInterface
     /**
      * @return mixed
      */
+    #[ReturnTypeWillChange]
     public function next()
     {
         if ($this->items === null) {
@@ -127,7 +134,7 @@ abstract class DynamicCollection implements DynamicCollectionInterface
     /**
      * @return bool
      */
-    public function valid()
+    public function valid(): bool
     {
         if ($this->items === null) {
             $this->fillItems();
@@ -141,7 +148,7 @@ abstract class DynamicCollection implements DynamicCollectionInterface
     /**
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         if ($this->items === null) {
             $this->fillItems();
@@ -155,7 +162,7 @@ abstract class DynamicCollection implements DynamicCollectionInterface
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         if ($this->items === null) {
             $this->fillItems();
@@ -167,7 +174,7 @@ abstract class DynamicCollection implements DynamicCollectionInterface
     /**
      * @return array[]
      */
-    public function toDblArray()
+    public function toDblArray(): array
     {
         if ($this->items === null) {
             $this->fillItems();

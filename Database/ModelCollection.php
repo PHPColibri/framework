@@ -282,7 +282,7 @@ abstract class ModelCollection extends DynamicCollection implements DynamicColle
      * @throws \Colibri\Database\Exception\SqlException
      * @throws \UnexpectedValueException
      */
-    public function count()
+    public function count(): int
     {
         return $this->items !== null
             ? parent::count()
